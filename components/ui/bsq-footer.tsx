@@ -9,9 +9,10 @@ import { ArrowRight, MapPin, Mail, Phone } from 'lucide-react'
    ══════════════════════════════════════════════════════════════════════════ */
 
 const NAV_LINKS = [
-  { label: 'Start Assessment', href: '/assessment' },
-  { label: 'How It Works',     href: '/#how'       },
-  { label: 'Solutions',        href: '/#solutions'  },
+  { label: 'Start Assessment', href: '/assessment'      },
+  { label: 'How It Works',     href: '/#how'            },
+  { label: 'Solutions',        href: '/#solutions'      },
+  { label: 'Privacy Policy',   href: '/privacy-policy'  },
   { label: 'Contact Advisor',  href: 'https://m.me/Bstarquartzarea' },
 ]
 
@@ -204,7 +205,8 @@ export default function BsqFooter() {
             ))}
           </div>
           <p className="text-[10px] text-white/20 text-center sm:text-right shrink-0">
-            © {new Date().getFullYear()} Brilliant Star Quartz · PRU Life UK Licensed · Advisory purposes only
+            © {new Date().getFullYear()} Brilliant Star Quartz · PRU Life UK Licensed · Advisory purposes only ·{' '}
+            <a href="/privacy-policy" className="hover:text-white/50 transition-colors duration-150 underline underline-offset-2">Privacy Policy</a>
           </p>
         </div>
 
