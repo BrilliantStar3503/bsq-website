@@ -15,8 +15,8 @@ const HOOKS = [
   "Smart decisions start with data. Get your AI financial insight now.",
 ]
 
-const TYPE_SPEED   = 30   // ms per character (typing)
-const DELETE_SPEED = 15   // ms per character (deleting — faster feels snappy)
+const TYPE_SPEED   = 52   // ms per character (typing — natural, readable pace)
+const DELETE_SPEED = 22   // ms per character (deleting — faster feels snappy)
 const PAUSE_AFTER  = 1400 // ms to hold full sentence before deleting
 const PAUSE_BEFORE = 300  // ms pause between delete and next hook
 
@@ -104,19 +104,32 @@ export default function RotatingHook() {
       aria-live="polite"
       style={{ display: 'block', minHeight: '3.75em' }}
     >
-      {display}
+      {/* Gradient text: crisp white → warm off-white → PRU red
+          Professional financial brand feel — not neon, not flat */}
+      <span style={{
+        backgroundImage:  'linear-gradient(95deg, #ffffff 0%, #f0f0f0 55%, #ed1b2e 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip:  'text',
+        filter:          'drop-shadow(0 0 18px rgba(237,27,46,0.18))',
+      }}>
+        {display}
+      </span>
+
+      {/* Cursor — PRU red to match gradient endpoint */}
       <span
         aria-hidden
         style={{
-          display:       'inline-block',
-          width:         '3px',
-          marginLeft:    '2px',
-          verticalAlign: 'text-bottom',
-          opacity:       cursor ? 1 : 0,
-          transition:    'opacity 0.1s',
-          background:    'currentColor',
-          height:        '0.85em',
-          borderRadius:  '1px',
+          display:          'inline-block',
+          width:            '3px',
+          marginLeft:       '2px',
+          verticalAlign:    'text-bottom',
+          opacity:          cursor ? 1 : 0,
+          transition:       'opacity 0.1s',
+          background:       '#ed1b2e',
+          height:           '0.85em',
+          borderRadius:     '1px',
+          boxShadow:        '0 0 6px rgba(237,27,46,0.6)',
         }}
       />
     </span>
