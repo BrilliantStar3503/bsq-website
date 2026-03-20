@@ -2,7 +2,7 @@
 @source "../components/**/*.{jsx,tsx,js,ts}";
 @source "../app/**/*.{jsx,tsx,js,ts}";
 
-/* ===== Base Styles (RESTORED) ===== */
+/* ===== Base Styles ===== */
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
@@ -21,12 +21,8 @@ body {
 
 /* ===== Scroll animation ===== */
 @keyframes scroll {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
 .animate-scroll {
