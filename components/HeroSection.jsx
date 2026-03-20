@@ -47,8 +47,7 @@ export default function HeroSection() {
               inactiveZone={0.3}
               borderWidth={1}
               onClick={() => {
-                console.log('Hero consultation clicked')
-                window.location.href = 'https://m.me/Bstarquartzarea?ref=hero_consultation'
+                window.open('https://calendly.com/brilliantstarquartz/30min', '_blank')
               }}
             >
               Book a Consultation
