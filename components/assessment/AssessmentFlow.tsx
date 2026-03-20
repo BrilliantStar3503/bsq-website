@@ -304,36 +304,55 @@ function ScanningScreen() {
 interface LeadCaptureModalProps {
   open: boolean
   onClose: () => void
-  score: number
-  statusLabel: string
+  result: ScoreResult
 }
 
-function LeadCaptureModal({ open, onClose, score, statusLabel }: LeadCaptureModalProps) {
+function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
   const [contactType, setContactType] = useState<'email' | 'phone'>('email')
   const [name, setName]               = useState('')
   const [contact, setContact]         = useState('')
   const [submitted, setSubmitted]     = useState(false)
   const [loading, setLoading]         = useState(false)
+  const [error, setError]             = useState('')
+
+  const score       = result.total
+  const statusLabel = result.status === 'good' ? 'Well Protected'
+                    : result.status === 'moderate' ? 'Moderate Risk'
+                    : result.status === 'at-risk'  ? 'At Risk'
+                    : 'Critical Risk'
 
   const RED = '#ed1b2e'
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name.trim() || !contact.trim()) return
     setLoading(true)
+    setError('')
 
-    // Store lead locally
     try {
-      const leads = JSON.parse(localStorage.getItem('bsq_leads') || '[]')
-      leads.push({ name, contactType, contact, score, statusLabel, ts: Date.now() })
-      localStorage.setItem('bsq_leads', JSON.stringify(leads))
-    } catch (_) { /* ignore */ }
+      const res = await fetch('/api/capture-lead', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          contactType,
+          contact,
+          score,
+          statusLabel,
+          riskLevel:       result.riskLevel,
+          gaps:            result.gaps,
+          recommendations: result.recommendations,
+        }),
+      })
 
-    // Simulate brief processing then show success
-    setTimeout(() => {
-      setLoading(false)
+      if (!res.ok) throw new Error('Request failed')
+
       setSubmitted(true)
-    }, 900)
+    } catch {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   // Reset on close
@@ -485,6 +504,11 @@ function LeadCaptureModal({ open, onClose, score, statusLabel }: LeadCaptureModa
                           onBlur={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.boxShadow = 'none' }}
                         />
                       </div>
+
+                      {/* Error */}
+                      {error && (
+                        <p className="text-xs text-center font-medium" style={{ color: RED }}>{error}</p>
+                      )}
 
                       {/* Submit */}
                       <motion.button
@@ -912,8 +936,7 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
       <LeadCaptureModal
         open={leadModalOpen}
         onClose={() => setLeadModalOpen(false)}
-        score={result.total}
-        statusLabel={statusLabel}
+        result={result}
       />
 
       {/* ── Disclaimer ───────────────────────────────────────────── */}
