@@ -12,7 +12,7 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-10">
 
         {/* LEFT SIDE */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
             Know Exactly How Financially Protected{' '}
             <span className="text-red-500">Your Family Is</span>
@@ -61,7 +61,7 @@ export default function HeroSection() {
         </div>
 
         {/* RIGHT SIDE — ROBOT */}
-        <div className="flex-1 flex justify-end">
+        <div className="flex-1 min-w-0 flex justify-end">
           <div className="w-full h-[320px] md:h-[480px]">
             <SplineScene
               scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
