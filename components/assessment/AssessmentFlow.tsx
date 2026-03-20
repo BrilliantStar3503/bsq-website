@@ -7,6 +7,7 @@ import { AlertTriangle, Shield, TrendingUp, Clock, ArrowRight, Info, Zap, CheckC
 import { questions } from '@/lib/assessment-questions'
 import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
+import TestimonialForm from '@/components/ui/testimonial-form'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
 const SCAN_STEPS = [
@@ -947,6 +948,13 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
         <p className="text-[11px] leading-relaxed text-gray-400">
           Results are based on financial planning models assessing risk exposure, savings behavior, and long-term readiness. Advisory purposes only — not financial advice. PRU Life UK products subject to eligibility and underwriting.
         </p>
+      </motion.div>
+
+      {/* ── Testimonial Form ─────────────────────────────────────── */}
+      <motion.div variants={fadeUp}
+        className="rounded-3xl p-8 md:p-10"
+        style={{ background: '#ffffff', border: '1px solid #f1f5f9', boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
+        <TestimonialForm />
       </motion.div>
 
     </motion.div>
