@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { SplineScene } from '@/components/ui/spline-scene'
+import RotatingHook from '@/components/ui/rotating-hook'
 
 const SCENE_URL = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode'
 
@@ -23,8 +24,7 @@ export default function HeroSection() {
           {/* ── LEFT — Text content ──────────────────────────────────── */}
           <div className="w-full md:w-1/2 min-w-0">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-              Know Exactly How Financially Protected{' '}
-              <span className="text-red-500">Your Family Is</span>
+              <RotatingHook />
             </h1>
 
             <p className="text-gray-400 mt-5 max-w-lg">
