@@ -15,8 +15,8 @@ const HOOKS = [
   "Smart decisions start with data. Get your AI financial insight now.",
 ]
 
-const TYPE_SPEED   = 38   // ms per character (typing)
-const DELETE_SPEED = 18   // ms per character (deleting — faster feels snappy)
+const TYPE_SPEED   = 30   // ms per character (typing)
+const DELETE_SPEED = 15   // ms per character (deleting — faster feels snappy)
 const PAUSE_AFTER  = 1400 // ms to hold full sentence before deleting
 const PAUSE_BEFORE = 300  // ms pause between delete and next hook
 
@@ -90,11 +90,19 @@ export default function RotatingHook() {
   const handleMouseLeave = () => { pausedRef.current = false }
 
   return (
+    /*
+     * ── Layout-shift fix ────────────────────────────────────────────────
+     * display:block + minHeight reserves space for 3 lines of text
+     * (3 × leading-tight 1.25 = 3.75em), relative to the <h1> font-size.
+     * This prevents any vertical reflow of elements below as text grows
+     * or shrinks during the typewriter cycle.
+     */
     <span
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       aria-label={HOOKS[hookIdx]}
       aria-live="polite"
+      style={{ display: 'block', minHeight: '3.75em' }}
     >
       {display}
       <span
