@@ -330,6 +330,11 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
     setLoading(true)
     setError('')
 
+    // ── Read UTM attribution saved on page load ──
+    const agent     = localStorage.getItem('bsq_utm_agent')  || 'direct'
+    const utmSource = localStorage.getItem('bsq_utm_source') || 'direct'
+    const utmMedium = localStorage.getItem('bsq_utm_medium') || 'organic'
+
     try {
       const res = await fetch('/api/capture-lead', {
         method:  'POST',
@@ -343,6 +348,9 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
           riskLevel:       result.riskLevel,
           gaps:            result.gaps,
           recommendations: result.recommendations,
+          agent,
+          utmSource,
+          utmMedium,
         }),
       })
 
@@ -968,6 +976,18 @@ export default function AssessmentFlow() {
   const [step, setStep]       = useState(0)
   const [answers, setAnswers] = useState<Answers>({})
   const [result, setResult]   = useState<ScoreResult | null>(null)
+
+  // ── Capture UTM params on first load and persist to localStorage ──
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const agent  = params.get('utm_agent')
+    const source = params.get('utm_source')
+    const medium = params.get('utm_medium')
+    if (agent)  localStorage.setItem('bsq_utm_agent',  agent)
+    if (source) localStorage.setItem('bsq_utm_source', source)
+    if (medium) localStorage.setItem('bsq_utm_medium', medium)
+  }, [])
 
   const handleRetake = () => {
     setAnswers({})

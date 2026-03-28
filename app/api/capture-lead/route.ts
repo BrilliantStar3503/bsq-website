@@ -13,6 +13,9 @@ export async function POST(req: NextRequest) {
       riskLevel,
       gaps,
       recommendations,
+      agent,
+      utmSource,
+      utmMedium,
     } = body
 
     // ── Validate required fields ──────────────────────────────────────
@@ -39,14 +42,19 @@ export async function POST(req: NextRequest) {
         gaps:            gaps ?? [],
         recommendations: recommendations ?? [],
       },
+      attribution: {
+        agent:     agent     ?? 'direct',
+        utmSource: utmSource ?? 'direct',
+        utmMedium: utmMedium ?? 'organic',
+      },
     }
 
     // ── Forward to n8n webhook ────────────────────────────────────────
-    const webhookUrl = process.env.N8N_WEBHOOK_URL
+    const webhookUrl = process.env.N8N_TESTIMONIAL_CRM
 
     if (!webhookUrl) {
       // Webhook not configured yet — still return success so UX works
-      console.warn('[capture-lead] N8N_WEBHOOK_URL is not set. Lead not forwarded.')
+      console.warn('[capture-lead] N8N_TESTIMONIAL_CRM is not set. Lead not forwarded.')
       return NextResponse.json({ success: true, forwarded: false })
     }
 
