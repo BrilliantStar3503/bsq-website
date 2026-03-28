@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { BsqHeader } from "@/components/ui/bsq-header";
 import BsqFooter from "@/components/ui/bsq-footer";
+import UtmCapture from "@/components/ui/utm-capture";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,12 +28,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Calendly popup widget styles */}
+        <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <UtmCapture />
         <BsqHeader />
         {children}
         <BsqFooter />
+        {/* Calendly popup widget script — loads after page is interactive */}
+        <Script
+          src="https://assets.calendly.com/assets/external/widget.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
