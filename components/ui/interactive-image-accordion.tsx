@@ -557,35 +557,99 @@ function MiniGapResult({ result }: { result: GapResult }) {
    ══════════════════════════════════════════════════════════════════════════ */
 
 function EmergencyAssessment() {
-  const [monthly,  setMonthly]  = useState('')
-  const [existing, setExisting] = useState('')
-  const [result,   setResult]   = useState<GapResult | null>(null)
+  const [monthly,    setMonthly]    = useState('')
+  const [incomeType, setIncomeType] = useState('fixed')
+  const [dependents, setDependents] = useState('none')
+  const [existing,   setExisting]   = useState('')
+  const [result,     setResult]     = useState<GapResult | null>(null)
+
+  // Industry-standard multipliers (midpoint of recommended range)
+  const INCOME_MONTHS: Record<string, { months: number; label: string }> = {
+    fixed:      { months: 4.5,  label: '3–6 months (employee)'          },
+    mixed:      { months: 7.5,  label: '6–9 months (mixed income)'      },
+    commission: { months: 10.5, label: '9–12 months (commission/freelance)' },
+    business:   { months: 10.5, label: '9–12 months (business owner)'   },
+  }
+
+  // Dependent adjustment per industry practice
+  const DEP_ADJ: Record<string, number> = {
+    none:     0,
+    partner:  1,
+    children: 2,
+    parents:  2,
+  }
 
   const calc = () => {
-    const monthlyExp = parseFloat(monthly) || 0
-    const fund       = parseFloat(existing) || 0
-    const target     = monthlyExp * 6
-    const gap        = Math.max(target - fund, 0)
-    const ratio      = target > 0 ? Math.min(fund / target, 1) : 1
-    const severity: GapResult['severity'] = gap === 0 ? 'covered' : ratio >= 0.6 ? 'medium' : ratio >= 0.25 ? 'high' : 'critical'
+    const monthlyExp  = parseFloat(monthly)  || 0
+    const fund        = parseFloat(existing) || 0
+    const { months: baseMonths, label: incomeLabel } = INCOME_MONTHS[incomeType] ?? INCOME_MONTHS.fixed
+    const depAdj      = DEP_ADJ[dependents] ?? 0
+    const totalMonths = baseMonths + depAdj
+    const target      = monthlyExp * totalMonths
+    const gap         = Math.max(target - fund, 0)
+    const ratio       = target > 0 ? Math.min(fund / target, 1) : 1
+    const monthsCovered = monthlyExp > 0 ? Math.min(fund / monthlyExp, totalMonths) : totalMonths
+
+    const severity: GapResult['severity'] =
+      gap === 0    ? 'covered' :
+      ratio >= 0.6 ? 'medium'  :
+      ratio >= 0.25? 'high'    : 'critical'
+
+    const depNote = depAdj > 0 ? ` (+${depAdj} month${depAdj > 1 ? 's' : ''} for dependents)` : ''
+
     setResult({
-      gapAmount: Math.round(gap), severity,
-      headline:  gap === 0 ? 'Emergency fund is sufficient.' : `You need ${php(gap)} more.`,
-      detail:    gap === 0
-        ? 'You have at least 6 months of expenses covered — your financial safety net is intact.'
-        : `Your fund covers ${(ratio * 6).toFixed(1)} months. Target: ${php(target)} (6 × monthly expenses).`,
+      gapAmount: Math.round(gap),
+      severity,
+      headline: gap === 0
+        ? `Emergency fund is sufficient — ${totalMonths.toFixed(1)} months covered ✓`
+        : `You need ${php(gap)} more to reach your ${totalMonths.toFixed(1)}-month target.`,
+      detail: gap === 0
+        ? `Based on ${incomeLabel}${depNote}, your target is ${php(target)}. Your current fund meets or exceeds this requirement.`
+        : `Your fund covers ${monthsCovered.toFixed(1)} of ${totalMonths.toFixed(1)} months needed. Target: ${php(target)} (${incomeLabel}${depNote}).`,
       product:   gap === 0 ? 'PRULife Optimizer' : 'PRULink Assurance Account Plus',
       rationale: gap === 0
-        ? 'Redirect surplus to a growth plan once your protection base is secure.'
-        : "Build your emergency fund through a structured savings plan that earns while it protects.",
+        ? 'Your safety net is fully funded. Redirect your surplus into a growth plan to maximize returns while keeping your protection base secure.'
+        : 'Build your emergency fund faster through a structured savings plan — one that earns interest while it protects you against life\'s unexpected events.',
       coverageRatio: ratio,
     })
   }
 
   return (
     <div className="space-y-4">
-      <MiniInput label="Monthly Living Expenses (PHP)" value={monthly} onChange={setMonthly} placeholder="30,000" />
-      <MiniInput label="Current Emergency Fund (PHP)"  value={existing} onChange={setExisting} placeholder="50,000" />
+      <MiniInput
+        label="Monthly Essential Expenses (PHP)"
+        value={monthly}
+        onChange={setMonthly}
+        placeholder="40,000"
+      />
+      <MiniSelect
+        label="Income Type"
+        value={incomeType}
+        onChange={setIncomeType}
+        options={[
+          { value: 'fixed',      label: 'Fixed salary (employee) — 3–6 months'         },
+          { value: 'mixed',      label: 'Mixed (salary + commission) — 6–9 months'      },
+          { value: 'commission', label: 'Commission / freelance — 9–12 months'          },
+          { value: 'business',   label: 'Business owner — 9–12 months'                  },
+        ]}
+      />
+      <MiniSelect
+        label="Dependents"
+        value={dependents}
+        onChange={setDependents}
+        options={[
+          { value: 'none',     label: 'None'                           },
+          { value: 'partner',  label: 'Partner only (+1 month)'        },
+          { value: 'children', label: 'Children (+2 months)'           },
+          { value: 'parents',  label: 'Parents / others (+2 months)'   },
+        ]}
+      />
+      <MiniInput
+        label="Current Emergency Fund (PHP)"
+        value={existing}
+        onChange={setExisting}
+        placeholder="50,000"
+      />
       <MiniCalcButton onClick={calc} />
       {result && <MiniGapResult result={result} />}
     </div>

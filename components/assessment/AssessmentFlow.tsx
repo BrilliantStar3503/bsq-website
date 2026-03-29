@@ -722,6 +722,64 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
         })}
       </motion.div>
 
+      {/* ── Emergency Fund Card ──────────────────────────────────── */}
+      {result.emergencyFundTarget > 0 && (
+        <motion.div variants={fadeUp} className="mb-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div style={{ width: 3, height: 20, background: '#f59e0b', borderRadius: 2 }} />
+            <h3 className="text-lg font-black text-gray-900 tracking-tight">Emergency Fund Target</h3>
+            <span className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full"
+              style={{ background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a' }}>
+              Industry Grade
+            </span>
+          </div>
+
+          <div className="bg-white rounded-2xl overflow-hidden"
+            style={{ border: '1px solid #fde68a', boxShadow: '0 2px 16px rgba(245,158,11,0.10)' }}>
+            {/* Amber top stripe */}
+            <div style={{ height: 3, background: 'linear-gradient(to right, #f59e0b, #fbbf24, transparent)' }} />
+
+            <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+
+              {/* Big number */}
+              <div className="md:col-span-1 flex flex-col items-start">
+                <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-amber-500 mb-1">Your Target</p>
+                <p className="text-4xl font-black leading-none text-gray-900">
+                  ₱{result.emergencyFundTarget.toLocaleString('en-PH')}
+                </p>
+                <p className="text-xs text-gray-400 mt-2">
+                  {result.emergencyFundMonths.toFixed(1)} months × ₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}/mo
+                </p>
+              </div>
+
+              {/* Breakdown */}
+              <div className="md:col-span-2 grid grid-cols-2 gap-4">
+                <div className="rounded-xl p-4" style={{ background: '#fffbeb', border: '1px solid #fde68a' }}>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">Recommended Months</p>
+                  <p className="text-2xl font-black text-gray-900">{result.emergencyFundMonths.toFixed(1)}</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">Based on your income type &amp; dependents</p>
+                </div>
+                <div className="rounded-xl p-4" style={{ background: '#f8fafc', border: '1px solid #e5e7eb' }}>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Monthly Expenses</p>
+                  <p className="text-2xl font-black text-gray-900">
+                    ₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}
+                  </p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">Essential expenses only</p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Footer note */}
+            <div className="px-6 md:px-8 pb-5">
+              <p className="text-[11px] text-gray-400 leading-relaxed">
+                💡 <strong className="text-gray-600">Industry standard:</strong> Keep 1–2 months in cash (liquid), put the rest in a high-yield savings or money market fund. Avoid locking it in long-term investments.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* ── Detected Gaps ────────────────────────────────────────── */}
       <motion.div variants={fadeUp} className="mb-6">
         <div className="flex items-center gap-3 mb-5">

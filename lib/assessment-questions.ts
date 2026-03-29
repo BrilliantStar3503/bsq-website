@@ -84,4 +84,27 @@ export const questions: Question[] = [
       'Very confident',
     ],
   },
+  {
+    id: 'monthlyExpenses',
+    question: 'What are your estimated monthly essential expenses?',
+    subtitle: 'Include housing, utilities, food, transportation, insurance & debt payments only.',
+    options: [
+      'Below ₱20,000',
+      '₱20,001 – ₱40,000',
+      '₱40,001 – ₱60,000',
+      '₱60,001 – ₱80,000',
+      'Above ₱80,000',
+    ],
+  },
+  {
+    id: 'incomeType',
+    question: 'How would you describe your income type?',
+    subtitle: 'This determines your recommended emergency fund coverage period.',
+    options: [
+      'Fixed salary (employee)',
+      'Mixed (salary + commission)',
+      'Pure commission / freelance',
+      'Business owner',
+    ],
+  },
 ]

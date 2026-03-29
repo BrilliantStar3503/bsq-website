@@ -6,6 +6,8 @@ export interface Answers {
   savings?: string
   medical?: string
   retirement?: string
+  monthlyExpenses?: string
+  incomeType?: string
 }
 
 export interface Gap {
@@ -39,6 +41,10 @@ export interface ScoreResult {
   explanation: string           // dynamic narrative
   gaps: Gap[]
   recommendations: Recommendation[]
+  // Emergency fund calculation
+  emergencyFundTarget: number   // in PHP
+  emergencyFundMonths: number   // recommended months
+  emergencyFundMonthlyExp: number // midpoint of selected expense range
 }
 
 /* ─── Answer → raw score maps (0–3) ────────────────────────────────── */
@@ -299,6 +305,39 @@ export function computeScore(answers: Answers): ScoreResult {
     })
   }
 
+  /* ── Emergency Fund Calculation (industry-grade) ───────────────── */
+
+  // Monthly expense range → midpoint value (PHP)
+  const expenseRangeMap: Record<string, number> = {
+    'Below ₱20,000':       15_000,
+    '₱20,001 – ₱40,000':  30_000,
+    '₱40,001 – ₱60,000':  50_000,
+    '₱60,001 – ₱80,000':  70_000,
+    'Above ₱80,000':       90_000,
+  }
+
+  // Income type → recommended months (midpoint of industry range)
+  const incomeTypeMonthsMap: Record<string, number> = {
+    'Fixed salary (employee)':      4.5,   // 3–6 months
+    'Mixed (salary + commission)':  7.5,   // 6–9 months
+    'Pure commission / freelance':  10.5,  // 9–12 months
+    'Business owner':               10.5,  // 9–12 months
+  }
+
+  // Dependent adjustment (+months)
+  const depAdjMap: Record<string, number> = {
+    'No':                    0,
+    'Yes — partner':         1,
+    'Yes — children':        2,
+    'Yes — parents / others':2,
+  }
+
+  const emergencyFundMonthlyExp = expenseRangeMap[answers.monthlyExpenses ?? ''] ?? 30_000
+  const baseMonths              = incomeTypeMonthsMap[answers.incomeType ?? '']  ?? 4.5
+  const depAdjMonths            = depAdjMap[answers.dependents ?? '']            ?? 0
+  const emergencyFundMonths     = baseMonths + depAdjMonths
+  const emergencyFundTarget     = Math.round(emergencyFundMonthlyExp * emergencyFundMonths)
+
   return {
     total,
     protectionScore,
@@ -311,5 +350,8 @@ export function computeScore(answers: Answers): ScoreResult {
     explanation,
     gaps,
     recommendations,
+    emergencyFundTarget,
+    emergencyFundMonths,
+    emergencyFundMonthlyExp,
   }
 }
