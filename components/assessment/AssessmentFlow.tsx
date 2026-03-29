@@ -60,7 +60,7 @@ function ScoreRing({ score }: { score: number }) {
             </linearGradient>
           </defs>
           {/* Track */}
-          <circle cx="100" cy="100" r={RADIUS} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10" />
+          <circle cx="100" cy="100" r={RADIUS} fill="none" stroke="#e5e7eb" strokeWidth="10" />
           {/* Fill */}
           <circle
             cx="100" cy="100" r={RADIUS} fill="none"
@@ -71,11 +71,11 @@ function ScoreRing({ score }: { score: number }) {
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-6xl font-black tabular-nums leading-none" style={{ color: statusColor }}>{display}</span>
-          <span className="text-[10px] tracking-[0.2em] uppercase font-semibold mt-1" style={{ color: 'rgba(255,255,255,0.3)' }}>out of 100</span>
+          <span className="text-[10px] tracking-[0.2em] uppercase font-semibold mt-1" style={{ color: '#9ca3af' }}>out of 100</span>
         </div>
       </div>
       <div className="text-center">
-        <p className="text-[10px] tracking-[0.25em] uppercase font-bold mb-1" style={{ color: 'rgba(255,255,255,0.3)' }}>Financial Risk Score</p>
+        <p className="text-[10px] tracking-[0.25em] uppercase font-bold mb-1" style={{ color: '#9ca3af' }}>Financial Risk Score</p>
       </div>
     </div>
   )
@@ -634,24 +634,18 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
       variants={stagger} initial="hidden" animate="show"
     >
 
-      {/* ── Hero Score Card — dark ────────────────────────────────── */}
+      {/* ── Hero Score Card — white ────────────────────────────────── */}
       <motion.div variants={fadeUp} className="relative overflow-hidden rounded-3xl mb-6"
-        style={{ background: 'linear-gradient(135deg, #0a0f1c 0%, #111827 60%, #0f172a 100%)' }}>
+        style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
 
         {/* Red accent stripe top */}
-        <div style={{ height: 3, background: `linear-gradient(to right, ${PRU_RED}, #f87171, transparent)` }} />
-
-        {/* Subtle grid */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)',
-          backgroundSize: '40px 40px',
-        }} />
+        <div style={{ height: 4, background: `linear-gradient(to right, ${PRU_RED}, #f87171, transparent)` }} />
 
         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0">
 
           {/* Left — Score ring */}
           <div className="flex flex-col items-center justify-center p-10 md:p-12"
-            style={{ borderRight: '1px solid rgba(255,255,255,0.05)' }}>
+            style={{ borderRight: '1px solid #e5e7eb' }}>
             <ScoreRing score={result.total} />
             {/* Status badge */}
             <div className="mt-4 flex items-center gap-2 px-4 py-2 rounded-full"
@@ -660,14 +654,14 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
               <span className="text-xs font-bold tracking-wide" style={{ color: statusColor }}>{statusLabel}</span>
             </div>
             <span className="text-[10px] tracking-widest uppercase font-semibold mt-3"
-              style={{ color: 'rgba(255,255,255,0.2)' }}>{result.riskLevel} Risk Level</span>
+              style={{ color: '#9ca3af' }}>{result.riskLevel} Risk Level</span>
           </div>
 
           {/* Right — Explanation + sub-scores */}
           <div className="p-8 md:p-10 flex flex-col justify-center gap-6">
             <div>
               <p className="text-[10px] font-bold tracking-[0.25em] uppercase mb-2" style={{ color: PRU_RED }}>Assessment Summary</p>
-              <p className="text-white/70 text-sm leading-relaxed">{result.explanation}</p>
+              <p className="text-gray-500 text-sm leading-relaxed">{result.explanation}</p>
             </div>
 
             {/* Sub-score bars */}
@@ -678,12 +672,12 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
                   <div key={label}>
                     <div className="flex justify-between items-center mb-2">
                       <div className="flex items-center gap-1.5">
-                        <span style={{ color: 'rgba(255,255,255,0.3)' }}>{icon}</span>
-                        <span className="text-[11px] font-semibold tracking-wide text-white/50 uppercase">{label}</span>
+                        <span style={{ color: '#9ca3af' }}>{icon}</span>
+                        <span className="text-[11px] font-semibold tracking-wide text-gray-400 uppercase">{label}</span>
                       </div>
                       <span className="text-xs font-black tabular-nums" style={{ color: barColor }}>{val}</span>
                     </div>
-                    <div className="h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                    <div className="h-[3px] rounded-full overflow-hidden" style={{ background: '#e5e7eb' }}>
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${val}%` }}
