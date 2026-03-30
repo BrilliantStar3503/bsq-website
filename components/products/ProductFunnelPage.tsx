@@ -488,7 +488,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                   style={{ borderRight: i < product.keyBenefits.length - 1 ? `1px solid ${GRAY_LINE}` : 'none' }}>
 
                   {/* Photo or placeholder */}
-                  <div className="relative w-full overflow-hidden" style={{ height: 200 }}>
+                  <div className="relative w-full overflow-hidden" style={{ height: 280 }}>
                     {benefitPhoto ? (
                       <Image
                         src={benefitPhoto}
