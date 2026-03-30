@@ -6,44 +6,46 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   ArrowRight, CheckCircle, MessageCircle, Shield, TrendingUp,
-  Clock, Users, Star, ChevronDown, Phone, X, Send, Check
+  Clock, Users, Star, Phone, X, Send, Check
 } from 'lucide-react'
 import type { PruProduct } from '@/lib/products'
 
-/* ─── Constants ────────────────────────────────────────────────────── */
-const PRU_RED = '#ed1b2e'
+/* ─── Brand constants ─────────────────────────────────────────────── */
+const PRU_RED   = '#D92D20'   // primary red
+const GRAY_BG   = '#f5f5f5'   // light section bg
+const GRAY_LINE = '#e5e7eb'   // divider
 
 const fadeUp = {
-  hidden:  { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
+  hidden:  { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' as const } },
 }
 const stagger = {
   hidden:  {},
-  visible: { transition: { staggerChildren: 0.09 } },
+  visible: { transition: { staggerChildren: 0.08 } },
 }
 
-/* ─── Category label ────────────────────────────────────────────────── */
-const CATEGORY_LABEL: Record<string, string> = {
-  vul:         'Variable Unit-Linked (VUL)',
-  traditional: 'Traditional Whole Life',
-  protection:  'Pure Protection',
-  income:      'Income Plan',
+/* ─── Benefit icon pool ──────────────────────────────────────────── */
+const ICONS = [Shield, TrendingUp, Clock, Star, Users, CheckCircle]
+
+/* ─── Utility: split "PRU..." product name into red PRU + black rest ── */
+function ProductTitle({ name, className = '' }: { name: string; className?: string }) {
+  if (name.startsWith('PRU')) {
+    return (
+      <span className={className}>
+        <span style={{ color: PRU_RED }}>PRU</span>{name.slice(3)}
+      </span>
+    )
+  }
+  return <span className={className}>{name}</span>
 }
 
-/* ─── Benefit icon rotation ─────────────────────────────────────────── */
-const BENEFIT_ICONS = [Shield, TrendingUp, Clock, Star, Users, CheckCircle]
-
-/* ─── Lead Capture Modal ────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   LEAD CAPTURE MODAL
+══════════════════════════════════════════════════════════════════ */
 function LeadModal({
-  open,
-  onClose,
-  product,
-  agentHandle,
+  open, onClose, product, agentHandle,
 }: {
-  open: boolean
-  onClose: () => void
-  product: PruProduct
-  agentHandle: string
+  open: boolean; onClose: () => void; product: PruProduct; agentHandle: string
 }) {
   const [name, setName]       = useState('')
   const [contact, setContact] = useState('')
@@ -59,9 +61,7 @@ function LeadModal({
     if (!name.trim() || !contact.trim()) { setError('Please fill in all fields.'); return }
     setLoading(true); setError('')
     try {
-      const utmData = (() => {
-        try { return JSON.parse(localStorage.getItem('bsq_utm') || '{}') } catch { return {} }
-      })()
+      const utmData = (() => { try { return JSON.parse(localStorage.getItem('bsq_utm') || '{}') } catch { return {} } })()
       await fetch('/api/capture-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -70,134 +70,112 @@ function LeadModal({
           source: `product_funnel_${product.slug}`,
           productInterest: product.name,
           attribution: {
-            agent: utmData.utm_agent || agentHandle || '',
+            agent:     utmData.utm_agent  || agentHandle || '',
             utmSource: utmData.utm_source || 'facebook',
             utmMedium: utmData.utm_medium || 'product_page',
           },
         }),
       })
       setDone(true)
-    } catch {
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setLoading(false)
-    }
+    } catch { setError('Something went wrong. Please try again.') }
+    finally  { setLoading(false) }
   }
 
   if (!open) return null
-
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(6px)' }}>
+      style={{ background: 'rgba(0,0,0,0.50)', backdropFilter: 'blur(4px)' }}>
       <motion.div
-        initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: 'easeOut' }}
-        className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl"
+        initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' as const }}
+        className="bg-white w-full max-w-md overflow-hidden"
+        style={{ borderRadius: 4, boxShadow: '0 8px 48px rgba(0,0,0,0.18)' }}
       >
-        {/* Top bar */}
-        <div className="h-1 w-full" style={{ background: product.color }} />
+        {/* Top red bar */}
+        <div style={{ height: 4, background: PRU_RED }} />
 
         <div className="p-7 relative">
           <button onClick={onClose}
-            className="absolute top-5 right-5 w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors">
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors">
             <X size={16} />
           </button>
 
           {!done ? (
             <>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                  style={{ background: `${product.color}15` }}>
-                  {product.emoji}
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: product.color }}>
-                    Get a Free Consultation
-                  </p>
-                  <h3 className="text-base font-black text-gray-900 leading-tight">{product.shortName}</h3>
-                </div>
-              </div>
+              <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: PRU_RED }}>Free Consultation</p>
+              <h3 className="text-xl font-black text-gray-900 mb-1 leading-tight">
+                Talk to a <span style={{ color: PRU_RED }}>PRU</span> Life UK Advisor
+              </h3>
+              <p className="text-xs text-gray-500 mb-6">About {product.shortName}. No cost, no obligation.</p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="text-xs font-bold text-gray-600 block mb-1.5">Your Name</label>
-                  <input
-                    type="text" value={name} onChange={e => setName(e.target.value)}
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-gray-500 block mb-1.5">Your Name</label>
+                  <input type="text" value={name} onChange={e => setName(e.target.value)}
                     placeholder="Juan dela Cruz"
-                    className="w-full px-4 py-3 rounded-xl text-sm text-gray-900 outline-none transition-all duration-200"
-                    style={{ border: '1.5px solid #e5e7eb', background: '#fafafa' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = product.color; e.currentTarget.style.boxShadow = `0 0 0 3px ${product.color}15` }}
-                    onBlur={e  => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.boxShadow = 'none' }}
-                  />
+                    className="w-full px-4 py-3 text-sm text-gray-900 outline-none transition-all"
+                    style={{ border: '1px solid #d1d5db', borderRadius: 4 }}
+                    onFocus={e => (e.currentTarget.style.borderColor = PRU_RED)}
+                    onBlur={e  => (e.currentTarget.style.borderColor = '#d1d5db')} />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-gray-600 block mb-1.5">Contact</label>
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-gray-500 block mb-1.5">Contact</label>
                   <div className="flex gap-2 mb-2">
                     {(['phone', 'email'] as const).map(t => (
-                      <button key={t} type="button"
-                        onClick={() => { setType(t); setContact('') }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 active:scale-[0.97]"
+                      <button key={t} type="button" onClick={() => { setType(t); setContact('') }}
+                        className="px-4 py-2 text-xs font-bold transition-all"
                         style={type === t
-                          ? { background: product.color, color: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.10)' }
-                          : { background: '#f9fafb', color: '#6b7280', border: '1px solid #e5e7eb' }
-                        }>
-                        <Phone size={10} /> {t === 'phone' ? 'Mobile' : 'Email'}
+                          ? { background: PRU_RED, color: '#fff', borderRadius: 4, border: `1px solid ${PRU_RED}` }
+                          : { background: '#fff', color: '#6b7280', borderRadius: 4, border: '1px solid #d1d5db' }}>
+                        <Phone size={10} className="inline mr-1" />{t === 'phone' ? 'Mobile' : 'Email'}
                       </button>
                     ))}
                   </div>
-                  <input
-                    key={type}
-                    type={type === 'email' ? 'email' : 'tel'}
+                  <input key={type} type={type === 'email' ? 'email' : 'tel'}
                     value={contact} onChange={e => setContact(e.target.value)}
                     placeholder={type === 'phone' ? '+63 9XX XXX XXXX' : 'you@example.com'}
-                    className="w-full px-4 py-3 rounded-xl text-sm text-gray-900 outline-none transition-all duration-200"
-                    style={{ border: '1.5px solid #e5e7eb', background: '#fafafa' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = product.color; e.currentTarget.style.boxShadow = `0 0 0 3px ${product.color}15` }}
-                    onBlur={e  => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.boxShadow = 'none' }}
-                  />
+                    className="w-full px-4 py-3 text-sm text-gray-900 outline-none transition-all"
+                    style={{ border: '1px solid #d1d5db', borderRadius: 4 }}
+                    onFocus={e => (e.currentTarget.style.borderColor = PRU_RED)}
+                    onBlur={e  => (e.currentTarget.style.borderColor = '#d1d5db')} />
                 </div>
 
-                {error && <p className="text-xs text-center font-medium text-red-600">{error}</p>}
+                {error && <p className="text-xs text-center font-medium" style={{ color: PRU_RED }}>{error}</p>}
 
                 <button type="submit" disabled={loading}
-                  className="w-full py-4 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.97] disabled:opacity-50"
-                  style={{ background: product.color, boxShadow: '0 1px 4px rgba(0,0,0,0.10)' }}
-                  onMouseEnter={e => !loading && (e.currentTarget.style.filter = 'brightness(0.9)')}
-                  onMouseLeave={e => (e.currentTarget.style.filter = 'brightness(1)')}
-                >
-                  {loading ? (
-                    <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Sending…</>
-                  ) : (
-                    <><Send size={14} /> Get My Free Consultation</>
-                  )}
+                  className="w-full py-3.5 text-sm font-bold text-white flex items-center justify-center gap-2 transition-all"
+                  style={{ background: loading ? '#aaa' : PRU_RED, borderRadius: 4, border: 'none' }}
+                  onMouseEnter={e => !loading && (e.currentTarget.style.background = '#B42318')}
+                  onMouseLeave={e => !loading && (e.currentTarget.style.background = PRU_RED)}>
+                  {loading
+                    ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Sending…</>
+                    : <><Send size={14} />Get My Free Consultation</>}
                 </button>
                 <p className="text-[10px] text-gray-400 text-center">🔒 Private & confidential. No spam, ever.</p>
               </form>
             </>
           ) : (
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               className="text-center py-4">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-                style={{ background: '#f0fdf4', border: '2px solid #bbf7d0' }}>
-                <Check size={28} className="text-green-500" />
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
+                style={{ background: '#f0fdf4', border: '2px solid #86efac' }}>
+                <Check size={24} className="text-green-500" />
               </div>
-              <h3 className="text-xl font-black text-gray-900 mb-2">You&apos;re on the list! 🎉</h3>
-              <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs mx-auto">
-                A licensed BSQ advisor will reach out within 24 hours to walk you through {product.shortName}.
+              <h3 className="text-lg font-black text-gray-900 mb-2">You&apos;re all set!</h3>
+              <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+                A licensed BSQ · PRU Life UK advisor will reach out within 24 hours.
               </p>
-              <button
-                onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=${messengerRef}`, '_blank')}
-                className="w-full py-3.5 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.97]"
-                style={{ background: product.color }}
-                onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(0.9)')}
-                onMouseLeave={e => (e.currentTarget.style.filter = 'brightness(1)')}
-              >
-                <MessageCircle size={15} /> Message Us Now
+              <button onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=${messengerRef}`, '_blank')}
+                className="w-full py-3.5 text-sm font-bold text-white flex items-center justify-center gap-2 transition-all"
+                style={{ background: PRU_RED, borderRadius: 4, border: 'none' }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
+                onMouseLeave={e => (e.currentTarget.style.background = PRU_RED)}>
+                <MessageCircle size={14} />Message Us on Facebook
               </button>
               <button onClick={onClose}
-                className="w-full mt-3 py-3 rounded-xl font-semibold text-sm text-gray-500 hover:text-gray-800 hover:bg-gray-50 transition-colors duration-150">
-                Back to Page
+                className="w-full mt-2 py-3 text-sm text-gray-400 hover:text-gray-700 transition-colors">
+                Back to page
               </button>
             </motion.div>
           )}
@@ -207,237 +185,203 @@ function LeadModal({
   )
 }
 
-/* ─── Main Funnel Page ──────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   MAIN FUNNEL PAGE
+══════════════════════════════════════════════════════════════════ */
 export default function ProductFunnelPage({ product }: { product: PruProduct }) {
-  const router = useRouter()
-  const [modalOpen, setModalOpen] = useState(false)
-  const [agentHandle, setAgentHandle] = useState('')
+  const router      = useRouter()
+  const [modal, setModal]           = useState(false)
+  const [agentHandle, setAgent]     = useState('')
+  const hasPhoto = false // ← flip to true once real photo is in /public/images/products/
 
-  /* Read UTM agent from localStorage */
   useEffect(() => {
     try {
       const utm = JSON.parse(localStorage.getItem('bsq_utm') || '{}')
-      if (utm.utm_agent) setAgentHandle(utm.utm_agent)
+      if (utm.utm_agent) setAgent(utm.utm_agent)
     } catch { /* silent */ }
   }, [])
 
-  const hex       = product.color
-  const bgTint    = `${hex}10`
-  const bgMedium  = `${hex}18`
-  const borderTint = `${hex}30`
-  const messengerRef = `product_${product.slug}${agentHandle ? `_${agentHandle}` : ''}`
-  const hasPhoto  = false // flip to true once real photos are added
-
   return (
-    <main className="bg-white min-h-screen">
+    <main style={{ background: '#fff', color: '#111' }}>
 
       {/* ══════════════════════════════════════════════════
-          HERO
+          HERO — split layout, white bg, photo on right
       ══════════════════════════════════════════════════ */}
-      <section
-        className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24"
-        style={{ background: `linear-gradient(160deg, ${bgTint} 0%, #fff 55%)` }}
-      >
-        {/* Subtle top accent line */}
-        <div className="absolute top-0 left-0 right-0 h-1" style={{ background: hex }} />
+      <section className="relative" style={{ borderBottom: `1px solid ${GRAY_LINE}` }}>
+        {/* thin red top stripe */}
+        <div style={{ height: 4, background: PRU_RED }} />
 
-        <div className="max-w-6xl mx-auto px-5 md:px-10">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <div className="flex flex-col lg:flex-row lg:items-stretch min-h-[520px]">
 
-            {/* ── Left: copy ── */}
+            {/* Left — text */}
             <motion.div
-              className="flex-1"
+              className="flex-1 flex flex-col justify-center py-14 lg:py-16 lg:pr-16"
               initial="hidden" animate="visible" variants={stagger}
             >
-              {/* Category badge */}
-              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-4">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border"
-                  style={{ color: hex, borderColor: borderTint, background: bgTint }}>
-                  {CATEGORY_LABEL[product.category] ?? product.category}
+              {/* Category tag */}
+              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-5">
+                <div style={{ width: 3, height: 16, background: PRU_RED, borderRadius: 2 }} />
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                  PRU Life UK · {product.category === 'vul' ? 'Investment-Linked' : product.category === 'traditional' ? 'Traditional' : 'Insurance'} Plan
                 </span>
-                {agentHandle && (
-                  <span className="text-[10px] font-bold text-gray-400 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-                    Shared by {agentHandle.replace(/_/g, ' ')}
-                  </span>
-                )}
               </motion.div>
 
-              {/* Product name */}
-              <motion.div variants={fadeUp} className="flex items-start gap-4 mb-4">
-                <div className="flex-shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-sm"
-                  style={{ background: bgMedium, border: `1px solid ${borderTint}` }}>
-                  {product.emoji}
-                </div>
-                <div>
-                  <h1 className="text-3xl md:text-4xl xl:text-5xl font-black text-gray-900 leading-tight tracking-tight">
-                    {product.name}
-                  </h1>
-                  <p className="text-base md:text-lg font-semibold mt-1" style={{ color: hex }}>
-                    {product.tagline}
-                  </p>
-                </div>
-              </motion.div>
+              {/* Product name — PRU in red */}
+              <motion.h1 variants={fadeUp}
+                className="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-3"
+                style={{ color: '#111' }}>
+                <ProductTitle name={product.name} />
+              </motion.h1>
+
+              {/* Tagline */}
+              <motion.p variants={fadeUp}
+                className="text-base md:text-lg font-semibold mb-5"
+                style={{ color: '#555' }}>
+                {product.tagline}
+              </motion.p>
 
               {/* What it is */}
               <motion.p variants={fadeUp}
-                className="text-base text-gray-600 leading-relaxed mb-6 max-w-xl">
+                className="text-sm text-gray-600 leading-relaxed mb-8 max-w-lg">
                 {product.whatItIs}
               </motion.p>
 
-              {/* Top 3 USPs */}
-              <motion.div variants={stagger} className="space-y-2.5 mb-8">
-                {product.usps.slice(0, 3).map((usp, i) => (
-                  <motion.div key={i} variants={fadeUp} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ background: bgMedium }}>
-                      <CheckCircle size={12} style={{ color: hex }} />
-                    </div>
-                    <p className="text-sm text-gray-700 font-medium">{usp}</p>
-                  </motion.div>
-                ))}
-              </motion.div>
-
               {/* CTAs */}
               <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-black text-sm text-white transition-all duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.97]"
-                  style={{ background: hex, boxShadow: '0 1px 4px rgba(0,0,0,0.10)' }}
-                  onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(0.9)')}
-                  onMouseLeave={e => (e.currentTarget.style.filter = 'brightness(1)')}
-                >
-                  <MessageCircle size={16} /> Get a Free Consultation
+                <button onClick={() => setModal(true)}
+                  className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold text-white transition-all"
+                  style={{ background: PRU_RED, borderRadius: 4, border: 'none' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
+                  onMouseLeave={e => (e.currentTarget.style.background = PRU_RED)}>
+                  <MessageCircle size={15} />Get a Free Consultation
                 </button>
-                <button
-                  onClick={() => router.push('/assessment')}
-                  className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-black text-sm border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.97]"
-                  style={{ background: '#fff', color: hex, borderColor: borderTint, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = hex; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = hex }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = hex; e.currentTarget.style.borderColor = borderTint }}
-                >
-                  Take Free Assessment <ArrowRight size={15} />
+                <button onClick={() => router.push('/assessment')}
+                  className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold transition-all"
+                  style={{ background: '#fff', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 4 }}
+                  onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = PRU_RED }}>
+                  Take Free Assessment <ArrowRight size={14} />
                 </button>
               </motion.div>
 
-              {/* Trust badges */}
-              <motion.div variants={fadeUp}
-                className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-5">
+              {/* Trust strip */}
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-x-6 gap-y-2 mt-6">
                 {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
                   <div key={t} className="flex items-center gap-1.5">
-                    <Check size={11} style={{ color: hex }} />
-                    <span className="text-[11px] text-gray-500 font-medium">{t}</span>
+                    <Check size={12} style={{ color: PRU_RED }} />
+                    <span className="text-xs text-gray-500">{t}</span>
                   </div>
                 ))}
               </motion.div>
+
+              {/* Agent attribution */}
+              {agentHandle && (
+                <motion.div variants={fadeUp}
+                  className="flex items-center gap-2 mt-4 text-xs text-gray-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                  Shared by {agentHandle.replace(/_/g, ' ')}
+                </motion.div>
+              )}
             </motion.div>
 
-            {/* ── Right: Product Photo ── */}
+            {/* Right — Photo */}
             <motion.div
-              className="lg:w-[420px] xl:w-[480px] flex-shrink-0"
-              initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+              className="lg:w-[480px] xl:w-[520px] flex-shrink-0 relative"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <div
-                className="relative w-full rounded-3xl overflow-hidden"
-                style={{
-                  aspectRatio: '4/3',
-                  background: `linear-gradient(135deg, ${bgMedium} 0%, ${bgTint} 100%)`,
-                  border: `1px solid ${borderTint}`,
-                  boxShadow: `0 4px 40px ${hex}15`,
-                }}
-              >
-                {hasPhoto ? (
-                  <Image
-                    src={`/images/products/${product.slug}.jpg`}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  /* Placeholder — replace with real photo */
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8">
-                    <div className="text-7xl">{product.emoji}</div>
-                    <div className="text-center">
-                      <p className="text-sm font-black text-gray-800">{product.shortName}</p>
-                      <p className="text-xs text-gray-400 mt-1">Photo coming soon</p>
-                    </div>
-                    {/* Decorative blobs */}
-                    <div className="absolute top-8 right-8 w-20 h-20 rounded-full opacity-20"
-                      style={{ background: hex, filter: 'blur(24px)' }} />
-                    <div className="absolute bottom-8 left-8 w-16 h-16 rounded-full opacity-15"
-                      style={{ background: hex, filter: 'blur(20px)' }} />
+              {hasPhoto ? (
+                <Image
+                  src={`/images/products/${product.slug}.jpg`}
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                /* Placeholder — clean gray, matches PRU Life UK style */
+                <div className="w-full h-full min-h-[320px] lg:min-h-0 flex flex-col items-center justify-center gap-4"
+                  style={{ background: GRAY_BG, borderLeft: `1px solid ${GRAY_LINE}` }}>
+                  <div className="text-6xl opacity-30">{product.emoji}</div>
+                  <div className="text-center">
+                    <p className="text-sm font-bold text-gray-400">{product.shortName}</p>
+                    <p className="text-xs text-gray-400 mt-1">Photo coming soon</p>
                   </div>
-                )}
-
-                {/* PRU Life UK badge */}
-                <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2 flex items-center gap-2 shadow-sm">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: hex }} />
-                  <span className="text-[10px] font-black text-gray-700">PRU Life UK</span>
+                  {/* PRU Life UK badge */}
+                  <div className="absolute bottom-5 right-5 bg-white px-3 py-1.5 flex items-center gap-2"
+                    style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
+                    <div className="w-2 h-2 rounded-full" style={{ background: PRU_RED }} />
+                    <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">PRU Life UK</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════
-          PROBLEM HOOK — emotional FB-style headline
+          PROBLEM HOOK — gray bg, centered
       ══════════════════════════════════════════════════ */}
-      <section className="py-10 md:py-14" style={{ background: bgTint }}>
-        <div className="max-w-3xl mx-auto px-5 md:px-10 text-center">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5 }}
-            className="text-xl md:text-2xl font-black text-gray-900 leading-snug"
-          >
-            &ldquo;{product.fbHooks[0]}&rdquo;
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-            viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-4 text-sm text-gray-500 leading-relaxed max-w-xl mx-auto"
-          >
-            {product.problemItSolves}
-          </motion.p>
+      <section style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
+        <div className="max-w-3xl mx-auto px-6 md:px-10 py-12 md:py-16 text-center">
+          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.45 }}>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div style={{ height: 2, width: 24, background: PRU_RED }} />
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>
+                The Problem
+              </span>
+              <div style={{ height: 2, width: 24, background: PRU_RED }} />
+            </div>
+            <p className="text-xl md:text-2xl font-bold text-gray-900 leading-snug mb-4">
+              &ldquo;{product.fbHooks[0]}&rdquo;
+            </p>
+            <p className="text-sm text-gray-500 leading-relaxed max-w-xl mx-auto">
+              {product.problemItSolves}
+            </p>
+          </motion.div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════
-          KEY BENEFITS
+          KEY BENEFITS — white bg
       ══════════════════════════════════════════════════ */}
-      <section className="py-14 md:py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-5 md:px-10">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5 }}
-          >
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-2" style={{ color: hex }}>
-              Why Choose {product.shortName}
-            </p>
+      <section style={{ background: '#fff', borderBottom: `1px solid ${GRAY_LINE}` }}>
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-14 md:py-20">
+          <motion.div className="mb-10"
+            initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.45 }}>
+            <div className="flex items-center gap-3 mb-3">
+              <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
+              <p className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>
+                Why {product.shortName}
+              </p>
+            </div>
             <h2 className="text-2xl md:text-3xl font-black text-gray-900">Key Benefits</h2>
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}
-            variants={stagger}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px"
+            style={{ border: `1px solid ${GRAY_LINE}` }}
+            initial="hidden" whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }} variants={stagger}
           >
             {product.keyBenefits.map((benefit, i) => {
-              const Icon = BENEFIT_ICONS[i % BENEFIT_ICONS.length]
+              const Icon = ICONS[i % ICONS.length]
               return (
                 <motion.div key={i} variants={fadeUp}
-                  className="rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
-                  style={{ background: bgTint, border: `1px solid ${borderTint}` }}
-                >
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                    style={{ background: bgMedium }}>
-                    <Icon size={18} style={{ color: hex }} />
+                  className="p-7 bg-white hover:bg-gray-50 transition-colors duration-200 group"
+                  style={{ borderRight: (i + 1) % 3 !== 0 ? `1px solid ${GRAY_LINE}` : 'none' }}>
+                  <div className="w-10 h-10 flex items-center justify-center mb-5"
+                    style={{ background: '#fef2f2', borderRadius: 4 }}>
+                    <Icon size={18} style={{ color: PRU_RED }} />
                   </div>
-                  <h3 className="text-sm font-black text-gray-900 mb-2 leading-snug">{benefit.title}</h3>
+                  <h3 className="text-sm font-bold text-gray-900 mb-2 leading-snug">{benefit.title}</h3>
                   <p className="text-xs text-gray-500 leading-relaxed">{benefit.description}</p>
+                  <div className="mt-4 h-0.5 w-8 transition-all duration-300 group-hover:w-12"
+                    style={{ background: PRU_RED }} />
                 </motion.div>
               )
             })}
@@ -446,83 +390,80 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
       </section>
 
       {/* ══════════════════════════════════════════════════
-          IDEAL FOR
+          IS IT RIGHT FOR YOU — gray bg, 2 col
       ══════════════════════════════════════════════════ */}
-      <section className="py-14 md:py-20" style={{ background: '#fafafa' }}>
-        <div className="max-w-6xl mx-auto px-5 md:px-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+      <section style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-14 md:py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
-            {/* Who it's for */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.5 }}
-            >
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3" style={{ color: hex }}>
-                This is for you if…
-              </p>
-              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-6">
-                Is {product.shortName} Right For You?
+            {/* Ideal For */}
+            <motion.div initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.45 }}>
+              <div className="flex items-center gap-3 mb-3">
+                <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
+                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>This Is For You</p>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8">
+                Is <ProductTitle name={product.shortName} /> Right For You?
               </h2>
-              <div className="space-y-3.5">
+              <div className="space-y-3">
                 {product.idealFor.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 p-4 rounded-xl"
-                    style={{ background: bgTint, border: `1px solid ${borderTint}` }}>
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ background: bgMedium }}>
-                      <Check size={12} style={{ color: hex }} />
+                  <div key={i} className="flex items-start gap-3 bg-white p-4"
+                    style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
+                    <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ background: '#fef2f2', borderRadius: '50%' }}>
+                      <Check size={11} style={{ color: PRU_RED }} />
                     </div>
-                    <p className="text-sm text-gray-800 font-medium leading-snug">{item}</p>
+                    <p className="text-sm text-gray-700 leading-snug">{item}</p>
                   </div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Specs panel */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-3 text-gray-400">
-                Plan Details
-              </p>
-              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-6">Quick Specs</h2>
+            {/* Quick Specs */}
+            <motion.div initial={{ opacity: 0, x: 12 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.45, delay: 0.05 }}>
+              <div className="flex items-center gap-3 mb-3">
+                <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
+                <p className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>Plan Details</p>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8">Quick Specs</h2>
 
-              <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+              <div className="bg-white overflow-hidden" style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
                 {[
-                  ['Product Type',    product.specs.productType],
-                  ['Payment Term',    product.specs.paymentTerms],
-                  ['Issue Age',       product.specs.issueAge],
-                  ['Entry Point',     product.specs.minPremium ?? product.specs.minSumAssured ?? 'Ask your advisor'],
-                  ['Death Benefit',   product.specs.deathBenefit],
-                  ['Benefit Until',   product.specs.benefitTerm],
-                  ['Currency',        product.specs.currency],
-                ].map(([label, value], i) => (
-                  <div key={i}
-                    className="flex items-start gap-4 px-5 py-4"
-                    style={{ borderBottom: i < 6 ? '1px solid #f1f5f9' : 'none', background: i % 2 === 0 ? '#fff' : '#fafafa' }}
-                  >
-                    <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 w-28 flex-shrink-0 mt-0.5">{label}</p>
-                    <p className="text-xs font-semibold text-gray-800 flex-1 leading-relaxed">{value}</p>
+                  ['Product Type',  product.specs.productType],
+                  ['Payment Term',  product.specs.paymentTerms],
+                  ['Issue Age',     product.specs.issueAge],
+                  ['Entry Point',   product.specs.minPremium ?? product.specs.minSumAssured ?? 'Ask your advisor'],
+                  ['Death Benefit', product.specs.deathBenefit],
+                  ['Benefit Until', product.specs.benefitTerm],
+                  ['Currency',      product.specs.currency],
+                ].map(([label, value], i, arr) => (
+                  <div key={i} className="flex gap-4 px-5 py-4"
+                    style={{ borderBottom: i < arr.length - 1 ? `1px solid ${GRAY_LINE}` : 'none' }}>
+                    <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 w-24 flex-shrink-0 pt-0.5">{label}</p>
+                    <p className="text-xs text-gray-800 leading-relaxed font-medium flex-1">{value}</p>
                   </div>
                 ))}
               </div>
 
-              {/* Riders teaser */}
+              {/* Riders */}
               {product.riders.length > 0 && (
-                <div className="mt-5 p-4 rounded-xl" style={{ background: bgTint, border: `1px solid ${borderTint}` }}>
-                  <p className="text-[10px] font-black uppercase tracking-wider mb-2" style={{ color: hex }}>
-                    Available Riders ({product.riders.length})
+                <div className="mt-5 bg-white p-5" style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
+                  <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: PRU_RED }}>
+                    Optional Riders ({product.riders.length})
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {product.riders.slice(0, 5).map((r, i) => (
-                      <span key={i} className="text-[9px] font-bold px-2 py-1 rounded-full bg-white border"
-                        style={{ color: hex, borderColor: borderTint }}>
+                    {product.riders.slice(0, 6).map((r, i) => (
+                      <span key={i} className="text-[10px] font-medium px-2.5 py-1 text-gray-600"
+                        style={{ background: GRAY_BG, border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
                         {r.split('(')[0].trim()}
                       </span>
                     ))}
-                    {product.riders.length > 5 && (
-                      <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-white border text-gray-400 border-gray-200">
-                        +{product.riders.length - 5} more
+                    {product.riders.length > 6 && (
+                      <span className="text-[10px] font-medium px-2.5 py-1 text-gray-400"
+                        style={{ background: GRAY_BG, border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
+                        +{product.riders.length - 6} more
                       </span>
                     )}
                   </div>
@@ -534,26 +475,20 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
       </section>
 
       {/* ══════════════════════════════════════════════════
-          MORE FB HOOKS — social proof / emotional
+          MORE HOOKS — white bg, clean quote cards
       ══════════════════════════════════════════════════ */}
       {product.fbHooks.length > 1 && (
-        <section className="py-12 md:py-16 bg-white">
-          <div className="max-w-4xl mx-auto px-5 md:px-10">
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 gap-5"
+        <section style={{ background: '#fff', borderBottom: `1px solid ${GRAY_LINE}` }}>
+          <div className="max-w-4xl mx-auto px-6 md:px-10 py-14 md:py-16">
+            <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6"
               initial="hidden" whileInView="visible"
-              viewport={{ once: true }} variants={stagger}
-            >
+              viewport={{ once: true }} variants={stagger}>
               {product.fbHooks.slice(1, 3).map((hook, i) => (
                 <motion.div key={i} variants={fadeUp}
-                  className="p-6 rounded-2xl"
-                  style={{ background: bgTint, border: `1px solid ${borderTint}` }}
-                >
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center mb-3"
-                    style={{ background: bgMedium }}>
-                    <ChevronDown size={14} style={{ color: hex }} />
-                  </div>
-                  <p className="text-sm font-bold text-gray-800 leading-relaxed">&ldquo;{hook}&rdquo;</p>
+                  className="p-6 bg-white"
+                  style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
+                  <div style={{ width: 24, height: 3, background: PRU_RED, borderRadius: 2, marginBottom: 16 }} />
+                  <p className="text-sm font-semibold text-gray-800 leading-relaxed">&ldquo;{hook}&rdquo;</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -562,87 +497,72 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
       )}
 
       {/* ══════════════════════════════════════════════════
-          BOTTOM CTA — dark section
+          BOTTOM CTA — dark section, PRU Life UK style
       ══════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden py-16 md:py-24"
-        style={{ background: 'linear-gradient(135deg, #0a0f1c 0%, #111827 100%)' }}>
-        {/* Red top accent */}
-        <div className="absolute top-0 left-0 right-0 h-[3px]"
-          style={{ background: `linear-gradient(to right, ${hex}, ${hex}60, transparent)` }} />
-        {/* Glow */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: `radial-gradient(ellipse 60% 70% at 50% 50%, ${hex}18 0%, transparent 70%)` }} />
+      <section style={{ background: '#1a1a1a' }}>
+        <div className="max-w-5xl mx-auto px-6 md:px-10 py-16 md:py-20">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-10">
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.45 }}>
+              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: PRU_RED }}>
+                Next Step
+              </p>
+              <h2 className="text-2xl md:text-3xl font-black text-white leading-tight mb-4">
+                Ready to learn more about<br />
+                <ProductTitle name={product.name} className="text-white" />?
+              </h2>
+              <p className="text-sm text-gray-400 leading-relaxed max-w-md">
+                Talk to a licensed BSQ · PRU Life UK advisor. Free consultation, no commitment.
+              </p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4">
+                {['Free & no obligation', 'Licensed PRU Life UK advisor', 'Reply within 24 hrs'].map(t => (
+                  <div key={t} className="flex items-center gap-1.5">
+                    <Check size={11} style={{ color: PRU_RED }} />
+                    <span className="text-xs text-gray-500">{t}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
 
-        <div className="relative max-w-3xl mx-auto px-5 md:px-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5 }}
-          >
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] mb-4" style={{ color: hex }}>
-              Take the Next Step
-            </p>
-            <h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-4">
-              Ready to Learn More About<br />
-              <span style={{ color: hex }}>{product.shortName}</span>?
-            </h2>
-            <p className="text-white/50 text-sm leading-relaxed mb-8 max-w-md mx-auto">
-              Talk to a licensed BSQ · PRU Life UK advisor. Free consultation, no commitment.
-              We&apos;ll walk you through exactly how {product.shortName} works for your situation.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => setModalOpen(true)}
-                className="flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-black text-sm transition-all duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.97]"
-                style={{ background: '#fff', color: hex, boxShadow: '0 1px 4px rgba(0,0,0,0.15)' }}
-                onMouseEnter={e => { e.currentTarget.style.background = hex; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = hex }}
-              >
-                <MessageCircle size={16} /> Get a Free Consultation
+            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+              viewport={{ once: true }} transition={{ duration: 0.45, delay: 0.1 }}
+              className="flex flex-col gap-3 shrink-0 w-full md:w-auto">
+              <button onClick={() => setModal(true)}
+                className="flex items-center justify-center gap-2 px-10 py-4 text-sm font-bold text-white transition-all"
+                style={{ background: PRU_RED, borderRadius: 4, border: 'none', minWidth: 240 }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
+                onMouseLeave={e => (e.currentTarget.style.background = PRU_RED)}>
+                <MessageCircle size={15} />Get a Free Consultation
               </button>
               <button
-                onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=${messengerRef}`, '_blank')}
-                className="flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-black text-sm border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 active:scale-[0.97]"
-                style={{ color: 'rgba(255,255,255,0.7)', borderColor: 'rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)' }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}
-              >
-                <MessageCircle size={16} /> Message on Facebook
+                onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=product_${product.slug}`, '_blank')}
+                className="flex items-center justify-center gap-2 px-10 py-4 text-sm font-bold transition-all"
+                style={{ background: 'transparent', color: '#e5e7eb', border: '1px solid #4b5563', borderRadius: 4 }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = '#fff'; e.currentTarget.style.color = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#4b5563'; e.currentTarget.style.color = '#e5e7eb' }}>
+                <MessageCircle size={15} />Message on Facebook
               </button>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-6">
-              {['Free & no obligation', 'Licensed PRU Life UK advisor', 'Reply within 24 hrs'].map(t => (
-                <div key={t} className="flex items-center gap-1.5">
-                  <CheckCircle size={11} style={{ color: hex }} />
-                  <span className="text-[11px] text-white/40">{t}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════
-          FOOTER NOTE
+          COMPLIANCE FOOTER NOTE
       ══════════════════════════════════════════════════ */}
-      <div className="bg-white px-5 py-5 text-center border-t border-gray-100">
-        <p className="text-[10px] text-gray-400 max-w-2xl mx-auto leading-relaxed">
-          {product.name} is underwritten by PRU Life Insurance Corporation of UK.
-          All product details are for informational purposes only. Benefits are subject to policy terms and conditions,
-          eligibility, and underwriting approval. Brilliant Star Quartz (BSQ) is a licensed district of PRU Life UK.
-        </p>
+      <div style={{ background: '#f9f9f9', borderTop: `1px solid ${GRAY_LINE}` }}>
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-5">
+          <p className="text-[10px] text-gray-400 leading-relaxed">
+            {product.name} is underwritten by PRU Life Insurance Corporation of UK.
+            All product details are for informational purposes only. Benefits are subject to policy
+            terms and conditions, eligibility, and underwriting approval. Brilliant Star Quartz (BSQ)
+            is a licensed district of PRU Life UK.
+          </p>
+        </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════
-          LEAD MODAL
-      ══════════════════════════════════════════════════ */}
-      <LeadModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        product={product}
-        agentHandle={agentHandle}
-      />
+      {/* Lead Modal */}
+      <LeadModal open={modal} onClose={() => setModal(false)} product={product} agentHandle={agentHandle} />
     </main>
   )
 }
