@@ -160,7 +160,7 @@ function BsqLogo() {
           Brilliant Star Quartz
         </span>
         <span className="text-[9px] tracking-[0.15em] uppercase font-bold flex items-center gap-1">
-          <span className="text-white/40">Tied Agency</span>
+          <span className="text-white/40">Tied Branch &amp; Area</span>
           <span className="text-white/25">·</span>
           <span style={{ color: '#D92D20', fontWeight: 800, letterSpacing: '0.12em' }}>PRU&nbsp;LIFE&nbsp;UK</span>
         </span>
