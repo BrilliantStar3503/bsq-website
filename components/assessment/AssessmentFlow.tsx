@@ -524,10 +524,8 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
                         type="submit"
                         disabled={loading}
                         whileTap={{ scale: 0.97 }}
-                        className="w-full py-4 rounded-xl font-black text-sm text-white transition-all duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
-                        style={{ background: RED, boxShadow: '0 1px 4px rgba(0,0,0,0.10)', opacity: loading ? 0.7 : 1 }}
-                        onMouseEnter={e => !loading && ((e.currentTarget.style.background = '#c1121f'))}
-                        onMouseLeave={e => !loading && ((e.currentTarget.style.background = RED))}
+                        className="ar-btn-primary w-full py-4 text-sm"
+                        style={{ opacity: loading ? 0.7 : 1 }}
                       >
                         {loading ? (
                           <>
@@ -570,17 +568,14 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
                       <motion.button
                         whileTap={{ scale: 0.97 }}
                         onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_lead_score${score}`, '_blank')}
-                        className="w-full py-3.5 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
-                        style={{ background: RED, boxShadow: '0 1px 4px rgba(0,0,0,0.10)' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = '#c1121f')}
-                        onMouseLeave={e => (e.currentTarget.style.background = RED)}
+                        className="ar-btn-primary w-full py-3.5 text-sm"
                       >
                         <MessageCircle size={15} />
                         Talk to an Advisor Now
                       </motion.button>
                       <button
                         onClick={handleClose}
-                        className="w-full py-3 rounded-2xl font-semibold text-sm text-gray-500 hover:text-gray-800 hover:bg-gray-50 transition-colors duration-150"
+                        className="ar-btn-tertiary w-full py-3 text-sm"
                       >
                         Back to My Results
                       </button>
@@ -957,32 +952,30 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
 
                   {/* ── CTAs ── */}
                   <div className="flex gap-2 mt-auto pt-1">
+                    {/* "Learn More" keeps dynamic product color — secondary style, no shadow */}
                     <a
                       href={`/products/${rec.slug}`}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[11px] font-bold transition-all duration-200 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 active:scale-[0.97]"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-md text-[11px] font-bold transition-all duration-200 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 active:scale-[0.97]"
                       style={{
                         background: '#fff',
                         color: hex,
-                        borderColor: borderTint,
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                        borderColor: hex,
                       }}
                       onMouseEnter={e => {
                         (e.currentTarget as HTMLAnchorElement).style.background = hex
                         ;(e.currentTarget as HTMLAnchorElement).style.color = '#fff'
-                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = hex
                       }}
                       onMouseLeave={e => {
                         (e.currentTarget as HTMLAnchorElement).style.background = '#fff'
                         ;(e.currentTarget as HTMLAnchorElement).style.color = hex
-                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = borderTint
                       }}
                     >
                       Learn More <ArrowRight size={11} />
                     </a>
+                    {/* "Advisor" — tertiary ghost button */}
                     <button
                       onClick={() => setLeadModalOpen(true)}
-                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-[11px] font-bold border transition-all duration-200 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 active:scale-[0.97]"
-                      style={{ color: '#6b7280', borderColor: '#e5e7eb', background: '#fff' }}
+                      className="ar-btn-tertiary px-3 py-2.5 text-[11px] active:scale-[0.97]"
                     >
                       <MessageCircle size={12} /> Advisor
                     </button>
@@ -1038,18 +1031,7 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
             <motion.button
               onClick={() => setLeadModalOpen(true)}
               whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-3 px-8 py-4 rounded-xl font-black text-sm transition-all duration-200 w-full md:w-auto justify-center border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
-              style={{ background: '#fff', color: PRU_RED, borderColor: '#fca5a5', boxShadow: '0 1px 3px rgba(0,0,0,0.07)' }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = PRU_RED
-                e.currentTarget.style.color = '#fff'
-                e.currentTarget.style.borderColor = PRU_RED
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = '#fff'
-                e.currentTarget.style.color = PRU_RED
-                e.currentTarget.style.borderColor = '#fca5a5'
-              }}
+              className="ar-btn-secondary w-full md:w-auto px-8 py-4 text-sm"
             >
               <Send size={14} />
               Send My Results
@@ -1093,18 +1075,7 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
             <motion.button
               onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
               whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-3 px-8 py-4 rounded-xl font-black text-sm transition-all duration-200 border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2"
-              style={{ background: '#fff', color: PRU_RED, boxShadow: '0 1px 4px rgba(0,0,0,0.10)' }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = PRU_RED
-                e.currentTarget.style.color = '#fff'
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(220,38,38,0.18)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = '#fff'
-                e.currentTarget.style.color = PRU_RED
-                e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.10)'
-              }}
+              className="ar-btn-secondary-dark px-8 py-4 text-sm"
             >
               <MessageCircle size={15} />
               Talk to an Advisor
@@ -1204,7 +1175,115 @@ export default function AssessmentFlow() {
 
   if (phase === 'results') {
     return (
-      <div className="min-h-screen flex flex-col" style={{ background: '#f8fafc' }}>
+      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f8fafc' }}>
+        {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
+        <style>{`
+          /* ═══════════════════════════════════════════════════════════════
+             Assessment Results — Scoped Button System
+             Inspired by Prudential Singapore (prudential.com.sg)
+             Scope: .assessment-results only — zero global side-effects
+             ═══════════════════════════════════════════════════════════════ */
+
+          /* PRIMARY — solid red, white text */
+          .assessment-results .ar-btn-primary {
+            background-color: #D92D20;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            box-shadow: none;
+            font-weight: 700;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+          }
+          .assessment-results .ar-btn-primary:hover:not(:disabled) {
+            background-color: #B42318;
+          }
+          .assessment-results .ar-btn-primary:focus-visible {
+            outline: 2px solid #FCA5A5;
+            outline-offset: 2px;
+          }
+          .assessment-results .ar-btn-primary:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+          }
+
+          /* SECONDARY — white base, strong red border */
+          .assessment-results .ar-btn-secondary {
+            background-color: #ffffff;
+            color: #D92D20;
+            border: 1.5px solid #D92D20;
+            border-radius: 6px;
+            box-shadow: none;
+            font-weight: 700;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+          }
+          .assessment-results .ar-btn-secondary:hover:not(:disabled) {
+            background-color: #D92D20;
+            color: #ffffff;
+          }
+          .assessment-results .ar-btn-secondary:focus-visible {
+            outline: 2px solid #FCA5A5;
+            outline-offset: 2px;
+          }
+
+          /* SECONDARY-DARK — white base on dark/colored backgrounds */
+          .assessment-results .ar-btn-secondary-dark {
+            background-color: #ffffff;
+            color: #D92D20;
+            border: 1.5px solid #ffffff;
+            border-radius: 6px;
+            box-shadow: none;
+            font-weight: 700;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+          }
+          .assessment-results .ar-btn-secondary-dark:hover:not(:disabled) {
+            background-color: #D92D20;
+            color: #ffffff;
+            border-color: #D92D20;
+          }
+          .assessment-results .ar-btn-secondary-dark:focus-visible {
+            outline: 2px solid rgba(255,255,255,0.5);
+            outline-offset: 2px;
+          }
+
+          /* TERTIARY — ghost, text + underline on hover */
+          .assessment-results .ar-btn-tertiary {
+            background: transparent;
+            color: #6b7280;
+            border: none;
+            box-shadow: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: color 0.15s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+          }
+          .assessment-results .ar-btn-tertiary:hover {
+            color: #111827;
+            text-decoration: underline;
+          }
+          .assessment-results .ar-btn-tertiary:focus-visible {
+            outline: 2px solid #e5e7eb;
+            outline-offset: 2px;
+          }
+        `}</style>
 
         {/* ── Top nav bar — PRU Life UK branded ──────────────────── */}
         <div className="sticky top-0 z-30 bg-white"
