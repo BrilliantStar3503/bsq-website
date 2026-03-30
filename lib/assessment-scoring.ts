@@ -20,11 +20,22 @@ export interface Gap {
 
 export interface Recommendation {
   id: number
+  productId: string
   name: string
+  shortName: string
+  emoji: string
   layer: string
-  what: string
-  why: string
+  category: string
+  color: string
   dot: string
+  // Card copy — pulled from products.ts
+  what: string          // one-liner product description
+  why: string           // personalised rationale from assessment answers
+  keyBenefits: { title: string; description: string }[]  // top 2 benefits
+  idealFor: string[]    // top 2 client profile bullets
+  entryPoint: string    // min premium or min SA
+  paymentTerm: string
+  slug: string          // future funnel page: /products/:slug
 }
 
 export type RiskLevel = 'Low' | 'Moderate' | 'High' | 'Critical'
@@ -246,62 +257,188 @@ export function computeScore(answers: Answers): ScoreResult {
     })
   }
 
-  /* ── Recommendations ───────────────────────────────────────────── */
+  /* ── Recommendations — sourced from /lib/products.ts primers ─── */
   const recommendations: Recommendation[] = []
   const gapIds = gaps.map(g => g.id)
 
+  // ── Income / Life Protection Gap → PRUMillion Protect ─────────
   if (gapIds.includes('income')) {
+    const depExposed = answers.dependents && answers.dependents !== 'No'
     recommendations.push({
       id: 1,
+      productId: 'pru-million-protect',
       name: 'PRUMillion Protect',
+      shortName: 'PMP',
+      emoji: '🛡️',
       layer: 'Income Replacement Layer',
-      what: 'Delivers a lump-sum benefit that replaces years of lost income if you pass away or become permanently disabled.',
-      why: 'Your income protection score indicates your family is exposed if your earnings stop.',
+      category: 'Protection',
+      color: '#ef4444',
       dot: '#ef4444',
+      slug: 'pru-million-protect',
+      what: 'Death benefit guaranteed at 500% of your annual premium OR your fund value — whichever is HIGHER. Your family is protected no matter what.',
+      why: depExposed
+        ? 'You have dependents relying on your income. If your earnings stop, their lifestyle is directly at risk. PRUMillion Protect replaces years of lost income in a single guaranteed payout.'
+        : 'Your income resilience score is below the protected threshold. A single critical event — illness, disability, or death — could leave your finances severely exposed.',
+      keyBenefits: [
+        {
+          title: '500% Premium Death Benefit Guarantee',
+          description: 'Your beneficiaries receive whichever is higher — 500% of your annual premium or your fund value. If you pay ₱250,000/year, your family gets at least ₱1,250,000.',
+        },
+        {
+          title: 'Protection + Investment Growth',
+          description: 'Premiums are invested in PRULink funds (equity, bonds, balanced) based on your risk profile — your money grows while your family stays protected.',
+        },
+      ],
+      idealFor: [
+        'Primary breadwinners with dependents',
+        'Professionals who want guaranteed high-coverage life insurance with investment upside',
+      ],
+      entryPoint: 'Ask your advisor for current minimum premium',
+      paymentTerm: 'Regular pay (up to age 100)',
     })
   }
 
+  // ── Medical Gap → PRULink Assurance Account Plus (health riders) ─
   if (gapIds.includes('medical')) {
     recommendations.push({
       id: 2,
-      name: 'PRU Health Prime',
+      productId: 'prulink-assurance-account-plus',
+      name: 'PRULink Assurance Account Plus',
+      shortName: 'PAA Plus',
+      emoji: '🏥',
       layer: 'Medical Risk Layer',
-      what: 'Covers hospitalization, surgeries, and critical illness costs — separating medical costs from your savings.',
-      why: 'No adequate medical coverage buffer was detected in your financial profile.',
+      category: 'Health',
+      color: '#0ea5e9',
       dot: '#0ea5e9',
+      slug: 'prulink-assurance-account-plus',
+      what: 'VUL plan with attachable critical illness (36 conditions), daily hospital income, ICU, surgical reimbursement, and long-term hospitalization riders — separating medical costs from your savings.',
+      why: 'No adequate medical coverage was detected in your profile. A single hospital event in the Philippines can cost ₱100,000–₱500,000+. Without coverage, your savings take the hit directly.',
+      keyBenefits: [
+        {
+          title: 'Critical Illness Coverage — 36 Conditions',
+          description: 'Life Care Benefit (LCB), Life Care Plus (LCP), and Multiple Life Care Plus (MLCP) riders pay out 100–310% of the benefit amount on diagnosis — keeping your base sum assured intact.',
+        },
+        {
+          title: 'Daily Hospital Income + ICU + Surgical Reimbursement',
+          description: 'DHI, ICU, LTH, and SER riders pay daily cash during hospitalization, ICU confinement, and reimburse actual surgical expenses up to coverage limits.',
+        },
+      ],
+      idealFor: [
+        'Individuals with no or minimal HMO coverage',
+        'Self-employed professionals with no employer health benefits',
+      ],
+      entryPoint: 'From ₱30,000/year (Peso) or USD 580/year (Dollar)',
+      paymentTerm: 'Regular pay (whole life to pay, up to age 100)',
     })
   }
 
+  // ── Savings Gap → PRULink Assurance Account Plus ───────────────
   if (gapIds.includes('savings')) {
     recommendations.push({
       id: 3,
+      productId: 'prulink-assurance-account-plus',
       name: 'PRULink Assurance Account Plus',
+      shortName: 'PAA Plus',
+      emoji: '📈',
       layer: 'Protection + Growth Layer',
-      what: 'Combines life insurance with market-linked investment funds — one plan doing two jobs.',
-      why: 'Your savings pattern indicates a need for a structured plan that grows alongside coverage.',
+      category: 'Investment',
+      color: '#22c55e',
       dot: '#22c55e',
+      slug: 'prulink-assurance-account-plus',
+      what: 'Regular-pay VUL that combines life insurance with market-linked investment across 8 Peso funds and 5 Dollar funds — one plan doing two jobs. Loyalty bonus kicks in on Years 11–20.',
+      why: answers.savings === "I haven't started"
+        ? 'You haven\'t started saving yet. PAA Plus is designed exactly for this — it builds both protection and investment simultaneously, starting at ₱30,000/year.'
+        : 'Your savings pattern is inconsistent. A structured VUL plan automates regular investing while keeping your family protected — removing the discipline problem.',
+      keyBenefits: [
+        {
+          title: 'Loyalty Bonus: Extra Units on Years 11–20',
+          description: 'Pay consistently for 10 years and earn an extra 10% (Peso) or 5% (Dollar) allocation on Years 11–20 — your discipline is rewarded with more fund units at no extra cost.',
+        },
+        {
+          title: '8 Peso + 5 Dollar Fund Options',
+          description: 'Allocate across PRULink Equity, Growth, Managed, Bond, Proactive, and Money Market funds. Switch between funds (1 free switch per year) based on market conditions.',
+        },
+      ],
+      idealFor: [
+        'Young professionals (mid-20s to early 40s) building wealth',
+        'First-time insurance buyers starting their financial journey',
+      ],
+      entryPoint: 'From ₱30,000/year (Peso) or USD 580/year (Dollar)',
+      paymentTerm: 'Regular pay (whole life to pay, up to age 100)',
     })
   }
 
+  // ── Retirement Gap → PRULifetime Income ───────────────────────
   if (gapIds.includes('retirement')) {
+    const yearsToRetirement =
+      answers.lifeStage === 'Preparing for retirement' ? 'few' :
+      answers.lifeStage === 'Starting out (single / early career)' ? '30+' : 'several'
     recommendations.push({
       id: 4,
+      productId: 'pru-lifetime-income',
       name: 'PRULifetime Income',
+      shortName: 'PLI',
+      emoji: '🌅',
       layer: 'Retirement Income Layer',
-      what: 'Converts your savings into a guaranteed monthly income that continues for life.',
-      why: 'Your retirement confidence score falls below the protected threshold.',
+      category: 'Retirement',
+      color: '#f97316',
       dot: '#f59e0b',
+      slug: 'prulifetime-income',
+      what: 'Limited-pay whole life plan that delivers GUARANTEED cash payouts starting at the end of Year 6, every year, for life — plus a 200% Sum Assured death benefit. Not market-dependent.',
+      why: `Your retirement confidence is below the protected threshold. With ${yearsToRetirement} years to retirement, establishing a guaranteed income stream now is critical. PRULifetime Income starts paying you back in as early as 6 years — and never stops.`,
+      keyBenefits: [
+        {
+          title: 'Guaranteed Payouts Starting Year 6',
+          description: 'Receive a guaranteed lump sum cash payout every year starting at end of Year 6 — for as long as you live, up to age 100. No market dependency, no guessing.',
+        },
+        {
+          title: '200% Death + Maturity Benefit',
+          description: 'Beneficiaries receive 200% of Sum Assured + accumulated dividends on death. If you survive to age 100, you receive 200% SA + all accumulated payouts — a guaranteed windfall.',
+        },
+      ],
+      idealFor: [
+        'Risk-averse individuals who want guaranteed retirement income (not market-linked)',
+        'Those who want cash payouts that start within 6 years of policy start',
+      ],
+      entryPoint: 'Minimum Sum Assured: ₱250,000',
+      paymentTerm: '5 years or 10 years (then covered for life)',
     })
   }
 
+  // ── Optimization / Well-Protected → PRU Elite Series ──────────
   if (recommendations.length === 0 || gapIds.includes('optimization')) {
+    const isHighIncome = answers.monthlyExpenses === 'Above ₱80,000' || answers.monthlyExpenses === '₱60,001 – ₱80,000'
     recommendations.push({
       id: 5,
-      name: 'PRU Elite Series',
+      productId: 'pru-elite-series',
+      name: 'PRUlink Elite Protector Series',
+      shortName: 'Elite Series',
+      emoji: '👑',
       layer: 'Wealth & Legacy Layer',
-      what: 'A premium plan for wealth accumulation and clean asset transfer to the next generation.',
-      why: 'Your strong foundation is ready for a legacy and wealth optimization strategy.',
+      category: 'Wealth',
+      color: '#7c3aed',
       dot: '#8b5cf6',
+      slug: 'elite-series',
+      what: 'Limited-pay VUL (pay 5, 7, 10, or 15 years — covered for life) designed for education funding, retirement building, and wealth legacy planning at scale.',
+      why: isHighIncome
+        ? 'Your financial foundation is strong. The Elite Series is the next level — it can fund your child\'s Ateneo or La Salle education, build a retirement corpus, AND leave a legacy, all in one premium plan.'
+        : 'Your foundation is solid. Elite Series helps you scale it — fund major life goals (education, retirement, big-ticket plans) while your money grows inside a market-linked fund.',
+      keyBenefits: [
+        {
+          title: 'Pay for 5–15 Years, Protected Until Age 100',
+          description: 'Elite 5: ₱200K/yr | Elite 7: ₱150K/yr | Elite 10: ₱110K/yr | Elite 15: ₱75K/yr. Pay a limited term, stop premiums, stay covered and invested for life.',
+        },
+        {
+          title: 'Proven Education & Retirement Tool',
+          description: 'Elite 5 at ₱600K/year funds ₱1,178,000/year college tuition at top universities for 4 years. Elite 10 at ₱125K/year generates ₱245,400/year retirement withdrawal for 15 years.',
+        },
+      ],
+      idealFor: [
+        'Corporate executives, business owners, OFWs with monthly family income ₱50,000+',
+        'Parents funding education at Ateneo, La Salle, UST, or international schools',
+      ],
+      entryPoint: 'From ₱75,000/year (Elite 15) to ₱200,000/year (Elite 5)',
+      paymentTerm: 'Choose: 5, 7, 10, or 15 years — then covered for life',
     })
   }
 

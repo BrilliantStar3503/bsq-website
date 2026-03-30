@@ -844,14 +844,12 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {result.recommendations.map((rec, i) => {
-            const categoryMap: Record<string, string> = {
-              'Income Replacement Layer': 'Protection',
-              'Medical Risk Layer':       'Health',
-              'Protection + Growth Layer':'Investment',
-              'Retirement Income Layer':  'Retirement',
-              'Wealth & Legacy Layer':    'Wealth',
-            }
-            const category = categoryMap[rec.layer] ?? rec.layer
+            /* ── derive colour from rec.color (hex) ── */
+            const hex   = rec.color ?? PRU_RED
+            const bgTint = `${hex}12`
+            const borderTint = `${hex}25`
+
+            /* ── category badge colours ── */
             const catColor: Record<string, { text: string; bg: string }> = {
               Protection: { text: PRU_RED,   bg: '#fef2f2' },
               Health:     { text: '#0369a1', bg: '#f0f9ff' },
@@ -859,7 +857,7 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
               Retirement: { text: '#d97706', bg: '#fffbeb' },
               Wealth:     { text: '#7c3aed', bg: '#f5f3ff' },
             }
-            const cc = catColor[category] ?? { text: '#6b7280', bg: '#f9fafb' }
+            const cc = catColor[rec.category] ?? { text: hex, bg: bgTint }
 
             return (
               <motion.div
@@ -867,25 +865,112 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.08, duration: 0.45, ease: 'easeOut' as const }}
-                whileHover={{ y: -4, boxShadow: '0 16px 40px rgba(0,0,0,0.1)' }}
-                className="bg-white rounded-2xl overflow-hidden transition-all duration-300 flex flex-col"
-                style={{ border: '1px solid #f1f5f9', boxShadow: '0 1px 6px rgba(0,0,0,0.05)' }}
+                whileHover={{ y: -4, boxShadow: '0 20px 48px rgba(0,0,0,0.10)' }}
+                className="bg-white rounded-2xl overflow-hidden flex flex-col"
+                style={{ border: `1px solid ${borderTint}`, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
               >
-                {/* Category top bar */}
-                <div className="px-5 pt-5 pb-4 flex items-center justify-between"
-                  style={{ borderBottom: '1px solid #f8fafc' }}>
-                  <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
-                    style={{ color: cc.text, background: cc.bg }}>{category}</span>
-                  <ArrowRight size={13} style={{ color: cc.text }} />
+                {/* ── Top accent bar ── */}
+                <div className="h-1 w-full" style={{ background: hex }} />
+
+                {/* ── Header ── */}
+                <div className="px-5 pt-4 pb-3 flex items-start gap-3" style={{ borderBottom: `1px solid ${borderTint}` }}>
+                  {/* Emoji badge */}
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 text-xl"
+                    style={{ background: bgTint }}>
+                    {rec.emoji}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                      <span className="text-[9px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
+                        style={{ color: cc.text, background: cc.bg }}>{rec.category}</span>
+                    </div>
+                    <h4 className="text-sm font-black text-gray-900 leading-snug">{rec.shortName ?? rec.name}</h4>
+                  </div>
                 </div>
 
-                <div className="p-5 flex flex-col flex-1">
-                  <h4 className="text-sm font-bold text-gray-900 mb-2 leading-snug">{rec.name}</h4>
-                  <p className="text-xs text-gray-500 leading-relaxed flex-1 mb-4">{rec.what}</p>
-                  <div className="rounded-xl p-3" style={{ background: '#f8fafc' }}>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Why this matters</p>
-                    <p className="text-[11px] text-gray-500 leading-relaxed">{rec.why}</p>
+                <div className="p-5 flex flex-col flex-1 gap-4">
+
+                  {/* ── What it is ── */}
+                  <p className="text-[11px] text-gray-500 leading-relaxed">{rec.what}</p>
+
+                  {/* ── Key Benefits ── */}
+                  {rec.keyBenefits && rec.keyBenefits.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Key Benefits</p>
+                      {rec.keyBenefits.map((b, bi) => (
+                        <div key={bi} className="flex items-start gap-2 rounded-xl px-3 py-2.5"
+                          style={{ background: bgTint }}>
+                          <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: hex }} />
+                          <div>
+                            <p className="text-[11px] font-bold text-gray-800 leading-snug">{b.title}</p>
+                            <p className="text-[10px] text-gray-500 leading-relaxed mt-0.5">{b.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* ── Ideal For ── */}
+                  {rec.idealFor && rec.idealFor.length > 0 && (
+                    <div>
+                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Ideal For</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {rec.idealFor.map((tag, ti) => (
+                          <span key={ti} className="text-[10px] font-medium px-2.5 py-1 rounded-full border"
+                            style={{ color: hex, borderColor: borderTint, background: bgTint }}>
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ── Specs Strip ── */}
+                  {(rec.entryPoint || rec.paymentTerm) && (
+                    <div className="grid grid-cols-2 gap-2 rounded-xl overflow-hidden"
+                      style={{ border: `1px solid ${borderTint}` }}>
+                      {rec.entryPoint && (
+                        <div className="p-2.5" style={{ background: bgTint }}>
+                          <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-0.5">Entry Point</p>
+                          <p className="text-[10px] font-bold text-gray-800 leading-snug">{rec.entryPoint}</p>
+                        </div>
+                      )}
+                      {rec.paymentTerm && (
+                        <div className="p-2.5" style={{ background: bgTint }}>
+                          <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-0.5">Payment</p>
+                          <p className="text-[10px] font-bold text-gray-800 leading-snug">{rec.paymentTerm}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ── Personalised Why ── */}
+                  <div className="rounded-xl p-3" style={{ background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Zap size={10} style={{ color: hex }} />
+                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Why This Fits You</p>
+                    </div>
+                    <p className="text-[11px] text-gray-600 leading-relaxed">{rec.why}</p>
                   </div>
+
+                  {/* ── CTAs ── */}
+                  <div className="flex gap-2 mt-auto pt-1">
+                    <a
+                      href={`/products/${rec.slug}`}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[11px] font-bold transition-all"
+                      style={{ background: hex, color: '#fff' }}
+                    >
+                      Learn More <ArrowRight size={11} />
+                    </a>
+                    <button
+                      onClick={() => setLeadModalOpen(true)}
+                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-[11px] font-bold border transition-all hover:bg-gray-50"
+                      style={{ color: hex, borderColor: borderTint }}
+                    >
+                      <MessageCircle size={12} /> Advisor
+                    </button>
+                  </div>
+
                 </div>
               </motion.div>
             )
