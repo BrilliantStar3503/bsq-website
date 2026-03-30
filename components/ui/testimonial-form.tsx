@@ -203,12 +203,14 @@ export default function TestimonialForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 rounded-2xl font-black text-sm text-white flex items-center justify-center gap-2 transition-all duration-200"
+          className="w-full py-3.5 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 active:scale-[0.97] disabled:opacity-40 disabled:pointer-events-none"
           style={{
-            background:  `linear-gradient(135deg, ${PRU_RED}, #c1121f)`,
-            boxShadow:   `0 6px 20px ${PRU_RED}35`,
-            opacity:     loading ? 0.75 : 1,
+            background: PRU_RED,
+            boxShadow: '0 1px 4px rgba(0,0,0,0.10)',
+            opacity: loading ? 0.7 : 1,
           }}
+          onMouseEnter={e => !loading && (e.currentTarget.style.background = '#c1121f')}
+          onMouseLeave={e => !loading && (e.currentTarget.style.background = PRU_RED)}
         >
           {loading ? (
             <>

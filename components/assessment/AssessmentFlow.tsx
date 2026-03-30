@@ -487,10 +487,10 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
                               key={type}
                               type="button"
                               onClick={() => { setContactType(type); setContact('') }}
-                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-150"
+                              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-1 active:scale-[0.97]"
                               style={contactType === type
-                                ? { background: RED, color: '#fff', boxShadow: `0 4px 12px ${RED}40` }
-                                : { background: '#f3f4f6', color: '#6b7280', border: '1px solid #e5e7eb' }
+                                ? { background: RED, color: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.10)' }
+                                : { background: '#f9fafb', color: '#6b7280', border: '1px solid #e5e7eb' }
                               }
                             >
                               {type === 'email' ? <Mail size={12} /> : <Phone size={12} />}
@@ -523,10 +523,11 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
                       <motion.button
                         type="submit"
                         disabled={loading}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full py-4 rounded-2xl font-black text-sm text-white transition-all duration-200 flex items-center justify-center gap-2"
-                        style={{ background: `linear-gradient(135deg, ${RED}, #c1121f)`, boxShadow: `0 6px 24px ${RED}40`, opacity: loading ? 0.8 : 1 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="w-full py-4 rounded-xl font-black text-sm text-white transition-all duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
+                        style={{ background: RED, boxShadow: '0 1px 4px rgba(0,0,0,0.10)', opacity: loading ? 0.7 : 1 }}
+                        onMouseEnter={e => !loading && ((e.currentTarget.style.background = '#c1121f'))}
+                        onMouseLeave={e => !loading && ((e.currentTarget.style.background = RED))}
                       >
                         {loading ? (
                           <>
@@ -567,11 +568,12 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
 
                     <div className="space-y-3">
                       <motion.button
-                        whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                         onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_lead_score${score}`, '_blank')}
-                        className="w-full py-3.5 rounded-2xl font-black text-sm text-white flex items-center justify-center gap-2"
-                        style={{ background: `linear-gradient(135deg, ${RED}, #c1121f)`, boxShadow: `0 6px 20px ${RED}40` }}
+                        className="w-full py-3.5 rounded-xl font-black text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
+                        style={{ background: RED, boxShadow: '0 1px 4px rgba(0,0,0,0.10)' }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#c1121f')}
+                        onMouseLeave={e => (e.currentTarget.style.background = RED)}
                       >
                         <MessageCircle size={15} />
                         Talk to an Advisor Now
@@ -957,15 +959,30 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
                   <div className="flex gap-2 mt-auto pt-1">
                     <a
                       href={`/products/${rec.slug}`}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[11px] font-bold transition-all"
-                      style={{ background: hex, color: '#fff' }}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[11px] font-bold transition-all duration-200 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 active:scale-[0.97]"
+                      style={{
+                        background: '#fff',
+                        color: hex,
+                        borderColor: borderTint,
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                      }}
+                      onMouseEnter={e => {
+                        (e.currentTarget as HTMLAnchorElement).style.background = hex
+                        ;(e.currentTarget as HTMLAnchorElement).style.color = '#fff'
+                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = hex
+                      }}
+                      onMouseLeave={e => {
+                        (e.currentTarget as HTMLAnchorElement).style.background = '#fff'
+                        ;(e.currentTarget as HTMLAnchorElement).style.color = hex
+                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = borderTint
+                      }}
                     >
                       Learn More <ArrowRight size={11} />
                     </a>
                     <button
                       onClick={() => setLeadModalOpen(true)}
-                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-[11px] font-bold border transition-all hover:bg-gray-50"
-                      style={{ color: hex, borderColor: borderTint }}
+                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-[11px] font-bold border transition-all duration-200 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 active:scale-[0.97]"
+                      style={{ color: '#6b7280', borderColor: '#e5e7eb', background: '#fff' }}
                     >
                       <MessageCircle size={12} /> Advisor
                     </button>
@@ -1020,10 +1037,19 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
           <div className="shrink-0">
             <motion.button
               onClick={() => setLeadModalOpen(true)}
-              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-sm text-white transition-all duration-200 w-full md:w-auto justify-center"
-              style={{ background: `linear-gradient(135deg, ${PRU_RED}, #c1121f)`, boxShadow: `0 8px 28px ${PRU_RED}45` }}
+              className="flex items-center gap-3 px-8 py-4 rounded-xl font-black text-sm transition-all duration-200 w-full md:w-auto justify-center border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
+              style={{ background: '#fff', color: PRU_RED, borderColor: '#fca5a5', boxShadow: '0 1px 3px rgba(0,0,0,0.07)' }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = PRU_RED
+                e.currentTarget.style.color = '#fff'
+                e.currentTarget.style.borderColor = PRU_RED
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#fff'
+                e.currentTarget.style.color = PRU_RED
+                e.currentTarget.style.borderColor = '#fca5a5'
+              }}
             >
               <Send size={14} />
               Send My Results
@@ -1066,10 +1092,19 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
           <div className="shrink-0">
             <motion.button
               onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
-              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-sm text-white transition-all duration-200"
-              style={{ background: `linear-gradient(135deg, ${PRU_RED}, #c1121f)`, boxShadow: `0 8px 32px ${PRU_RED}50` }}
+              className="flex items-center gap-3 px-8 py-4 rounded-xl font-black text-sm transition-all duration-200 border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2"
+              style={{ background: '#fff', color: PRU_RED, boxShadow: '0 1px 4px rgba(0,0,0,0.10)' }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = PRU_RED
+                e.currentTarget.style.color = '#fff'
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(220,38,38,0.18)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#fff'
+                e.currentTarget.style.color = PRU_RED
+                e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.10)'
+              }}
             >
               <MessageCircle size={15} />
               Talk to an Advisor

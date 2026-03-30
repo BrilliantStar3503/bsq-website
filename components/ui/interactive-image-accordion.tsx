@@ -428,9 +428,8 @@ function MiniSelect({
 
 function MiniCalcButton({ onClick }: { onClick: () => void }) {
   return (
-    <motion.button onClick={onClick} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-      className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white rounded-xl py-3 text-sm font-bold transition-colors duration-150"
-      style={{ boxShadow: '0 3px 14px rgba(220,38,38,0.28)' }}>
+    <motion.button onClick={onClick} whileTap={{ scale: 0.97 }}
+      className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-xl py-3 text-sm font-bold transition-all duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 active:scale-[0.97]">
       <Calculator size={14} /> Calculate My Gap
     </motion.button>
   )
@@ -530,13 +529,14 @@ function MiniGapResult({ result }: { result: GapResult }) {
           {/* Full-width CTA button */}
           <motion.button
             onClick={() => window.open('https://m.me/Bstarquartzarea?ref=financial_assessment', '_blank')}
-            whileHover={{ scale: 1.025 }}
-            whileTap={{ scale: 0.975 }}
-            className="w-full flex items-center justify-center gap-2 text-white text-sm font-bold rounded-xl py-3.5 transition-colors duration-200"
+            whileTap={{ scale: 0.97 }}
+            className="w-full flex items-center justify-center gap-2 text-white text-sm font-bold rounded-xl py-3.5 transition-all duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.97]"
             style={{
-              background:  sv.color,
-              boxShadow:   `0 4px 18px ${sv.color}40`,
+              background: sv.color,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.10)',
             }}
+            onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(0.9)')}
+            onMouseLeave={e => (e.currentTarget.style.filter = 'brightness(1)')}
           >
             <MessageCircle size={14} />
             Talk to an advisor
@@ -1069,8 +1069,7 @@ export function FinancialAccordion() {
             <div className="shrink-0">
               <button
                 onClick={() => window.open('https://m.me/Bstarquartzarea?ref=financial_assessment', '_blank')}
-                className="inline-flex items-center gap-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded-xl px-8 py-3.5 transition-all duration-200 hover:scale-105 whitespace-nowrap"
-                style={{ boxShadow: '0 4px 18px rgba(220,38,38,0.28)' }}>
+                className="inline-flex items-center gap-2.5 bg-white text-red-600 border border-red-200 hover:bg-red-600 hover:text-white hover:border-red-600 font-semibold text-sm rounded-xl px-8 py-3.5 transition-all duration-200 shadow-[0_1px_3px_rgba(0,0,0,0.07)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 active:scale-[0.97] whitespace-nowrap">
                 Talk to a Financial Advisor <ArrowRight size={15} />
               </button>
               <p className="text-[11px] text-gray-400 mt-2 text-center">Free · No commitment</p>
