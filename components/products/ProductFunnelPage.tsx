@@ -15,21 +15,31 @@ const PRU_RED   = '#D92D20'   // primary red
 const GRAY_BG   = '#f5f5f5'   // light section bg
 const GRAY_LINE = '#e5e7eb'   // divider
 
-/* ─── Per-product photo arrays ────────────────────────────────────────
-   Add filenames here once photos are dropped into /public/images/products/
-   Leave empty array [] for products without photos yet.
+/* ─── Per-product photo config ─────────────────────────────────────────
+   hero[]    — carousel photos in the hero section
+   benefits[] — one photo per key benefit card (in order)
 ────────────────────────────────────────────────────────────────────── */
-const PRODUCT_PHOTOS: Record<string, string[]> = {
-  'prulifetime-income': [
-    '/images/products/prulifetime-income.jpg',
-    '/images/products/prulifetime-income-2.jpg',
-    '/images/products/prulifetime-income-3.jpg',
-    '/images/products/prulifetime-income-4.jpg',
-  ],
-  'pru-million-protect':              [],
-  'elite-series':                     [],
-  'prulink-assurance-account-plus':   [],
-  'prulove-for-life':                 [],
+type ProductPhotoConfig = { hero: string[]; benefits: string[] }
+
+const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
+  'prulifetime-income': {
+    hero: [
+      '/images/products/prulifetime-income.jpg',
+      '/images/products/prulifetime-income-2.jpg',
+      '/images/products/prulifetime-income-3.jpg',
+      '/images/products/prulifetime-income-4.jpg',
+    ],
+    benefits: [
+      '/images/products/prulifetime-benefit-1.jpg',  // family financial security
+      '/images/products/prulifetime-benefit-2.jpg',  // family protection
+      '/images/products/prulifetime-benefit-3.jpg',  // retirement / elderly couple
+      '/images/products/prulifetime-benefit-4.jpg',  // investment / dividends
+    ],
+  },
+  'pru-million-protect':            { hero: [], benefits: [] },
+  'elite-series':                   { hero: [], benefits: [] },
+  'prulink-assurance-account-plus': { hero: [], benefits: [] },
+  'prulove-for-life':               { hero: [], benefits: [] },
 }
 
 const fadeUp = {
@@ -327,7 +337,9 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
   const router      = useRouter()
   const [modal, setModal]       = useState(false)
   const [agentHandle, setAgent] = useState('')
-  const photos = PRODUCT_PHOTOS[product.slug] ?? []
+  const photoConfig   = PRODUCT_PHOTOS[product.slug] ?? { hero: [], benefits: [] }
+  const photos        = photoConfig.hero
+  const benefitPhotos = photoConfig.benefits
 
   useEffect(() => {
     try {
@@ -474,19 +486,23 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px"
-            style={{ border: `1px solid ${GRAY_LINE}` }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             initial="hidden" whileInView="visible"
             viewport={{ once: true, margin: '-40px' }} variants={stagger}
           >
             {product.keyBenefits.map((benefit, i) => {
               const Icon = ICONS[i % ICONS.length]
-              const benefitPhoto = photos[i] ?? null
+              const benefitPhoto = benefitPhotos[i] ?? null
               return (
                 <motion.div key={i} variants={fadeUp}
-                  className="bg-white hover:bg-gray-50 transition-colors duration-200 group overflow-hidden"
-                  style={{ borderRight: i < product.keyBenefits.length - 1 ? `1px solid ${GRAY_LINE}` : 'none' }}>
-
+                  className="bg-white group overflow-hidden transition-all duration-300"
+                  style={{
+                    borderRadius: 10,
+                    boxShadow: '0 6px 28px rgba(0,0,0,0.09)',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.15)')}
+                  onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 6px 28px rgba(0,0,0,0.09)')}
+                >
                   {/* Photo or placeholder */}
                   <div className="relative w-full overflow-hidden" style={{ height: 280 }}>
                     {benefitPhoto ? (
@@ -495,12 +511,12 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                         alt={benefit.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 25vw"
+                        sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center"
-                        style={{ background: GRAY_BG }}>
-                        <Icon size={32} style={{ color: '#d1d5db' }} />
+                        style={{ background: GRAY_BG, borderRadius: '10px 10px 0 0' }}>
+                        <Icon size={36} style={{ color: '#d1d5db' }} />
                       </div>
                     )}
                   </div>
