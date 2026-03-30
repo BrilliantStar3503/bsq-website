@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   ArrowRight, CheckCircle, MessageCircle, Shield, TrendingUp,
-  Clock, Users, Star, Phone, X, Send, Check
+  Clock, Users, Star, Phone, X, Send, Check, ChevronLeft, ChevronRight
 } from 'lucide-react'
 import type { PruProduct } from '@/lib/products'
 
@@ -14,6 +14,23 @@ import type { PruProduct } from '@/lib/products'
 const PRU_RED   = '#D92D20'   // primary red
 const GRAY_BG   = '#f5f5f5'   // light section bg
 const GRAY_LINE = '#e5e7eb'   // divider
+
+/* ─── Per-product photo arrays ────────────────────────────────────────
+   Add filenames here once photos are dropped into /public/images/products/
+   Leave empty array [] for products without photos yet.
+────────────────────────────────────────────────────────────────────── */
+const PRODUCT_PHOTOS: Record<string, string[]> = {
+  'prulifetime-income': [
+    '/images/products/prulifetime-income.jpg',
+    '/images/products/prulifetime-income-2.jpg',
+    '/images/products/prulifetime-income-3.jpg',
+    '/images/products/prulifetime-income-4.jpg',
+  ],
+  'pru-million-protect':              [],
+  'elite-series':                     [],
+  'prulink-assurance-account-plus':   [],
+  'prulove-for-life':                 [],
+}
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
@@ -37,6 +54,124 @@ function ProductTitle({ name, className = '' }: { name: string; className?: stri
     )
   }
   return <span className={className}>{name}</span>
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   HERO CAROUSEL — auto-rotates every 4 s, fade transition
+   Falls back to branded placeholder when no photos are provided.
+══════════════════════════════════════════════════════════════════ */
+function HeroCarousel({ photos, product }: { photos: string[]; product: PruProduct }) {
+  const [current, setCurrent] = useState(0)
+  const [hovered, setHovered] = useState(false)
+
+  useEffect(() => {
+    if (photos.length <= 1) return
+    if (hovered) return
+    const timer = setInterval(() => {
+      setCurrent(prev => (prev + 1) % photos.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [photos.length, hovered])
+
+  const prev = () => setCurrent(c => (c - 1 + photos.length) % photos.length)
+  const next = () => setCurrent(c => (c + 1) % photos.length)
+
+  /* No photos yet — show branded placeholder */
+  if (photos.length === 0) {
+    return (
+      <div className="w-full h-full min-h-[320px] lg:min-h-0 flex flex-col items-center justify-center gap-4 relative"
+        style={{ background: GRAY_BG, borderLeft: `1px solid ${GRAY_LINE}` }}>
+        <div className="text-6xl opacity-30">{product.emoji}</div>
+        <div className="text-center">
+          <p className="text-sm font-bold text-gray-400">{product.shortName}</p>
+          <p className="text-xs text-gray-400 mt-1">Photo coming soon</p>
+        </div>
+        <div className="absolute bottom-5 right-5 bg-white px-3 py-1.5 flex items-center gap-2"
+          style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
+          <div className="w-2 h-2 rounded-full" style={{ background: PRU_RED }} />
+          <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">PRU Life UK</span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className="relative w-full h-full min-h-[360px] lg:min-h-0 overflow-hidden"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Slides */}
+      {photos.map((src, i) => (
+        <div
+          key={src}
+          className="absolute inset-0 transition-opacity duration-700"
+          style={{ opacity: i === current ? 1 : 0, zIndex: i === current ? 1 : 0 }}
+        >
+          <Image
+            src={src}
+            alt={`${product.name} — photo ${i + 1}`}
+            fill
+            className="object-cover"
+            priority={i === 0}
+            sizes="(max-width: 1024px) 100vw, 520px"
+          />
+        </div>
+      ))}
+
+      {/* Subtle dark gradient at bottom so dots are visible */}
+      <div className="absolute bottom-0 left-0 right-0 h-20 z-10"
+        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)' }} />
+
+      {/* Prev / Next arrows (show on hover) */}
+      {photos.length > 1 && (
+        <>
+          <button onClick={prev}
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200"
+            style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.2)', opacity: hovered ? 1 : 0 }}
+            aria-label="Previous photo">
+            <ChevronLeft size={16} className="text-white" />
+          </button>
+          <button onClick={next}
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200"
+            style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.2)', opacity: hovered ? 1 : 0 }}
+            aria-label="Next photo">
+            <ChevronRight size={16} className="text-white" />
+          </button>
+        </>
+      )}
+
+      {/* Dot indicators */}
+      {photos.length > 1 && (
+        <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-1.5 z-20">
+          {photos.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              aria-label={`Photo ${i + 1}`}
+              className="transition-all duration-300"
+              style={{
+                width: i === current ? 20 : 6,
+                height: 6,
+                borderRadius: 3,
+                background: i === current ? '#fff' : 'rgba(255,255,255,0.45)',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* PRU Life UK badge */}
+      <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm px-3 py-1.5 flex items-center gap-2"
+        style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
+        <div className="w-2 h-2 rounded-full" style={{ background: PRU_RED }} />
+        <span className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">PRU Life UK</span>
+      </div>
+    </div>
+  )
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -190,9 +325,9 @@ function LeadModal({
 ══════════════════════════════════════════════════════════════════ */
 export default function ProductFunnelPage({ product }: { product: PruProduct }) {
   const router      = useRouter()
-  const [modal, setModal]           = useState(false)
-  const [agentHandle, setAgent]     = useState('')
-  const hasPhoto = false // ← flip to true once real photo is in /public/images/products/
+  const [modal, setModal]       = useState(false)
+  const [agentHandle, setAgent] = useState('')
+  const photos = PRODUCT_PHOTOS[product.slug] ?? []
 
   useEffect(() => {
     try {
@@ -285,37 +420,13 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
               )}
             </motion.div>
 
-            {/* Right — Photo */}
+            {/* Right — Carousel */}
             <motion.div
               className="lg:w-[480px] xl:w-[520px] flex-shrink-0 relative"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              {hasPhoto ? (
-                <Image
-                  src={`/images/products/${product.slug}.jpg`}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              ) : (
-                /* Placeholder — clean gray, matches PRU Life UK style */
-                <div className="w-full h-full min-h-[320px] lg:min-h-0 flex flex-col items-center justify-center gap-4"
-                  style={{ background: GRAY_BG, borderLeft: `1px solid ${GRAY_LINE}` }}>
-                  <div className="text-6xl opacity-30">{product.emoji}</div>
-                  <div className="text-center">
-                    <p className="text-sm font-bold text-gray-400">{product.shortName}</p>
-                    <p className="text-xs text-gray-400 mt-1">Photo coming soon</p>
-                  </div>
-                  {/* PRU Life UK badge */}
-                  <div className="absolute bottom-5 right-5 bg-white px-3 py-1.5 flex items-center gap-2"
-                    style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
-                    <div className="w-2 h-2 rounded-full" style={{ background: PRU_RED }} />
-                    <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">PRU Life UK</span>
-                  </div>
-                </div>
-              )}
+              <HeroCarousel photos={photos} product={product} />
             </motion.div>
           </div>
         </div>
