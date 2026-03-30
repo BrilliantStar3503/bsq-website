@@ -142,8 +142,8 @@ function BsqLogo() {
             <span className="text-red-400 font-black text-xs">BSQ</span>
           </div>
         ) : (
-          /* White-bg logo — displayed in a clipped rounded container */
-          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-white/95">
+          /* Black-bg logo — displayed in a clipped rounded container */
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-black">
             <Image
               src="/images/bsq-logo.png"
               alt="BSQ"
@@ -159,8 +159,10 @@ function BsqLogo() {
         <span className="text-white font-black text-sm tracking-wide">
           Brilliant Star Quartz
         </span>
-        <span className="text-white/35 text-[9px] tracking-[0.18em] uppercase font-medium">
-          Financial System
+        <span className="text-[9px] tracking-[0.15em] uppercase font-bold flex items-center gap-1">
+          <span className="text-white/40">Tied Agency</span>
+          <span className="text-white/25">·</span>
+          <span style={{ color: '#D92D20', fontWeight: 800, letterSpacing: '0.12em' }}>PRU&nbsp;LIFE&nbsp;UK</span>
         </span>
       </div>
     </a>
