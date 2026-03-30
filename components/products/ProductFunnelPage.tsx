@@ -481,18 +481,37 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
           >
             {product.keyBenefits.map((benefit, i) => {
               const Icon = ICONS[i % ICONS.length]
+              const benefitPhoto = photos[i] ?? null
               return (
                 <motion.div key={i} variants={fadeUp}
-                  className="p-8 bg-white hover:bg-gray-50 transition-colors duration-200 group"
+                  className="bg-white hover:bg-gray-50 transition-colors duration-200 group overflow-hidden"
                   style={{ borderRight: i < product.keyBenefits.length - 1 ? `1px solid ${GRAY_LINE}` : 'none' }}>
-                  <div className="w-12 h-12 flex items-center justify-center mb-6"
-                    style={{ background: '#fef2f2', borderRadius: 4 }}>
-                    <Icon size={22} style={{ color: PRU_RED }} />
+
+                  {/* Photo or placeholder */}
+                  <div className="relative w-full overflow-hidden" style={{ height: 200 }}>
+                    {benefitPhoto ? (
+                      <Image
+                        src={benefitPhoto}
+                        alt={benefit.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 25vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center"
+                        style={{ background: GRAY_BG }}>
+                        <Icon size={32} style={{ color: '#d1d5db' }} />
+                      </div>
+                    )}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 leading-snug">{benefit.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{benefit.description}</p>
-                  <div className="mt-5 h-0.5 w-8 transition-all duration-300 group-hover:w-14"
-                    style={{ background: PRU_RED }} />
+
+                  {/* Text */}
+                  <div className="p-8">
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 leading-snug">{benefit.title}</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">{benefit.description}</p>
+                    <div className="mt-5 h-0.5 w-8 transition-all duration-300 group-hover:w-14"
+                      style={{ background: PRU_RED }} />
+                  </div>
                 </motion.div>
               )
             })}
