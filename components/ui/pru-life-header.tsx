@@ -128,7 +128,10 @@ export function PruLifeHeader() {
       {/* ── Row 2 — Red nav bar (desktop) ───────────────────────── */}
       <div
         className="hidden md:block"
-        style={{ background: PRU_RED }}
+        style={{
+          background: PRU_RED,
+          boxShadow: '0 6px 20px rgba(217, 45, 32, 0.45), 0 2px 8px rgba(0,0,0,0.18)',
+        }}
       >
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
           {NAV_LINKS.map(link => {
