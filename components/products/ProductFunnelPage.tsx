@@ -378,7 +378,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
 
               {/* What it is */}
               <motion.p variants={fadeUp}
-                className="text-sm text-gray-600 leading-relaxed mb-8 max-w-lg">
+                className="text-base text-gray-600 leading-relaxed mb-8 max-w-lg">
                 {product.whatItIs}
               </motion.p>
 
@@ -405,7 +405,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
                   <div key={t} className="flex items-center gap-1.5">
                     <Check size={12} style={{ color: PRU_RED }} />
-                    <span className="text-xs text-gray-500">{t}</span>
+                    <span className="text-sm text-gray-500">{t}</span>
                   </div>
                 ))}
               </motion.div>
@@ -446,10 +446,10 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
               </span>
               <div style={{ height: 2, width: 24, background: PRU_RED }} />
             </div>
-            <p className="text-xl md:text-2xl font-bold text-gray-900 leading-snug mb-4">
+            <p className="text-2xl md:text-3xl font-bold text-gray-900 leading-snug mb-4">
               &ldquo;{product.fbHooks[0]}&rdquo;
             </p>
-            <p className="text-sm text-gray-500 leading-relaxed max-w-xl mx-auto">
+            <p className="text-base text-gray-600 leading-relaxed max-w-xl mx-auto">
               {product.problemItSolves}
             </p>
           </motion.div>
@@ -470,11 +470,11 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 Why {product.shortName}
               </p>
             </div>
-            <h2 className="text-2xl md:text-3xl font-black text-gray-900">Key Benefits</h2>
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900">Key Benefits</h2>
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px"
             style={{ border: `1px solid ${GRAY_LINE}` }}
             initial="hidden" whileInView="visible"
             viewport={{ once: true, margin: '-40px' }} variants={stagger}
@@ -483,15 +483,15 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
               const Icon = ICONS[i % ICONS.length]
               return (
                 <motion.div key={i} variants={fadeUp}
-                  className="p-7 bg-white hover:bg-gray-50 transition-colors duration-200 group"
-                  style={{ borderRight: (i + 1) % 3 !== 0 ? `1px solid ${GRAY_LINE}` : 'none' }}>
-                  <div className="w-10 h-10 flex items-center justify-center mb-5"
+                  className="p-8 bg-white hover:bg-gray-50 transition-colors duration-200 group"
+                  style={{ borderRight: i < product.keyBenefits.length - 1 ? `1px solid ${GRAY_LINE}` : 'none' }}>
+                  <div className="w-12 h-12 flex items-center justify-center mb-6"
                     style={{ background: '#fef2f2', borderRadius: 4 }}>
-                    <Icon size={18} style={{ color: PRU_RED }} />
+                    <Icon size={22} style={{ color: PRU_RED }} />
                   </div>
-                  <h3 className="text-sm font-bold text-gray-900 mb-2 leading-snug">{benefit.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed">{benefit.description}</p>
-                  <div className="mt-4 h-0.5 w-8 transition-all duration-300 group-hover:w-12"
+                  <h3 className="text-lg font-bold text-gray-900 mb-3 leading-snug">{benefit.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{benefit.description}</p>
+                  <div className="mt-5 h-0.5 w-8 transition-all duration-300 group-hover:w-14"
                     style={{ background: PRU_RED }} />
                 </motion.div>
               )
@@ -514,18 +514,18 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
                 <p className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>This Is For You</p>
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8">
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8">
                 Is <ProductTitle name={product.shortName} /> Right For You?
               </h2>
               <div className="space-y-3">
                 {product.idealFor.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 bg-white p-4"
+                  <div key={i} className="flex items-start gap-3 bg-white p-5"
                     style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
-                    <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5"
+                    <div className="w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5"
                       style={{ background: '#fef2f2', borderRadius: '50%' }}>
-                      <Check size={11} style={{ color: PRU_RED }} />
+                      <Check size={13} style={{ color: PRU_RED }} />
                     </div>
-                    <p className="text-sm text-gray-700 leading-snug">{item}</p>
+                    <p className="text-base text-gray-700 leading-snug">{item}</p>
                   </div>
                 ))}
               </div>
@@ -538,7 +538,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
                 <p className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>Plan Details</p>
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-8">Quick Specs</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8">Quick Specs</h2>
 
               <div className="bg-white overflow-hidden" style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
                 {[
@@ -552,8 +552,8 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 ].map(([label, value], i, arr) => (
                   <div key={i} className="flex gap-4 px-5 py-4"
                     style={{ borderBottom: i < arr.length - 1 ? `1px solid ${GRAY_LINE}` : 'none' }}>
-                    <p className="text-[10px] font-black uppercase tracking-wider text-gray-400 w-24 flex-shrink-0 pt-0.5">{label}</p>
-                    <p className="text-xs text-gray-800 leading-relaxed font-medium flex-1">{value}</p>
+                    <p className="text-xs font-black uppercase tracking-wider text-gray-400 w-28 flex-shrink-0 pt-0.5">{label}</p>
+                    <p className="text-sm text-gray-800 leading-relaxed font-medium flex-1">{value}</p>
                   </div>
                 ))}
               </div>
@@ -561,18 +561,18 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
               {/* Riders */}
               {product.riders.length > 0 && (
                 <div className="mt-5 bg-white p-5" style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
-                  <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: PRU_RED }}>
+                  <p className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: PRU_RED }}>
                     Optional Riders ({product.riders.length})
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {product.riders.slice(0, 6).map((r, i) => (
-                      <span key={i} className="text-[10px] font-medium px-2.5 py-1 text-gray-600"
+                      <span key={i} className="text-xs font-medium px-3 py-1.5 text-gray-600"
                         style={{ background: GRAY_BG, border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
                         {r.split('(')[0].trim()}
                       </span>
                     ))}
                     {product.riders.length > 6 && (
-                      <span className="text-[10px] font-medium px-2.5 py-1 text-gray-400"
+                      <span className="text-xs font-medium px-3 py-1.5 text-gray-400"
                         style={{ background: GRAY_BG, border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
                         +{product.riders.length - 6} more
                       </span>
@@ -599,7 +599,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                   className="p-6 bg-white"
                   style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
                   <div style={{ width: 24, height: 3, background: PRU_RED, borderRadius: 2, marginBottom: 16 }} />
-                  <p className="text-sm font-semibold text-gray-800 leading-relaxed">&ldquo;{hook}&rdquo;</p>
+                  <p className="text-base font-semibold text-gray-800 leading-relaxed">&ldquo;{hook}&rdquo;</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -618,18 +618,18 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
               <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: PRU_RED }}>
                 Next Step
               </p>
-              <h2 className="text-2xl md:text-3xl font-black text-white leading-tight mb-4">
+              <h2 className="text-3xl md:text-4xl font-black text-white leading-tight mb-4">
                 Ready to learn more about<br />
                 <ProductTitle name={product.name} className="text-white" />?
               </h2>
-              <p className="text-sm text-gray-400 leading-relaxed max-w-md">
+              <p className="text-base text-gray-400 leading-relaxed max-w-md">
                 Talk to a licensed BSQ · PRU Life UK advisor. Free consultation, no commitment.
               </p>
               <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4">
                 {['Free & no obligation', 'Licensed PRU Life UK advisor', 'Reply within 24 hrs'].map(t => (
                   <div key={t} className="flex items-center gap-1.5">
                     <Check size={11} style={{ color: PRU_RED }} />
-                    <span className="text-xs text-gray-500">{t}</span>
+                    <span className="text-sm text-gray-500">{t}</span>
                   </div>
                 ))}
               </div>
