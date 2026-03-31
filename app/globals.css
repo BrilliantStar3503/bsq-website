@@ -78,15 +78,15 @@ body {
 ═══════════════════════════════════════════════════════════════ */
 
 @keyframes shine-pulse {
-  0%   { background-position: 0%   0%;   }
-  50%  { background-position: 100% 100%; }
-  100% { background-position: 0%   0%;   }
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
 }
 
 .animated-gradient-btn {
   /* Animation engine — colors injected via inline style */
-  background-size: 300% 300%;
-  animation: shine-pulse var(--shine-duration, 6s) linear infinite;
+  background-size: 300% 100%;
+  animation: shine-pulse var(--shine-duration, 5s) linear infinite;
 
   /* Base button chrome */
   display: inline-flex;
