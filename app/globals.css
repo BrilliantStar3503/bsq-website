@@ -83,11 +83,19 @@ body {
   100% { background-position: 0%   50%; }
 }
 
-/* ShineBorder — diagonal sweep for animated gradient border wrapper */
-@keyframes shine-pulse-border {
-  0%   { background-position: 0%   50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0%   50%; }
+/* ShineBorder — spinning conic-gradient border (requires @property) */
+@property --shine-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spin-shine {
+  to { --shine-angle: 360deg; }
+}
+
+.shine-border-spin {
+  animation: spin-shine var(--shine-spin-duration, 4s) linear infinite;
 }
 
 .animated-gradient-btn {

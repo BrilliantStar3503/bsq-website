@@ -979,10 +979,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             ))}
           </div>
           <ShineBorder
-            color={['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#D92D20', '#7f0000']}
+            color={['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#ff6b35', '#D92D20']}
             borderRadius={12}
-            borderWidth={2}
-            duration={6}
+            borderWidth={3}
+            duration={4}
             className="w-full"
           >
             <button onClick={() => setLeadModalOpen(true)}
@@ -1021,10 +1021,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             ))}
           </div>
           <ShineBorder
-            color={['#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#D92D20']}
+            color={['#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#ff6b35', '#D92D20', '#7f0000']}
             borderRadius={12}
-            borderWidth={2}
-            duration={7}
+            borderWidth={3}
+            duration={4}
             className="w-full relative z-10"
           >
             <button

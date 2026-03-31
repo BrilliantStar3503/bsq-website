@@ -10,47 +10,54 @@ interface ShineBorderProps {
   duration?: number
   color?: TColorProp
   className?: string
-  /** Extra classes forwarded to the inner content wrapper */
-  innerClassName?: string
   children: React.ReactNode
 }
 
 /**
  * ShineBorder
  * ──────────────────────────────────────────────────────────────────────
- * The "padding-as-border" trick:
- *   1. Outer div  — animated linear-gradient background (300% × 300%)
- *   2. Inner div  — full-width, solid background, slightly smaller radius
- *   3. The gap between outer and inner = borderWidth → shows the gradient = the animated border
+ * Spinning conic-gradient border using @property --shine-angle.
+ * The colour beam visibly rotates 360° around the button edge.
  *
- * This approach works in every browser without mask-composite tricks.
+ *  Outer div  — conic-gradient background + padding = border thickness
+ *  Inner div  — solid background, slightly smaller radius
+ *  The gap between them reveals the spinning gradient = the border
  */
 export function ShineBorder({
   borderRadius = 8,
-  borderWidth = 2,
-  duration = 6,
-  color = ['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#D92D20', '#7f0000'],
+  borderWidth = 3,
+  duration = 4,
+  color = ['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#D92D20', '#7f0000'],
   className,
-  innerClassName,
   children,
 }: ShineBorderProps) {
-  const colors = Array.isArray(color) ? color.join(', ') : color
-  const gradient = `linear-gradient(135deg, ${colors})`
+  const stops = Array.isArray(color) ? color : [color]
+
+  // Build conic-gradient colour stops evenly spaced around 360°
+  const step   = 360 / stops.length
+  const conicStops = stops
+    .map((c, i) => `${c} ${i * step}deg`)
+    .concat(`${stops[0]} 360deg`)   // close the loop
+    .join(', ')
 
   return (
     <div
-      className={cn('relative', className)}
+      className={cn('shine-border-spin relative', className)}
       style={{
-        padding:          `${borderWidth}px`,
-        borderRadius:     `${borderRadius + borderWidth}px`,
-        background:       gradient,
-        backgroundSize:   '300% 300%',
-        animation:        `shine-pulse-border ${duration}s linear infinite`,
-      }}
+        '--shine-spin-duration': `${duration}s`,
+        padding:      `${borderWidth}px`,
+        borderRadius: `${borderRadius + borderWidth}px`,
+        background:   `conic-gradient(from var(--shine-angle, 0deg), ${conicStops})`,
+      } as React.CSSProperties}
     >
       <div
-        className={cn('relative w-full h-full', innerClassName)}
-        style={{ borderRadius: `${borderRadius}px`, overflow: 'hidden' }}
+        style={{
+          borderRadius: `${borderRadius}px`,
+          overflow:     'hidden',
+          position:     'relative',
+          width:        '100%',
+          height:       '100%',
+        }}
       >
         {children}
       </div>
