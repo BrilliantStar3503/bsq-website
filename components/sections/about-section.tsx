@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { motion, useInView } from 'framer-motion'
 import {
   ShieldCheck,
@@ -135,15 +136,14 @@ export default function AboutSection() {
               in partnership with Pru Life UK.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a
-                href="https://m.me/Bstarquartzarea?ref=about_cta"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-black text-sm text-white transition-all duration-200 hover:scale-[1.03]"
-                style={{ background: `linear-gradient(135deg, ${PRU_RED}, #c1121f)`, boxShadow: `0 8px 32px ${PRU_RED}45` }}
+              <AnimatedGradientButton
+                preset="pru"
+                duration={5}
+                className="px-8 py-4 rounded-2xl font-black text-sm"
+                onClick={() => window.open('https://m.me/Bstarquartzarea?ref=about_cta', '_blank')}
               >
                 Talk to an Advisor <ArrowRight size={15} />
-              </a>
+              </AnimatedGradientButton>
               <a
                 href="/assessment"
                 className="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-semibold text-sm text-white/70 hover:text-white border transition-all duration-200 hover:bg-white/05"

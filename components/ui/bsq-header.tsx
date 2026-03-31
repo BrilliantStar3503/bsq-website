@@ -15,6 +15,7 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
 import { LucideIcon } from 'lucide-react'
+import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import {
   ClipboardList,
   ShieldCheck,
@@ -382,25 +383,23 @@ export function BsqHeader() {
 
         {/* ── Desktop CTAs ── */}
         <div className="hidden md:flex items-center gap-2">
-          <Button
-            variant="ghost"
-            className="text-white/65 hover:text-white hover:bg-white/10 text-sm"
+          <AnimatedGradientButton
+            preset="pru"
+            duration={5}
+            className="text-sm px-5 py-2 rounded-md"
             onClick={() => window.open('https://m.me/Bstarquartzarea?ref=nav_consult', '_blank')}
           >
             Talk to Advisor
-          </Button>
-          <a href="/assessment">
-            <Button
-              className="text-white text-sm font-bold px-5"
-              style={{
-                background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-                boxShadow: '0 2px 16px rgba(220,38,38,0.35)',
-              }}
-            >
-              Start Assessment
-              <ArrowRight size={14} className="ml-1.5" />
-            </Button>
-          </a>
+          </AnimatedGradientButton>
+          <AnimatedGradientButton
+            preset="pru"
+            duration={5}
+            className="text-sm font-bold px-5 py-2 rounded-md"
+            onClick={() => window.location.href = '/assessment'}
+          >
+            Start Assessment
+            <ArrowRight size={14} />
+          </AnimatedGradientButton>
         </div>
 
         {/* ── Mobile hamburger ── */}
@@ -475,26 +474,24 @@ export function BsqHeader() {
 
         {/* Mobile CTAs */}
         <div className="flex flex-col gap-2 pt-2 border-t border-white/08">
-          <Button
-            variant="outline"
-            className="w-full bg-transparent text-white border-white/15 hover:bg-white/10 hover:text-white"
-            onClick={() => {
-              setOpen(false)
-              window.open('https://m.me/Bstarquartzarea?ref=mobile_consult', '_blank')
-            }}
+          <AnimatedGradientButton
+            preset="pru"
+            duration={5}
+            className="w-full py-3 text-sm rounded-md"
+            onClick={() => { setOpen(false); window.open('https://m.me/Bstarquartzarea?ref=mobile_consult', '_blank') }}
           >
-            <MessageCircle size={14} className="mr-2" />
+            <MessageCircle size={14} />
             Talk to an Advisor
-          </Button>
-          <a href="/assessment" onClick={() => setOpen(false)}>
-            <Button
-              className="w-full text-white font-bold"
-              style={{ background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)' }}
-            >
-              Start Free Assessment
-              <ArrowRight size={14} className="ml-1.5" />
-            </Button>
-          </a>
+          </AnimatedGradientButton>
+          <AnimatedGradientButton
+            preset="pru"
+            duration={5}
+            className="w-full py-3 text-sm font-bold rounded-md"
+            onClick={() => { setOpen(false); window.location.href = '/assessment' }}
+          >
+            Start Free Assessment
+            <ArrowRight size={14} />
+          </AnimatedGradientButton>
         </div>
       </MobileMenu>
     </header>

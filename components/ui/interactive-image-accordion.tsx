@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { motion, AnimatePresence }  from 'framer-motion'
 import {
   ArrowRight, CheckCircle2, X, Calculator,
@@ -330,17 +331,14 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         </p>
 
         {/* CTA */}
-        <button
+        <AnimatedGradientButton
+          preset="pru"
+          duration={5}
+          className="text-xs px-4 py-2.5 rounded-lg"
           onClick={e => { e.stopPropagation(); onClick() }}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-white rounded-lg px-4 py-2.5 transition-all duration-200 hover:brightness-110"
-          style={{
-            background:   accentRgba(0.88),
-            boxShadow:    `0 2px 12px ${accentRgba(0.4)}`,
-            backdropFilter: 'blur(6px)',
-          }}
         >
           <Calculator size={12} /> Start Assessment <ArrowRight size={11} />
-        </button>
+        </AnimatedGradientButton>
       </div>
     </div>
   )

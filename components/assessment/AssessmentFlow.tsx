@@ -1184,15 +1184,16 @@ export default function AssessmentFlow() {
              Scope: .assessment-results only — zero global side-effects
              ═══════════════════════════════════════════════════════════════ */
 
-          /* PRIMARY — solid red, white text */
+          /* PRIMARY — animated gradient sweep */
           .assessment-results .ar-btn-primary {
-            background-color: #D92D20;
+            background-image: linear-gradient(135deg, #7f0000, #D92D20, #ff6b35, #ffb347, #D92D20, #7f0000);
+            background-size: 300% 100%;
+            animation: shine-pulse 5s linear infinite;
             color: #ffffff;
             border: none;
             border-radius: 6px;
             box-shadow: none;
             font-weight: 700;
-            transition: background-color 0.2s ease;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -1200,7 +1201,7 @@ export default function AssessmentFlow() {
             gap: 8px;
           }
           .assessment-results .ar-btn-primary:hover:not(:disabled) {
-            background-color: #B42318;
+            filter: brightness(1.08);
           }
           .assessment-results .ar-btn-primary:focus-visible {
             outline: 2px solid #FCA5A5;
@@ -1235,15 +1236,16 @@ export default function AssessmentFlow() {
             outline-offset: 2px;
           }
 
-          /* SECONDARY-DARK — white base on dark/colored backgrounds */
+          /* SECONDARY-DARK — animated gradient on dark backgrounds */
           .assessment-results .ar-btn-secondary-dark {
-            background-color: #ffffff;
-            color: #D92D20;
-            border: 1.5px solid #ffffff;
+            background-image: linear-gradient(135deg, #7f0000, #D92D20, #ff6b35, #ffb347, #D92D20, #7f0000);
+            background-size: 300% 100%;
+            animation: shine-pulse 5s linear infinite;
+            color: #ffffff;
+            border: none;
             border-radius: 6px;
             box-shadow: none;
             font-weight: 700;
-            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -1251,9 +1253,7 @@ export default function AssessmentFlow() {
             gap: 8px;
           }
           .assessment-results .ar-btn-secondary-dark:hover:not(:disabled) {
-            background-color: #D92D20;
-            color: #ffffff;
-            border-color: #D92D20;
+            filter: brightness(1.08);
           }
           .assessment-results .ar-btn-secondary-dark:focus-visible {
             outline: 2px solid rgba(255,255,255,0.5);
