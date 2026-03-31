@@ -9,6 +9,7 @@ import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-s
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
 import { ShineBorder } from '@/components/ui/shine-border'
+import { AssessmentTrustStrip, ResultsStatsBanner } from '@/components/ui/assessment-stats'
 import TestimonialForm from '@/components/ui/testimonial-form'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
@@ -650,6 +651,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       className="w-full max-w-6xl mx-auto px-4 md:px-8 pb-24 space-y-8"
       variants={stagger} initial="hidden" animate="show"
     >
+
+      {/* ══ Stats Banner ════════════════════════════════════════════════ */}
+      <motion.div variants={fadeUp}>
+        <ResultsStatsBanner />
+      </motion.div>
 
       {/* ══ SECTION 1 — Score Overview ═══════════════════════════════ */}
       <motion.div variants={fadeUp}
@@ -1320,6 +1326,7 @@ export default function AssessmentFlow() {
           </div>
           <span className="text-[11px] text-white/25 tabular-nums">{step + 1} / {questions.length}</span>
         </div>
+        <AssessmentTrustStrip className="mt-2" />
       </div>
 
       {/* Main content */}

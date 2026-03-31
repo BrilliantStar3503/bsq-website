@@ -1,13 +1,49 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SplineScene } from '@/components/ui/spline-scene'
 import RotatingHook from '@/components/ui/rotating-hook'
+import { HeroStatsPills } from '@/components/ui/assessment-stats'
 
 const SCENE_URL = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode'
+const CALENDLY_URL = 'https://calendly.com/brilliantstarquartz/30min'
 
 export default function HeroSection() {
   const router = useRouter()
+
+  // Listen for Calendly booking confirmation → send to CRM
+  useEffect(() => {
+    const handleCalendlyEvent = async (e) => {
+      if (e.data?.event === 'calendly.event_scheduled') {
+        try {
+          await fetch('/api/calendly-booking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              invitee_uri: e.data.payload?.invitee?.uri || '',
+              event_uri: e.data.payload?.event?.uri || '',
+            }),
+          })
+        } catch (err) {
+          // Silent fail — never break the user experience
+          console.error('[BSQ] Calendly tracking error:', err)
+        }
+      }
+    }
+
+    window.addEventListener('message', handleCalendlyEvent)
+    return () => window.removeEventListener('message', handleCalendlyEvent)
+  }, [])
+
+  // Open Calendly popup — fallback to new tab if script not yet loaded
+  const openCalendly = () => {
+    if (typeof window !== 'undefined' && window.Calendly) {
+      window.Calendly.initPopupWidget({ url: CALENDLY_URL })
+    } else {
+      window.open(CALENDLY_URL, '_blank')
+    }
+  }
 
   return (
     <>
@@ -50,7 +86,7 @@ export default function HeroSection() {
 
               {/* SECONDARY CTA */}
               <button
-                onClick={() => window.open('https://calendly.com/brilliantstarquartz/30min', '_blank')}
+                onClick={openCalendly}
                 className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm text-white/80 transition-all duration-200"
                 style={{
                   background: 'rgba(255,255,255,0.05)',
@@ -70,6 +106,8 @@ export default function HeroSection() {
                 Book a Consultation
               </button>
             </div>
+
+            <HeroStatsPills className="mt-5" />
 
             <p className="text-xs text-gray-500 mt-4">
               Free &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; Confidential
