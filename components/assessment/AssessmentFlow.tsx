@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertTriangle, Shield, TrendingUp, Clock, ArrowRight, Info, Zap, CheckCircle, BarChart2, RotateCcw, Home, Mail, Phone, X, Send, MessageCircle } from 'lucide-react'
+import { AlertTriangle, Shield, TrendingUp, Clock, ArrowRight, Info, Zap, CheckCircle, BarChart2, RotateCcw, Home, Mail, Phone, X, Send, MessageCircle, Check, Sparkles, User } from 'lucide-react'
 import { questions } from '@/lib/assessment-questions'
 import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
@@ -598,91 +598,105 @@ const PRU_RED = '#ed1b2e'
 function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineResult: RecommendationResult }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
 
+  /* ── Design tokens ── */
+  const RED_SOFT  = `${PRU_RED}12`
+  const RED_MED   = `${PRU_RED}30`
+
   const gapIcon: Record<string, React.ReactNode> = {
-    income:       <Shield        size={16} />,
-    medical:      <AlertTriangle size={16} />,
-    savings:      <TrendingUp    size={16} />,
-    retirement:   <Clock         size={16} />,
-    awareness:    <Zap           size={16} />,
-    optimization: <BarChart2     size={16} />,
+    income:       <Shield size={15} />,
+    medical:      <AlertTriangle size={15} />,
+    savings:      <TrendingUp size={15} />,
+    retirement:   <Clock size={15} />,
+    awareness:    <Zap size={15} />,
+    optimization: <BarChart2 size={15} />,
   }
 
   const sevStyle = {
-    high:   { color: PRU_RED,    accent: '#fca5a5', track: '#fef2f2', label: 'High Risk',   dot: PRU_RED },
-    medium: { color: '#d97706',  accent: '#fde68a', track: '#fffbeb', label: 'Medium Risk', dot: '#f59e0b' },
-    low:    { color: '#059669',  accent: '#6ee7b7', track: '#ecfdf5', label: 'Low Risk',    dot: '#10b981' },
+    high:   { color: PRU_RED,   bg: RED_SOFT,    border: RED_MED,        label: 'High Risk'   },
+    medium: { color: '#b45309', bg: '#fffbeb',   border: '#fde68a',      label: 'Moderate Risk' },
+    low:    { color: '#047857', bg: '#f0fdf4',   border: '#bbf7d0',      label: 'Low Risk'    },
   }
 
-  const statusColor = result.status === 'good' ? '#059669' : result.status === 'moderate' ? '#d97706' : PRU_RED
+  const statusColor = result.status === 'good' ? '#047857' : result.status === 'moderate' ? '#b45309' : PRU_RED
   const statusLabel = result.status === 'good' ? 'Well Protected' : result.status === 'moderate' ? 'Moderate Risk' : result.status === 'at-risk' ? 'At Risk' : 'Critical Risk'
 
-  const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } }
-  const fadeUp  = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } } }
+  const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }
+  const fadeUp  = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' as const } } }
 
   const subScores = [
-    { label: 'Protection', val: result.protectionScore,  icon: <Shield size={12} /> },
-    { label: 'Savings',    val: result.savingsScore,     icon: <TrendingUp size={12} /> },
-    { label: 'Retirement', val: result.retirementScore,  icon: <Clock size={12} /> },
-    { label: 'Awareness',  val: result.awarenessScore,   icon: <Zap size={12} /> },
+    { label: 'Protection', val: result.protectionScore,  icon: <Shield size={13} /> },
+    { label: 'Savings',    val: result.savingsScore,     icon: <TrendingUp size={13} /> },
+    { label: 'Retirement', val: result.retirementScore,  icon: <Clock size={13} /> },
+    { label: 'Awareness',  val: result.awarenessScore,   icon: <Zap size={13} /> },
   ]
+
+  const tierLabel =
+    engineResult.incomeTier === 'entry'   ? 'Entry Income Tier'
+    : engineResult.incomeTier === 'mid'   ? 'Mid Income Tier'
+    : engineResult.incomeTier === 'high'  ? 'High Income Tier'
+    : 'Premium Income Tier'
+
+  const catColor: Record<string, { text: string; bg: string; border: string }> = {
+    Protection: { text: PRU_RED,   bg: RED_SOFT,  border: RED_MED  },
+    Health:     { text: '#0369a1', bg: '#eff6ff', border: '#bfdbfe' },
+    Investment: { text: '#047857', bg: '#f0fdf4', border: '#bbf7d0' },
+    Retirement: { text: '#b45309', bg: '#fffbeb', border: '#fde68a' },
+    Wealth:     { text: '#6d28d9', bg: '#faf5ff', border: '#ddd6fe' },
+  }
 
   return (
     <motion.div
-      className="w-full max-w-5xl mx-auto px-4 md:px-8 pb-24"
+      className="w-full max-w-6xl mx-auto px-4 md:px-8 pb-24 space-y-8"
       variants={stagger} initial="hidden" animate="show"
     >
 
-      {/* ── Hero Score Card — white ────────────────────────────────── */}
-      <motion.div variants={fadeUp} className="relative overflow-hidden rounded-3xl mb-6"
-        style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
+      {/* ══ SECTION 1 — Score Overview ═══════════════════════════════ */}
+      <motion.div variants={fadeUp}
+        className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+        style={{ boxShadow: '0 1px 12px rgba(0,0,0,0.06)' }}>
+        <div style={{ height: 3, background: `linear-gradient(to right, ${PRU_RED}, #fca5a5, transparent)` }} />
+        <div className="grid grid-cols-1 md:grid-cols-2">
 
-        {/* Red accent stripe top */}
-        <div style={{ height: 4, background: `linear-gradient(to right, ${PRU_RED}, #f87171, transparent)` }} />
-
-        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0">
-
-          {/* Left — Score ring */}
-          <div className="flex flex-col items-center justify-center p-10 md:p-12"
-            style={{ borderRight: '1px solid #e5e7eb' }}>
+          {/* Score ring */}
+          <div className="flex flex-col items-center justify-center p-10 gap-4"
+            style={{ borderBottom: '1px solid #f3f4f6' }} >
             <ScoreRing score={result.total} />
-            {/* Status badge */}
-            <div className="mt-4 flex items-center gap-2 px-4 py-2 rounded-full"
-              style={{ background: `${statusColor}18`, border: `1px solid ${statusColor}40` }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: statusColor, display: 'inline-block', boxShadow: `0 0 6px ${statusColor}` }} />
-              <span className="text-xs font-bold tracking-wide" style={{ color: statusColor }}>{statusLabel}</span>
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full"
+              style={{ background: `${statusColor}10`, border: `1px solid ${statusColor}30` }}>
+              <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: statusColor }} />
+              <span className="text-xs font-semibold tracking-wide" style={{ color: statusColor }}>{statusLabel}</span>
             </div>
-            <span className="text-[10px] tracking-widest uppercase font-semibold mt-3"
-              style={{ color: '#9ca3af' }}>{result.riskLevel} Risk Level</span>
+            <p className="text-xs uppercase tracking-widest text-gray-400 font-medium">{result.riskLevel} Risk Level</p>
           </div>
 
-          {/* Right — Explanation + sub-scores */}
-          <div className="p-8 md:p-10 flex flex-col justify-center gap-6">
+          {/* Sub-scores */}
+          <div className="p-8 md:p-10 flex flex-col justify-center gap-5">
             <div>
-              <p className="text-[10px] font-bold tracking-[0.25em] uppercase mb-2" style={{ color: PRU_RED }}>Assessment Summary</p>
-              <p className="text-gray-500 text-sm leading-relaxed">{result.explanation}</p>
+              <p className="text-xs uppercase tracking-widest font-semibold mb-1" style={{ color: PRU_RED }}>Assessment Summary</p>
+              <p className="text-sm text-gray-500 leading-relaxed">{result.explanation}</p>
             </div>
-
-            {/* Sub-score bars */}
             <div className="space-y-4">
               {subScores.map(({ label, val, icon }) => {
-                const barColor = val < 40 ? PRU_RED : val < 65 ? '#f59e0b' : '#10b981'
+                const barColor = val < 40 ? PRU_RED : val < 65 ? '#b45309' : '#047857'
+                const grade    = val < 40 ? 'Needs attention' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
                 return (
                   <div key={label}>
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="flex items-center gap-1.5">
-                        <span style={{ color: '#9ca3af' }}>{icon}</span>
-                        <span className="text-[11px] font-semibold tracking-wide text-gray-400 uppercase">{label}</span>
+                    <div className="flex justify-between items-center mb-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-400">{icon}</span>
+                        <span className="text-xs font-medium text-gray-500">{label}</span>
                       </div>
-                      <span className="text-xs font-black tabular-nums" style={{ color: barColor }}>{val}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-400">{grade}</span>
+                        <span className="text-xs font-semibold tabular-nums w-6 text-right" style={{ color: barColor }}>{val}</span>
+                      </div>
                     </div>
-                    <div className="h-[3px] rounded-full overflow-hidden" style={{ background: '#e5e7eb' }}>
-                      <motion.div
+                    <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                      <motion.div className="h-full rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${val}%` }}
-                        transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' as const }}
-                        className="h-full rounded-full"
-                        style={{ background: `linear-gradient(to right, ${barColor}, ${barColor}99)` }}
-                      />
+                        transition={{ duration: 1.1, delay: 0.4, ease: 'easeOut' as const }}
+                        style={{ background: barColor }} />
                     </div>
                   </div>
                 )
@@ -690,139 +704,105 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             </div>
           </div>
         </div>
+
+        {/* Metric mini row */}
+        <div className="grid grid-cols-4 border-t border-gray-100">
+          {subScores.map(({ label, val }, idx) => {
+            const color = val < 40 ? PRU_RED : val < 65 ? '#b45309' : '#047857'
+            const grade = val < 40 ? 'Needs Work' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
+            return (
+              <div key={label}
+                className="flex flex-col items-center py-4 gap-0.5"
+                style={{ borderRight: idx < 3 ? '1px solid #f3f4f6' : 'none' }}>
+                <p className="text-2xl font-semibold tabular-nums" style={{ color }}>{val}</p>
+                <p className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">{label}</p>
+                <p className="text-[10px] font-medium" style={{ color }}>{grade}</p>
+              </div>
+            )
+          })}
+        </div>
       </motion.div>
 
-      {/* ── 4 Metric Cards ───────────────────────────────────────── */}
-      <motion.div variants={fadeUp} className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        {subScores.map(({ label, val }) => {
-          const color = val < 40 ? PRU_RED : val < 65 ? '#f59e0b' : '#10b981'
-          const grade = val < 40 ? 'Needs Work' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
-          return (
-            <div key={label} className="bg-white rounded-2xl p-4 border border-gray-100"
-              style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.06)' }}>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{label}</span>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: color, display: 'inline-block' }} />
-              </div>
-              <p className="text-3xl font-black tabular-nums leading-none mb-1" style={{ color }}>{val}</p>
-              <p className="text-[10px] font-semibold" style={{ color }}>{grade}</p>
-              <div className="mt-3 h-1 rounded-full overflow-hidden bg-gray-100">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${val}%` }}
-                  transition={{ duration: 1.0, delay: 0.6, ease: 'easeOut' as const }}
-                  className="h-full rounded-full"
-                  style={{ background: color }}
-                />
-              </div>
-            </div>
-          )
-        })}
-      </motion.div>
-
-      {/* ── Emergency Fund Card ──────────────────────────────────── */}
+      {/* ══ SECTION 2 — Emergency Fund (conditional) ════════════════════ */}
       {result.emergencyFundTarget > 0 && (
-        <motion.div variants={fadeUp} className="mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div style={{ width: 3, height: 20, background: '#f59e0b', borderRadius: 2 }} />
-            <h3 className="text-lg font-black text-gray-900 tracking-tight">Emergency Fund Target</h3>
-            <span className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-              style={{ background: '#fffbeb', color: '#d97706', border: '1px solid #fde68a' }}>
-              Industry Grade
-            </span>
-          </div>
-
-          <div className="bg-white rounded-2xl overflow-hidden"
-            style={{ border: '1px solid #fde68a', boxShadow: '0 2px 16px rgba(245,158,11,0.10)' }}>
-            {/* Amber top stripe */}
-            <div style={{ height: 3, background: 'linear-gradient(to right, #f59e0b, #fbbf24, transparent)' }} />
-
-            <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-
-              {/* Big number */}
-              <div className="md:col-span-1 flex flex-col items-start">
-                <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-amber-500 mb-1">Your Target</p>
-                <p className="text-4xl font-black leading-none text-gray-900">
+        <motion.div variants={fadeUp}
+          className="bg-white rounded-2xl border overflow-hidden"
+          style={{ borderColor: '#fde68a', boxShadow: '0 1px 12px rgba(245,158,11,0.08)' }}>
+          <div style={{ height: 2, background: 'linear-gradient(to right,#f59e0b,#fbbf24,transparent)' }} />
+          <div className="p-6 md:p-8">
+            <div className="flex items-center gap-2 mb-6">
+              <p className="text-xs uppercase tracking-widest font-semibold text-amber-600">Emergency Fund Target</p>
+              <span className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-200">Industry Grade</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+              <div>
+                <p className="text-xs text-gray-400 mb-1 font-medium">Recommended Target</p>
+                <p className="text-3xl font-semibold tracking-tight text-gray-900">
                   ₱{result.emergencyFundTarget.toLocaleString('en-PH')}
                 </p>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-gray-400 mt-1.5">
                   {result.emergencyFundMonths.toFixed(1)} months × ₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}/mo
                 </p>
               </div>
-
-              {/* Breakdown */}
-              <div className="md:col-span-2 grid grid-cols-2 gap-4">
-                <div className="rounded-xl p-4" style={{ background: '#fffbeb', border: '1px solid #fde68a' }}>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">Recommended Months</p>
-                  <p className="text-2xl font-black text-gray-900">{result.emergencyFundMonths.toFixed(1)}</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Based on your income type &amp; dependents</p>
-                </div>
-                <div className="rounded-xl p-4" style={{ background: '#f8fafc', border: '1px solid #e5e7eb' }}>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Monthly Expenses</p>
-                  <p className="text-2xl font-black text-gray-900">
-                    ₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}
-                  </p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Essential expenses only</p>
-                </div>
+              <div className="rounded-xl p-4 bg-amber-50 border border-amber-100">
+                <p className="text-xs uppercase tracking-wide text-amber-600 font-semibold mb-1">Months Coverage</p>
+                <p className="text-2xl font-semibold text-gray-900">{result.emergencyFundMonths.toFixed(1)}</p>
+                <p className="text-xs text-gray-500 mt-1">Based on your income type &amp; dependents</p>
               </div>
-
+              <div className="rounded-xl p-4 bg-gray-50 border border-gray-100">
+                <p className="text-xs uppercase tracking-wide text-gray-500 font-semibold mb-1">Monthly Expenses</p>
+                <p className="text-2xl font-semibold text-gray-900">₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}</p>
+                <p className="text-xs text-gray-500 mt-1">Essential expenses only</p>
+              </div>
             </div>
-
-            {/* Footer note */}
-            <div className="px-6 md:px-8 pb-5">
-              <p className="text-[11px] text-gray-400 leading-relaxed">
-                💡 <strong className="text-gray-600">Industry standard:</strong> Keep 1–2 months in cash (liquid), put the rest in a high-yield savings or money market fund. Avoid locking it in long-term investments.
+            <div className="mt-5 flex items-start gap-2 pt-4 border-t border-gray-100">
+              <Info size={12} className="shrink-0 mt-0.5 text-amber-400" />
+              <p className="text-xs text-gray-500 leading-relaxed">
+                <span className="font-medium text-gray-700">Industry standard:</span> Keep 1–2 months liquid in cash or savings. Park the remainder in a high-yield money market fund — not locked in long-term investments.
               </p>
             </div>
           </div>
         </motion.div>
       )}
 
-      {/* ── Detected Gaps ────────────────────────────────────────── */}
-      <motion.div variants={fadeUp} className="mb-6">
-        <div className="flex items-center gap-3 mb-5">
-          <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
-          <h3 className="text-lg font-black text-gray-900 tracking-tight">Risk Exposures Identified</h3>
-          <span className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-            style={{ background: '#fef2f2', color: PRU_RED, border: `1px solid #fecaca` }}>
-            {result.gaps.length} Found
+      {/* ══ SECTION 3 — Financial Gaps ══════════════════════════════════ */}
+      <motion.div variants={fadeUp}>
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-gray-400 font-medium mb-0.5">Risk Analysis</p>
+            <h2 className="text-xl font-semibold text-gray-900 tracking-tight">Financial Gaps Identified</h2>
+          </div>
+          <span className="text-xs font-medium px-3 py-1 rounded-full"
+            style={{ background: RED_SOFT, color: PRU_RED, border: `1px solid ${RED_MED}` }}>
+            {result.gaps.length} found
           </span>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {result.gaps.map((gap, i) => {
             const sv = sevStyle[gap.severity]
             return (
-              <motion.div
-                key={gap.id}
-                initial={{ opacity: 0, y: 12 }}
+              <motion.div key={gap.id}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.07, duration: 0.4, ease: 'easeOut' as const }}
-                whileHover={{ y: -3, boxShadow: '0 12px 32px rgba(0,0,0,0.1)' }}
-                className="bg-white rounded-2xl p-5 transition-all duration-300 flex flex-col gap-3"
-                style={{
-                  border: '1px solid #f1f5f9',
-                  borderLeft: `3px solid ${sv.color}`,
-                  boxShadow: '0 1px 6px rgba(0,0,0,0.05)',
-                }}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center justify-center rounded-xl shrink-0"
-                      style={{ width: 36, height: 36, background: sv.track, color: sv.color }}>
-                      {gapIcon[gap.id] ?? <AlertTriangle size={16} />}
-                    </span>
-                    <div>
-                      <h4 className="text-sm font-bold text-gray-900 leading-tight">{gap.title}</h4>
-                      <span className="text-[10px] font-bold tracking-wide uppercase" style={{ color: sv.color }}>{sv.label}</span>
-                    </div>
+                transition={{ delay: 0.05 + i * 0.06, duration: 0.4, ease: 'easeOut' as const }}
+                whileHover={{ y: -2, boxShadow: '0 8px 24px rgba(0,0,0,0.07)' }}
+                className="bg-white rounded-2xl p-5 flex flex-col gap-3 transition-all duration-200"
+                style={{ border: `1px solid ${sv.border}`, borderLeft: `3px solid ${sv.color}`, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                <div className="flex items-start gap-3">
+                  <div className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
+                    style={{ background: sv.bg, color: sv.color }}>
+                    {gapIcon[gap.id] ?? <AlertTriangle size={15} />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-semibold text-gray-900 leading-snug">{gap.title}</h4>
+                    <span className="text-xs font-medium" style={{ color: sv.color }}>{sv.label}</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed">{gap.description}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{gap.description}</p>
                 <div className="flex items-start gap-2 rounded-xl px-3 py-2.5"
-                  style={{ background: sv.track }}>
-                  <Zap size={11} className="shrink-0 mt-0.5" style={{ color: sv.color }} />
-                  <p className="text-[11px] font-medium leading-relaxed" style={{ color: sv.color }}>{gap.consequence}</p>
+                  style={{ background: sv.bg }}>
+                  <ArrowRight size={11} className="shrink-0 mt-0.5" style={{ color: sv.color }} />
+                  <p className="text-xs font-medium leading-relaxed" style={{ color: sv.color }}>{gap.consequence}</p>
                 </div>
               </motion.div>
             )
@@ -830,213 +810,139 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
       </motion.div>
 
-      {/* ── Solutions ────────────────────────────────────────────── */}
-      <motion.div variants={fadeUp} className="mb-6">
-        <div className="flex items-center gap-3 mb-5">
-          <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
-          <div>
-            <h3 className="text-lg font-black text-gray-900 tracking-tight">Your Protection Plan</h3>
-            <p className="text-xs text-gray-400 mt-0.5">Powered by PRU Life UK product suite</p>
+      {/* ══ SECTION 4 — Advisor Recommendation ═════════════════════════ */}
+      <motion.div variants={fadeUp}
+        className="rounded-2xl p-6 flex gap-4 items-start"
+        style={{ background: `${PRU_RED}08`, border: `1px solid ${RED_MED}` }}>
+        <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
+          style={{ background: '#fff', border: `1px solid ${RED_MED}` }}>
+          <User size={16} style={{ color: PRU_RED }} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2">
+            <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: PRU_RED }}>Your BSQ Advisor</p>
+            <span className="text-xs px-2.5 py-0.5 rounded-full font-medium text-gray-500 bg-white border border-gray-200">
+              {engineResult.segment} · {tierLabel}
+            </span>
           </div>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            &ldquo;{engineResult.positioning_message}&rdquo;
+          </p>
+        </div>
+      </motion.div>
+
+      {/* ══ SECTION 5 — Recommended Plans ══════════════════════════════ */}
+      <motion.div variants={fadeUp}>
+        <div className="mb-6">
+          <p className="text-xs uppercase tracking-widest text-gray-400 font-medium mb-0.5">Personalised to your profile</p>
+          <h2 className="text-xl font-semibold text-gray-900 tracking-tight">Recommended Plans</h2>
         </div>
 
-        {/* ── Advisor Positioning Card ─────────────────────────── */}
-        <div className="flex gap-4 rounded-2xl p-5 mb-6"
-          style={{ background: 'linear-gradient(135deg,#fff9f9,#fff)', border: `1px solid ${PRU_RED}20`, boxShadow: `0 2px 16px ${PRU_RED}08` }}>
-          <div className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg"
-            style={{ background: '#fef2f2' }}>
-            💬
-          </div>
-          <div>
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: PRU_RED }}>
-              Your BSQ Advisor Says
-            </p>
-            <p className="text-sm text-gray-700 leading-relaxed font-medium">
-              "{engineResult.positioning_message}"
-            </p>
-            <p className="text-[11px] text-gray-400 mt-1.5">
-              Based on your profile as{' '}
-              <span className="font-semibold text-gray-600">{engineResult.segment}</span>
-              {' '}·{' '}
-              <span className="font-semibold text-gray-600">
-                {engineResult.incomeTier === 'entry' ? 'Entry Income Tier'
-                  : engineResult.incomeTier === 'mid' ? 'Mid Income Tier'
-                  : engineResult.incomeTier === 'high' ? 'High Income Tier'
-                  : 'Premium Income Tier'}
-              </span>
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {result.recommendations.map((rec, i) => {
-            /* ── derive colour from rec.color (hex) ── */
-            const hex   = rec.color ?? PRU_RED
-            const bgTint = `${hex}12`
-            const borderTint = `${hex}25`
-
-            /* ── check engine alignment ── */
+            const hex          = rec.color ?? PRU_RED
             const engineMatch  = engineResult.recommended_products.find(e => e.slug === rec.slug)
             const isTopPick    = engineMatch?.priority === 1
-            const isIncomefit  = !!engineMatch
-
-            /* ── category badge colours ── */
-            const catColor: Record<string, { text: string; bg: string }> = {
-              Protection: { text: PRU_RED,   bg: '#fef2f2' },
-              Health:     { text: '#0369a1', bg: '#f0f9ff' },
-              Investment: { text: '#059669', bg: '#ecfdf5' },
-              Retirement: { text: '#d97706', bg: '#fffbeb' },
-              Wealth:     { text: '#7c3aed', bg: '#f5f3ff' },
-            }
-            const cc = catColor[rec.category] ?? { text: hex, bg: bgTint }
+            const isIncomeFit  = !!engineMatch
+            const cc           = catColor[rec.category] ?? { text: hex, bg: `${hex}10`, border: `${hex}25` }
 
             return (
-              <motion.div
-                key={rec.id}
-                initial={{ opacity: 0, y: 14 }}
+              <motion.div key={rec.id}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.08, duration: 0.45, ease: 'easeOut' as const }}
-                whileHover={{ y: -4, boxShadow: '0 20px 48px rgba(0,0,0,0.10)' }}
-                className="bg-white rounded-2xl overflow-hidden flex flex-col relative"
+                transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: 'easeOut' as const }}
+                whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0,0,0,0.10)' }}
+                className="bg-white rounded-2xl flex flex-col relative overflow-hidden transition-all duration-300"
                 style={{
-                  border: isTopPick ? `1.5px solid ${PRU_RED}50` : `1px solid ${borderTint}`,
-                  boxShadow: isTopPick ? `0 4px 24px ${PRU_RED}15` : '0 2px 8px rgba(0,0,0,0.05)',
-                }}
-              >
-                {/* ── Advisor's Pick ribbon ── */}
+                  border: isTopPick ? `1.5px solid ${RED_MED}` : '1px solid #e5e7eb',
+                  boxShadow: isTopPick ? `0 4px 20px ${PRU_RED}12` : '0 1px 6px rgba(0,0,0,0.04)',
+                }}>
+
+                {/* Advisor's Pick badge */}
                 {isTopPick && (
-                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-white text-[9px] font-black tracking-[0.12em] uppercase"
-                    style={{ background: PRU_RED, boxShadow: `0 2px 8px ${PRU_RED}50` }}>
-                    ★ Advisor&apos;s Pick
+                  <div className="absolute top-4 right-4 z-10 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium"
+                    style={{ background: RED_SOFT, color: PRU_RED, border: `1px solid ${RED_MED}` }}>
+                    <Sparkles size={10} />
+                    Advisor&apos;s Pick
                   </div>
                 )}
 
-                {/* ── Top accent bar ── */}
-                <div className="h-1 w-full" style={{ background: isTopPick ? PRU_RED : hex }} />
+                {/* Top accent */}
+                <div style={{ height: 3, background: isTopPick ? PRU_RED : hex, borderRadius: '12px 12px 0 0' }} />
 
-                {/* ── Header ── */}
-                <div className="px-5 pt-4 pb-3 flex items-start gap-3" style={{ borderBottom: `1px solid ${borderTint}` }}>
-                  {/* Emoji badge */}
-                  <div className="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 text-xl"
-                    style={{ background: bgTint }}>
-                    {rec.emoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                      <span className="text-[9px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
-                        style={{ color: cc.text, background: cc.bg }}>{rec.category}</span>
-                      {isIncomefit && !isTopPick && (
-                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-md"
-                          style={{ color: '#059669', background: '#ecfdf5' }}>
-                          ✓ Income Fit
-                        </span>
-                      )}
+                {/* Card header */}
+                <div className="p-6 pb-4">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg"
+                      style={{ background: cc.bg }}>
+                      {rec.emoji}
                     </div>
-                    <h4 className="text-sm font-black text-gray-900 leading-snug">{rec.shortName ?? rec.name}</h4>
+                    <div className="flex-1 pt-0.5 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                        <span className="text-xs font-medium px-2.5 py-0.5 rounded-full"
+                          style={{ color: cc.text, background: cc.bg, border: `1px solid ${cc.border}` }}>
+                          {rec.category}
+                        </span>
+                        {isIncomeFit && !isTopPick && (
+                          <span className="text-xs font-medium px-2.5 py-0.5 rounded-full text-emerald-700 bg-emerald-50 border border-emerald-200">
+                            ✓ Income Fit
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-base font-semibold text-gray-900 leading-snug">{rec.shortName ?? rec.name}</h3>
+                    </div>
                   </div>
+                  <p className="text-sm text-gray-500 leading-relaxed">{rec.what}</p>
                 </div>
 
-                <div className="p-5 flex flex-col flex-1 gap-4">
+                {/* Divider */}
+                <div className="mx-6 border-t border-gray-100" />
 
-                  {/* ── What it is ── */}
-                  <p className="text-[11px] text-gray-500 leading-relaxed">{rec.what}</p>
-
-                  {/* ── Key Benefits ── */}
-                  {rec.keyBenefits && rec.keyBenefits.length > 0 && (
+                {/* Key benefits */}
+                <div className="p-6 pt-4 flex flex-col flex-1 gap-4">
+                  {rec.keyBenefits && rec.keyBenefits.slice(0, 2).length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Key Benefits</p>
-                      {rec.keyBenefits.map((b, bi) => (
-                        <div key={bi} className="flex items-start gap-2 rounded-xl px-3 py-2.5"
-                          style={{ background: bgTint }}>
-                          <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: hex }} />
+                      <p className="text-xs uppercase tracking-widest text-gray-400 font-medium">Key Benefits</p>
+                      {rec.keyBenefits.slice(0, 2).map((b, bi) => (
+                        <div key={bi} className="flex items-start gap-2.5">
+                          <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                            style={{ background: cc.bg }}>
+                            <Check size={9} style={{ color: cc.text }} />
+                          </div>
                           <div>
-                            <p className="text-[11px] font-bold text-gray-800 leading-snug">{b.title}</p>
-                            <p className="text-[10px] text-gray-500 leading-relaxed mt-0.5">{b.description}</p>
+                            <p className="text-sm font-medium text-gray-800">{b.title}</p>
+                            <p className="text-xs text-gray-500 leading-relaxed mt-0.5">{b.description}</p>
                           </div>
                         </div>
                       ))}
                     </div>
                   )}
 
-                  {/* ── Ideal For ── */}
-                  {rec.idealFor && rec.idealFor.length > 0 && (
-                    <div>
-                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Ideal For</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {rec.idealFor.map((tag, ti) => (
-                          <span key={ti} className="text-[10px] font-medium px-2.5 py-1 rounded-full border"
-                            style={{ color: hex, borderColor: borderTint, background: bgTint }}>
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* ── Specs Strip ── */}
-                  {(rec.entryPoint || rec.paymentTerm) && (
-                    <div className="grid grid-cols-2 gap-2 rounded-xl overflow-hidden"
-                      style={{ border: `1px solid ${borderTint}` }}>
-                      {rec.entryPoint && (
-                        <div className="p-2.5" style={{ background: bgTint }}>
-                          <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-0.5">Entry Point</p>
-                          <p className="text-[10px] font-bold text-gray-800 leading-snug">{rec.entryPoint}</p>
-                        </div>
-                      )}
-                      {rec.paymentTerm && (
-                        <div className="p-2.5" style={{ background: bgTint }}>
-                          <p className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-0.5">Payment</p>
-                          <p className="text-[10px] font-bold text-gray-800 leading-snug">{rec.paymentTerm}</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* ── Personalised Why ── */}
-                  <div className="rounded-xl p-3" style={{ background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Zap size={10} style={{ color: hex }} />
-                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Why This Fits You</p>
-                    </div>
-                    <p className="text-[11px] text-gray-600 leading-relaxed">{rec.why}</p>
+                  {/* Why this fits */}
+                  <div className="rounded-xl p-3.5 bg-gray-50 border border-gray-100 mt-auto">
+                    <p className="text-xs uppercase tracking-widest text-gray-400 font-medium mb-1.5">Why this fits you</p>
+                    <p className="text-xs text-gray-600 leading-relaxed">{rec.why}</p>
                     {engineMatch && (
-                      <p className="text-[10px] text-gray-400 leading-relaxed mt-1.5 pt-1.5 border-t border-gray-100 italic">
+                      <p className="text-xs text-gray-400 leading-relaxed mt-2 pt-2 border-t border-gray-200 italic">
                         {engineMatch.reason}
                       </p>
                     )}
                   </div>
 
-                  {/* ── CTAs ── */}
-                  <div className="flex gap-2 mt-auto pt-1">
-                    {/* "Learn More" keeps dynamic product color — secondary style, no shadow */}
-                    <a
-                      href={`/products/${rec.slug}`}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-md text-[11px] font-bold transition-all duration-200 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 active:scale-[0.97]"
-                      style={{
-                        background: '#fff',
-                        color: hex,
-                        borderColor: hex,
-                      }}
-                      onMouseEnter={e => {
-                        (e.currentTarget as HTMLAnchorElement).style.background = hex
-                        ;(e.currentTarget as HTMLAnchorElement).style.color = '#fff'
-                      }}
-                      onMouseLeave={e => {
-                        (e.currentTarget as HTMLAnchorElement).style.background = '#fff'
-                        ;(e.currentTarget as HTMLAnchorElement).style.color = hex
-                      }}
-                    >
-                      Learn More <ArrowRight size={11} />
+                  {/* CTAs */}
+                  <div className="flex gap-2 pt-1">
+                    <a href={`/products/${rec.slug}`}
+                      className="flex-1 h-10 flex items-center justify-center gap-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 active:scale-[0.97]"
+                      style={{ color: hex, borderColor: `${hex}50`, background: '#fff' }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = hex; el.style.color = '#fff' }}
+                      onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = '#fff'; el.style.color = hex }}>
+                      Learn More <ArrowRight size={12} />
                     </a>
-                    {/* "Advisor" — tertiary ghost button */}
-                    <button
-                      onClick={() => setLeadModalOpen(true)}
-                      className="ar-btn-tertiary px-3 py-2.5 text-[11px] active:scale-[0.97]"
-                    >
+                    <button onClick={() => setLeadModalOpen(true)}
+                      className="h-10 px-3 rounded-xl text-xs font-medium text-gray-400 border border-gray-200 hover:border-gray-300 hover:text-gray-600 transition-all duration-200 flex items-center gap-1.5">
                       <MessageCircle size={12} /> Advisor
                     </button>
                   </div>
-
                 </div>
               </motion.div>
             )
@@ -1044,99 +950,73 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
       </motion.div>
 
-      {/* ── Lead Capture Card ─────────────────────────────────── */}
-      <motion.div variants={fadeUp}
-        className="relative overflow-hidden rounded-3xl"
-        style={{ border: `1.5px solid ${PRU_RED}30`, background: 'linear-gradient(135deg, #fff 0%, #fff9f9 100%)', boxShadow: `0 4px 32px ${PRU_RED}12` }}>
+      {/* ══ SECTION 6 — CTA ═════════════════════════════════════════════ */}
+      <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        {/* Soft red glow top-left */}
-        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full pointer-events-none"
-          style={{ background: `${PRU_RED}08`, filter: 'blur(40px)' }} />
-
-        <div className="relative p-8 md:p-10 flex flex-col md:flex-row md:items-center gap-8">
-          {/* Left — copy */}
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="flex items-center justify-center w-8 h-8 rounded-xl shrink-0"
-                style={{ background: '#fef2f2' }}>
-                <Mail size={14} style={{ color: PRU_RED }} />
-              </span>
-              <p className="text-[10px] font-bold tracking-[0.25em] uppercase" style={{ color: PRU_RED }}>
-                Save Your Report
-              </p>
+        {/* Save Report */}
+        <div className="bg-white rounded-2xl p-6 border border-gray-100 flex flex-col gap-4"
+          style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: RED_SOFT }}>
+              <Mail size={15} style={{ color: PRU_RED }} />
             </div>
-            <h3 className="text-xl md:text-2xl font-black text-gray-900 leading-tight mb-2">
-              Send My Results via<br />Email or SMS — Free
-            </h3>
-            <p className="text-sm text-gray-500 leading-relaxed max-w-sm">
-              Get a personalised copy of your financial gap report with tailored
-              recommendations — delivered directly to your inbox or phone.
-            </p>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 mt-4">
-              {['Instant delivery', 'Free & private', 'No spam ever'].map(t => (
-                <div key={t} className="flex items-center gap-1.5">
-                  <CheckCircle size={11} style={{ color: PRU_RED }} />
-                  <span className="text-[11px] text-gray-500">{t}</span>
-                </div>
-              ))}
+            <div>
+              <p className="text-xs uppercase tracking-widest font-semibold text-gray-400">Save Your Report</p>
+              <h3 className="text-base font-semibold text-gray-900">Get it via Email or SMS</h3>
             </div>
           </div>
-
-          {/* Right — CTA button */}
-          <div className="shrink-0">
-            <motion.button
-              onClick={() => setLeadModalOpen(true)}
-              whileTap={{ scale: 0.97 }}
-              className="ar-btn-secondary w-full md:w-auto px-8 py-4 text-sm"
-            >
-              <Send size={14} />
-              Send My Results
-            </motion.button>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            Receive a personalised copy of your financial gap report with tailored recommendations — free and instant.
+          </p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            {['Instant delivery', 'Free & private', 'No spam'].map(t => (
+              <div key={t} className="flex items-center gap-1.5">
+                <Check size={11} style={{ color: PRU_RED }} />
+                <span className="text-xs text-gray-500">{t}</span>
+              </div>
+            ))}
           </div>
+          <button onClick={() => setLeadModalOpen(true)}
+            className="h-12 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+            style={{ background: PRU_RED, color: '#fff', boxShadow: `0 4px 16px ${PRU_RED}30` }}>
+            <Send size={14} />
+            Send My Results
+          </button>
         </div>
-      </motion.div>
 
-      {/* ── Advisor CTA ───────────────────────────────────────── */}
-      <motion.div variants={fadeUp}
-        className="relative overflow-hidden rounded-3xl p-8 md:p-12"
-        style={{ background: 'linear-gradient(135deg, #0a0f1c 0%, #111827 100%)' }}>
-
-        {/* Red accent */}
-        <div className="absolute top-0 left-0 right-0 h-[3px]"
-          style={{ background: `linear-gradient(to right, ${PRU_RED}, #f87171, transparent)` }} />
-        {/* Glow */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: `radial-gradient(ellipse 60% 80% at 20% 50%, ${PRU_RED}18 0%, transparent 70%)` }} />
-
-        <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          <div>
-            <p className="text-[10px] font-bold tracking-[0.25em] uppercase mb-2" style={{ color: PRU_RED }}>Talk to an Expert</p>
-            <h3 className="text-2xl md:text-3xl font-black text-white leading-tight mb-3">
-              Talk to a Trusted<br />Financial Advisor
-            </h3>
-            <p className="text-white/50 text-sm leading-relaxed max-w-sm">
-              A licensed BSQ · PRU Life UK advisor will review your results and build a
-              personalised protection plan — at no cost, no obligation.
-            </p>
-            <div className="flex items-center gap-5 mt-4">
-              {['Free consultation', 'No obligation', 'Licensed advisor'].map(t => (
-                <div key={t} className="flex items-center gap-1.5">
-                  <CheckCircle size={11} style={{ color: PRU_RED }} />
-                  <span className="text-[11px] text-white/40">{t}</span>
-                </div>
-              ))}
+        {/* Talk to Advisor */}
+        <div className="rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden"
+          style={{ background: 'linear-gradient(135deg,#0f172a,#1e293b)', boxShadow: '0 4px 24px rgba(0,0,0,0.15)' }}>
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: `radial-gradient(ellipse at 10% 50%, ${PRU_RED}20 0%, transparent 60%)` }} />
+          <div className="relative flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: RED_SOFT }}>
+              <MessageCircle size={15} style={{ color: PRU_RED }} />
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: `${PRU_RED}cc` }}>Talk to an Expert</p>
+              <h3 className="text-base font-semibold text-white">Free Consultation</h3>
             </div>
           </div>
-          <div className="shrink-0">
-            <motion.button
-              onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
-              whileTap={{ scale: 0.97 }}
-              className="ar-btn-secondary-dark px-8 py-4 text-sm"
-            >
-              <MessageCircle size={15} />
-              Talk to an Advisor
-            </motion.button>
+          <p className="relative text-sm text-white/50 leading-relaxed">
+            A licensed BSQ · PRU Life UK advisor will review your results and build a personalised plan — no cost, no obligation.
+          </p>
+          <div className="relative flex flex-wrap gap-x-4 gap-y-1">
+            {['Free consultation', 'No obligation', 'Licensed advisor'].map(t => (
+              <div key={t} className="flex items-center gap-1.5">
+                <Check size={11} style={{ color: PRU_RED }} />
+                <span className="text-xs text-white/40">{t}</span>
+              </div>
+            ))}
           </div>
+          <button
+            onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
+            className="relative h-12 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 border border-white/10 text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.98]">
+            <MessageCircle size={14} />
+            Talk to an Advisor
+          </button>
         </div>
       </motion.div>
 
@@ -1147,21 +1027,19 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         result={result}
       />
 
-      {/* ── Disclaimer ───────────────────────────────────────────── */}
-      <motion.div variants={fadeUp}
-        className="mt-5 flex items-start gap-2.5 px-4 py-3 rounded-xl"
-        style={{ background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-        <Info size={12} className="shrink-0 mt-0.5 text-gray-300" />
-        <p className="text-[11px] leading-relaxed text-gray-400">
-          Results are based on financial planning models assessing risk exposure, savings behavior, and long-term readiness. Advisory purposes only — not financial advice. PRU Life UK products subject to eligibility and underwriting.
-        </p>
-      </motion.div>
-
       {/* ── Testimonial Form ─────────────────────────────────────── */}
       <motion.div variants={fadeUp}
-        className="rounded-3xl p-8 md:p-10"
-        style={{ background: '#ffffff', border: '1px solid #f1f5f9', boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
+        className="bg-white rounded-2xl p-8 md:p-10 border border-gray-100"
+        style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.04)' }}>
         <TestimonialForm />
+      </motion.div>
+
+      {/* ── Disclaimer ───────────────────────────────────────────── */}
+      <motion.div variants={fadeUp} className="flex items-start gap-2.5">
+        <Info size={12} className="shrink-0 mt-0.5 text-gray-300" />
+        <p className="text-xs leading-relaxed text-gray-400">
+          Results are based on financial planning models assessing risk exposure, savings behavior, and long-term readiness. Advisory purposes only — not financial advice. PRU Life UK products subject to eligibility and underwriting.
+        </p>
       </motion.div>
 
     </motion.div>
