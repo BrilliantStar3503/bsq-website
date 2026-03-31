@@ -8,7 +8,7 @@ import { questions } from '@/lib/assessment-questions'
 import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
-import { AnimatedGradientButton } from '@/components/ui/AnimatedGradientButton'
+import { ShineBorder } from '@/components/ui/shine-border'
 import TestimonialForm from '@/components/ui/testimonial-form'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
@@ -852,12 +852,19 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: 'easeOut' as const }}
-                whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0,0,0,0.10)' }}
-                className="bg-white rounded-2xl flex flex-col relative overflow-hidden transition-all duration-300"
-                style={{
-                  border: isTopPick ? `1.5px solid ${RED_MED}` : '1px solid #e5e7eb',
-                  boxShadow: isTopPick ? `0 4px 20px ${PRU_RED}12` : '0 1px 6px rgba(0,0,0,0.04)',
-                }}>
+                className="h-full">
+              <ShineBorder
+                color={['#FF007F', '#ff6b35', '#ffb347', '#39FF14', '#00FFFF', '#a855f7', '#FF007F']}
+                borderRadius={16}
+                borderWidth={2}
+                duration={4 + i}
+                className="h-full"
+              >
+                <div
+                  className="bg-white rounded-2xl flex flex-col relative h-full overflow-hidden transition-shadow duration-300 hover:shadow-xl"
+                  style={{
+                    boxShadow: isTopPick ? `0 4px 20px ${PRU_RED}12` : '0 1px 6px rgba(0,0,0,0.04)',
+                  }}>
 
                 {/* Advisor's Pick badge */}
                 {isTopPick && (
@@ -945,6 +952,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                     </button>
                   </div>
                 </div>
+              </div>
+              </ShineBorder>
               </motion.div>
             )
           })}
@@ -978,15 +987,13 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               </div>
             ))}
           </div>
-          <AnimatedGradientButton
+          <button
             onClick={() => setLeadModalOpen(true)}
-            colors={['#FF007F', '#39FF14', '#00FFFF']}
-            duration={3}
-            style={{ background: PRU_RED, color: '#fff' }}
-          >
+            className="h-12 w-full rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+            style={{ background: PRU_RED, color: '#fff' }}>
             <Send size={14} />
             Send My Results
-          </AnimatedGradientButton>
+          </button>
         </div>
 
         {/* Talk to Advisor */}
