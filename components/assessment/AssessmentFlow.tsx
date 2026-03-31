@@ -8,6 +8,7 @@ import { questions } from '@/lib/assessment-questions'
 import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
+import { ShineBorder } from '@/components/ui/shine-border'
 import TestimonialForm from '@/components/ui/testimonial-form'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
@@ -977,12 +978,20 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               </div>
             ))}
           </div>
-          <button onClick={() => setLeadModalOpen(true)}
-            className="h-12 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-            style={{ background: PRU_RED, color: '#fff', boxShadow: `0 4px 16px ${PRU_RED}30` }}>
-            <Send size={14} />
-            Send My Results
-          </button>
+          <ShineBorder
+            color={['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#D92D20', '#7f0000']}
+            borderRadius={12}
+            borderWidth={2}
+            duration={6}
+            className="!bg-transparent !p-0 !rounded-xl w-full"
+          >
+            <button onClick={() => setLeadModalOpen(true)}
+              className="h-12 w-full rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+              style={{ background: PRU_RED, color: '#fff', boxShadow: `0 4px 16px ${PRU_RED}30` }}>
+              <Send size={14} />
+              Send My Results
+            </button>
+          </ShineBorder>
         </div>
 
         {/* Talk to Advisor */}
@@ -1011,12 +1020,21 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               </div>
             ))}
           </div>
-          <button
-            onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
-            className="relative h-12 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 border border-white/10 text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.98]">
-            <MessageCircle size={14} />
-            Talk to an Advisor
-          </button>
+          <ShineBorder
+            color={['#D92D20', '#ff6b35', '#ffb347', '#ffffff60', '#ffb347', '#D92D20']}
+            borderRadius={12}
+            borderWidth={2}
+            duration={7}
+            className="!bg-transparent !p-0 !rounded-xl w-full relative z-10"
+          >
+            <button
+              onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
+              className="relative h-12 w-full rounded-xl text-sm font-semibold flex items-center justify-center gap-2 text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.98]"
+              style={{ background: 'rgba(255,255,255,0.05)' }}>
+              <MessageCircle size={14} />
+              Talk to an Advisor
+            </button>
+          </ShineBorder>
         </div>
       </motion.div>
 
