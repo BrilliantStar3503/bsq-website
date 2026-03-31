@@ -37,7 +37,6 @@ export function MessengerChat() {
       script.id       = 'facebook-jssdk'
       script.async    = true
       script.defer    = true
-      script.crossOrigin = 'anonymous'
       script.src      = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js'
       document.body.appendChild(script)
     }
