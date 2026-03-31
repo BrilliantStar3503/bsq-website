@@ -1097,6 +1097,17 @@ export default function AssessmentFlow() {
       setEngineResult(engine)
       setPhase('analyzing')
       setTimeout(() => setPhase('results'), 2500)
+
+      // Track completion silently — fire and forget, never blocks UX
+      fetch('/api/track-assessment', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          score:     computed.total,
+          segment:   engine.segment,
+          riskLevel: computed.riskLevel,
+        }),
+      }).catch(() => { /* silent fail */ })
     }
   }
 

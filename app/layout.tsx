@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import HeaderWrapper from "@/components/ui/HeaderWrapper";
 import BsqFooter from "@/components/ui/bsq-footer";
@@ -39,6 +40,7 @@ export default function RootLayout({
         <HeaderWrapper />
         {children}
         <BsqFooter />
+        <Analytics />
         {/* Calendly popup widget script — loads after page is interactive */}
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"
