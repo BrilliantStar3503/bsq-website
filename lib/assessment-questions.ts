@@ -19,6 +19,29 @@ export const questions: Question[] = [
     ],
   },
   {
+    id: 'occupation',
+    question: 'What best describes your work setup?',
+    subtitle: 'This helps us tailor recommendations to your income profile.',
+    options: [
+      'Salaried Employee',
+      'OFW (Overseas Filipino Worker)',
+      'Business Owner',
+      'Freelancer / Professional / Commission',
+    ],
+  },
+  {
+    id: 'monthlyIncome',
+    question: 'What is your estimated gross monthly income?',
+    subtitle: 'This determines which products are the right fit for your budget.',
+    options: [
+      'Below ₱30,000',
+      '₱30,001 – ₱60,000',
+      '₱60,001 – ₱100,000',
+      '₱100,001 – ₱150,000',
+      'Above ₱150,000',
+    ],
+  },
+  {
     id: 'priority',
     question: 'What is your top financial priority right now?',
     subtitle: 'Choose the one that matters most to you today.',

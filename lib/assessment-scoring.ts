@@ -1,5 +1,8 @@
 export interface Answers {
   lifeStage?: string
+  /** Engine inputs — new questions inserted after lifeStage */
+  occupation?: string    // 'Salaried Employee' | 'OFW (Overseas Filipino Worker)' | 'Business Owner' | 'Freelancer / Professional / Commission'
+  monthlyIncome?: string // 'Below ₱30,000' | '₱30,001 – ₱60,000' | '₱60,001 – ₱100,000' | '₱100,001 – ₱150,000' | 'Above ₱150,000'
   priority?: string
   incomeProtection?: string
   dependents?: string

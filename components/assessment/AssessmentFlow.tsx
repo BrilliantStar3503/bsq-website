@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, Shield, TrendingUp, Clock, ArrowRight, Info, Zap, CheckCircle, BarChart2, RotateCcw, Home, Mail, Phone, X, Send, MessageCircle } from 'lucide-react'
 import { questions } from '@/lib/assessment-questions'
 import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
+import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
 import TestimonialForm from '@/components/ui/testimonial-form'
 
@@ -594,7 +595,7 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
 /* ─── Results Screen — PRU Life UK Modern ──────────────────────────── */
 const PRU_RED = '#ed1b2e'
 
-function ResultsScreen({ result }: { result: ScoreResult }) {
+function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineResult: RecommendationResult }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
 
   const gapIcon: Record<string, React.ReactNode> = {
@@ -839,12 +840,45 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
           </div>
         </div>
 
+        {/* ── Advisor Positioning Card ─────────────────────────── */}
+        <div className="flex gap-4 rounded-2xl p-5 mb-6"
+          style={{ background: 'linear-gradient(135deg,#fff9f9,#fff)', border: `1px solid ${PRU_RED}20`, boxShadow: `0 2px 16px ${PRU_RED}08` }}>
+          <div className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg"
+            style={{ background: '#fef2f2' }}>
+            💬
+          </div>
+          <div>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: PRU_RED }}>
+              Your BSQ Advisor Says
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed font-medium">
+              "{engineResult.positioning_message}"
+            </p>
+            <p className="text-[11px] text-gray-400 mt-1.5">
+              Based on your profile as{' '}
+              <span className="font-semibold text-gray-600">{engineResult.segment}</span>
+              {' '}·{' '}
+              <span className="font-semibold text-gray-600">
+                {engineResult.incomeTier === 'entry' ? 'Entry Income Tier'
+                  : engineResult.incomeTier === 'mid' ? 'Mid Income Tier'
+                  : engineResult.incomeTier === 'high' ? 'High Income Tier'
+                  : 'Premium Income Tier'}
+              </span>
+            </p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {result.recommendations.map((rec, i) => {
             /* ── derive colour from rec.color (hex) ── */
             const hex   = rec.color ?? PRU_RED
             const bgTint = `${hex}12`
             const borderTint = `${hex}25`
+
+            /* ── check engine alignment ── */
+            const engineMatch  = engineResult.recommended_products.find(e => e.slug === rec.slug)
+            const isTopPick    = engineMatch?.priority === 1
+            const isIncomefit  = !!engineMatch
 
             /* ── category badge colours ── */
             const catColor: Record<string, { text: string; bg: string }> = {
@@ -863,11 +897,22 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.08, duration: 0.45, ease: 'easeOut' as const }}
                 whileHover={{ y: -4, boxShadow: '0 20px 48px rgba(0,0,0,0.10)' }}
-                className="bg-white rounded-2xl overflow-hidden flex flex-col"
-                style={{ border: `1px solid ${borderTint}`, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}
+                className="bg-white rounded-2xl overflow-hidden flex flex-col relative"
+                style={{
+                  border: isTopPick ? `1.5px solid ${PRU_RED}50` : `1px solid ${borderTint}`,
+                  boxShadow: isTopPick ? `0 4px 24px ${PRU_RED}15` : '0 2px 8px rgba(0,0,0,0.05)',
+                }}
               >
+                {/* ── Advisor's Pick ribbon ── */}
+                {isTopPick && (
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-white text-[9px] font-black tracking-[0.12em] uppercase"
+                    style={{ background: PRU_RED, boxShadow: `0 2px 8px ${PRU_RED}50` }}>
+                    ★ Advisor&apos;s Pick
+                  </div>
+                )}
+
                 {/* ── Top accent bar ── */}
-                <div className="h-1 w-full" style={{ background: hex }} />
+                <div className="h-1 w-full" style={{ background: isTopPick ? PRU_RED : hex }} />
 
                 {/* ── Header ── */}
                 <div className="px-5 pt-4 pb-3 flex items-start gap-3" style={{ borderBottom: `1px solid ${borderTint}` }}>
@@ -880,6 +925,12 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <span className="text-[9px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded-md"
                         style={{ color: cc.text, background: cc.bg }}>{rec.category}</span>
+                      {isIncomefit && !isTopPick && (
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-md"
+                          style={{ color: '#059669', background: '#ecfdf5' }}>
+                          ✓ Income Fit
+                        </span>
+                      )}
                     </div>
                     <h4 className="text-sm font-black text-gray-900 leading-snug">{rec.shortName ?? rec.name}</h4>
                   </div>
@@ -948,6 +999,11 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
                       <p className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400">Why This Fits You</p>
                     </div>
                     <p className="text-[11px] text-gray-600 leading-relaxed">{rec.why}</p>
+                    {engineMatch && (
+                      <p className="text-[10px] text-gray-400 leading-relaxed mt-1.5 pt-1.5 border-t border-gray-100 italic">
+                        {engineMatch.reason}
+                      </p>
+                    )}
                   </div>
 
                   {/* ── CTAs ── */}
@@ -1115,15 +1171,17 @@ function ResultsScreen({ result }: { result: ScoreResult }) {
 /* ─── Main AssessmentFlow — phase state machine ────────────────────── */
 export default function AssessmentFlow() {
   const router = useRouter()
-  const [phase, setPhase]     = useState<'question' | 'analyzing' | 'results'>('question')
-  const [step, setStep]       = useState(0)
-  const [answers, setAnswers] = useState<Answers>({})
-  const [result, setResult]   = useState<ScoreResult | null>(null)
+  const [phase, setPhase]       = useState<'question' | 'analyzing' | 'results'>('question')
+  const [step, setStep]         = useState(0)
+  const [answers, setAnswers]   = useState<Answers>({})
+  const [result, setResult]     = useState<ScoreResult | null>(null)
+  const [engineResult, setEngineResult] = useState<RecommendationResult | null>(null)
 
 
   const handleRetake = () => {
     setAnswers({})
     setResult(null)
+    setEngineResult(null)
     setStep(0)
     setPhase('question')
   }
@@ -1137,9 +1195,11 @@ export default function AssessmentFlow() {
       // More questions remain
       setStep(step + 1)
     } else {
-      // Last question — compute score and enter analyzing phase
+      // Last question — compute gap score + engine recommendations, then show results
       const computed = computeScore(updated)
+      const engine   = getRecommendationsFromAnswers(updated)
       setResult(computed)
+      setEngineResult(engine)
       setPhase('analyzing')
       setTimeout(() => setPhase('results'), 2500)
     }
@@ -1329,7 +1389,7 @@ export default function AssessmentFlow() {
 
         {/* ── Main content ────────────────────────────────────────── */}
         <div className="flex-1 py-10">
-          {result && <ResultsScreen result={result} />}
+          {result && engineResult && <ResultsScreen result={result} engineResult={engineResult} />}
         </div>
 
         {/* ── Footer ──────────────────────────────────────────────── */}

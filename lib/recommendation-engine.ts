@@ -293,6 +293,84 @@ export function getRecommendations(
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   ANSWER → ENGINE INPUT MAPPERS
+   Converts raw assessment answers to (segment, income) so the engine
+   can be called directly from AssessmentFlow without extra logic.
+════════════════════════════════════════════════════════════════════ */
+
+/** Maps the `occupation` question answer → Segment */
+const OCCUPATION_TO_SEGMENT: Record<string, Segment> = {
+  'Salaried Employee':                    'Employee',
+  'OFW (Overseas Filipino Worker)':       'OFW',
+  'Business Owner':                       'Business Owner',
+  'Freelancer / Professional / Commission': 'Professional',
+}
+
+/** Maps the old `incomeType` question answer → Segment (fallback) */
+const INCOME_TYPE_TO_SEGMENT: Record<string, Segment> = {
+  'Fixed salary (employee)':   'Employee',
+  'Mixed (salary + commission)': 'Professional',
+  'Pure commission / freelance': 'Professional',
+  'Business owner':            'Business Owner',
+}
+
+/** Maps the new `monthlyIncome` question → PHP midpoint */
+const MONTHLY_INCOME_TO_PHP: Record<string, number> = {
+  'Below ₱30,000':          20_000,
+  '₱30,001 – ₱60,000':     45_000,
+  '₱60,001 – ₱100,000':    80_000,
+  '₱100,001 – ₱150,000':  125_000,
+  'Above ₱150,000':        175_000,
+}
+
+/** Maps the old `monthlyExpenses` question → estimated income proxy (expenses × 1.6) */
+const EXPENSE_TO_INCOME_PROXY: Record<string, number> = {
+  'Below ₱20,000':          28_000,
+  '₱20,001 – ₱40,000':     50_000,
+  '₱40,001 – ₱60,000':     80_000,
+  '₱60,001 – ₱80,000':    115_000,
+  'Above ₱80,000':         150_000,
+}
+
+type AnswerInputs = {
+  occupation?: string
+  monthlyIncome?: string
+  incomeType?: string
+  monthlyExpenses?: string
+}
+
+/**
+ * Converts raw assessment answers into the (segment, income) pair
+ * needed by the recommendation engine.
+ *
+ * Priority:
+ *   segment → occupation answer > incomeType fallback > 'Professional'
+ *   income  → monthlyIncome answer > monthlyExpenses proxy > 50,000
+ */
+export function answersToEngineInput(answers: AnswerInputs): { segment: Segment; income: number } {
+  const segment: Segment =
+    (answers.occupation ? OCCUPATION_TO_SEGMENT[answers.occupation] : undefined) ??
+    (answers.incomeType ? INCOME_TYPE_TO_SEGMENT[answers.incomeType] : undefined) ??
+    'Professional'
+
+  const income: number =
+    (answers.monthlyIncome ? MONTHLY_INCOME_TO_PHP[answers.monthlyIncome] : undefined) ??
+    (answers.monthlyExpenses ? EXPENSE_TO_INCOME_PROXY[answers.monthlyExpenses] : undefined) ??
+    50_000
+
+  return { segment, income }
+}
+
+/**
+ * One-shot helper — call this with the raw Answers object from AssessmentFlow
+ * to get a full RecommendationResult without needing to extract segment/income manually.
+ */
+export function getRecommendationsFromAnswers(answers: AnswerInputs): RecommendationResult {
+  const { segment, income } = answersToEngineInput(answers)
+  return getRecommendations(segment, income)
+}
+
+/* ════════════════════════════════════════════════════════════════════
    UTILITY HELPERS
 ════════════════════════════════════════════════════════════════════ */
 
