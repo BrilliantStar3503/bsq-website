@@ -8,7 +8,7 @@ import { questions } from '@/lib/assessment-questions'
 import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
-import { ShineBorder } from '@/components/ui/shine-border'
+import { AnimatedGradientButton } from '@/components/ui/AnimatedGradientButton'
 import TestimonialForm from '@/components/ui/testimonial-form'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
@@ -978,20 +978,15 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               </div>
             ))}
           </div>
-          <ShineBorder
-            color={['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#ff6b35', '#D92D20']}
-            borderRadius={12}
-            borderWidth={3}
-            duration={4}
-            className="w-full"
+          <AnimatedGradientButton
+            onClick={() => setLeadModalOpen(true)}
+            colors={['#FF007F', '#39FF14', '#00FFFF']}
+            duration={3}
+            style={{ background: PRU_RED, color: '#fff' }}
           >
-            <button onClick={() => setLeadModalOpen(true)}
-              className="h-12 w-full text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
-              style={{ background: PRU_RED, color: '#fff' }}>
-              <Send size={14} />
-              Send My Results
-            </button>
-          </ShineBorder>
+            <Send size={14} />
+            Send My Results
+          </AnimatedGradientButton>
         </div>
 
         {/* Talk to Advisor */}
@@ -1020,21 +1015,12 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               </div>
             ))}
           </div>
-          <ShineBorder
-            color={['#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#ff6b35', '#D92D20', '#7f0000']}
-            borderRadius={12}
-            borderWidth={3}
-            duration={4}
-            className="w-full relative z-10"
-          >
-            <button
-              onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
-              className="relative h-12 w-full text-sm font-semibold flex items-center justify-center gap-2 text-white transition-all duration-200 active:scale-[0.98]"
-              style={{ background: '#1e293b' }}>
-              <MessageCircle size={14} />
-              Talk to an Advisor
-            </button>
-          </ShineBorder>
+          <button
+            onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
+            className="relative h-12 w-full rounded-xl text-sm font-semibold flex items-center justify-center gap-2 text-white border border-white/10 transition-all duration-200 hover:bg-white/10 active:scale-[0.98]">
+            <MessageCircle size={14} />
+            Talk to an Advisor
+          </button>
         </div>
       </motion.div>
 
