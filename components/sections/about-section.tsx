@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
+import { useAgentContact } from '@/hooks/useAgentContact'
 import { motion, useInView } from 'framer-motion'
 import {
   ShieldCheck,
@@ -98,6 +99,7 @@ const STATS = [
    MAIN EXPORT
    ══════════════════════════════════════════════════════════════════════════ */
 export default function AboutSection() {
+  const { openContact } = useAgentContact()
   return (
     <div className="bg-white">
 
@@ -140,7 +142,7 @@ export default function AboutSection() {
                 preset="pru"
                 duration={5}
                 className="px-8 py-4 rounded-2xl font-black text-sm"
-                onClick={() => window.open('https://m.me/Bstarquartzarea?ref=about_cta', '_blank')}
+                onClick={() => openContact('about_cta')}
               >
                 Talk to an Advisor <ArrowRight size={15} />
               </AnimatedGradientButton>
@@ -404,7 +406,8 @@ export default function AboutSection() {
                 <ArrowRight size={15} />
               </a>
               <a
-                href="https://m.me/Bstarquartzarea?ref=about_cta2"
+                href="#"
+                onClick={(e) => { e.preventDefault(); openContact('about_cta2') }}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 px-9 py-4 rounded-2xl font-semibold text-sm text-white/65 hover:text-white border transition-all duration-200 hover:bg-white/05"

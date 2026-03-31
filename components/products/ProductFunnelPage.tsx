@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
+import { useAgentContact } from '@/hooks/useAgentContact'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
@@ -199,6 +200,7 @@ function LeadModal({
   const [loading, setLoading] = useState(false)
   const [done, setDone]       = useState(false)
   const [error, setError]     = useState('')
+  const { openContact }       = useAgentContact()
 
   const messengerRef = `product_${product.slug}${agentHandle ? `_${agentHandle}` : ''}`
 
@@ -312,7 +314,7 @@ function LeadModal({
               <p className="text-sm text-gray-500 mb-6 leading-relaxed">
                 A licensed BSQ · PRU Life UK advisor will reach out within 24 hours.
               </p>
-              <button onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=${messengerRef}`, '_blank')}
+              <button onClick={() => openContact(messengerRef)}
                 className="w-full py-3.5 text-sm font-bold text-white flex items-center justify-center gap-2 transition-all"
                 style={{ background: PRU_RED, borderRadius: 4, border: 'none' }}
                 onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
@@ -335,9 +337,10 @@ function LeadModal({
    MAIN FUNNEL PAGE
 ══════════════════════════════════════════════════════════════════ */
 export default function ProductFunnelPage({ product }: { product: PruProduct }) {
-  const router      = useRouter()
+  const router                  = useRouter()
   const [modal, setModal]       = useState(false)
   const [agentHandle, setAgent] = useState('')
+  const { openContact }         = useAgentContact()
   const photoConfig   = PRODUCT_PHOTOS[product.slug] ?? { hero: [], benefits: [] }
   const photos        = photoConfig.hero
   const benefitPhotos = photoConfig.benefits
@@ -685,7 +688,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 <MessageCircle size={15} />Get a Free Consultation
               </AnimatedGradientButton>
               <button
-                onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=product_${product.slug}`, '_blank')}
+                onClick={() => openContact(`product_${product.slug}`)}
                 className="flex items-center justify-center gap-2 px-10 py-4 text-sm font-bold transition-all"
                 style={{ background: 'transparent', color: '#e5e7eb', border: '1px solid #4b5563', borderRadius: 4 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = '#fff'; e.currentTarget.style.color = '#fff' }}

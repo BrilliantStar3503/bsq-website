@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/navigation-menu'
 import { LucideIcon } from 'lucide-react'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
+import { useAgentContact } from '@/hooks/useAgentContact'
 import {
   ClipboardList,
   ShieldCheck,
@@ -252,8 +253,9 @@ function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
 
 /* ─── Main Header Export ────────────────────────────────────────────── */
 export function BsqHeader() {
-  const [open, setOpen] = React.useState(false)
-  const scrolled = useScroll(10)
+  const [open, setOpen]   = React.useState(false)
+  const scrolled          = useScroll(10)
+  const { openContact }   = useAgentContact()
 
   React.useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -369,7 +371,8 @@ export function BsqHeader() {
             {/* Simple link */}
             <NavigationMenuItem>
               <NavigationMenuLink
-                href="https://m.me/Bstarquartzarea?ref=nav_contact"
+                href="#"
+                onClick={(e) => { e.preventDefault(); openContact('nav_contact') }}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 text-sm text-white/65 hover:text-white rounded-md hover:bg-white/08 transition-colors duration-150 inline-flex items-center"
@@ -387,7 +390,7 @@ export function BsqHeader() {
             preset="pru"
             duration={5}
             className="text-sm px-5 py-2 rounded-md"
-            onClick={() => window.open('https://m.me/Bstarquartzarea?ref=nav_consult', '_blank')}
+            onClick={() => openContact('nav_consult')}
           >
             Talk to Advisor
           </AnimatedGradientButton>
@@ -478,7 +481,7 @@ export function BsqHeader() {
             preset="pru"
             duration={5}
             className="w-full py-3 text-sm rounded-md"
-            onClick={() => { setOpen(false); window.open('https://m.me/Bstarquartzarea?ref=mobile_consult', '_blank') }}
+            onClick={() => { setOpen(false); openContact('mobile_consult') }}
           >
             <MessageCircle size={14} />
             Talk to an Advisor

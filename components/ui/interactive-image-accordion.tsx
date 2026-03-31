@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
+import { useAgentContact } from '@/hooks/useAgentContact'
 import { motion, AnimatePresence }  from 'framer-motion'
 import {
   ArrowRight, CheckCircle2, X, Calculator,
@@ -437,6 +438,7 @@ function MiniCalcButton({ onClick }: { onClick: () => void }) {
 function MiniGapResult({ result }: { result: GapResult }) {
   const sv  = SEV_STYLE[result.severity]
   const pct = result.coverageRatio !== undefined ? Math.round(result.coverageRatio * 100) : null
+  const { openContact } = useAgentContact()
 
   return (
     <motion.div
@@ -526,7 +528,7 @@ function MiniGapResult({ result }: { result: GapResult }) {
 
           {/* Full-width CTA button */}
           <motion.button
-            onClick={() => window.open('https://m.me/Bstarquartzarea?ref=financial_assessment', '_blank')}
+            onClick={() => openContact('financial_assessment')}
             whileTap={{ scale: 0.97 }}
             className="w-full flex items-center justify-center gap-2 text-white text-sm font-bold rounded-xl py-3.5 transition-all duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.97]"
             style={{
@@ -1030,6 +1032,7 @@ export function FinancialAccordion() {
   const [selectedIndex,  setSelectedIndex]  = useState<number | null>(null)
   const [activeNeedId,   setActiveNeedId]   = useState<number | null>(null)
   const [isModalOpen,    setIsModalOpen]    = useState(false)
+  const { openContact }                     = useAgentContact()
 
   // Hover is a no-op while modal is open — prevents accidental state changes
   const handleHover = (index: number) => { if (isModalOpen) return; setHoverIndex(index) }
@@ -1069,7 +1072,7 @@ export function FinancialAccordion() {
                 preset="pru"
                 duration={5}
                 className="font-semibold text-sm rounded-xl px-8 py-3.5 whitespace-nowrap"
-                onClick={() => window.open('https://m.me/Bstarquartzarea?ref=financial_assessment', '_blank')}
+                onClick={() => openContact('financial_assessment')}
               >
                 Talk to a Financial Advisor <ArrowRight size={15} />
               </AnimatedGradientButton>

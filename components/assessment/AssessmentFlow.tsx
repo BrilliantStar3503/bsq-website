@@ -10,6 +10,7 @@ import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/
 import { GlowingEffect } from '@/components/ui/glowing-effect'
 import { ShineBorder } from '@/components/ui/shine-border'
 import { AssessmentTrustStrip, ResultsStatsBanner } from '@/components/ui/assessment-stats'
+import { useAgentContact } from '@/hooks/useAgentContact'
 import TestimonialForm from '@/components/ui/testimonial-form'
 
 /* ─── Constants ────────────────────────────────────────────────────── */
@@ -318,6 +319,7 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
   const [submitted, setSubmitted]     = useState(false)
   const [loading, setLoading]         = useState(false)
   const [error, setError]             = useState('')
+  const { openContact }               = useAgentContact()
 
   const score       = result.total
   const statusLabel = result.status === 'good' ? 'Well Protected'
@@ -570,7 +572,7 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
                     <div className="space-y-3">
                       <motion.button
                         whileTap={{ scale: 0.97 }}
-                        onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_lead_score${score}`, '_blank')}
+                        onClick={() => openContact(`results_lead_score${score}`)}
                         className="ar-btn-primary w-full py-3.5 text-sm"
                       >
                         <MessageCircle size={15} />
@@ -599,6 +601,7 @@ const PRU_RED = '#ed1b2e'
 
 function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineResult: RecommendationResult }) {
   const [leadModalOpen, setLeadModalOpen] = useState(false)
+  const { openContact, contactUrl }       = useAgentContact()
 
   /* ── Design tokens ── */
   const RED_SOFT  = `${PRU_RED}12`
@@ -952,7 +955,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                       onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = '#fff'; el.style.color = hex }}>
                       Learn More <ArrowRight size={12} />
                     </a>
-                    <button onClick={() => setLeadModalOpen(true)}
+                    <button onClick={() => openContact(`rec_${rec.slug}`)}
                       className="h-10 px-3 rounded-xl text-xs font-medium text-gray-400 border border-gray-200 hover:border-gray-300 hover:text-gray-600 transition-all duration-200 flex items-center gap-1.5">
                       <MessageCircle size={12} /> Advisor
                     </button>
@@ -1029,7 +1032,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             ))}
           </div>
           <button
-            onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
+            onClick={() => openContact(`results_score${result.total}`)}
             className="relative h-12 w-full rounded-xl text-sm font-semibold flex items-center justify-center gap-2 text-white border border-white/10 transition-all duration-200 hover:bg-white/10 active:scale-[0.98]">
             <MessageCircle size={14} />
             Talk to an Advisor
