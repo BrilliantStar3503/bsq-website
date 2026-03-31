@@ -1,63 +1,55 @@
 'use client'
 
-import { useEffect } from 'react'
-
-declare global {
-  interface Window {
-    FB?: { init: (opts: object) => void }
-    fbAsyncInit?: () => void
-  }
-}
-
 /**
  * MessengerChat
  * ──────────────────────────────────────────────────────────────────────
- * Embeds the Facebook Messenger Customer Chat bubble.
- * Powered by your existing n8n Facebook Messenger chatbot workflow.
- *
- * Prerequisites:
- *   1. Set NEXT_PUBLIC_FB_PAGE_ID in .env.local + Vercel env vars
- *      (Facebook Page → Settings → About → Page ID)
- *   2. Your FB Page must have Messenger enabled
- *
- * If NEXT_PUBLIC_FB_PAGE_ID is not set, renders nothing.
+ * Floating Messenger button — opens m.me link in a new tab.
+ * No SDK dependency, works on all browsers and devices.
  */
 export function MessengerChat() {
-  const pageId = process.env.NEXT_PUBLIC_FB_PAGE_ID
-
-  useEffect(() => {
-    if (!pageId) return
-
-    window.fbAsyncInit = function () {
-      window.FB?.init({ xfbml: true, version: 'v19.0' })
-    }
-
-    if (!document.getElementById('facebook-jssdk')) {
-      const script    = document.createElement('script')
-      script.id       = 'facebook-jssdk'
-      script.async    = true
-      script.defer    = true
-      script.src      = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js'
-      document.body.appendChild(script)
-    }
-  }, [pageId])
-
-  if (!pageId) return null
-
   return (
-    <>
-      <div id="fb-root" />
-      <div
-        className="fb-customerchat"
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        {...({
-          attribution:          'biz_inbox',
-          page_id:              pageId,
-          theme_color:          '#D92D20',
-          logged_in_greeting:   "Hi! 👋 I'm your BSQ financial advisor. How can I help you today?",
-          logged_out_greeting:  "Hi! 👋 I'm your BSQ financial advisor. How can I help you today?",
-        } as any)}
-      />
-    </>
+    <a
+      href="https://m.me/Bstarquartzarea"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat with us on Messenger"
+      style={{
+        position:        'fixed',
+        bottom:          '24px',
+        right:           '24px',
+        zIndex:          9999,
+        width:           '56px',
+        height:          '56px',
+        borderRadius:    '50%',
+        background:      'linear-gradient(135deg, #D92D20 0%, #ff6b35 100%)',
+        display:         'flex',
+        alignItems:      'center',
+        justifyContent:  'center',
+        boxShadow:       '0 4px 16px rgba(217,45,32,0.5)',
+        cursor:          'pointer',
+        textDecoration:  'none',
+        transition:      'transform 0.2s ease, box-shadow 0.2s ease',
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLAnchorElement).style.transform  = 'scale(1.1)'
+        ;(e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 6px 20px rgba(217,45,32,0.7)'
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLAnchorElement).style.transform  = 'scale(1)'
+        ;(e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 16px rgba(217,45,32,0.5)'
+      }}
+    >
+      {/* Messenger icon */}
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M14 2C7.373 2 2 7.09 2 13.333c0 3.311 1.42 6.278 3.7 8.4V26l4.2-2.31A12.7 12.7 0 0014 24c6.627 0 12-5.09 12-10.667S20.627 2 14 2z"
+          fill="white"
+        />
+        <path
+          d="M15.273 17.067l-3.054-3.254-5.965 3.254 6.563-6.967 3.127 3.254 5.892-3.254-6.563 6.967z"
+          fill="#D92D20"
+        />
+      </svg>
+    </a>
   )
 }
