@@ -932,17 +932,32 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
                   {/* CTAs */}
                   <div className="flex gap-2 pt-1">
-                    <a href={`/products/${rec.slug}`}
-                      className="flex-1 h-10 flex items-center justify-center gap-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 active:scale-[0.97]"
-                      style={{ color: hex, borderColor: `${hex}50`, background: '#fff' }}
-                      onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = hex; el.style.color = '#fff' }}
-                      onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = '#fff'; el.style.color = hex }}>
-                      Learn More <ArrowRight size={12} />
-                    </a>
-                    <button onClick={() => setLeadModalOpen(true)}
-                      className="h-10 px-3 rounded-xl text-xs font-medium text-gray-400 border border-gray-200 hover:border-gray-300 hover:text-gray-600 transition-all duration-200 flex items-center gap-1.5">
-                      <MessageCircle size={12} /> Advisor
-                    </button>
+                    <ShineBorder
+                      color={['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#ff6b35', '#D92D20']}
+                      borderRadius={11}
+                      borderWidth={2}
+                      duration={4}
+                      className="flex-1"
+                    >
+                      <a href={`/products/${rec.slug}`}
+                        className="w-full h-10 flex items-center justify-center gap-1.5 text-xs font-semibold transition-all duration-200 active:scale-[0.97]"
+                        style={{ color: hex, background: '#fff' }}
+                        onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = hex; el.style.color = '#fff' }}
+                        onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = '#fff'; el.style.color = hex }}>
+                        Learn More <ArrowRight size={12} />
+                      </a>
+                    </ShineBorder>
+                    <ShineBorder
+                      color={['#9ca3af', '#d1d5db', '#ffffff', '#d1d5db', '#9ca3af']}
+                      borderRadius={11}
+                      borderWidth={2}
+                      duration={5}
+                    >
+                      <button onClick={() => setLeadModalOpen(true)}
+                        className="h-10 px-3 text-xs font-medium text-gray-400 hover:text-gray-600 transition-all duration-200 flex items-center gap-1.5 bg-white">
+                        <MessageCircle size={12} /> Advisor
+                      </button>
+                    </ShineBorder>
                   </div>
                 </div>
               </motion.div>
