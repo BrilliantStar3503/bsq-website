@@ -197,18 +197,11 @@ export default function BsqFooter() {
         {/* ── Divider ── */}
         <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: '1.25rem' }} />
 
-        {/* ── Partner logos + legal ── */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-5 flex-wrap">
-            {PARTNER_LOGOS.map(p => (
-              <PartnerLogo key={p.alt} {...p} />
-            ))}
-          </div>
-          <p className="text-[10px] text-white/20 text-center sm:text-right shrink-0">
-            © {new Date().getFullYear()} Brilliant Star Quartz · PRU Life UK Licensed · Advisory purposes only ·{' '}
-            <a href="/privacy-policy" className="hover:text-white/50 transition-colors duration-150 underline underline-offset-2">Privacy Policy</a>
-          </p>
-        </div>
+        {/* ── Legal ── */}
+        <p className="text-[10px] text-white/20 text-center">
+          © {new Date().getFullYear()} Brilliant Star Quartz · PRU Life UK Licensed · Advisory purposes only ·{' '}
+          <a href="/privacy-policy" className="hover:text-white/50 transition-colors duration-150 underline underline-offset-2">Privacy Policy</a>
+        </p>
 
       </div>
     </footer>
