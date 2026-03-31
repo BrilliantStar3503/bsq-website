@@ -5,21 +5,24 @@ import { useState, useEffect } from 'react'
 /* ─── Types ─────────────────────────────────────────────────────────── */
 export interface AgentContact {
   name:      string
-  messenger: string | null   // full URL: https://m.me/username
-  whatsapp:  string | null   // number with country code: 639171234567
-  viber:     string | null   // number with country code: 639171234567
-  cell:      string | null   // display: 0917 123 4567
+  messenger: string | null   // full URL: https://m.me/username (add Messenger column to sheet later)
+  phone:     string | null   // from "Contacts" column → tel: link
   email:     string | null
+  // legacy fields kept for backward compat
+  whatsapp:  string | null
+  viber:     string | null
+  cell:      string | null
 }
 
 /* ─── BSQ branch defaults (Chris Garcia) ────────────────────────────── */
 const BSQ_DEFAULT: AgentContact = {
   name:      'BSQ Financial Advisory',
   messenger: 'https://m.me/Bstarquartzarea',
+  phone:     null,
+  email:     'bstarquartz@gmail.com',
   whatsapp:  null,
   viber:     null,
   cell:      null,
-  email:     'bstarquartz@gmail.com',
 }
 
 /* ─── Module-level cache — fetches once per browser session ─────────── */
@@ -46,22 +49,28 @@ async function fetchAgentContact(agentId: string): Promise<AgentContact> {
   return _pending[agentId]
 }
 
-/* ─── Primary contact URL (priority: Messenger → WhatsApp → cell) ───── */
+/* ─── Primary contact URL (priority: Messenger → phone) ─────────────── */
 export function getPrimaryContactUrl(contact: AgentContact, ref?: string): string {
   if (contact.messenger) {
     return ref ? `${contact.messenger}?ref=${ref}` : contact.messenger
   }
-  if (contact.whatsapp) {
-    const msg = ref ? `?text=Hi! I came from ${ref}` : ''
-    return `https://wa.me/${contact.whatsapp}${msg}`
+  if (contact.phone) {
+    return `tel:${contact.phone.replace(/\s/g, '')}`
   }
-  if (contact.viber) {
-    return `viber://chat?number=${encodeURIComponent('+' + contact.viber)}`
+  // legacy fallbacks
+  if (contact.whatsapp) {
+    return `https://wa.me/${contact.whatsapp}`
   }
   if (contact.cell) {
     return `tel:${contact.cell.replace(/\s/g, '')}`
   }
   return BSQ_DEFAULT.messenger!
+}
+
+/* ─── Phone-only URL (for explicit Call buttons) ─────────────────────── */
+export function getPhoneUrl(contact: AgentContact): string | null {
+  const num = contact.phone || contact.cell
+  return num ? `tel:${num.replace(/\s/g, '')}` : null
 }
 
 /* ─── Hook ──────────────────────────────────────────────────────────── */
@@ -70,7 +79,13 @@ export function useAgentContact() {
   const [agentId, setAgentId]  = useState<string | null>(null)
 
   useEffect(() => {
-    const id = localStorage.getItem('bsq_utm_agent')
+    // Support both ?agent_id= (new spec) and ?utm_agent= (existing CRM param)
+    const params   = new URLSearchParams(window.location.search)
+    const fromUrl  = params.get('agent_id') || params.get('utm_agent')
+    if (fromUrl) {
+      localStorage.setItem('bsq_utm_agent', fromUrl)
+    }
+    const id = fromUrl || localStorage.getItem('bsq_utm_agent')
     if (!id) return
     setAgentId(id)
     fetchAgentContact(id).then(setContact)

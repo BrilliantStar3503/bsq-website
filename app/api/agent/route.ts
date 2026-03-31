@@ -1,28 +1,31 @@
 import { NextResponse } from 'next/server'
 
 /**
- * GET /api/agent?id=agentSlug
+ * GET /api/agent?id=agentCode
  * ──────────────────────────────────────────────────────────────────────
- * Reads the "Agents" tab of the BSQ Google Sheet and returns contact
- * details for the requested agent_id.
+ * Reads the BSQ agent roster from Google Sheets (Sheet1 tab).
  *
- * Sheet columns (row 1 = headers):
- *   agent_id | name | messenger | whatsapp | viber | cell | email | active
+ * Actual sheet columns (row 1 headers):
+ *   Agent Name | Email | Contacts | Agent Code | Date Appointed |
+ *   Birthday   | UM    | Branch Name | Date Terminated | LINK
+ *
+ * Lookup key  : "Agent Code"  (matches utm_agent in the URL)
+ * Phone       : "Contacts"    (used for tel: call links)
+ * Messenger   : "Messenger"   (add this column later when agents provide links)
+ * Active check: "Date Terminated" is empty = active agent
  *
  * Prerequisites:
- *   1. Share the Google Sheet as "Anyone with the link → Viewer"
- *   2. Set GOOGLE_SHEETS_API_KEY in .env.local + Vercel env vars
- *      (Google Cloud Console → APIs → Sheets API → Create API key)
+ *   1. Share the Google Sheet: Share → Anyone with the link → Viewer
+ *   2. Set GOOGLE_SHEETS_API_KEY in Vercel env vars
  *
- * If GOOGLE_SHEETS_API_KEY is not set, returns { found: false }
- * so all buttons fall back to BSQ defaults gracefully.
+ * Falls back gracefully to { found: false } → BSQ owner defaults shown.
  */
 
 const SHEET_ID  = '1LC4XVI2jDc4omL3heyZxqhv8UTpOqd4-F7lS1ssAD18'
-const TAB_NAME  = 'Agents'
+const TAB_NAME  = 'Sheet1'
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
-/* ─── In-memory cache (resets on cold start, fine for this use case) ── */
+/* ─── In-memory cache ───────────────────────────────────────────────── */
 let _cache: { rows: Record<string, string>[]; ts: number } | null = null
 
 async function fetchAllAgents(): Promise<Record<string, string>[] | null> {
@@ -47,7 +50,8 @@ async function fetchAllAgents(): Promise<Record<string, string>[] | null> {
       headers.forEach((h, i) => { obj[h.trim()] = (row[i] ?? '').trim() })
       return obj
     })
-    .filter(r => r.active?.toUpperCase() !== 'FALSE')
+    // Active = "Date Terminated" column is empty
+    .filter(r => !r['Date Terminated'])
 
   _cache = { rows: parsed, ts: Date.now() }
   return parsed
@@ -63,18 +67,19 @@ export async function GET(req: Request) {
     const agents = await fetchAllAgents()
     if (!agents) return NextResponse.json({ found: false })
 
-    const agent = agents.find(a => a.agent_id === id)
+    // Match by Agent Code (case-insensitive for safety)
+    const agent = agents.find(
+      a => a['Agent Code']?.toLowerCase() === id.toLowerCase()
+    )
     if (!agent) return NextResponse.json({ found: false })
 
     return NextResponse.json({
       found: true,
       contact: {
-        name:      agent.name      || null,
-        messenger: agent.messenger || null,
-        whatsapp:  agent.whatsapp  || null,
-        viber:     agent.viber     || null,
-        cell:      agent.cell      || null,
-        email:     agent.email     || null,
+        name:      agent['Agent Name']  || null,
+        phone:     agent['Contacts']    || null,   // → tel: link
+        messenger: agent['Messenger']   || null,   // → add column later
+        email:     agent['Email']       || null,
       },
     })
   } catch {
