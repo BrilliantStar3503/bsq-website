@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { TestimonialCard } from '@/components/ui/testimonial-card'
 import { Star } from 'lucide-react'
+import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 
 /* ══════════════════════════════════════════════════════════════════════════
    TESTIMONIALS WITH MARQUEE — BSQ Financial · PRU Life UK Brand
@@ -162,16 +163,14 @@ export default function TestimonialsWithMarquee() {
           <p className="text-xs text-gray-400 mb-5">
             Join hundreds of Filipinos who took control of their financial future
           </p>
-          <a
-            href="/assessment"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-sm text-white transition-all duration-200 hover:scale-[1.04]"
-            style={{
-              background: `linear-gradient(135deg, ${PRU_RED}, #c1121f)`,
-              boxShadow: `0 8px 28px ${PRU_RED}45`,
-            }}
+          <AnimatedGradientButton
+            preset="pru"
+            duration={5}
+            className="px-8 py-4 rounded-2xl font-black text-sm"
+            onClick={() => window.location.href = '/assessment'}
           >
             Start Your Free Assessment →
-          </a>
+          </AnimatedGradientButton>
         </div>
       </FadeUp>
     </section>

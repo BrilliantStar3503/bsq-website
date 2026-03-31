@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { ArrowRight, MapPin, Mail, Phone } from 'lucide-react'
+import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 
 /* ══════════════════════════════════════════════════════════════════════════
    BSQ FOOTER — Compact, professional AI-grade design
@@ -174,16 +175,15 @@ export default function BsqFooter() {
               <p className="text-xs text-white/35 leading-relaxed mb-4">
                 Know your gaps.<br />Fix them with a plan.
               </p>
-              <a
-                href="/assessment"
-                className="inline-flex items-center gap-2 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-all duration-200"
-                style={{ background: 'linear-gradient(135deg,#dc2626,#b91c1c)', boxShadow: '0 2px 12px rgba(220,38,38,0.3)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 20px rgba(220,38,38,0.5)' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 2px 12px rgba(220,38,38,0.3)' }}
+              <AnimatedGradientButton
+                preset="pru"
+                duration={5}
+                className="text-xs font-bold px-4 py-2.5 rounded-lg"
+                onClick={() => window.location.href = '/assessment'}
               >
                 Free Assessment
                 <ArrowRight size={12} />
-              </a>
+              </AnimatedGradientButton>
             </div>
             {/* PRU affiliation tag */}
             <div className="rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>

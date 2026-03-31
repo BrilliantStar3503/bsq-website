@@ -1065,11 +1065,14 @@ export function FinancialAccordion() {
               </p>
             </div>
             <div className="shrink-0">
-              <button
+              <AnimatedGradientButton
+                preset="pru"
+                duration={5}
+                className="font-semibold text-sm rounded-xl px-8 py-3.5 whitespace-nowrap"
                 onClick={() => window.open('https://m.me/Bstarquartzarea?ref=financial_assessment', '_blank')}
-                className="inline-flex items-center gap-2.5 bg-white text-red-600 border border-red-200 hover:bg-red-600 hover:text-white hover:border-red-600 font-semibold text-sm rounded-xl px-8 py-3.5 transition-all duration-200 shadow-[0_1px_3px_rgba(0,0,0,0.07)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 active:scale-[0.97] whitespace-nowrap">
+              >
                 Talk to a Financial Advisor <ArrowRight size={15} />
-              </button>
+              </AnimatedGradientButton>
               <p className="text-[11px] text-gray-400 mt-2 text-center">Free · No commitment</p>
             </div>
           </div>
