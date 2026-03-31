@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Forward to n8n webhook ────────────────────────────────────────
-    const webhookUrl = process.env.N8N_WEBHOOK_TESTIMONIAL_CRM
+    const webhookUrl = process.env.N8N_TESTIMONIAL_CRM
 
     if (!webhookUrl) {
       // Webhook not configured yet — still return success so UX works

@@ -96,8 +96,23 @@ export function useAgentContact() {
     agentId,
     /** Returns the best contact URL for a given ref tag */
     contactUrl: (ref?: string) => getPrimaryContactUrl(contact, ref),
-    /** Opens the best contact channel */
+    /** Opens the best contact channel and logs the click to CRM */
     openContact: (ref?: string) => {
+      // Silent CRM tracking — fire and forget
+      fetch('/api/track-click', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source:    ref ? `advisor_btn_${ref}` : 'advisor_btn',
+          agent:     agentId ?? 'direct',
+          utmSource: typeof window !== 'undefined'
+            ? new URLSearchParams(window.location.search).get('utm_source') ?? 'direct'
+            : 'direct',
+          utmMedium: typeof window !== 'undefined'
+            ? new URLSearchParams(window.location.search).get('utm_medium') ?? 'organic'
+            : 'organic',
+        }),
+      }).catch(() => {})
       window.open(getPrimaryContactUrl(contact, ref), '_blank')
     },
   }
