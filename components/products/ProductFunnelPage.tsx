@@ -706,7 +706,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
             {product.name} is underwritten by PRU Life Insurance Corporation of UK.
             All product details are for informational purposes only. Benefits are subject to policy
             terms and conditions, eligibility, and underwriting approval. Brilliant Star Quartz (BSQ)
-            is a licensed district of PRU Life UK.
+            is a tied-branch and area of PRU Life UK with its headquarters located at PRU House, Ortigas Center, Pasig City.
           </p>
         </div>
       </div>
