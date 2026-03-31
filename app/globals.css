@@ -61,3 +61,59 @@ body {
   width: max-content;
   display: flex;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATED GRADIENT BUTTON
+   Extracted animation-only from ShineBorder — no masks, no borders,
+   no pseudo elements. Pure flowing gradient background.
+
+   Usage:
+     <button class="animated-gradient-btn">Label</button>
+
+   To customize colors, set background-image via inline style:
+     style={{ backgroundImage: 'radial-gradient(...)' }}
+
+   To customize speed, set --shine-duration via inline style:
+     style={{ '--shine-duration': '4s' }}
+═══════════════════════════════════════════════════════════════ */
+
+@keyframes shine-pulse {
+  0%   { background-position: 0%   0%;   }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0%   0%;   }
+}
+
+.animated-gradient-btn {
+  /* Animation engine — colors injected via inline style */
+  background-size: 300% 300%;
+  animation: shine-pulse var(--shine-duration, 6s) linear infinite;
+
+  /* Base button chrome */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.6rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  will-change: background-position;
+}
+
+.animated-gradient-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+}
+
+.animated-gradient-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}

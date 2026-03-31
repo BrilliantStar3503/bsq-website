@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
@@ -396,13 +397,14 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
 
               {/* CTAs */}
               <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
-                <button onClick={() => setModal(true)}
-                  className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold text-white transition-all"
-                  style={{ background: PRU_RED, borderRadius: 4, border: 'none' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
-                  onMouseLeave={e => (e.currentTarget.style.background = PRU_RED)}>
+                <AnimatedGradientButton
+                  onClick={() => setModal(true)}
+                  preset="pru"
+                  duration={5}
+                  className="px-8 py-3.5 text-sm rounded-sm"
+                >
                   <MessageCircle size={15} />Get a Free Consultation
-                </button>
+                </AnimatedGradientButton>
                 <button onClick={() => router.push('/assessment')}
                   className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold transition-all"
                   style={{ background: '#fff', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 4 }}
@@ -673,13 +675,15 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
               viewport={{ once: true }} transition={{ duration: 0.45, delay: 0.1 }}
               className="flex flex-col gap-3 shrink-0 w-full md:w-auto">
-              <button onClick={() => setModal(true)}
-                className="flex items-center justify-center gap-2 px-10 py-4 text-sm font-bold text-white transition-all"
-                style={{ background: PRU_RED, borderRadius: 4, border: 'none', minWidth: 240 }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
-                onMouseLeave={e => (e.currentTarget.style.background = PRU_RED)}>
+              <AnimatedGradientButton
+                onClick={() => setModal(true)}
+                preset="pru"
+                duration={5}
+                className="px-10 py-4 text-sm rounded-sm"
+                style={{ minWidth: 240 }}
+              >
                 <MessageCircle size={15} />Get a Free Consultation
-              </button>
+              </AnimatedGradientButton>
               <button
                 onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=product_${product.slug}`, '_blank')}
                 className="flex items-center justify-center gap-2 px-10 py-4 text-sm font-bold transition-all"
