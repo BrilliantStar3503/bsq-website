@@ -983,11 +983,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             borderRadius={12}
             borderWidth={2}
             duration={6}
-            className="!bg-transparent !p-0 !rounded-xl w-full"
+            className="w-full"
           >
             <button onClick={() => setLeadModalOpen(true)}
-              className="h-12 w-full rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
-              style={{ background: PRU_RED, color: '#fff', boxShadow: `0 4px 16px ${PRU_RED}30` }}>
+              className="h-12 w-full text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+              style={{ background: PRU_RED, color: '#fff' }}>
               <Send size={14} />
               Send My Results
             </button>
@@ -1021,16 +1021,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             ))}
           </div>
           <ShineBorder
-            color={['#D92D20', '#ff6b35', '#ffb347', '#ffffff60', '#ffb347', '#D92D20']}
+            color={['#D92D20', '#ff6b35', '#ffb347', '#ffffff', '#ffb347', '#D92D20']}
             borderRadius={12}
             borderWidth={2}
             duration={7}
-            className="!bg-transparent !p-0 !rounded-xl w-full relative z-10"
+            className="w-full relative z-10"
           >
             <button
               onClick={() => window.open(`https://m.me/Bstarquartzarea?ref=results_score${result.total}`, '_blank')}
-              className="relative h-12 w-full rounded-xl text-sm font-semibold flex items-center justify-center gap-2 text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.98]"
-              style={{ background: 'rgba(255,255,255,0.05)' }}>
+              className="relative h-12 w-full text-sm font-semibold flex items-center justify-center gap-2 text-white transition-all duration-200 active:scale-[0.98]"
+              style={{ background: '#1e293b' }}>
               <MessageCircle size={14} />
               Talk to an Advisor
             </button>

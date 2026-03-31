@@ -10,70 +10,50 @@ interface ShineBorderProps {
   duration?: number
   color?: TColorProp
   className?: string
+  /** Extra classes forwarded to the inner content wrapper */
+  innerClassName?: string
   children: React.ReactNode
 }
 
 /**
  * ShineBorder
- * Animated radial-gradient border sweep — colour bands orbit the edge of the element.
+ * ──────────────────────────────────────────────────────────────────────
+ * The "padding-as-border" trick:
+ *   1. Outer div  — animated linear-gradient background (300% × 300%)
+ *   2. Inner div  — full-width, solid background, slightly smaller radius
+ *   3. The gap between outer and inner = borderWidth → shows the gradient = the animated border
  *
- * Usage:
- *   <ShineBorder color={['#D92D20', '#ff6b35', '#ffb347']} borderRadius={12} borderWidth={2}>
- *     <button ...>Click me</button>
- *   </ShineBorder>
- *
- * Props:
- *   borderRadius  — corner radius in px (default 8)
- *   borderWidth   — border thickness in px (default 1)
- *   duration      — animation cycle length in seconds (default 14)
- *   color         — single CSS colour string or array of colours
- *   className     — extra classes for the outer wrapper (override bg, padding, etc.)
- *   children      — content rendered inside the border
+ * This approach works in every browser without mask-composite tricks.
  */
 export function ShineBorder({
   borderRadius = 8,
-  borderWidth = 1,
-  duration = 14,
-  color = '#000000',
+  borderWidth = 2,
+  duration = 6,
+  color = ['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#D92D20', '#7f0000'],
   className,
+  innerClassName,
   children,
 }: ShineBorderProps) {
-  const colorValue = Array.isArray(color) ? color.join(',') : color
+  const colors = Array.isArray(color) ? color.join(', ') : color
+  const gradient = `linear-gradient(135deg, ${colors})`
 
   return (
     <div
-      style={{ '--border-radius': `${borderRadius}px` } as React.CSSProperties}
-      className={cn(
-        'relative grid h-full w-full place-items-center rounded-[--border-radius] bg-white p-3 text-black dark:bg-black dark:text-white',
-        className,
-      )}
+      className={cn('relative', className)}
+      style={{
+        padding:          `${borderWidth}px`,
+        borderRadius:     `${borderRadius + borderWidth}px`,
+        background:       gradient,
+        backgroundSize:   '300% 300%',
+        animation:        `shine-pulse-border ${duration}s linear infinite`,
+      }}
     >
-      {/* The animated border pseudo-element, implemented as an absolutely-positioned sibling */}
       <div
-        style={
-          {
-            '--border-width':           `${borderWidth}px`,
-            '--border-radius':          `${borderRadius}px`,
-            '--shine-pulse-duration':   `${duration}s`,
-            '--mask-linear-gradient':   `linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)`,
-            '--background-radial-gradient': `radial-gradient(transparent,transparent,${colorValue},transparent,transparent)`,
-          } as React.CSSProperties
-        }
-        className={[
-          'before:absolute before:inset-0 before:aspect-square before:size-full',
-          'before:rounded-[--border-radius]',
-          'before:p-[--border-width]',
-          'before:will-change-[background-position]',
-          'before:content-[""]',
-          'before:![-webkit-mask-composite:xor]',
-          'before:[background-image:var(--background-radial-gradient)]',
-          'before:[background-size:300%_300%]',
-          'before:![mask-composite:exclude]',
-          'before:[mask:var(--mask-linear-gradient)]',
-          'motion-safe:before:animate-[shine-pulse-border_var(--shine-pulse-duration)_infinite_linear]',
-        ].join(' ')}
-      />
-      {children}
+        className={cn('relative w-full h-full', innerClassName)}
+        style={{ borderRadius: `${borderRadius}px`, overflow: 'hidden' }}
+      >
+        {children}
+      </div>
     </div>
   )
 }
