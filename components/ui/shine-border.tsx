@@ -16,12 +16,12 @@ interface ShineBorderProps {
 /**
  * ShineBorder
  * ──────────────────────────────────────────────────────────────────────
- * Spinning conic-gradient border using @property --shine-angle.
- * The colour beam visibly rotates 360° around the button edge.
+ * Rotating conic-gradient border using transform: rotate() on an
+ * oversized absolute div — no @property needed, works in all browsers.
  *
- *  Outer div  — conic-gradient background + padding = border thickness
- *  Inner div  — solid background, slightly smaller radius
- *  The gap between them reveals the spinning gradient = the border
+ *  Outer div       — relative, overflow:hidden, padding = border width
+ *  Spinning layer  — absolute, 300%×300%, conic-gradient, rotates 360°
+ *  Inner wrapper   — relative z-1, solid background, clips the spinner
  */
 export function ShineBorder({
   borderRadius = 8,
@@ -32,29 +32,39 @@ export function ShineBorder({
   children,
 }: ShineBorderProps) {
   const stops = Array.isArray(color) ? color : [color]
-
-  // Build conic-gradient colour stops evenly spaced around 360°
-  const step   = 360 / stops.length
-  const conicStops = stops
-    .map((c, i) => `${c} ${i * step}deg`)
-    .concat(`${stops[0]} 360deg`)   // close the loop
-    .join(', ')
+  const step  = 360 / stops.length
+  const conicStops = [
+    ...stops.map((c, i) => `${c} ${i * step}deg`),
+    `${stops[0]} 360deg`,
+  ].join(', ')
 
   return (
     <div
-      className={cn('shine-border-spin relative', className)}
+      className={cn('relative overflow-hidden', className)}
       style={{
-        '--shine-spin-duration': `${duration}s`,
         padding:      `${borderWidth}px`,
         borderRadius: `${borderRadius + borderWidth}px`,
-        background:   `conic-gradient(from var(--shine-angle, 0deg), ${conicStops})`,
-      } as React.CSSProperties}
+      }}
     >
+      {/* Rotating gradient layer — oversized so corners stay filled */}
       <div
         style={{
+          position:   'absolute',
+          inset:      '-100%',
+          width:      '300%',
+          height:     '300%',
+          background: `conic-gradient(${conicStops})`,
+          animation:  `shine-border-rotate ${duration}s linear infinite`,
+        }}
+      />
+
+      {/* Content layer — solid bg blocks the spinner, shows only the border gap */}
+      <div
+        style={{
+          position:     'relative',
+          zIndex:       1,
           borderRadius: `${borderRadius}px`,
           overflow:     'hidden',
-          position:     'relative',
           width:        '100%',
           height:       '100%',
         }}
