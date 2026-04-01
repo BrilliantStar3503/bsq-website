@@ -84,11 +84,19 @@ export async function GET(req: Request) {
     const agents = await fetchAllAgents()
     if (!agents) return NextResponse.json({ found: false })
 
-    // Match by Agent Code first, then fall back to LINK column
-    const agent = agents.find(
-      a => a['Agent Code']?.toLowerCase() === id.toLowerCase()
-         || a['LINK']?.toLowerCase() === id.toLowerCase()
-    )
+    // Match by Agent Code first, then fall back to utm_agent slug in LINK column
+    const agent = agents.find(a => {
+      if (a['Agent Code']?.toLowerCase() === id.toLowerCase()) return true
+      // Extract utm_agent value from full LINK URL e.g. https://www.prubsq.com?utm_agent=slug
+      const link = a['LINK'] ?? ''
+      try {
+        const slug = new URL(link).searchParams.get('utm_agent') ?? ''
+        if (slug.toLowerCase() === id.toLowerCase()) return true
+      } catch {
+        // LINK is not a valid URL — skip
+      }
+      return false
+    })
     if (!agent) return NextResponse.json({ found: false })
 
     return NextResponse.json({
