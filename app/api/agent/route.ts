@@ -104,10 +104,13 @@ export async function GET(req: Request) {
     return NextResponse.json({
       found: true,
       contact: {
-        name:      agent['Nickname'] || agent['Agent Name'] || null,
-        phone:     agent['Contacts']  || null,
-        messenger: toMessengerUrl(agent['Messenger']) || null,
-        email:     agent['Email']     || null,
+        name:      agent['Nickname']   || agent['Agent Name'] || null,
+        phone:     agent['Contacts']   || null,
+        messenger: toMessengerUrl(agent['FB Page']) || null,
+        whatsapp:  agent['WhatsApp']   || null,
+        viber:     agent['Viber']      || null,
+        telegram:  agent['Telegram']   || null,
+        email:     agent['Email']      || null,
       },
     })
   } catch {
