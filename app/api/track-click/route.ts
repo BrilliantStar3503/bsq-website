@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   try {
     const { source, agent, utmSource, utmMedium } = await req.json()
 
-    const webhookUrl = process.env.N8N_TESTIMONIAL_CRM
+    const webhookUrl = process.env.N8N_WEBHOOK_TESTIMONIAL_CRM
     if (!webhookUrl) return NextResponse.json({ ok: true })
 
     fetch(webhookUrl, {
