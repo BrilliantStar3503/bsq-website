@@ -21,6 +21,20 @@ import { NextResponse } from 'next/server'
  * Falls back gracefully to { found: false } → BSQ owner defaults shown.
  */
 
+/** Converts any Facebook URL to an m.me link. Leaves m.me links untouched. */
+function toMessengerUrl(raw: string): string | null {
+  if (!raw) return null
+  const s = raw.trim()
+  // Already an m.me link
+  if (s.startsWith('https://m.me/') || s.startsWith('http://m.me/')) return s
+  // facebook.com/username or www.facebook.com/username
+  const fbMatch = s.match(/facebook\.com\/([^\s/?#]+)/)
+  if (fbMatch) return `https://m.me/${fbMatch[1]}`
+  // Plain username with no domain — wrap it
+  if (!s.includes('/') && !s.includes(' ')) return `https://m.me/${s}`
+  return null
+}
+
 const SHEET_ID  = '1LC4XVI2jDc4omL3heyZxqhv8UTpOqd4-F7lS1ssAD18'
 const TAB_NAME  = 'BSQ Agent List'
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
@@ -81,7 +95,7 @@ export async function GET(req: Request) {
       contact: {
         name:      agent['Nickname'] || agent['Agent Name'] || null,
         phone:     agent['Contacts']  || null,
-        messenger: agent['Messenger'] || null,
+        messenger: toMessengerUrl(agent['Messenger']) || null,
         email:     agent['Email']     || null,
       },
     })
