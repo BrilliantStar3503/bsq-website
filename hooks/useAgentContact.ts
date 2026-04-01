@@ -1,27 +1,29 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 /* ─── Types ─────────────────────────────────────────────────────────── */
 export interface AgentContact {
   name:      string
-  messenger: string | null   // full URL: https://m.me/username (add Messenger column to sheet later)
+  messenger: string | null   // FB Page converted to m.me link
   phone:     string | null   // from "Contacts" column → tel: link
+  whatsapp:  string | null   // raw number/wa.me URL from "WhatsApp" column
+  viber:     string | null   // raw number from "Viber" column
+  telegram:  string | null   // username or t.me URL from "Telegram" column
   email:     string | null
   // legacy fields kept for backward compat
-  whatsapp:  string | null
-  viber:     string | null
   cell:      string | null
 }
 
-/* ─── BSQ branch defaults (Chris Garcia) ────────────────────────────── */
+/* ─── BSQ branch defaults ────────────────────────────────────────────── */
 const BSQ_DEFAULT: AgentContact = {
   name:      'BSQ Financial Advisory',
   messenger: 'https://m.me/Bstarquartzarea',
   phone:     null,
-  email:     'bstarquartz@gmail.com',
   whatsapp:  null,
   viber:     null,
+  telegram:  null,
+  email:     'bstarquartz@gmail.com',
   cell:      null,
 }
 
@@ -36,7 +38,12 @@ async function fetchAgentContact(agentId: string): Promise<AgentContact> {
   _pending[agentId] = fetch(`/api/agent?id=${encodeURIComponent(agentId)}`)
     .then(r => r.ok ? r.json() : null)
     .then(data => {
-      const contact = data?.found ? data.contact : BSQ_DEFAULT
+      const raw = data?.found ? data.contact : BSQ_DEFAULT
+      // Ensure new platform fields default to null if absent
+      const contact: AgentContact = {
+        ...BSQ_DEFAULT,
+        ...raw,
+      }
       _cache[agentId] = contact
       delete _pending[agentId]
       return contact
@@ -49,8 +56,76 @@ async function fetchAgentContact(agentId: string): Promise<AgentContact> {
   return _pending[agentId]
 }
 
-/* ─── Primary contact URL (priority: Messenger → phone) ─────────────── */
+/* ─── Build a clean WhatsApp URL ─────────────────────────────────────── */
+export function getWhatsAppUrl(contact: AgentContact, message?: string): string | null {
+  const raw = contact.whatsapp
+  if (!raw) return null
+  // Already a wa.me link
+  const base = raw.startsWith('https://wa.me/') || raw.startsWith('http://wa.me/')
+    ? raw
+    : `https://wa.me/${raw.replace(/[^\d+]/g, '')}`
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base
+}
+
+/* ─── Build a Viber URL ──────────────────────────────────────────────── */
+export function getViberUrl(contact: AgentContact, message?: string): string | null {
+  const raw = contact.viber
+  if (!raw) return null
+  // Already a viber:// link
+  if (raw.startsWith('viber://')) return raw
+  const num = raw.replace(/[^\d+]/g, '')
+  return message
+    ? `viber://chat?number=${num}&text=${encodeURIComponent(message)}`
+    : `viber://chat?number=${num}`
+}
+
+/* ─── Build a Telegram URL ───────────────────────────────────────────── */
+export function getTelegramUrl(contact: AgentContact, message?: string): string | null {
+  const raw = contact.telegram
+  if (!raw) return null
+  // Already a t.me or telegram.me link
+  if (raw.startsWith('https://t.me/') || raw.startsWith('http://t.me/') || raw.startsWith('https://telegram.me/')) return raw
+  // Username with or without @
+  const username = raw.replace(/^@/, '')
+  return message
+    ? `https://t.me/${username}?text=${encodeURIComponent(message)}`
+    : `https://t.me/${username}`
+}
+
+/**
+ * Chat URL — picks the best platform for the chat widget
+ * Priority: WhatsApp (supports pre-fill) → Viber → Telegram → FB Page → BSQ default
+ */
+export function getChatUrl(contact: AgentContact, message?: string): string {
+  const wa = getWhatsAppUrl(contact, message)
+  if (wa) return wa
+
+  const viber = getViberUrl(contact, message)
+  if (viber) return viber
+
+  const tg = getTelegramUrl(contact, message)
+  if (tg) return tg
+
+  if (contact.messenger) return contact.messenger
+  return BSQ_DEFAULT.messenger!
+}
+
+/**
+ * getChatPlatform — returns which platform getChatUrl() will use
+ * Useful for customising the button label/icon
+ */
+export function getChatPlatform(contact: AgentContact): 'whatsapp' | 'viber' | 'telegram' | 'messenger' {
+  if (contact.whatsapp) return 'whatsapp'
+  if (contact.viber)    return 'viber'
+  if (contact.telegram) return 'telegram'
+  return 'messenger'
+}
+
+/* ─── Primary contact URL (priority: WhatsApp → Messenger → phone) ──── */
 export function getPrimaryContactUrl(contact: AgentContact, ref?: string): string {
+  const wa = getWhatsAppUrl(contact)
+  if (wa) return wa
+
   if (contact.messenger) {
     return ref ? `${contact.messenger}?ref=${ref}` : contact.messenger
   }
@@ -58,9 +133,6 @@ export function getPrimaryContactUrl(contact: AgentContact, ref?: string): strin
     return `tel:${contact.phone.replace(/\s/g, '')}`
   }
   // legacy fallbacks
-  if (contact.whatsapp) {
-    return `https://wa.me/${contact.whatsapp}`
-  }
   if (contact.cell) {
     return `tel:${contact.cell.replace(/\s/g, '')}`
   }
