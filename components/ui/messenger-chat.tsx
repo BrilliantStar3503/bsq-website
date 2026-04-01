@@ -153,12 +153,31 @@ export function MessengerChat() {
           {/* Body */}
           <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {sent ? (
-              <div style={{ textAlign:'center', padding:'20px 0' }}>
-                <div style={{ fontSize:'36px', marginBottom:'8px' }}>✅</div>
-                <p style={{ color:'#fff', fontWeight:700, fontSize:'14px', margin:'0 0 4px' }}>Message sent!</p>
-                <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', margin:0 }}>
-                  {agentName} will contact you on Messenger shortly.
+              <div style={{ textAlign:'center', padding:'12px 0' }}>
+                <div style={{ fontSize:'32px', marginBottom:'6px' }}>💬</div>
+                <p style={{ color:'#fff', fontWeight:700, fontSize:'14px', margin:'0 0 4px' }}>Messenger is opening!</p>
+                <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', margin:'0 0 12px' }}>
+                  Paste your message and hit Send:
                 </p>
+                <div style={{
+                  background: 'rgba(255,255,255,0.07)',
+                  borderRadius: '8px',
+                  padding: '10px',
+                  fontSize: '12px',
+                  color: '#fff',
+                  textAlign: 'left',
+                  marginBottom: '10px',
+                  wordBreak: 'break-word',
+                }}>
+                  {name.trim() ? `Hi, I'm ${name.trim()}. ` : ''}{message}
+                </div>
+                <button
+                  onClick={() => navigator.clipboard.writeText(`${name.trim() ? `Hi, I'm ${name.trim()}. ` : ''}${message}`)}
+                  className="bsq-send-btn"
+                  style={{ fontSize:'12px', padding:'8px' }}
+                >
+                  📋 Copy Message
+                </button>
               </div>
             ) : (
               <>
