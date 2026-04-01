@@ -59,12 +59,31 @@ async function fetchAllAgents(): Promise<Record<string, string>[] | null> {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const id = searchParams.get('id')?.trim()
+  const id    = searchParams.get('id')?.trim()
+  const debug = searchParams.get('debug') === '1'
 
   if (!id) return NextResponse.json({ found: false })
 
+  const apiKey = process.env.GOOGLE_SHEETS_API_KEY
+
   try {
     const agents = await fetchAllAgents()
+
+    if (debug) {
+      // Temporary debug — remove after testing
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(TAB_NAME)}?key=${apiKey}`
+      const res  = await fetch(url)
+      const json = await res.json()
+      return NextResponse.json({
+        hasApiKey:  !!apiKey,
+        sheetOk:    res.ok,
+        sheetStatus: res.status,
+        rowCount:   agents?.length ?? 0,
+        sampleCodes: agents?.slice(0, 5).map(a => a['Agent Code']) ?? [],
+        rawError:   json.error ?? null,
+      })
+    }
+
     if (!agents) return NextResponse.json({ found: false })
 
     // Match by Agent Code (case-insensitive for safety)
@@ -77,12 +96,13 @@ export async function GET(req: Request) {
       found: true,
       contact: {
         name:      agent['Agent Name']  || null,
-        phone:     agent['Contacts']    || null,   // → tel: link
-        messenger: agent['Messenger']   || null,   // → add column later
+        phone:     agent['Contacts']    || null,
+        messenger: agent['Messenger']   || null,
         email:     agent['Email']       || null,
       },
     })
-  } catch {
+  } catch (e) {
+    if (debug) return NextResponse.json({ error: String(e) })
     return NextResponse.json({ found: false })
   }
 }
