@@ -111,14 +111,43 @@ export function getChatUrl(contact: AgentContact, message?: string): string {
 }
 
 /**
- * getChatPlatform — returns which platform getChatUrl() will use
- * Useful for customising the button label/icon
+ * getChatPlatform — returns the highest-priority single platform
  */
 export function getChatPlatform(contact: AgentContact): 'whatsapp' | 'viber' | 'telegram' | 'messenger' {
   if (contact.whatsapp) return 'whatsapp'
   if (contact.viber)    return 'viber'
   if (contact.telegram) return 'telegram'
   return 'messenger'
+}
+
+export type ChatPlatform = 'whatsapp' | 'viber' | 'telegram' | 'messenger'
+
+/**
+ * getAvailablePlatforms — returns ALL platforms the agent has configured,
+ * each with a ready-to-open URL (message pre-filled where supported).
+ * Falls back to BSQ Messenger if nothing is configured.
+ */
+export function getAvailablePlatforms(
+  contact: AgentContact,
+  message?: string,
+): { platform: ChatPlatform; url: string }[] {
+  const list: { platform: ChatPlatform; url: string }[] = []
+
+  const wa = getWhatsAppUrl(contact, message)
+  if (wa) list.push({ platform: 'whatsapp', url: wa })
+
+  const viber = getViberUrl(contact, message)
+  if (viber) list.push({ platform: 'viber', url: viber })
+
+  const tg = getTelegramUrl(contact, message)
+  if (tg) list.push({ platform: 'telegram', url: tg })
+
+  if (contact.messenger) list.push({ platform: 'messenger', url: contact.messenger })
+
+  // Default fallback
+  if (list.length === 0) list.push({ platform: 'messenger', url: BSQ_DEFAULT.messenger! })
+
+  return list
 }
 
 /* ─── Primary contact URL (priority: WhatsApp → Messenger → phone) ──── */
