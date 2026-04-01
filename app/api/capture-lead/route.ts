@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { generateAssessmentEmail } from '@/lib/email-template'
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,6 +27,40 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // ── Fetch agent info for email personalisation ────────────────────
+    let agentName:      string | undefined
+    let agentPhone:     string | undefined
+    let agentMessenger: string | undefined
+
+    if (agent && agent !== 'direct') {
+      try {
+        const agentRes = await fetch(
+          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.prubsq.com'}/api/agent?id=${encodeURIComponent(agent)}`
+        )
+        if (agentRes.ok) {
+          const agentData = await agentRes.json()
+          if (agentData.found) {
+            agentName      = agentData.contact.name      ?? undefined
+            agentPhone     = agentData.contact.phone     ?? undefined
+            agentMessenger = agentData.contact.messenger ?? undefined
+          }
+        }
+      } catch { /* silent — email still sends without agent info */ }
+    }
+
+    // ── Generate HTML email ───────────────────────────────────────────
+    const emailHtml = generateAssessmentEmail({
+      name,
+      score,
+      statusLabel,
+      riskLevel,
+      gaps:            gaps ?? [],
+      recommendations: recommendations ?? [],
+      agentName,
+      agentPhone,
+      agentMessenger,
+    })
+
     // ── Build n8n payload ─────────────────────────────────────────────
     const payload = {
       source:    'bsq_financial_assessment',
@@ -46,6 +81,10 @@ export async function POST(req: NextRequest) {
         agent:     agent     ?? 'direct',
         utmSource: utmSource ?? 'direct',
         utmMedium: utmMedium ?? 'organic',
+      },
+      email: {
+        subject: `${name.split(' ')[0]}, your BSQ Financial Assessment Results`,
+        html:    emailHtml,
       },
     }
 
