@@ -50,8 +50,11 @@ async function fetchAllAgents(): Promise<Record<string, string>[] | null> {
       headers.forEach((h, i) => { obj[h.trim()] = (row[i] ?? '').trim() })
       return obj
     })
-    // Active = "Date Terminated" column is empty
-    .filter(r => !r['Date Terminated'])
+    // Active = Agent Status is not Suspended or Terminated
+    .filter(r => {
+      const status = r['Agent Status']?.toLowerCase()
+      return status !== 'suspended' && status !== 'terminated'
+    })
 
   _cache = { rows: parsed, ts: Date.now() }
   return parsed
@@ -59,31 +62,12 @@ async function fetchAllAgents(): Promise<Record<string, string>[] | null> {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const id    = searchParams.get('id')?.trim()
-  const debug = searchParams.get('debug') === '1'
+  const id = searchParams.get('id')?.trim()
 
   if (!id) return NextResponse.json({ found: false })
 
-  const apiKey = process.env.GOOGLE_SHEETS_API_KEY
-
   try {
     const agents = await fetchAllAgents()
-
-    if (debug) {
-      // Temporary debug — remove after testing
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(TAB_NAME)}?key=${apiKey}`
-      const res  = await fetch(url)
-      const json = await res.json()
-      return NextResponse.json({
-        hasApiKey:  !!apiKey,
-        sheetOk:    res.ok,
-        sheetStatus: res.status,
-        rowCount:   agents?.length ?? 0,
-        sampleCodes: agents?.slice(0, 5).map(a => a['Agent Code']) ?? [],
-        rawError:   json.error ?? null,
-      })
-    }
-
     if (!agents) return NextResponse.json({ found: false })
 
     // Match by Agent Code (case-insensitive for safety)
@@ -95,14 +79,13 @@ export async function GET(req: Request) {
     return NextResponse.json({
       found: true,
       contact: {
-        name:      agent['Agent Name']  || null,
-        phone:     agent['Contacts']    || null,
-        messenger: agent['Messenger']   || null,
-        email:     agent['Email']       || null,
+        name:      agent['Nickname'] || agent['Agent Name'] || null,
+        phone:     agent['Contacts']  || null,
+        messenger: agent['Messenger'] || null,
+        email:     agent['Email']     || null,
       },
     })
-  } catch (e) {
-    if (debug) return NextResponse.json({ error: String(e) })
+  } catch {
     return NextResponse.json({ found: false })
   }
 }
