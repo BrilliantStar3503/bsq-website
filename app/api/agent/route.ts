@@ -21,15 +21,14 @@ import { NextResponse } from 'next/server'
  * Falls back gracefully to { found: false } → BSQ owner defaults shown.
  */
 
-/** Converts any Facebook URL to an m.me link. */
+/** Normalises any Facebook/Messenger URL — preserves direct Messenger links as-is. */
 function toMessengerUrl(raw: string): string | null {
   if (!raw) return null
   const s = raw.trim()
   // Already an m.me link
   if (s.startsWith('https://m.me/') || s.startsWith('http://m.me/')) return s
-  // messenger.com/t/username — convert to m.me
-  const messengerMatch = s.match(/messenger\.com\/t\/([^\s/?#]+)/)
-  if (messengerMatch) return `https://m.me/${messengerMatch[1]}`
+  // Any messenger.com link (e2ee, t/, etc.) — keep as-is
+  if (s.includes('messenger.com/')) return s
   // facebook.com/username
   const fbMatch = s.match(/facebook\.com\/([^\s/?#]+)/)
   if (fbMatch) return `https://m.me/${fbMatch[1]}`
