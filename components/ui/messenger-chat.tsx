@@ -49,6 +49,9 @@ export function MessengerChat() {
       }),
     }).catch(() => {})
 
+    // Open agent's Messenger directly
+    window.open(messengerUrl, '_blank')
+
     setSent(true)
     setTimeout(() => {
       setOpen(false)
