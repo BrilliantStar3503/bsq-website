@@ -84,9 +84,10 @@ export async function GET(req: Request) {
     const agents = await fetchAllAgents()
     if (!agents) return NextResponse.json({ found: false })
 
-    // Match by Agent Code (case-insensitive for safety)
+    // Match by Agent Code first, then fall back to LINK column
     const agent = agents.find(
       a => a['Agent Code']?.toLowerCase() === id.toLowerCase()
+         || a['LINK']?.toLowerCase() === id.toLowerCase()
     )
     if (!agent) return NextResponse.json({ found: false })
 
