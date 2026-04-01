@@ -14,6 +14,7 @@ export function MessengerChat() {
   const [open,    setOpen]    = useState(false)
   const [name,    setName]    = useState('')
   const [message, setMessage] = useState('')
+  const [sent,    setSent]    = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const { contact, agentId } = useAgentContact()
 
@@ -33,13 +34,28 @@ export function MessengerChat() {
 
   function handleSend() {
     if (!message.trim()) return
-    const intro = name.trim() ? `Hi, I'm ${name.trim()}. ` : ''
-    const text   = encodeURIComponent(`${intro}${message.trim()}`)
-    const url = `${messengerUrl}?text=${text}`
-    window.open(url, '_blank')
-    setOpen(false)
-    setName('')
-    setMessage('')
+
+    // Save lead to CRM silently
+    fetch('/api/track-click', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source:    'chat_launcher',
+        agent:     agentId ?? 'direct',
+        name:      name.trim() || 'Anonymous',
+        message:   message.trim(),
+        utmSource: new URLSearchParams(window.location.search).get('utm_source') ?? 'direct',
+        utmMedium: new URLSearchParams(window.location.search).get('utm_medium') ?? 'organic',
+      }),
+    }).catch(() => {})
+
+    setSent(true)
+    setTimeout(() => {
+      setOpen(false)
+      setSent(false)
+      setName('')
+      setMessage('')
+    }, 3000)
   }
 
   return (
@@ -133,34 +149,46 @@ export function MessengerChat() {
 
           {/* Body */}
           <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', margin:0, textAlign:'center' }}>
-              Send a message — we'll reply on Messenger
-            </p>
+            {sent ? (
+              <div style={{ textAlign:'center', padding:'20px 0' }}>
+                <div style={{ fontSize:'36px', marginBottom:'8px' }}>✅</div>
+                <p style={{ color:'#fff', fontWeight:700, fontSize:'14px', margin:'0 0 4px' }}>Message sent!</p>
+                <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', margin:0 }}>
+                  {agentName} will contact you on Messenger shortly.
+                </p>
+              </div>
+            ) : (
+              <>
+                <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', margin:0, textAlign:'center' }}>
+                  Send a message — we'll reply on Messenger
+                </p>
 
-            <input
-              className="bsq-chat-input"
-              type="text"
-              placeholder="Your name (optional)"
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
+                <input
+                  className="bsq-chat-input"
+                  type="text"
+                  placeholder="Your name (optional)"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
 
-            <textarea
-              className="bsq-chat-input"
-              placeholder="Type your message..."
-              rows={3}
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
-              style={{ resize: 'none' }}
-            />
+                <textarea
+                  className="bsq-chat-input"
+                  placeholder="Type your message..."
+                  rows={3}
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
+                  style={{ resize: 'none' }}
+                />
 
-            <button className="bsq-send-btn" onClick={handleSend} disabled={!message.trim()}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Send on Messenger
-            </button>
+                <button className="bsq-send-btn" onClick={handleSend} disabled={!message.trim()}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Send Message
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
