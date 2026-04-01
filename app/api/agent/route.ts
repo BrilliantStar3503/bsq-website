@@ -21,20 +21,20 @@ import { NextResponse } from 'next/server'
  * Falls back gracefully to { found: false } → BSQ owner defaults shown.
  */
 
-/** Converts any Facebook URL to a messenger.com/t/ link for reliable personal profile routing. */
+/** Converts any Facebook URL to an m.me link. */
 function toMessengerUrl(raw: string): string | null {
   if (!raw) return null
   const s = raw.trim()
-  // Already a messenger.com link
-  if (s.includes('messenger.com/t/')) return s
-  // Already an m.me link — convert to messenger.com/t/
-  const mmeMatch = s.match(/m\.me\/([^\s/?#]+)/)
-  if (mmeMatch) return `https://www.messenger.com/t/${mmeMatch[1]}`
-  // facebook.com/username or www.facebook.com/username
+  // Already an m.me link
+  if (s.startsWith('https://m.me/') || s.startsWith('http://m.me/')) return s
+  // messenger.com/t/username — convert to m.me
+  const messengerMatch = s.match(/messenger\.com\/t\/([^\s/?#]+)/)
+  if (messengerMatch) return `https://m.me/${messengerMatch[1]}`
+  // facebook.com/username
   const fbMatch = s.match(/facebook\.com\/([^\s/?#]+)/)
-  if (fbMatch) return `https://www.messenger.com/t/${fbMatch[1]}`
-  // Plain username with no domain — wrap it
-  if (!s.includes('/') && !s.includes(' ')) return `https://www.messenger.com/t/${s}`
+  if (fbMatch) return `https://m.me/${fbMatch[1]}`
+  // Plain username
+  if (!s.includes('/') && !s.includes(' ')) return `https://m.me/${s}`
   return null
 }
 
