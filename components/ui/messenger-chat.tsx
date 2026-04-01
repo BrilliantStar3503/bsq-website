@@ -35,6 +35,10 @@ export function MessengerChat() {
   function handleSend() {
     if (!message.trim()) return
 
+    // Auto-copy message to clipboard so visitor can paste in Messenger
+    const fullMessage = `${name.trim() ? `Hi, I'm ${name.trim()}. ` : ''}${message.trim()}`
+    navigator.clipboard.writeText(fullMessage).catch(() => {})
+
     // Save lead to CRM silently
     fetch('/api/track-click', {
       method:  'POST',
@@ -157,7 +161,7 @@ export function MessengerChat() {
                 <div style={{ fontSize:'32px', marginBottom:'6px' }}>💬</div>
                 <p style={{ color:'#fff', fontWeight:700, fontSize:'14px', margin:'0 0 4px' }}>Messenger is opening!</p>
                 <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', margin:'0 0 12px' }}>
-                  Paste your message and hit Send:
+                  Your message is <strong style={{color:'#4ade80'}}>copied</strong> — just paste it in Messenger and hit Send:
                 </p>
                 <div style={{
                   background: 'rgba(255,255,255,0.07)',
