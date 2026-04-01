@@ -35,8 +35,8 @@ export function MessengerChat() {
     if (!message.trim()) return
     const intro = name.trim() ? `Hi, I'm ${name.trim()}. ` : ''
     const text   = encodeURIComponent(`${intro}${message.trim()}`)
-    // Open Messenger chat — text param not appended as it causes redirect issues
-    window.open(messengerUrl, '_blank')
+    const url = `${messengerUrl}?text=${text}`
+    window.open(url, '_blank')
     setOpen(false)
     setName('')
     setMessage('')
