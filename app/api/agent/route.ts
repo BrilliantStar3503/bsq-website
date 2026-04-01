@@ -22,7 +22,7 @@ import { NextResponse } from 'next/server'
  */
 
 const SHEET_ID  = '1LC4XVI2jDc4omL3heyZxqhv8UTpOqd4-F7lS1ssAD18'
-const TAB_NAME  = 'Sheet1'
+const TAB_NAME  = 'BSQ Agent List'
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
 /* ─── In-memory cache ───────────────────────────────────────────────── */
