@@ -41,17 +41,17 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
   },
   'pru-million-protect': {
     hero: [
-      { src: '/images/products/pru-million-protect.jpg',   pos: '75% center' }, // woman at laptop — crop left text
-      { src: '/images/products/pru-million-protect-2.jpg', pos: 'center 25%' }, // 3 people in resto — crop bottom text
-      { src: '/images/products/pru-million-protect-3.jpg', pos: 'center 30%' }, // father & daughter — crop bottom strip
-      { src: '/images/products/pru-million-protect-4.jpg', pos: 'center 60%' }, // family at table — crop top & bottom text
+      { src: '/images/products/pru-million-protect.jpg',   pos: '80% center' }, // woman at laptop — push right, hide left text
+      { src: '/images/products/pru-million-protect-2.jpg', pos: 'center 15%' }, // father & daughter — push up, hide bottom strip
+      { src: '/images/products/pru-million-protect-3.jpg', pos: 'center 88%' }, // family at table — push down, hide top text
+      { src: '/images/products/pru-million-protect-4.jpg', pos: 'center 20%' }, // 3 people in resto — push up, hide bottom text
     ],
     benefits: [],
   },
   'elite-series': { hero: [], benefits: [] },
   'prulink-assurance-account-plus': {
     hero: [
-      { src: '/images/products/prulink-assurance-account-plus.jpg', pos: 'center 20%' }, // family — crop bottom text block
+      { src: '/images/products/prulink-assurance-account-plus.jpg', pos: 'center 15%' }, // family — push up, hide bottom text block
     ],
     benefits: [],
   },
@@ -376,7 +376,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
         {/* Dark gradient overlay — left heavy so text is always readable */}
         <div className="absolute inset-0 z-10"
           style={{ background: hasPhotos
-            ? 'linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.52) 55%, rgba(0,0,0,0.18) 100%)'
+            ? 'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.70) 50%, rgba(0,0,0,0.55) 100%)'
             : 'transparent'
           }} />
 
