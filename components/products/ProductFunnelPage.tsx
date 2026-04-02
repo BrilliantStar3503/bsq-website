@@ -38,9 +38,22 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
       '/images/products/prulifetime-benefit-4.jpg',  // investment / dividends
     ],
   },
-  'pru-million-protect':            { hero: [], benefits: [] },
+  'pru-million-protect': {
+    hero: [
+      '/images/products/pru-million-protect.jpg',    // woman at laptop
+      '/images/products/pru-million-protect-2.jpg',  // father & daughter laughing
+      '/images/products/pru-million-protect-3.jpg',  // family at dining table
+      '/images/products/pru-million-protect-4.jpg',  // product features infographic
+    ],
+    benefits: [],
+  },
   'elite-series':                   { hero: [], benefits: [] },
-  'prulink-assurance-account-plus': { hero: [], benefits: [] },
+  'prulink-assurance-account-plus': {
+    hero: [
+      '/images/products/prulink-assurance-account-plus.jpg', // family with daughter
+    ],
+    benefits: [],
+  },
   'prulove-for-life':               { hero: [], benefits: [] },
 }
 

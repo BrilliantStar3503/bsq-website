@@ -6,11 +6,11 @@ import { NextResponse } from 'next/server'
  * Reads the BSQ agent roster from Google Sheets (Sheet1 tab).
  *
  * Actual sheet columns (row 1 headers):
- *   Agent Name | Email | Contacts | Agent Code | Date Appointed |
+ *   Agent Name | Email | Agent Code | Date Appointed |
  *   Birthday   | UM    | Branch Name | Date Terminated | LINK
  *
  * Lookup key  : "Agent Code"  (matches utm_agent in the URL)
- * Phone       : "Contacts"    (used for tel: call links)
+ * Phone       : "WhatsApp" column (Contacts column removed 2026-04-02)
  * Messenger   : "Messenger"   (add this column later when agents provide links)
  * Active check: "Date Terminated" is empty = active agent
  *
@@ -105,7 +105,7 @@ export async function GET(req: Request) {
       found: true,
       contact: {
         name:      agent['Nickname']   || agent['Agent Name'] || null,
-        phone:     agent['Contacts']   || null,
+        phone:     agent['WhatsApp']   || agent['Contacts'] || null,
         messenger: toMessengerUrl(agent['FB Page']) || null,
         whatsapp:  agent['WhatsApp']   || null,
         viber:     agent['Viber']      || null,
