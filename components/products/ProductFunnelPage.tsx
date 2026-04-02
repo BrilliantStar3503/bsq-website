@@ -355,7 +355,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* ── Background: carousel images or dark gradient fallback ── */}
+        {/* ── Background: carousel images ── */}
         {hasPhotos ? (
           <HeroCarousel
             photos={photos}
@@ -369,51 +369,49 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
             onMouseLeave={() => setHovered(false)}
           />
         ) : (
-          /* No photos — solid dark bg */
-          <div className="absolute inset-0" style={{ background: '#1a1a2e' }} />
+          <div className="absolute inset-0" style={{ background: '#f0f0f0' }} />
         )}
-
-        {/* Dark gradient overlay — left heavy so text is always readable */}
-        <div className="absolute inset-0 z-10"
-          style={{ background: hasPhotos
-            ? 'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.70) 50%, rgba(0,0,0,0.55) 100%)'
-            : 'transparent'
-          }} />
 
         {/* thin red top stripe */}
         <div className="absolute top-0 left-0 right-0 z-20" style={{ height: 4, background: PRU_RED }} />
 
-        {/* ── Text content ── */}
-        <div className="relative z-20 w-full max-w-6xl mx-auto px-6 md:px-10 py-20 lg:py-24">
+        {/* ── White card — bottom right, PRU Life UK style ── */}
+        <div className="absolute bottom-0 right-0 z-20 w-full lg:w-[480px] xl:w-[520px]">
           <motion.div
-            className="max-w-xl"
+            className="mx-4 mb-4 lg:mx-6 lg:mb-6 p-7 lg:p-8"
+            style={{
+              background: 'rgba(255,255,255,0.96)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: 12,
+              boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
+            }}
             initial="hidden" animate="visible" variants={stagger}
           >
             {/* Category tag */}
-            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-5">
-              <div style={{ width: 3, height: 16, background: PRU_RED, borderRadius: 2 }} />
-              <span className="text-xs font-bold uppercase tracking-[0.18em]" style={{ color: 'rgba(255,255,255,0.75)' }}>
+            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-4">
+              <div style={{ width: 3, height: 14, background: PRU_RED, borderRadius: 2 }} />
+              <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-gray-400">
                 PRU Life UK · {product.category === 'vul' ? 'Investment-Linked' : product.category === 'traditional' ? 'Traditional' : 'Insurance'} Plan
               </span>
             </motion.div>
 
             {/* Product name */}
             <motion.h1 variants={fadeUp}
-              className="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-3 text-white">
+              className="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2"
+              style={{ color: '#111' }}>
               <ProductTitle name={product.name} />
             </motion.h1>
 
             {/* Tagline */}
             <motion.p variants={fadeUp}
-              className="text-base md:text-lg font-semibold mb-5"
-              style={{ color: 'rgba(255,255,255,0.85)' }}>
+              className="text-sm font-semibold mb-3"
+              style={{ color: '#555' }}>
               {product.tagline}
             </motion.p>
 
             {/* What it is */}
             <motion.p variants={fadeUp}
-              className="text-sm md:text-base leading-relaxed mb-8"
-              style={{ color: 'rgba(255,255,255,0.70)' }}>
+              className="text-sm leading-relaxed mb-6 text-gray-500">
               {product.whatItIs}
             </motion.p>
 
@@ -423,25 +421,25 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 onClick={() => setModal(true)}
                 preset="pru"
                 duration={5}
-                className="px-8 py-3.5 text-sm rounded-sm"
+                className="px-6 py-3 text-sm rounded-sm"
               >
-                <MessageCircle size={15} />Get a Free Consultation
+                <MessageCircle size={14} />Get a Free Consultation
               </AnimatedGradientButton>
               <button onClick={() => router.push('/assessment')}
-                className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold transition-all"
-                style={{ background: 'transparent', color: '#fff', border: '1.5px solid rgba(255,255,255,0.6)', borderRadius: 4 }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.borderColor = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)' }}>
-                Take Free Assessment <ArrowRight size={14} />
+                className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold transition-all"
+                style={{ background: '#fff', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 4 }}
+                onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = PRU_RED }}>
+                Take Free Assessment <ArrowRight size={13} />
               </button>
             </motion.div>
 
             {/* Trust strip */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-x-6 gap-y-2 mt-6">
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-x-5 gap-y-1.5 mt-4">
               {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
                 <div key={t} className="flex items-center gap-1.5">
-                  <Check size={12} style={{ color: PRU_RED }} />
-                  <span className="text-sm" style={{ color: 'rgba(255,255,255,0.65)' }}>{t}</span>
+                  <Check size={11} style={{ color: PRU_RED }} />
+                  <span className="text-xs text-gray-400">{t}</span>
                 </div>
               ))}
             </motion.div>
@@ -449,8 +447,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
             {/* Agent attribution */}
             {agentHandle && (
               <motion.div variants={fadeUp}
-                className="flex items-center gap-2 mt-4 text-xs"
-                style={{ color: 'rgba(255,255,255,0.5)' }}>
+                className="flex items-center gap-2 mt-3 text-xs text-gray-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
                 Shared by {agentHandle.replace(/_/g, ' ')}
               </motion.div>
