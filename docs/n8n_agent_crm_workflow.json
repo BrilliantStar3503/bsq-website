@@ -1,0 +1,226 @@
+{
+  "name": "BSQ Assessment Leads — Per-Agent CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bsq-assessment-lead",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ── Extract and clean lead data from the incoming payload ──\nconst body = $input.first().json.body ?? $input.first().json;\n\nconst lead        = body.lead        ?? {};\nconst assessment  = body.assessment  ?? {};\nconst attribution = body.attribution ?? {};\nconst email       = body.email       ?? {};\n\n// Agent tab name: use agent code, fallback to 'direct'\nconst rawAgent  = (attribution.agent ?? 'direct').toString().trim();\nconst agentTab  = rawAgent === '' ? 'direct' : rawAgent;\n\n// Flatten gaps and recommendations for sheet columns\nconst gaps  = Array.isArray(assessment.gaps)\n  ? assessment.gaps.join(' | ')\n  : '';\n\nconst recs  = Array.isArray(assessment.recommendations)\n  ? assessment.recommendations.map(r => r.name ?? r).join(' | ')\n  : '';\n\nreturn [{\n  json: {\n    // Sheet-ready flat row\n    timestamp:   body.timestamp ?? new Date().toISOString(),\n    name:        lead.name        ?? '',\n    contactType: lead.contactType ?? '',\n    contact:     lead.contact     ?? '',\n    score:       assessment.score        ?? '',\n    statusLabel: assessment.statusLabel  ?? '',\n    riskLevel:   assessment.riskLevel    ?? '',\n    gaps,\n    recommendations: recs,\n    agent:       attribution.agent     ?? 'direct',\n    utmSource:   attribution.utmSource ?? 'direct',\n    utmMedium:   attribution.utmMedium ?? 'organic',\n    emailSubject: email.subject ?? '',\n    // Internal routing\n    agentTab,\n    spreadsheetId: '1gEa5mu9d4ZHZBX_oi1eSKbzoG9tlyJKh-uNFaUCYxzQ',\n    masterTab:     'Assessment_Leads',\n  }\n}];"
+      },
+      "id": "prepare-data",
+      "name": "Prepare Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "get-sheets",
+      "name": "Get Sheet List",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if a tab named after the agent already exists\nconst agentTab = $('Prepare Data').first().json.agentTab;\n\n// The Get Sheets node returns the spreadsheet metadata\n// Sheets are in .sheets[] array with .properties.title\nconst sheetsData = $input.first().json;\nconst sheets = sheetsData.sheets ?? [];\n\nconst exists = sheets.some(\n  s => (s.properties?.title ?? '').toLowerCase() === agentTab.toLowerCase()\n);\n\nreturn [{ json: { ...($('Prepare Data').first().json), tabExists: exists } }];"
+      },
+      "id": "check-tab",
+      "name": "Check Tab Exists",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.tabExists }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "if-tab-exists",
+      "name": "Tab Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Create a new sheet tab for this agent via Google Sheets API\nconst data        = $input.first().json;\nconst agentTab    = data.agentTab;\nconst spreadsheetId = data.spreadsheetId;\n\n// We'll use the Google Sheets batchUpdate API via HTTP Request node\n// Pass through the data and flag that we need to add headers\nreturn [{ json: { ...data, needsHeaders: true } }];"
+      },
+      "id": "prep-create-tab",
+      "name": "Prep Create Tab",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 460]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://sheets.googleapis.com/v4/spreadsheets/{{ $json.spreadsheetId }}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleSheetsOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "requests",
+              "value": "=[{\"addSheet\":{\"properties\":{\"title\":\"{{ $json.agentTab }\"}}}]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "create-tab",
+      "name": "Create Agent Tab",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 460]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Check Tab Exists').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Check Tab Exists').first().json.agentTab }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date":            "={{ $('Check Tab Exists').first().json.timestamp }}",
+            "Name":            "={{ $('Check Tab Exists').first().json.name }}",
+            "Contact Type":    "={{ $('Check Tab Exists').first().json.contactType }}",
+            "Contact":         "={{ $('Check Tab Exists').first().json.contact }}",
+            "Score":           "={{ $('Check Tab Exists').first().json.score }}",
+            "Status":          "={{ $('Check Tab Exists').first().json.statusLabel }}",
+            "Risk Level":      "={{ $('Check Tab Exists').first().json.riskLevel }}",
+            "Gaps":            "={{ $('Check Tab Exists').first().json.gaps }}",
+            "Recommendations": "={{ $('Check Tab Exists').first().json.recommendations }}",
+            "UTM Source":      "={{ $('Check Tab Exists').first().json.utmSource }}",
+            "UTM Medium":      "={{ $('Check Tab Exists').first().json.utmMedium }}"
+          }
+        },
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "write-agent-tab",
+      "name": "Write to Agent Tab",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1780, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Check Tab Exists').first().json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Assessment_Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date":            "={{ $('Check Tab Exists').first().json.timestamp }}",
+            "Name":            "={{ $('Check Tab Exists').first().json.name }}",
+            "Contact Type":    "={{ $('Check Tab Exists').first().json.contactType }}",
+            "Contact":         "={{ $('Check Tab Exists').first().json.contact }}",
+            "Score":           "={{ $('Check Tab Exists').first().json.score }}",
+            "Status":          "={{ $('Check Tab Exists').first().json.statusLabel }}",
+            "Risk Level":      "={{ $('Check Tab Exists').first().json.riskLevel }}",
+            "Gaps":            "={{ $('Check Tab Exists').first().json.gaps }}",
+            "Recommendations": "={{ $('Check Tab Exists').first().json.recommendations }}",
+            "Agent":           "={{ $('Check Tab Exists').first().json.agent }}",
+            "UTM Source":      "={{ $('Check Tab Exists').first().json.utmSource }}",
+            "UTM Medium":      "={{ $('Check Tab Exists').first().json.utmMedium }}"
+          }
+        },
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "write-master",
+      "name": "Write to Master Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"success\": true }"
+      },
+      "id": "respond",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2220, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Prepare Data", "type": "main", "index": 0 }]]
+    },
+    "Prepare Data": {
+      "main": [[{ "node": "Get Sheet List", "type": "main", "index": 0 }]]
+    },
+    "Get Sheet List": {
+      "main": [[{ "node": "Check Tab Exists", "type": "main", "index": 0 }]]
+    },
+    "Check Tab Exists": {
+      "main": [[{ "node": "Tab Exists?", "type": "main", "index": 0 }]]
+    },
+    "Tab Exists?": {
+      "main": [
+        [{ "node": "Write to Agent Tab", "type": "main", "index": 0 }],
+        [{ "node": "Prep Create Tab",    "type": "main", "index": 0 }]
+      ]
+    },
+    "Prep Create Tab": {
+      "main": [[{ "node": "Create Agent Tab", "type": "main", "index": 0 }]]
+    },
+    "Create Agent Tab": {
+      "main": [[{ "node": "Write to Agent Tab", "type": "main", "index": 0 }]]
+    },
+    "Write to Agent Tab": {
+      "main": [[{ "node": "Write to Master Sheet", "type": "main", "index": 0 }]]
+    },
+    "Write to Master Sheet": {
+      "main": [[{ "node": "Respond OK", "type": "main", "index": 0 }]]
+    }
+  }
+}
