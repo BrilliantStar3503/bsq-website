@@ -31,6 +31,7 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
       { src: '/images/products/prulifetime-income-2.jpg' },
       { src: '/images/products/prulifetime-income-3.jpg' },
       { src: '/images/products/prulifetime-income-4.jpg' },
+      { src: '/images/products/pru-million-protect-2-hero.jpg', pos: 'center center' }, // man golfing — retirement lifestyle ✅
     ],
     benefits: [
       '/images/products/prulifetime-benefit-1.jpg',
@@ -42,7 +43,6 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
   'pru-million-protect': {
     hero: [
       { src: '/images/products/pru-million-protect-hero.jpg',   pos: 'center center' }, // woman at desk — 1536x1024 ✅
-      { src: '/images/products/pru-million-protect-2-hero.jpg', pos: 'center center' }, // man golfing — 1536x1024 ✅
       { src: '/images/products/pru-million-protect-3-hero.jpg', pos: 'center center' }, // couple with coffee — 1536x1024 ✅
       { src: '/images/products/pru-million-protect-4-hero.jpg', pos: 'center center' }, // family breakfast — 1536x1024 ✅
     ],
