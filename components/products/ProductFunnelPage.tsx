@@ -51,7 +51,7 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
   'elite-series': { hero: [], benefits: [] },
   'prulink-assurance-account-plus': {
     hero: [
-      { src: '/images/products/prulink-assurance-account-plus.jpg', pos: 'center 15%' }, // family — push up, hide bottom text block
+      { src: '/images/products/prulink-assurance-account-plus-hero.jpg', pos: 'center center' }, // clean family photo — father, mother, daughter on sofa ✅
     ],
     benefits: [],
   },
