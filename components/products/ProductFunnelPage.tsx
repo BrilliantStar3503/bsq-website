@@ -43,6 +43,7 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
     hero: [
       { src: '/images/products/pru-million-protect-hero.jpg',   pos: 'center center' }, // woman at desk — 1536x1024 ✅
       { src: '/images/products/pru-million-protect-2-hero.jpg', pos: 'center center' }, // man golfing — 1536x1024 ✅
+      { src: '/images/products/pru-million-protect-3-hero.jpg', pos: 'center center' }, // couple with coffee — 1536x1024 ✅
     ],
     benefits: [],
   },
