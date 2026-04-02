@@ -85,81 +85,51 @@ function ProductTitle({ name, className = '' }: { name: string; className?: stri
    HERO CAROUSEL — auto-rotates every 4 s, fade transition
    Falls back to branded placeholder when no photos are provided.
 ══════════════════════════════════════════════════════════════════ */
-function HeroCarousel({ photos, product }: { photos: string[]; product: PruProduct }) {
-  const [current, setCurrent] = useState(0)
-  const [hovered, setHovered] = useState(false)
-
-  useEffect(() => {
-    if (photos.length <= 1) return
-    if (hovered) return
-    const timer = setInterval(() => {
-      setCurrent(prev => (prev + 1) % photos.length)
-    }, 4000)
-    return () => clearInterval(timer)
-  }, [photos.length, hovered])
-
-  const prev = () => setCurrent(c => (c - 1 + photos.length) % photos.length)
-  const next = () => setCurrent(c => (c + 1) % photos.length)
-
-  /* No photos yet — show branded placeholder */
-  if (photos.length === 0) {
-    return (
-      <div className="w-full h-full min-h-[320px] lg:min-h-0 flex flex-col items-center justify-center gap-4 relative"
-        style={{ background: GRAY_BG, borderLeft: `1px solid ${GRAY_LINE}` }}>
-        <div className="text-6xl opacity-30">{product.emoji}</div>
-        <div className="text-center">
-          <p className="text-sm font-bold text-gray-400">{product.shortName}</p>
-          <p className="text-xs text-gray-400 mt-1">Photo coming soon</p>
-        </div>
-        <div className="absolute bottom-5 right-5 bg-white px-3 py-1.5 flex items-center gap-2"
-          style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
-          <div className="w-2 h-2 rounded-full" style={{ background: PRU_RED }} />
-          <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">PRU Life UK</span>
-        </div>
-      </div>
-    )
-  }
+function HeroCarousel({ photos, product, current, hovered, onPrev, onNext, onDot, onMouseEnter, onMouseLeave }: {
+  photos: string[]
+  product: PruProduct
+  current: number
+  hovered: boolean
+  onPrev: () => void
+  onNext: () => void
+  onDot: (i: number) => void
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+}) {
+  /* No photos — plain dark gradient fallback */
+  if (photos.length === 0) return null
 
   return (
-    <div
-      className="relative w-full h-full min-h-[480px] lg:min-h-0 overflow-hidden"
-      style={{ background: '#f8f8f8' }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Slides */}
+    <>
+      {/* Background slides */}
       {photos.map((src, i) => (
         <div
           key={src}
-          className="absolute inset-0 transition-opacity duration-700"
+          className="absolute inset-0 transition-opacity duration-1000"
           style={{ opacity: i === current ? 1 : 0, zIndex: i === current ? 1 : 0 }}
         >
           <Image
             src={src}
             alt={`${product.name} — photo ${i + 1}`}
             fill
-            className="object-contain"
+            className="object-cover object-top"
             priority={i === 0}
-            sizes="(max-width: 1024px) 100vw, 520px"
+            sizes="100vw"
           />
         </div>
       ))}
 
-      {/* Subtle dark gradient at bottom so dots are visible */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 z-10"
-        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)' }} />
-
-      {/* Prev / Next arrows (show on hover) */}
+      {/* Prev / Next arrows */}
       {photos.length > 1 && (
         <>
-          <button onClick={prev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200"
+          <button onClick={onPrev}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 flex items-center justify-center rounded-full transition-all duration-200"
             style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.2)', opacity: hovered ? 1 : 0 }}
             aria-label="Previous photo">
             <ChevronLeft size={16} className="text-white" />
           </button>
-          <button onClick={next}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200"
+          <button onClick={onNext}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-9 h-9 flex items-center justify-center rounded-full transition-all duration-200"
             style={{ background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.2)', opacity: hovered ? 1 : 0 }}
             aria-label="Next photo">
             <ChevronRight size={16} className="text-white" />
@@ -169,18 +139,18 @@ function HeroCarousel({ photos, product }: { photos: string[]; product: PruProdu
 
       {/* Dot indicators */}
       {photos.length > 1 && (
-        <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-1.5 z-20">
+        <div className="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-2 z-30">
           {photos.map((_, i) => (
             <button
               key={i}
-              onClick={() => setCurrent(i)}
+              onClick={() => onDot(i)}
               aria-label={`Photo ${i + 1}`}
               className="transition-all duration-300"
               style={{
-                width: i === current ? 20 : 6,
+                width: i === current ? 22 : 6,
                 height: 6,
                 borderRadius: 3,
-                background: i === current ? '#fff' : 'rgba(255,255,255,0.45)',
+                background: i === current ? '#fff' : 'rgba(255,255,255,0.5)',
                 border: 'none',
                 cursor: 'pointer',
                 padding: 0,
@@ -189,14 +159,7 @@ function HeroCarousel({ photos, product }: { photos: string[]; product: PruProdu
           ))}
         </div>
       )}
-
-      {/* PRU Life UK badge */}
-      <div className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm px-3 py-1.5 flex items-center gap-2"
-        style={{ border: `1px solid ${GRAY_LINE}`, borderRadius: 4 }}>
-        <div className="w-2 h-2 rounded-full" style={{ background: PRU_RED }} />
-        <span className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">PRU Life UK</span>
-      </div>
-    </div>
+    </>
   )
 }
 
@@ -351,13 +314,25 @@ function LeadModal({
    MAIN FUNNEL PAGE
 ══════════════════════════════════════════════════════════════════ */
 export default function ProductFunnelPage({ product }: { product: PruProduct }) {
-  const router                  = useRouter()
-  const [modal, setModal]       = useState(false)
-  const [agentHandle, setAgent] = useState('')
-  const { openContact }         = useAgentContact()
+  const router                      = useRouter()
+  const [modal, setModal]           = useState(false)
+  const [agentHandle, setAgent]     = useState('')
+  const { openContact }             = useAgentContact()
   const photoConfig   = PRODUCT_PHOTOS[product.slug] ?? { hero: [], benefits: [] }
   const photos        = photoConfig.hero
   const benefitPhotos = photoConfig.benefits
+
+  /* ── Carousel state lifted up ── */
+  const [current, setCurrent]   = useState(0)
+  const [hovered, setHovered]   = useState(false)
+  const hasPhotos               = photos.length > 0
+
+  useEffect(() => {
+    if (photos.length <= 1) return
+    if (hovered) return
+    const timer = setInterval(() => setCurrent(p => (p + 1) % photos.length), 4000)
+    return () => clearInterval(timer)
+  }, [photos.length, hovered])
 
   useEffect(() => {
     try {
@@ -370,96 +345,115 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
     <main style={{ background: '#fff', color: '#111' }}>
 
       {/* ══════════════════════════════════════════════════
-          HERO — split layout, white bg, photo on right
+          HERO — full-width background carousel
       ══════════════════════════════════════════════════ */}
-      <section className="relative" style={{ borderBottom: `1px solid ${GRAY_LINE}` }}>
+      <section
+        className="relative min-h-[580px] lg:min-h-[660px] flex items-center overflow-hidden"
+        style={{ borderBottom: `1px solid ${GRAY_LINE}` }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* ── Background: carousel images or dark gradient fallback ── */}
+        {hasPhotos ? (
+          <HeroCarousel
+            photos={photos}
+            product={product}
+            current={current}
+            hovered={hovered}
+            onPrev={() => setCurrent(c => (c - 1 + photos.length) % photos.length)}
+            onNext={() => setCurrent(c => (c + 1) % photos.length)}
+            onDot={i => setCurrent(i)}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+          />
+        ) : (
+          /* No photos — solid dark bg */
+          <div className="absolute inset-0" style={{ background: '#1a1a2e' }} />
+        )}
+
+        {/* Dark gradient overlay — left heavy so text is always readable */}
+        <div className="absolute inset-0 z-10"
+          style={{ background: hasPhotos
+            ? 'linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.52) 55%, rgba(0,0,0,0.18) 100%)'
+            : 'transparent'
+          }} />
+
         {/* thin red top stripe */}
-        <div style={{ height: 4, background: PRU_RED }} />
+        <div className="absolute top-0 left-0 right-0 z-20" style={{ height: 4, background: PRU_RED }} />
 
-        <div className="max-w-6xl mx-auto px-6 md:px-10">
-          <div className="flex flex-col lg:flex-row lg:items-stretch min-h-[520px]">
-
-            {/* Left — text */}
-            <motion.div
-              className="flex-1 flex flex-col justify-center py-14 lg:py-16 lg:pr-16"
-              initial="hidden" animate="visible" variants={stagger}
-            >
-              {/* Category tag */}
-              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-5">
-                <div style={{ width: 3, height: 16, background: PRU_RED, borderRadius: 2 }} />
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-                  PRU Life UK · {product.category === 'vul' ? 'Investment-Linked' : product.category === 'traditional' ? 'Traditional' : 'Insurance'} Plan
-                </span>
-              </motion.div>
-
-              {/* Product name — PRU in red */}
-              <motion.h1 variants={fadeUp}
-                className="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-3"
-                style={{ color: '#111' }}>
-                <ProductTitle name={product.name} />
-              </motion.h1>
-
-              {/* Tagline */}
-              <motion.p variants={fadeUp}
-                className="text-base md:text-lg font-semibold mb-5"
-                style={{ color: '#555' }}>
-                {product.tagline}
-              </motion.p>
-
-              {/* What it is */}
-              <motion.p variants={fadeUp}
-                className="text-base text-gray-600 leading-relaxed mb-8 max-w-lg">
-                {product.whatItIs}
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
-                <AnimatedGradientButton
-                  onClick={() => setModal(true)}
-                  preset="pru"
-                  duration={5}
-                  className="px-8 py-3.5 text-sm rounded-sm"
-                >
-                  <MessageCircle size={15} />Get a Free Consultation
-                </AnimatedGradientButton>
-                <button onClick={() => router.push('/assessment')}
-                  className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold transition-all"
-                  style={{ background: '#fff', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 4 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = PRU_RED }}>
-                  Take Free Assessment <ArrowRight size={14} />
-                </button>
-              </motion.div>
-
-              {/* Trust strip */}
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-x-6 gap-y-2 mt-6">
-                {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
-                  <div key={t} className="flex items-center gap-1.5">
-                    <Check size={12} style={{ color: PRU_RED }} />
-                    <span className="text-sm text-gray-500">{t}</span>
-                  </div>
-                ))}
-              </motion.div>
-
-              {/* Agent attribution */}
-              {agentHandle && (
-                <motion.div variants={fadeUp}
-                  className="flex items-center gap-2 mt-4 text-xs text-gray-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-                  Shared by {agentHandle.replace(/_/g, ' ')}
-                </motion.div>
-              )}
+        {/* ── Text content ── */}
+        <div className="relative z-20 w-full max-w-6xl mx-auto px-6 md:px-10 py-20 lg:py-24">
+          <motion.div
+            className="max-w-xl"
+            initial="hidden" animate="visible" variants={stagger}
+          >
+            {/* Category tag */}
+            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-5">
+              <div style={{ width: 3, height: 16, background: PRU_RED, borderRadius: 2 }} />
+              <span className="text-xs font-bold uppercase tracking-[0.18em]" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                PRU Life UK · {product.category === 'vul' ? 'Investment-Linked' : product.category === 'traditional' ? 'Traditional' : 'Insurance'} Plan
+              </span>
             </motion.div>
 
-            {/* Right — Carousel */}
-            <motion.div
-              className="lg:w-[480px] xl:w-[520px] flex-shrink-0 relative"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <HeroCarousel photos={photos} product={product} />
+            {/* Product name */}
+            <motion.h1 variants={fadeUp}
+              className="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-3 text-white">
+              <ProductTitle name={product.name} />
+            </motion.h1>
+
+            {/* Tagline */}
+            <motion.p variants={fadeUp}
+              className="text-base md:text-lg font-semibold mb-5"
+              style={{ color: 'rgba(255,255,255,0.85)' }}>
+              {product.tagline}
+            </motion.p>
+
+            {/* What it is */}
+            <motion.p variants={fadeUp}
+              className="text-sm md:text-base leading-relaxed mb-8"
+              style={{ color: 'rgba(255,255,255,0.70)' }}>
+              {product.whatItIs}
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
+              <AnimatedGradientButton
+                onClick={() => setModal(true)}
+                preset="pru"
+                duration={5}
+                className="px-8 py-3.5 text-sm rounded-sm"
+              >
+                <MessageCircle size={15} />Get a Free Consultation
+              </AnimatedGradientButton>
+              <button onClick={() => router.push('/assessment')}
+                className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold transition-all"
+                style={{ background: 'transparent', color: '#fff', border: '1.5px solid rgba(255,255,255,0.6)', borderRadius: 4 }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.borderColor = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)' }}>
+                Take Free Assessment <ArrowRight size={14} />
+              </button>
             </motion.div>
-          </div>
+
+            {/* Trust strip */}
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-x-6 gap-y-2 mt-6">
+              {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
+                <div key={t} className="flex items-center gap-1.5">
+                  <Check size={12} style={{ color: PRU_RED }} />
+                  <span className="text-sm" style={{ color: 'rgba(255,255,255,0.65)' }}>{t}</span>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Agent attribution */}
+            {agentHandle && (
+              <motion.div variants={fadeUp}
+                className="flex items-center gap-2 mt-4 text-xs"
+                style={{ color: 'rgba(255,255,255,0.5)' }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                Shared by {agentHandle.replace(/_/g, ' ')}
+              </motion.div>
+            )}
+          </motion.div>
         </div>
       </section>
 
