@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
 
     // ── Build n8n payload ─────────────────────────────────────────────
     const payload = {
+      type:      'assessment',
       source:    'bsq_financial_assessment',
       timestamp: new Date().toISOString(),
       lead: {
@@ -89,7 +90,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Forward to n8n webhook ────────────────────────────────────────
-    const webhookUrl = process.env.N8N_WEBHOOK_TESTIMONIAL_CRM
+    const webhookUrl = process.env.N8N_WEBHOOK_ASSESSMENT_LEADS
 
     if (!webhookUrl) {
       // Webhook not configured yet — still return success so UX works
