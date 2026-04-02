@@ -142,7 +142,7 @@ function HeroCarousel({ photos, product, current, hovered, onPrev, onNext, onDot
 
       {/* Dot indicators */}
       {photos.length > 1 && (
-        <div className="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-2 z-30">
+        <div className="absolute bottom-8 lg:bottom-16 left-0 right-0 flex items-center justify-center gap-2 z-30">
           {photos.map((_, i) => (
             <button
               key={i}
@@ -349,119 +349,164 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
 
       {/* ══════════════════════════════════════════════════
           HERO — full-width background carousel
+          Card LEFT · CTA floats between hero & section 2
       ══════════════════════════════════════════════════ */}
       <section
-        className="relative min-h-[580px] lg:min-h-[660px] flex items-center overflow-hidden"
-        style={{ borderBottom: `1px solid ${GRAY_LINE}` }}
+        className="relative min-h-[580px] lg:min-h-[700px]"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* ── Background: carousel images ── */}
-        {hasPhotos ? (
-          <HeroCarousel
-            photos={photos}
-            product={product}
-            current={current}
-            hovered={hovered}
-            onPrev={() => setCurrent(c => (c - 1 + photos.length) % photos.length)}
-            onNext={() => setCurrent(c => (c + 1) % photos.length)}
-            onDot={i => setCurrent(i)}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-          />
-        ) : (
-          <div className="absolute inset-0" style={{ background: '#f0f0f0' }} />
-        )}
+        {/* ── Background images — overflow clipped here only ── */}
+        <div className="absolute inset-0 overflow-hidden">
+          {hasPhotos ? (
+            <HeroCarousel
+              photos={photos}
+              product={product}
+              current={current}
+              hovered={hovered}
+              onPrev={() => setCurrent(c => (c - 1 + photos.length) % photos.length)}
+              onNext={() => setCurrent(c => (c + 1) % photos.length)}
+              onDot={i => setCurrent(i)}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+            />
+          ) : (
+            <div className="absolute inset-0" style={{ background: '#f0f0f0' }} />
+          )}
+          {/* thin red top stripe */}
+          <div className="absolute top-0 left-0 right-0 z-20" style={{ height: 4, background: PRU_RED }} />
+        </div>
 
-        {/* thin red top stripe */}
-        <div className="absolute top-0 left-0 right-0 z-20" style={{ height: 4, background: PRU_RED }} />
+        {/* ── Content layer — LEFT card ── */}
+        <div className="relative z-10 flex items-end lg:items-center min-h-[580px] lg:min-h-[700px] pb-8 lg:pb-28 pt-10">
+          <div className="w-full max-w-6xl mx-auto px-4 md:px-8 lg:px-16">
+            <motion.div
+              className="w-full lg:w-[460px] xl:w-[500px] p-6 md:p-7 lg:p-9"
+              style={{
+                background: 'rgba(255,255,255,0.96)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: 12,
+                boxShadow: '0 8px 48px rgba(0,0,0,0.18)',
+              }}
+              initial="hidden" animate="visible" variants={stagger}
+            >
+              {/* Category tag */}
+              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-4">
+                <div style={{ width: 3, height: 14, background: PRU_RED, borderRadius: 2 }} />
+                <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-gray-400">
+                  PRU Life UK · {product.category === 'vul' ? 'Investment-Linked' : product.category === 'traditional' ? 'Traditional' : 'Insurance'} Plan
+                </span>
+              </motion.div>
 
-        {/* ── White card — bottom right, PRU Life UK style ── */}
-        <div className="absolute bottom-0 right-0 z-20 w-full lg:w-[480px] xl:w-[520px]">
-          <motion.div
-            className="mx-4 mb-4 lg:mx-6 lg:mb-6 p-7 lg:p-8"
-            style={{
-              background: 'rgba(255,255,255,0.96)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: 12,
-              boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
-            }}
-            initial="hidden" animate="visible" variants={stagger}
-          >
-            {/* Category tag */}
-            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-4">
-              <div style={{ width: 3, height: 14, background: PRU_RED, borderRadius: 2 }} />
-              <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-gray-400">
-                PRU Life UK · {product.category === 'vul' ? 'Investment-Linked' : product.category === 'traditional' ? 'Traditional' : 'Insurance'} Plan
-              </span>
+              {/* Product name */}
+              <motion.h1 variants={fadeUp}
+                className="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2"
+                style={{ color: '#111' }}>
+                <ProductTitle name={product.name} />
+              </motion.h1>
+
+              {/* Tagline */}
+              <motion.p variants={fadeUp}
+                className="text-sm font-semibold mb-3"
+                style={{ color: '#555' }}>
+                {product.tagline}
+              </motion.p>
+
+              {/* What it is */}
+              <motion.p variants={fadeUp}
+                className="text-sm leading-relaxed text-gray-500 mb-5">
+                {product.whatItIs}
+              </motion.p>
+
+              {/* Trust strip */}
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
+                  <div key={t} className="flex items-center gap-1.5">
+                    <Check size={11} style={{ color: PRU_RED }} />
+                    <span className="text-xs text-gray-400">{t}</span>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* Agent attribution */}
+              {agentHandle && (
+                <motion.div variants={fadeUp}
+                  className="flex items-center gap-2 mt-3 text-xs text-gray-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                  Shared by {agentHandle.replace(/_/g, ' ')}
+                </motion.div>
+              )}
+
+              {/* ── Mobile CTAs — hidden on desktop ── */}
+              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mt-6 lg:hidden">
+                <AnimatedGradientButton
+                  onClick={() => setModal(true)}
+                  preset="pru"
+                  duration={5}
+                  className="px-6 py-3 text-sm rounded-sm"
+                >
+                  <MessageCircle size={14} />Get a Free Consultation
+                </AnimatedGradientButton>
+                <button onClick={() => router.push('/assessment')}
+                  className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold transition-all"
+                  style={{ background: '#fff', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 4 }}
+                  onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = PRU_RED }}>
+                  Take Free Assessment <ArrowRight size={13} />
+                </button>
+              </motion.div>
             </motion.div>
+          </div>
+        </div>
 
-            {/* Product name */}
-            <motion.h1 variants={fadeUp}
-              className="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2"
-              style={{ color: '#111' }}>
-              <ProductTitle name={product.name} />
-            </motion.h1>
-
-            {/* Tagline */}
-            <motion.p variants={fadeUp}
-              className="text-sm font-semibold mb-3"
-              style={{ color: '#555' }}>
-              {product.tagline}
-            </motion.p>
-
-            {/* What it is */}
-            <motion.p variants={fadeUp}
-              className="text-sm leading-relaxed mb-6 text-gray-500">
-              {product.whatItIs}
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
+        {/* ── Desktop floating CTA — straddles hero / section 2 boundary ── */}
+        <div
+          className="hidden lg:block absolute bottom-0 left-0 right-0 z-30"
+          style={{ transform: 'translateY(50%)' }}
+        >
+          <div className="max-w-6xl mx-auto px-16">
+            <motion.div
+              className="flex items-center gap-3"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.55 }}
+            >
               <AnimatedGradientButton
                 onClick={() => setModal(true)}
                 preset="pru"
                 duration={5}
-                className="px-6 py-3 text-sm rounded-sm"
+                className="px-8 py-3.5 text-sm rounded-sm"
+                style={{ boxShadow: '0 6px 28px rgba(217,45,32,0.35)' }}
               >
                 <MessageCircle size={14} />Get a Free Consultation
               </AnimatedGradientButton>
-              <button onClick={() => router.push('/assessment')}
-                className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold transition-all"
-                style={{ background: '#fff', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 4 }}
+              <button
+                onClick={() => router.push('/assessment')}
+                className="flex items-center gap-2 px-7 py-3.5 text-sm font-bold transition-all"
+                style={{
+                  background: 'rgba(255,255,255,0.97)',
+                  color: PRU_RED,
+                  border: `1.5px solid ${PRU_RED}`,
+                  borderRadius: 4,
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.10)',
+                  backdropFilter: 'blur(8px)',
+                }}
                 onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = PRU_RED }}>
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.97)'; e.currentTarget.style.color = PRU_RED }}
+              >
                 Take Free Assessment <ArrowRight size={13} />
               </button>
             </motion.div>
-
-            {/* Trust strip */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-x-5 gap-y-1.5 mt-4">
-              {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
-                <div key={t} className="flex items-center gap-1.5">
-                  <Check size={11} style={{ color: PRU_RED }} />
-                  <span className="text-xs text-gray-400">{t}</span>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* Agent attribution */}
-            {agentHandle && (
-              <motion.div variants={fadeUp}
-                className="flex items-center gap-2 mt-3 text-xs text-gray-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
-                Shared by {agentHandle.replace(/_/g, ' ')}
-              </motion.div>
-            )}
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════
           PROBLEM HOOK — gray bg, centered
+          pt-10 mobile / pt-20 desktop (floating CTA room)
       ══════════════════════════════════════════════════ */}
       <section style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
-        <div className="max-w-3xl mx-auto px-6 md:px-10 py-12 md:py-16 text-center">
+        <div className="max-w-3xl mx-auto px-6 md:px-10 pt-10 pb-12 lg:pt-20 lg:pb-16 text-center">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.45 }}>
             <div className="flex items-center justify-center gap-2 mb-4">
