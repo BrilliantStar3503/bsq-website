@@ -122,7 +122,8 @@ function HeroCarousel({ photos, product }: { photos: string[]; product: PruProdu
 
   return (
     <div
-      className="relative w-full h-full min-h-[360px] lg:min-h-0 overflow-hidden"
+      className="relative w-full h-full min-h-[480px] lg:min-h-0 overflow-hidden"
+      style={{ background: '#f8f8f8' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -137,7 +138,7 @@ function HeroCarousel({ photos, product }: { photos: string[]; product: PruProdu
             src={src}
             alt={`${product.name} — photo ${i + 1}`}
             fill
-            className="object-cover"
+            className="object-contain"
             priority={i === 0}
             sizes="(max-width: 1024px) 100vw, 520px"
           />
