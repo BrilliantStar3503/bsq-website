@@ -41,10 +41,9 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
   },
   'pru-million-protect': {
     hero: [
-      { src: '/images/products/pru-million-protect.jpg',   pos: '80% center' }, // woman at laptop — push right, hide left text
-      { src: '/images/products/pru-million-protect-2.jpg', pos: 'center 15%' }, // father & daughter — push up, hide bottom strip
-      { src: '/images/products/pru-million-protect-3.jpg', pos: 'center 88%' }, // family at table — push down, hide top text
-      { src: '/images/products/pru-million-protect-4.jpg', pos: 'center 20%' }, // 3 people in resto — push up, hide bottom text
+      { src: '/images/products/pru-million-protect-2.jpg', pos: 'center 15%' }, // father & daughter — 1140x1424
+      { src: '/images/products/pru-million-protect-3.jpg', pos: 'center 88%' }, // family at table — 1140x1423
+      { src: '/images/products/pru-million-protect-4.jpg', pos: 'center 20%' }, // 3 people in resto — 1080x1350
     ],
     benefits: [],
   },
@@ -116,6 +115,7 @@ function HeroCarousel({ photos, product, current, hovered, onPrev, onNext, onDot
             className="object-cover"
             style={{ objectPosition: pos ?? 'center center' }}
             priority={i === 0}
+            quality={90}
             sizes="100vw"
           />
         </div>
