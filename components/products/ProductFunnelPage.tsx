@@ -21,40 +21,41 @@ const GRAY_LINE = '#e5e7eb'   // divider
    hero[]    — carousel photos in the hero section
    benefits[] — one photo per key benefit card (in order)
 ────────────────────────────────────────────────────────────────────── */
-type ProductPhotoConfig = { hero: string[]; benefits: string[] }
+type HeroPhoto = { src: string; pos?: string }
+type ProductPhotoConfig = { hero: HeroPhoto[]; benefits: string[] }
 
 const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
   'prulifetime-income': {
     hero: [
-      '/images/products/prulifetime-income.jpg',
-      '/images/products/prulifetime-income-2.jpg',
-      '/images/products/prulifetime-income-3.jpg',
-      '/images/products/prulifetime-income-4.jpg',
+      { src: '/images/products/prulifetime-income.jpg' },
+      { src: '/images/products/prulifetime-income-2.jpg' },
+      { src: '/images/products/prulifetime-income-3.jpg' },
+      { src: '/images/products/prulifetime-income-4.jpg' },
     ],
     benefits: [
-      '/images/products/prulifetime-benefit-1.jpg',  // family financial security
-      '/images/products/prulifetime-benefit-2.jpg',  // family protection
-      '/images/products/prulifetime-benefit-3.jpg',  // retirement / elderly couple
-      '/images/products/prulifetime-benefit-4.jpg',  // investment / dividends
+      '/images/products/prulifetime-benefit-1.jpg',
+      '/images/products/prulifetime-benefit-2.jpg',
+      '/images/products/prulifetime-benefit-3.jpg',
+      '/images/products/prulifetime-benefit-4.jpg',
     ],
   },
   'pru-million-protect': {
     hero: [
-      '/images/products/pru-million-protect.jpg',    // woman at laptop
-      '/images/products/pru-million-protect-2.jpg',  // father & daughter laughing
-      '/images/products/pru-million-protect-3.jpg',  // family at dining table
-      '/images/products/pru-million-protect-4.jpg',  // product features infographic
+      { src: '/images/products/pru-million-protect.jpg',   pos: '75% center' }, // woman at laptop — crop left text
+      { src: '/images/products/pru-million-protect-2.jpg', pos: 'center 25%' }, // 3 people in resto — crop bottom text
+      { src: '/images/products/pru-million-protect-3.jpg', pos: 'center 30%' }, // father & daughter — crop bottom strip
+      { src: '/images/products/pru-million-protect-4.jpg', pos: 'center 60%' }, // family at table — crop top & bottom text
     ],
     benefits: [],
   },
-  'elite-series':                   { hero: [], benefits: [] },
+  'elite-series': { hero: [], benefits: [] },
   'prulink-assurance-account-plus': {
     hero: [
-      '/images/products/prulink-assurance-account-plus.jpg', // family with daughter
+      { src: '/images/products/prulink-assurance-account-plus.jpg', pos: 'center 20%' }, // family — crop bottom text block
     ],
     benefits: [],
   },
-  'prulove-for-life':               { hero: [], benefits: [] },
+  'prulove-for-life': { hero: [], benefits: [] },
 }
 
 const fadeUp = {
@@ -86,7 +87,7 @@ function ProductTitle({ name, className = '' }: { name: string; className?: stri
    Falls back to branded placeholder when no photos are provided.
 ══════════════════════════════════════════════════════════════════ */
 function HeroCarousel({ photos, product, current, hovered, onPrev, onNext, onDot, onMouseEnter, onMouseLeave }: {
-  photos: string[]
+  photos: HeroPhoto[]
   product: PruProduct
   current: number
   hovered: boolean
@@ -102,7 +103,7 @@ function HeroCarousel({ photos, product, current, hovered, onPrev, onNext, onDot
   return (
     <>
       {/* Background slides */}
-      {photos.map((src, i) => (
+      {photos.map(({ src, pos }, i) => (
         <div
           key={src}
           className="absolute inset-0 transition-opacity duration-1000"
@@ -112,7 +113,8 @@ function HeroCarousel({ photos, product, current, hovered, onPrev, onNext, onDot
             src={src}
             alt={`${product.name} — photo ${i + 1}`}
             fill
-            className="object-cover object-top"
+            className="object-cover"
+            style={{ objectPosition: pos ?? 'center center' }}
             priority={i === 0}
             sizes="100vw"
           />
