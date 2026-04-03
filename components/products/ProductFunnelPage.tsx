@@ -57,6 +57,17 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
   'prulove-for-life': { hero: [], benefits: [] },
 }
 
+/* ─── Per-product hero copy overrides ──────────────────────────────
+   Benefit-driven headline + updated description per product slug.
+   Falls back to product.name / product.whatItIs when not set.
+────────────────────────────────────────────────────────────────── */
+const HERO_OVERRIDES: Record<string, { headline?: string; description?: string }> = {
+  'pru-million-protect': {
+    headline:    'Grow Your Wealth with PRUMillion Protect',
+    description: 'A smart investment-linked plan that helps you grow your money while staying protected—so your wealth works for you today and secures your future.',
+  },
+}
+
 const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' as const } },
@@ -374,16 +385,17 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
           )}
         </div>
 
-        {/* ── Content layer — LEFT card ── */}
-        <div className="relative z-10 flex items-end lg:items-center min-h-[580px] lg:min-h-[700px] pb-8 lg:pb-28 pt-10">
-          <div className="w-full max-w-6xl mx-auto px-4 md:px-8 lg:px-16">
+        {/* ── Content layer — LEFT-aligned card, shared 1200px container ── */}
+        <div className="relative z-10 flex items-center min-h-[580px] lg:min-h-[700px] py-12 lg:py-16">
+          {/* Same max-width + horizontal padding as the navbar (1200px / px-8) */}
+          <div className="w-full max-w-[1200px] mx-auto px-8">
             <motion.div
-              className="w-full lg:w-[460px] xl:w-[500px] p-6 md:p-7 lg:p-9"
+              className="w-full sm:w-[480px] lg:w-[500px] xl:w-[520px]"
               style={{
-                background: 'rgba(255,255,255,0.96)',
-                backdropFilter: 'blur(10px)',
-                borderRadius: 12,
-                boxShadow: '0 8px 48px rgba(0,0,0,0.18)',
+                background:   '#ffffff',
+                borderRadius: 14,
+                boxShadow:    '0 10px 30px rgba(0,0,0,0.08)',
+                padding:      '36px 40px',
               }}
               initial="hidden" animate="visible" variants={stagger}
             >
@@ -395,28 +407,35 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
                 </span>
               </motion.div>
 
-              {/* Product name */}
+              {/* Headline — benefit-driven override or product name */}
               <motion.h1 variants={fadeUp}
-                className="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2"
+                className="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-3"
                 style={{ color: '#111' }}>
-                <ProductTitle name={product.name} />
+                {HERO_OVERRIDES[product.slug]?.headline
+                  ? (() => {
+                      const hl = HERO_OVERRIDES[product.slug].headline!
+                      const pruIdx = hl.indexOf('PRU')
+                      if (pruIdx === -1) return <>{hl}</>
+                      return (
+                        <>
+                          {hl.slice(0, pruIdx)}
+                          <span style={{ color: PRU_RED }}>PRU</span>
+                          {hl.slice(pruIdx + 3)}
+                        </>
+                      )
+                    })()
+                  : <ProductTitle name={product.name} />
+                }
               </motion.h1>
 
-              {/* Tagline */}
-              <motion.p variants={fadeUp}
-                className="text-sm font-semibold mb-3"
-                style={{ color: '#555' }}>
-                {product.tagline}
-              </motion.p>
-
-              {/* What it is */}
+              {/* Description — override or product.whatItIs */}
               <motion.p variants={fadeUp}
                 className="text-sm leading-relaxed text-gray-500 mb-5">
-                {product.whatItIs}
+                {HERO_OVERRIDES[product.slug]?.description ?? product.whatItIs}
               </motion.p>
 
               {/* Trust strip */}
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-x-4 gap-y-1.5">
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-x-4 gap-y-1.5 mb-1">
                 {['Licensed PRU Life UK Advisor', 'Free Consultation', 'No Obligation'].map(t => (
                   <div key={t} className="flex items-center gap-1.5">
                     <Check size={11} style={{ color: PRU_RED }} />
@@ -428,71 +447,48 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
               {/* Agent attribution */}
               {agentHandle && (
                 <motion.div variants={fadeUp}
-                  className="flex items-center gap-2 mt-3 text-xs text-gray-400">
+                  className="flex items-center gap-2 mt-2 text-xs text-gray-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
                   Shared by {agentHandle.replace(/_/g, ' ')}
                 </motion.div>
               )}
 
-              {/* ── Mobile CTAs — hidden on desktop ── */}
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mt-6 lg:hidden">
-                <AnimatedGradientButton
+              {/* ── CTAs — horizontal on sm+, stacked on mobile ── */}
+              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mt-6">
+                {/* Primary */}
+                <button
                   onClick={() => setModal(true)}
-                  preset="pru"
-                  duration={5}
-                  className="px-6 py-3 text-sm rounded-sm"
+                  className="flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold text-white transition-all"
+                  style={{
+                    background:   PRU_RED,
+                    borderRadius: 6,
+                    border:       'none',
+                    boxShadow:    '0 4px 14px rgba(217,45,32,0.35)',
+                    whiteSpace:   'nowrap',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#B42318'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(217,45,32,0.45)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = PRU_RED;   e.currentTarget.style.boxShadow = '0 4px 14px rgba(217,45,32,0.35)' }}
                 >
-                  <MessageCircle size={14} />Get a Free Consultation
-                </AnimatedGradientButton>
-                <button onClick={() => router.push('/assessment')}
-                  className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold transition-all"
-                  style={{ background: '#fff', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 4 }}
+                  <MessageCircle size={14} /> Get a Free Consultation
+                </button>
+                {/* Secondary */}
+                <button
+                  onClick={() => router.push('/assessment')}
+                  className="flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold transition-all"
+                  style={{
+                    background:   'transparent',
+                    color:        PRU_RED,
+                    border:       `1.5px solid ${PRU_RED}`,
+                    borderRadius: 6,
+                    whiteSpace:   'nowrap',
+                  }}
                   onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = PRU_RED }}>
+                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = PRU_RED }}
+                >
                   Take Free Assessment <ArrowRight size={13} />
                 </button>
               </motion.div>
-            </motion.div>
-          </div>
-        </div>
 
-        {/* ── Desktop floating CTA — straddles hero / section 2 boundary ── */}
-        <div
-          className="hidden lg:block absolute bottom-0 left-0 right-0 z-30"
-          style={{ transform: 'translateY(50%)' }}
-        >
-          <div className="max-w-6xl mx-auto px-16">
-            <motion.div
-              className="flex items-center gap-3"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.55 }}
-            >
-              <AnimatedGradientButton
-                onClick={() => setModal(true)}
-                preset="pru"
-                duration={5}
-                className="px-8 py-3.5 text-sm rounded-sm"
-                style={{ boxShadow: '0 6px 28px rgba(217,45,32,0.35)' }}
-              >
-                <MessageCircle size={14} />Get a Free Consultation
-              </AnimatedGradientButton>
-              <button
-                onClick={() => router.push('/assessment')}
-                className="flex items-center gap-2 px-7 py-3.5 text-sm font-bold transition-all"
-                style={{
-                  background: 'rgba(255,255,255,0.97)',
-                  color: PRU_RED,
-                  border: `1.5px solid ${PRU_RED}`,
-                  borderRadius: 4,
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.10)',
-                  backdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.97)'; e.currentTarget.style.color = PRU_RED }}
-              >
-                Take Free Assessment <ArrowRight size={13} />
-              </button>
             </motion.div>
           </div>
         </div>
@@ -503,7 +499,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
           pt-10 mobile / pt-20 desktop (floating CTA room)
       ══════════════════════════════════════════════════ */}
       <section style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
-        <div className="max-w-3xl mx-auto px-6 md:px-10 pt-10 pb-12 lg:pt-20 lg:pb-16 text-center">
+        <div className="max-w-3xl mx-auto px-6 md:px-10 pt-12 pb-12 lg:pt-16 lg:pb-16 text-center">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.45 }}>
             <div className="flex items-center justify-center gap-2 mb-4">
