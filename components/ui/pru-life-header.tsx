@@ -143,29 +143,18 @@ export function PruLifeHeader() {
         </div>
       </div>
 
-      {/* ── Row 2 — Nav bar (desktop) — red→white "blow-out" animation ── */}
-      <div className="hidden md:block" style={{ position: 'relative', overflow: 'hidden' }}>
-
-        {/* Layer 1 — Solid red base — fades out once on first scroll */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: PRU_RED,
-          opacity: scrolled ? 0 : 1,
-          transition: 'opacity 0.4s ease',
-        }} />
-
-        {/* Layer 2 — White overlay — blows out from both sides, freezes white */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: '#fff',
-          borderBottom: scrolled ? '1px solid #e5e7eb' : 'none',
-          clipPath: scrolled ? 'inset(0 0% 0 0%)' : 'inset(0 50% 0 50%)',
-          transition: 'clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-          boxShadow: scrolled ? '0 2px 8px rgba(0,0,0,0.07)' : 'none',
-        }} />
-
-        {/* Nav content (sits above both layers) */}
-        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
+      {/* ── Row 2 — Nav bar (desktop) — matches prulifeuk.com.ph exactly ── */}
+      {/* transition: all 0.3s linear — simple linear bg sweep, no clip-path  */}
+      <div
+        className="hidden md:block"
+        style={{
+          background:   scrolled ? '#fff'  : PRU_RED,
+          borderBottom: scrolled ? '1px solid #e5eaef' : 'none',
+          boxShadow:    scrolled ? '0 2px 8px rgba(0,0,0,0.07)' : 'none',
+          transition:   'all 0.3s linear',
+        }}
+      >
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
           {NAV_LINKS.map(link => {
             const isActive = link.href !== '/' && pathname.startsWith(link.href)
             const isProducts = link.hasDropdown
@@ -240,8 +229,8 @@ export function PruLifeHeader() {
               </div>
             )
           })}
-        </div>   {/* end nav content */}
-      </div>     {/* end nav row */}
+        </div>
+      </div>
 
       {/* ── Mobile menu ─────────────────────────────────────────── */}
       {menuOpen && (
