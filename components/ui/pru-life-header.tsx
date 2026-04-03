@@ -78,7 +78,10 @@ export function PruLifeHeader() {
       {/* ── Flow spacer ───────────────────────────────────────────────
           Reserves space equal to the full two-row header on load,
           so page content starts below the fixed header.            */}
-      <div aria-hidden="true" style={{ height: FULL_HEADER_H }} />
+      <div aria-hidden="true" style={{
+        height:     scrolled ? NAV_H_SCROLLED : FULL_HEADER_H,
+        transition: T,
+      }} />
 
       {/* ══════════════════════════════════════════════════════════
           FIXED HEADER SHELL — never hides, always at top
