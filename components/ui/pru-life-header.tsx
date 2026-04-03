@@ -58,7 +58,7 @@ export function PruLifeHeader() {
     <header style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
 
       {/* ── Row 1 — White brand bar ──────────────────────────────── */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
+      <div style={{ background: '#fff' }}>
         <div style={{
           maxWidth: 1200, margin: '0 auto',
           padding: '0 32px',
