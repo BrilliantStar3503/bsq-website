@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Search, ChevronDown, Menu, X } from 'lucide-react'
@@ -36,6 +36,23 @@ export function PruLifeHeader() {
   const [menuOpen,  setMenuOpen]  = useState(false)
   const [dropOpen,  setDropOpen]  = useState(false)
   const [imgError,  setImgError]  = useState(false)
+  const [scrolled,  setScrolled]  = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Nav bar transitions: red at top → white when scrolled
+  const navBg      = scrolled ? '#fff'                            : PRU_RED
+  const navShadow  = scrolled ? '0 2px 12px rgba(0,0,0,0.10)'   : '0 6px 20px rgba(217,45,32,0.45), 0 2px 8px rgba(0,0,0,0.18)'
+  const navBorder  = scrolled ? '1px solid #e5e7eb'              : 'none'
+  const linkColor  = scrolled ? '#111827'                         : '#fff'
+  const activeBorderColor = scrolled ? PRU_RED                   : 'rgba(255,255,255,0.9)'
+  const activeBg          = scrolled ? 'rgba(217,45,32,0.06)'    : 'rgba(0,0,0,0.12)'
+  const hoverBg           = scrolled ? 'rgba(217,45,32,0.06)'    : 'rgba(0,0,0,0.12)'
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 1000, boxShadow: '0 2px 12px rgba(0,0,0,0.12)' }}>
@@ -125,12 +142,14 @@ export function PruLifeHeader() {
         </div>
       </div>
 
-      {/* ── Row 2 — Red nav bar (desktop) ───────────────────────── */}
+      {/* ── Row 2 — Nav bar (desktop) — red at top, white on scroll ── */}
       <div
         className="hidden md:block"
         style={{
-          background: PRU_RED,
-          boxShadow: '0 6px 20px rgba(217, 45, 32, 0.45), 0 2px 8px rgba(0,0,0,0.18)',
+          background: navBg,
+          boxShadow: navShadow,
+          borderBottom: navBorder,
+          transition: 'background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
         }}
       >
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
@@ -148,18 +167,18 @@ export function PruLifeHeader() {
                   href={link.href}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 4,
-                    color: '#fff',
+                    color: isActive ? (scrolled ? PRU_RED : '#fff') : linkColor,
                     fontWeight: isActive ? 800 : 600,
                     fontSize: 13.5,
                     padding: '14px 18px',
                     textDecoration: 'none',
                     letterSpacing: '0.01em',
-                    borderBottom: isActive ? '3px solid rgba(255,255,255,0.9)' : '3px solid transparent',
-                    transition: 'border-color 0.15s, background 0.15s',
-                    background: isActive ? 'rgba(0,0,0,0.12)' : 'transparent',
+                    borderBottom: isActive ? `3px solid ${activeBorderColor}` : '3px solid transparent',
+                    transition: 'border-color 0.3s, background 0.3s, color 0.3s',
+                    background: isActive ? activeBg : 'transparent',
                   }}
                   onMouseEnter={e => {
-                    if (!isActive) e.currentTarget.style.background = 'rgba(0,0,0,0.12)'
+                    if (!isActive) e.currentTarget.style.background = hoverBg
                   }}
                   onMouseLeave={e => {
                     if (!isActive) e.currentTarget.style.background = 'transparent'
