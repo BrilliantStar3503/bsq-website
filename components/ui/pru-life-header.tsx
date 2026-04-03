@@ -70,8 +70,8 @@ export function PruLifeHeader() {
     }
   }, [handleScroll])
 
-  /* ── Shared transition (exact match to prulifeuk.com.ph CSS) ─── */
-  const T = 'all 0.3s linear'
+  /* ── Shared transition ───────────────────────────────────────── */
+  const T = 'all 0.2s linear'
 
   return (
     <>
@@ -97,13 +97,15 @@ export function PruLifeHeader() {
       >
 
         {/* ── ROW 1: Brand bar ─────────────────────────────────────
-            Collapses upward when scrolled via max-height + opacity.
-            Uses overflow:hidden to clip while keeping content 88px  */}
+            Slides up and out via translateY + height:0 clip.
+            translateY keeps it in sync with the nav colour change. */}
         <div style={{
-          maxHeight:  scrolled ? '0px' : `${BRAND_ROW_H}px`,
-          opacity:    scrolled ? 0 : 1,
-          overflow:   'hidden',
+          height:    `${BRAND_ROW_H}px`,
+          overflow:  'hidden',
           background: '#fff',
+          transform:  scrolled ? `translateY(-${BRAND_ROW_H}px)` : 'translateY(0)',
+          opacity:    scrolled ? 0 : 1,
+          marginBottom: scrolled ? `-${BRAND_ROW_H}px` : '0px',
           transition: T,
         }}>
           <div style={{
