@@ -45,14 +45,12 @@ export function PruLifeHeader() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Nav bar transitions: red at top → white when scrolled
-  const navBg      = scrolled ? '#fff'                          : PRU_RED
-  const navShadow  = scrolled ? '0 2px 8px rgba(0,0,0,0.08)'   : 'none'
-  const navBorder  = scrolled ? '1px solid #e5e7eb'             : 'none'
-  const linkColor  = scrolled ? '#111827'                         : '#fff'
-  const activeBorderColor = scrolled ? PRU_RED                   : 'rgba(255,255,255,0.9)'
-  const activeBg          = scrolled ? 'rgba(217,45,32,0.06)'    : 'rgba(0,0,0,0.12)'
-  const hoverBg           = scrolled ? 'rgba(217,45,32,0.06)'    : 'rgba(0,0,0,0.12)'
+  // Nav link color transitions with slight delay so text flips after bg settles
+  const linkColor         = scrolled ? '#111827'              : '#fff'
+  const activeBorderColor = scrolled ? PRU_RED                : 'rgba(255,255,255,0.9)'
+  const activeLinkColor   = scrolled ? PRU_RED                : '#fff'
+  const activeBg          = scrolled ? 'rgba(217,45,32,0.06)' : 'rgba(0,0,0,0.12)'
+  const hoverBg           = scrolled ? 'rgba(217,45,32,0.06)' : 'rgba(0,0,0,0.12)'
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
@@ -142,17 +140,29 @@ export function PruLifeHeader() {
         </div>
       </div>
 
-      {/* ── Row 2 — Nav bar (desktop) — red at top, white on scroll ── */}
-      <div
-        className="hidden md:block"
-        style={{
-          background: navBg,
-          boxShadow: navShadow,
-          borderBottom: navBorder,
-          transition: 'background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
-        }}
-      >
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
+      {/* ── Row 2 — Nav bar (desktop) — red→white "blow-out" animation ── */}
+      <div className="hidden md:block" style={{ position: 'relative', overflow: 'hidden' }}>
+
+        {/* Layer 1 — Red base (fades out on scroll) */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: PRU_RED,
+          opacity: scrolled ? 0 : 1,
+          transition: 'opacity 0.45s ease',
+        }} />
+
+        {/* Layer 2 — White overlay (expands from both sides on scroll) */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: '#fff',
+          borderBottom: '1px solid #e5e7eb',
+          clipPath: scrolled ? 'inset(0 0% 0 0%)' : 'inset(0 50% 0 50%)',
+          transition: 'clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: scrolled ? '0 2px 8px rgba(0,0,0,0.07)' : 'none',
+        }} />
+
+        {/* Nav content (sits above both layers) */}
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center' }}>
           {NAV_LINKS.map(link => {
             const isActive = link.href !== '/' && pathname.startsWith(link.href)
             const isProducts = link.hasDropdown
@@ -167,10 +177,10 @@ export function PruLifeHeader() {
                   href={link.href}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 4,
-                    color: isActive ? (scrolled ? PRU_RED : '#fff') : linkColor,
+                    color: isActive ? activeLinkColor : linkColor,
                     fontWeight: isActive ? 800 : 600,
-                    fontSize: 13.5,
-                    padding: '14px 18px',
+                    fontSize: 15,
+                    padding: '15px 20px',
                     textDecoration: 'none',
                     letterSpacing: '0.01em',
                     borderBottom: isActive ? `3px solid ${activeBorderColor}` : '3px solid transparent',
@@ -227,8 +237,8 @@ export function PruLifeHeader() {
               </div>
             )
           })}
-        </div>
-      </div>
+        </div>   {/* end nav content */}
+      </div>     {/* end nav row */}
 
       {/* ── Mobile menu ─────────────────────────────────────────── */}
       {menuOpen && (
