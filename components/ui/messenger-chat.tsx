@@ -193,7 +193,7 @@ export function MessengerChat() {
 
           {/* Header */}
           <div style={{
-            background:  'linear-gradient(135deg,#D92D20,#ff6b35)',
+            background:  'linear-gradient(135deg,#7f0000,#D92D20)',
             padding:     '14px 18px',
             display:     'flex',
             alignItems:  'center',
@@ -242,7 +242,7 @@ export function MessengerChat() {
                 ) : (
                   <>
                     <p style={{ color:'rgba(255,255,255,0.6)', fontSize:'12px', margin:'0 0 10px' }}>
-                      Message <strong style={{color:'#4ade80'}}>copied</strong> — paste it and hit Send:
+                      Message <strong style={{color:'#ffffff'}}>copied</strong> — paste it and hit Send:
                     </p>
                     <div style={{
                       background: 'rgba(255,255,255,0.07)',
@@ -321,7 +321,7 @@ export function MessengerChat() {
           width:          '56px',
           height:         '56px',
           borderRadius:   '50%',
-          background:     'linear-gradient(135deg,#D92D20 0%,#ff6b35 100%)',
+          background:     'linear-gradient(135deg,#7f0000 0%,#D92D20 100%)',
           display:        'flex',
           alignItems:     'center',
           justifyContent: 'center',

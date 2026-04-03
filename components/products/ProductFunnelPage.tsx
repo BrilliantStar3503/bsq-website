@@ -297,8 +297,8 @@ function LeadModal({
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               className="text-center py-4">
               <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-                style={{ background: '#f0fdf4', border: '2px solid #86efac' }}>
-                <Check size={24} className="text-green-500" />
+                style={{ background: '#fef2f2', border: '2px solid #fca5a5' }}>
+                <Check size={24} style={{ color: PRU_RED }} />
               </div>
               <h3 className="text-lg font-black text-gray-900 mb-2">You&apos;re all set!</h3>
               <p className="text-sm text-gray-500 mb-6 leading-relaxed">
@@ -448,7 +448,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
               {agentHandle && (
                 <motion.div variants={fadeUp}
                   className="flex items-center gap-2 mt-2 text-xs text-gray-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />
+                  <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: PRU_RED }} />
                   Shared by {agentHandle.replace(/_/g, ' ')}
                 </motion.div>
               )}

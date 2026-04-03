@@ -20,8 +20,8 @@ import { cn } from '@/lib/utils'
 
 /* ─── Preset palettes (high contrast = clearly visible sweep) ─── */
 export const GRADIENT_PRESETS = {
-  /** PRU red → crimson → gold flash → back — on-brand but visible */
-  pru:    ['#7f0000', '#D92D20', '#ff6b35', '#ffb347', '#D92D20', '#7f0000'],
+  /** PRU red → crimson → deep red → back — strictly PRU Life UK brand */
+  pru:    ['#7f0000', '#B42318', '#D92D20', '#c0291f', '#B42318', '#7f0000'],
   /** Neon — magenta → lime → cyan */
   neon:   ['#FF007F', '#39FF14', '#00FFFF', '#FF007F'],
   /** Ocean — deep navy → teal → sky */

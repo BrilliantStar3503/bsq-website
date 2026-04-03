@@ -863,7 +863,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: 'easeOut' as const }}
                 className="h-full">
               <ShineBorder
-                color={['#FF007F', '#ff6b35', '#ffb347', '#39FF14', '#00FFFF', '#a855f7', '#FF007F']}
+                color={['#7f0000', '#B42318', '#D92D20', '#ffffff', '#D92D20', '#B42318', '#7f0000']}
                 borderRadius={16}
                 borderWidth={2}
                 duration={4 + i}
@@ -1155,7 +1155,7 @@ export default function AssessmentFlow() {
 
           /* PRIMARY — animated gradient sweep */
           .assessment-results .ar-btn-primary {
-            background-image: linear-gradient(135deg, #7f0000, #D92D20, #ff6b35, #ffb347, #D92D20, #7f0000);
+            background-image: linear-gradient(135deg, #7f0000, #B42318, #D92D20, #c0291f, #B42318, #7f0000);
             background-size: 300% 100%;
             animation: shine-pulse 5s linear infinite;
             color: #ffffff;
@@ -1207,7 +1207,7 @@ export default function AssessmentFlow() {
 
           /* SECONDARY-DARK — animated gradient on dark backgrounds */
           .assessment-results .ar-btn-secondary-dark {
-            background-image: linear-gradient(135deg, #7f0000, #D92D20, #ff6b35, #ffb347, #D92D20, #7f0000);
+            background-image: linear-gradient(135deg, #7f0000, #B42318, #D92D20, #c0291f, #B42318, #7f0000);
             background-size: 300% 100%;
             animation: shine-pulse 5s linear infinite;
             color: #ffffff;
