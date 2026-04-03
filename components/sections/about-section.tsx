@@ -61,19 +61,19 @@ const WHY_CARDS = [
     icon: ShieldCheck,
     title: 'Protection + Investment in One',
     body: 'Through Pru Life UK, we offer plans that protect your life while simultaneously growing your money over time.',
-    accent: '#0369a1',
+    accent: '#D92D20',
   },
   {
     icon: MessageSquare,
     title: 'Simple, Clear Guidance',
     body: 'We remove confusion and explain everything in plain language — no jargon, no pressure, just honest clarity.',
-    accent: '#059669',
+    accent: '#B42318',
   },
   {
     icon: Heart,
     title: 'Long-Term Relationship',
     body: 'We stay with you — from your first policy to your future milestones. Your success is our commitment.',
-    accent: '#7c3aed',
+    accent: '#7f0000',
   },
 ]
 
@@ -279,7 +279,7 @@ export default function AboutSection() {
             <div className="relative overflow-hidden rounded-3xl p-8 h-full"
               style={{ background: 'linear-gradient(135deg, #0a0f1c 0%, #111827 100%)' }}>
               <div className="absolute top-0 left-0 right-0 h-[3px]"
-                style={{ background: 'linear-gradient(to right, #7c3aed, transparent)' }} />
+                style={{ background: 'linear-gradient(to right, #D92D20, transparent)' }} />
               <div className="absolute inset-0 pointer-events-none" style={{
                 background: 'radial-gradient(ellipse 80% 60% at 10% 90%, rgba(124,58,237,0.1) 0%, transparent 60%)',
               }} />

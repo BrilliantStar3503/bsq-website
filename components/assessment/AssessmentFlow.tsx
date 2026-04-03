@@ -45,9 +45,9 @@ function ScoreRing({ score }: { score: number }) {
     requestAnimationFrame(tick)
   }, [score])
 
-  const c1 = score < 35 ? '#ef4444' : score < 55 ? '#f97316' : score < 75 ? '#eab308' : '#22c55e'
-  const c2 = score < 35 ? '#ed1b2e' : score < 55 ? '#fbbf24' : score < 75 ? '#84cc16' : '#16a34a'
-  const statusColor = score < 35 ? '#ef4444' : score < 55 ? '#f97316' : score < 75 ? '#eab308' : '#22c55e'
+  const c1 = score < 35 ? '#D92D20' : score < 55 ? '#B42318' : score < 75 ? '#374151' : '#111827'
+  const c2 = score < 35 ? '#ed1b2e' : score < 55 ? '#B42318' : score < 75 ? '#6b7280' : '#374151'
+  const statusColor = score < 35 ? '#D92D20' : score < 55 ? '#B42318' : score < 75 ? '#374151' : '#111827'
 
   return (
     <div className="flex flex-col items-center gap-5">
@@ -226,15 +226,15 @@ function ScanningScreen() {
         {/* Header */}
         <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <div className="flex gap-1.5">
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#B42318', display: 'inline-block' }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#7f0000', display: 'inline-block' }} />
           </div>
           <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginLeft: 4 }}>
             bsq-ai-scanner — running
           </span>
           <span className="scan-pulse ml-auto" style={{
-            width: 6, height: 6, borderRadius: '50%', background: '#22d3ee', display: 'inline-block',
+            width: 6, height: 6, borderRadius: '50%', background: '#D92D20', display: 'inline-block',
           }} />
         </div>
 
@@ -257,25 +257,25 @@ function ScanningScreen() {
                   transition: 'all 0.3s ease',
                 }}>
                   {isDone ? (
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   ) : isCurrent ? (
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22d3ee', display: 'inline-block' }} />
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
                   ) : (
                     <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-block' }} />
                   )}
                 </span>
                 <p style={{
                   fontFamily: 'ui-monospace, monospace', fontSize: 12, letterSpacing: '0.01em',
-                  color: isDone ? '#4ade80' : isCurrent ? '#67e8f9' : 'rgba(255,255,255,0.25)',
+                  color: isDone ? '#ffffff' : isCurrent ? '#fca5a5' : 'rgba(255,255,255,0.25)',
                   transition: 'color 0.3s ease',
                 }}>
                   {isDone ? `✓ ${label}` : label}
                   {isCurrent && (
                     <span style={{
                       display: 'inline-block', width: 6, height: 12,
-                      background: '#22d3ee', marginLeft: 3, verticalAlign: 'text-bottom',
+                      background: '#D92D20', marginLeft: 3, verticalAlign: 'text-bottom',
                       opacity: cursorVisible ? 1 : 0, transition: 'opacity 0.1s',
                     }} />
                   )}
@@ -290,7 +290,7 @@ function ScanningScreen() {
           <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', borderRadius: 9999, overflow: 'hidden' }}>
             <div style={{
               height: '100%', borderRadius: 9999,
-              background: 'linear-gradient(to right, #22d3ee, #4ade80)',
+              background: 'linear-gradient(to right, #7f0000, #D92D20)',
               width: `${Math.min((activeStep / SCAN_STEPS.length) * 100, 100)}%`,
               transition: 'width 0.45s cubic-bezier(0.34,1.2,0.64,1)',
             }} />
@@ -449,8 +449,8 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
                     <div className="flex items-center gap-3 rounded-2xl px-4 py-3 mb-6"
                       style={{ background: '#f8fafc', border: '1px solid #f1f5f9' }}>
                       <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-base shrink-0"
-                        style={{ background: score < 40 ? '#fef2f2' : score < 65 ? '#fffbeb' : '#f0fdf4',
-                                 color: score < 40 ? RED : score < 65 ? '#d97706' : '#059669' }}>
+                        style={{ background: score < 40 ? '#fef2f2' : score < 65 ? '#f9fafb' : '#f3f4f6',
+                                 color: score < 40 ? RED : score < 65 ? '#374151' : '#111827' }}>
                         {score}
                       </div>
                       <div>
@@ -618,11 +618,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
   const sevStyle = {
     high:   { color: PRU_RED,   bg: RED_SOFT,    border: RED_MED,        label: 'High Risk'   },
-    medium: { color: '#b45309', bg: '#fffbeb',   border: '#fde68a',      label: 'Moderate Risk' },
-    low:    { color: '#047857', bg: '#f0fdf4',   border: '#bbf7d0',      label: 'Low Risk'    },
+    medium: { color: '#374151', bg: '#f9fafb',   border: '#d1d5db',      label: 'Moderate Risk' },
+    low:    { color: '#111827', bg: '#f3f4f6',   border: '#d1d5db',      label: 'Low Risk'    },
   }
 
-  const statusColor = result.status === 'good' ? '#047857' : result.status === 'moderate' ? '#b45309' : PRU_RED
+  const statusColor = result.status === 'good' ? '#111827' : result.status === 'moderate' ? '#374151' : PRU_RED
   const statusLabel = result.status === 'good' ? 'Well Protected' : result.status === 'moderate' ? 'Moderate Risk' : result.status === 'at-risk' ? 'At Risk' : 'Critical Risk'
 
   const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }
@@ -643,10 +643,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
   const catColor: Record<string, { text: string; bg: string; border: string }> = {
     Protection: { text: PRU_RED,   bg: RED_SOFT,  border: RED_MED  },
-    Health:     { text: '#0369a1', bg: '#eff6ff', border: '#bfdbfe' },
-    Investment: { text: '#047857', bg: '#f0fdf4', border: '#bbf7d0' },
-    Retirement: { text: '#b45309', bg: '#fffbeb', border: '#fde68a' },
-    Wealth:     { text: '#6d28d9', bg: '#faf5ff', border: '#ddd6fe' },
+    Health:     { text: '#B42318', bg: '#fef2f2', border: '#fca5a5' },
+    Investment: { text: '#7f0000', bg: '#fef2f2', border: '#fca5a5' },
+    Retirement: { text: '#374151', bg: '#f9fafb', border: '#d1d5db' },
+    Wealth:     { text: '#111827', bg: '#f3f4f6', border: '#d1d5db' },
   }
 
   return (
@@ -687,7 +687,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             </div>
             <div className="space-y-4">
               {subScores.map(({ label, val, icon }) => {
-                const barColor = val < 40 ? PRU_RED : val < 65 ? '#b45309' : '#047857'
+                const barColor = val < 40 ? PRU_RED : val < 65 ? '#374151' : '#111827'
                 const grade    = val < 40 ? 'Needs attention' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
                 return (
                   <div key={label}>
@@ -718,7 +718,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         {/* Metric mini row */}
         <div className="grid grid-cols-4 border-t border-gray-100">
           {subScores.map(({ label, val }, idx) => {
-            const color = val < 40 ? PRU_RED : val < 65 ? '#b45309' : '#047857'
+            const color = val < 40 ? PRU_RED : val < 65 ? '#374151' : '#111827'
             const grade = val < 40 ? 'Needs Work' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
             return (
               <div key={label}
@@ -737,11 +737,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       {result.emergencyFundTarget > 0 && (
         <motion.div variants={fadeUp}
           className="bg-white rounded-2xl border overflow-hidden"
-          style={{ borderColor: '#fde68a', boxShadow: '0 1px 12px rgba(245,158,11,0.08)' }}>
-          <div style={{ height: 2, background: 'linear-gradient(to right,#f59e0b,#fbbf24,transparent)' }} />
+          style={{ borderColor: '#fca5a5', boxShadow: '0 1px 12px rgba(217,45,32,0.08)' }}>
+          <div style={{ height: 2, background: 'linear-gradient(to right,#D92D20,#B42318,transparent)' }} />
           <div className="p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
-              <p className="text-xs uppercase tracking-widest font-semibold text-amber-600">Emergency Fund Target</p>
+              <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#D92D20' }}>Emergency Fund Target</p>
               <span className="text-xs px-2.5 py-0.5 rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-200">Industry Grade</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
@@ -1279,7 +1279,7 @@ export default function AssessmentFlow() {
             {/* Right */}
             <div className="flex items-center gap-3">
               <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-                style={{ background: '#f0fdf4', color: '#059669', border: '1px solid #bbf7d0' }}>
+                style={{ background: '#fef2f2', color: '#D92D20', border: '1px solid #fca5a5' }}>
                 <CheckCircle size={10} /> Complete
               </span>
               <button

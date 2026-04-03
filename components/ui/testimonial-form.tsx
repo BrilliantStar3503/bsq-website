@@ -99,8 +99,8 @@ export default function TestimonialForm() {
               >
                 <Star
                   size={28}
-                  fill={(hover || form.rating) >= star ? '#f59e0b' : 'none'}
-                  stroke={(hover || form.rating) >= star ? '#f59e0b' : '#d1d5db'}
+                  fill={(hover || form.rating) >= star ? '#D92D20' : 'none'}
+                  stroke={(hover || form.rating) >= star ? '#D92D20' : '#d1d5db'}
                   strokeWidth={1.5}
                 />
               </button>

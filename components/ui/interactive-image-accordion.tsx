@@ -67,10 +67,10 @@ const FALLBACK_URL =
 const php = (n: number) => '₱' + Math.round(n).toLocaleString('en-PH')
 
 const SEV_STYLE = {
-  critical: { color: '#dc2626', bg: '#fef2f2', border: '#fecaca', label: 'Critical Gap'   },
-  high:     { color: '#ea580c', bg: '#fff7ed', border: '#fed7aa', label: 'High Gap'        },
-  medium:   { color: '#d97706', bg: '#fffbeb', border: '#fde68a', label: 'Moderate Gap'   },
-  covered:  { color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0', label: 'Well Covered'   },
+  critical: { color: '#D92D20', bg: '#fef2f2', border: '#fca5a5', label: 'Critical Gap'   },
+  high:     { color: '#B42318', bg: '#fef2f2', border: '#fca5a5', label: 'High Gap'        },
+  medium:   { color: '#374151', bg: '#f9fafb', border: '#d1d5db', label: 'Moderate Gap'   },
+  covered:  { color: '#374151', bg: '#f9fafb', border: '#d1d5db', label: 'Well Covered'   },
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -81,7 +81,7 @@ const accordionItems: AccordionItemData[] = [
   {
     id: 1, title: 'Emergency Fund',
     category: 'Liquidity',
-    accent:   '#f59e0b',   // amber
+    accent:   '#D92D20',   // PRU red
     Icon:     Wallet,
     // Stack of cash / coins — warm amber tones, dark base
     imageUrl: 'https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?q=80&w=1200&auto=format&fit=crop&crop=center',
@@ -89,7 +89,7 @@ const accordionItems: AccordionItemData[] = [
   {
     id: 2, title: 'Life Insurance Protection',
     category: 'Protection',
-    accent:   '#3b82f6',   // blue
+    accent:   '#B42318',   // PRU dark red
     Icon:     ShieldCheck,
     // Father with child — family + protection narrative
     imageUrl: 'https://images.unsplash.com/photo-1609220136736-443140cffec6?q=80&w=1200&auto=format&fit=crop&crop=center',
@@ -97,7 +97,7 @@ const accordionItems: AccordionItemData[] = [
   {
     id: 3, title: 'Health Insurance Coverage',
     category: 'Health',
-    accent:   '#22c55e',   // green
+    accent:   '#7f0000',   // PRU crimson
     Icon:     HeartPulse,
     // Stethoscope on dark surface — reads well at any brightness
     imageUrl: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=1200&auto=format&fit=crop&crop=center',
@@ -105,7 +105,7 @@ const accordionItems: AccordionItemData[] = [
   {
     id: 4, title: 'Income Protection',
     category: 'Income',
-    accent:   '#8b5cf6',   // violet
+    accent:   '#D92D20',   // PRU red
     Icon:     TrendingUp,
     // Professional at work — income / career narrative
     imageUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop&crop=center',
@@ -113,7 +113,7 @@ const accordionItems: AccordionItemData[] = [
   {
     id: 5, title: 'Retirement Funding',
     category: 'Retirement',
-    accent:   '#f97316',   // orange
+    accent:   '#D92D20',   // PRU red
     Icon:     Sunset,
     // Senior couple outdoors — freedom / sunset-of-life narrative
     imageUrl: 'https://images.unsplash.com/photo-1516307365426-bea591f05011?q=80&w=1200&auto=format&fit=crop&crop=center',
@@ -121,7 +121,7 @@ const accordionItems: AccordionItemData[] = [
   {
     id: 6, title: 'Educational Funding',
     category: 'Education',
-    accent:   '#6366f1',   // indigo
+    accent:   '#B42318',   // PRU dark red
     Icon:     GraduationCap,
     // Campus / students — darker tone, education context
     imageUrl: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=1200&auto=format&fit=crop&crop=center',
@@ -129,7 +129,7 @@ const accordionItems: AccordionItemData[] = [
   {
     id: 7, title: 'Wealth Accumulation',
     category: 'Wealth',
-    accent:   '#10b981',   // emerald
+    accent:   '#7f0000',   // PRU crimson
     Icon:     LineChart,
     // Stock charts — investment & growth narrative, dark background
     imageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop&crop=center',
@@ -482,7 +482,7 @@ function MiniGapResult({ result }: { result: GapResult }) {
         ) : (
           <div className="flex items-center gap-2 mb-4">
             <span className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-              <CheckCircle2 size={12} color="#16a34a" />
+              <CheckCircle2 size={12} color="#D92D20" />
             </span>
             <p className="text-sm font-bold text-green-700">You're on track — no gap detected!</p>
           </div>
@@ -929,13 +929,13 @@ const MODAL_CONFIG: Record<number, {
   bg:       string
   form:     React.ReactNode
 }> = {
-  1: { title: 'Emergency Fund',            subtitle: 'How secure is your financial safety net?',  icon: Wallet,       color: '#f59e0b', bg: '#fffbeb', form: <EmergencyAssessment /> },
-  2: { title: 'Life Insurance Protection', subtitle: 'Are your dependents financially protected?', icon: ShieldCheck,  color: '#3b82f6', bg: '#eff6ff', form: <LifeAssessment /> },
-  3: { title: 'Health Insurance Coverage', subtitle: 'Can you handle a major medical event?',      icon: HeartPulse,   color: '#22c55e', bg: '#f0fdf4', form: <HealthAssessment /> },
-  4: { title: 'Income Protection',         subtitle: 'What happens if you cannot work?',           icon: TrendingUp,   color: '#8b5cf6', bg: '#f5f3ff', form: <IncomeProtectionAssessment /> },
-  5: { title: 'Retirement Funding',        subtitle: 'Will you have enough at retirement?',        icon: Sunset,       color: '#f97316', bg: '#fff7ed', form: <RetirementAssessment /> },
-  6: { title: 'Educational Funding',       subtitle: "Is your child's future funded?",             icon: GraduationCap,color: '#6366f1', bg: '#eef2ff', form: <EducationAssessment /> },
-  7: { title: 'Wealth Accumulation',       subtitle: 'Is your money working hard enough for you?', icon: LineChart,    color: '#10b981', bg: '#f0fdf4', form: <WealthAssessment /> },
+  1: { title: 'Emergency Fund',            subtitle: 'How secure is your financial safety net?',  icon: Wallet,       color: '#D92D20', bg: '#fef2f2', form: <EmergencyAssessment /> },
+  2: { title: 'Life Insurance Protection', subtitle: 'Are your dependents financially protected?', icon: ShieldCheck,  color: '#B42318', bg: '#fef2f2', form: <LifeAssessment /> },
+  3: { title: 'Health Insurance Coverage', subtitle: 'Can you handle a major medical event?',      icon: HeartPulse,   color: '#7f0000', bg: '#fef2f2', form: <HealthAssessment /> },
+  4: { title: 'Income Protection',         subtitle: 'What happens if you cannot work?',           icon: TrendingUp,   color: '#D92D20', bg: '#fef2f2', form: <IncomeProtectionAssessment /> },
+  5: { title: 'Retirement Funding',        subtitle: 'Will you have enough at retirement?',        icon: Sunset,       color: '#B42318', bg: '#fef2f2', form: <RetirementAssessment /> },
+  6: { title: 'Educational Funding',       subtitle: "Is your child's future funded?",             icon: GraduationCap,color: '#B42318', bg: '#fef2f2', form: <EducationAssessment /> },
+  7: { title: 'Wealth Accumulation',       subtitle: 'Is your money working hard enough for you?', icon: LineChart,    color: '#7f0000', bg: '#fef2f2', form: <WealthAssessment /> },
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

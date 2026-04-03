@@ -49,8 +49,8 @@ function StarRow({ rating }: { rating: number }) {
         <Star
           key={s}
           size={14}
-          fill={s <= rating ? '#f59e0b' : 'none'}
-          stroke={s <= rating ? '#f59e0b' : '#e5e7eb'}
+          fill={s <= rating ? '#D92D20' : 'none'}
+          stroke={s <= rating ? '#D92D20' : '#e5e7eb'}
           strokeWidth={1.5}
         />
       ))}

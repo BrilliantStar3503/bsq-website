@@ -58,7 +58,7 @@ export function HeroStatsPills({ className }: { className?: string }) {
         icon={<ClipboardList size={11} />}
         value={`${fmt(assessments)} assessments`}
         sub="taken"
-        accent="#22d3ee"
+        accent="#D92D20"
       />
       <Pill
         icon={<Users size={11} />}
@@ -70,7 +70,7 @@ export function HeroStatsPills({ className }: { className?: string }) {
         icon={<TrendingUp size={11} />}
         value={`${rate}% found clarity`}
         sub="after results"
-        accent="#4ade80"
+        accent="#B42318"
       />
     </div>
   )
@@ -108,7 +108,7 @@ export function AssessmentTrustStrip({ className }: { className?: string }) {
       <span className="flex items-center gap-1.5">
         <span
           className="inline-block rounded-full"
-          style={{ width: 5, height: 5, background: '#4ade80', boxShadow: '0 0 6px #4ade80', animation: 'pulse 2s ease-in-out infinite' }}
+          style={{ width: 5, height: 5, background: '#D92D20', boxShadow: '0 0 6px rgba(217,45,32,0.6)', animation: 'pulse 2s ease-in-out infinite' }}
         />
         <span className="text-[10px] text-white/30 tracking-widest uppercase font-medium">Live</span>
       </span>
@@ -154,7 +154,7 @@ export function ResultsStatsBanner({ className }: { className?: string }) {
         icon={<ClipboardList size={14} />}
         count={fmt(assessments)}
         label="Assessments Taken"
-        accent="#22d3ee"
+        accent="#D92D20"
       />
       <Divider />
       <StatItem
@@ -168,7 +168,7 @@ export function ResultsStatsBanner({ className }: { className?: string }) {
         icon={<TrendingUp size={14} />}
         count={`${SITE_STATS.satisfactionRate}%`}
         label="Found Their Gaps"
-        accent="#4ade80"
+        accent="#B42318"
       />
     </div>
   )

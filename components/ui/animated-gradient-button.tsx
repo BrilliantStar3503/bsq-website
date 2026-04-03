@@ -23,13 +23,13 @@ export const GRADIENT_PRESETS = {
   /** PRU red → crimson → deep red → back — strictly PRU Life UK brand */
   pru:    ['#7f0000', '#B42318', '#D92D20', '#c0291f', '#B42318', '#7f0000'],
   /** Neon — magenta → lime → cyan */
-  neon:   ['#FF007F', '#39FF14', '#00FFFF', '#FF007F'],
-  /** Ocean — deep navy → teal → sky */
-  ocean:  ['#1e3a8a', '#0ea5e9', '#06b6d4', '#0ea5e9', '#1e3a8a'],
+  neon:   ['#7f0000', '#B42318', '#D92D20', '#c0291f', '#B42318', '#7f0000'],
+  /** Depth — deep charcoal → dark red (PRU-safe dark variant) */
+  ocean:  ['#111827', '#1f2937', '#374151', '#D92D20', '#374151', '#111827'],
   /** Sunset — deep orange → pink → purple */
-  sunset: ['#7c2d12', '#f97316', '#ec4899', '#8b5cf6', '#f97316', '#7c2d12'],
-  /** Gold — dark amber → bright gold → warm yellow */
-  gold:   ['#78350f', '#d97706', '#fbbf24', '#fef08a', '#d97706', '#78350f'],
+  sunset: ['#7f0000', '#B42318', '#D92D20', '#c0291f', '#B42318', '#7f0000'],
+  /** Navy — deep navy → steel blue (PRU-safe neutral) */
+  gold:   ['#111827', '#374151', '#D92D20', '#374151', '#111827'],
 } as const
 
 export type GradientPreset = keyof typeof GRADIENT_PRESETS
