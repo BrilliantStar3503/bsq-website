@@ -80,6 +80,7 @@ export function PruLifeHeader() {
           so page content starts below the fixed header.            */}
       <div aria-hidden="true" style={{
         height:     scrolled ? NAV_H_SCROLLED : FULL_HEADER_H,
+        background: '#ffffff',
         transition: T,
       }} />
 
