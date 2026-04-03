@@ -97,15 +97,20 @@ export function PruLifeHeader() {
       >
 
         {/* ── ROW 1: Brand bar ─────────────────────────────────────
-            Slides up and out via translateY + height:0 clip.
-            translateY keeps it in sync with the nav colour change. */}
+            Outer wrapper collapses height instantly (no transition)
+            so the nav snaps up immediately when scrolled.
+            Inner div fades + slides up purely visually.           */}
+        <div style={{
+          height:   scrolled ? 0 : `${BRAND_ROW_H}px`,
+          overflow: 'hidden',
+          /* NO transition here — space collapses the instant
+             scrolled flips, so the nav jumps up with zero lag   */
+        }}>
         <div style={{
           height:    `${BRAND_ROW_H}px`,
-          overflow:  'hidden',
           background: '#fff',
           transform:  scrolled ? `translateY(-${BRAND_ROW_H}px)` : 'translateY(0)',
           opacity:    scrolled ? 0 : 1,
-          marginBottom: scrolled ? `-${BRAND_ROW_H}px` : '0px',
           transition: T,
         }}>
           <div style={{
