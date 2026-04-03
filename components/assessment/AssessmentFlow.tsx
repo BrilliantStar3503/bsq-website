@@ -1326,53 +1326,78 @@ export default function AssessmentFlow() {
           }
         `}</style>
 
-        {/* ── Top nav bar — dark premium ──────────────────── */}
-        <div className="sticky top-0 z-30"
-          style={{
-            background: 'rgba(11,11,15,0.85)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            borderBottom: '1px solid rgba(255,255,255,0.07)',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+        {/* ══ Apple-style two-layer sticky header ══════════════════ */}
+        <div className="sticky top-0 z-30" style={{
+          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+          transition: 'all 0.3s ease',
+        }}>
+          {/* Layer 1 — 2px PRU red accent (identity, not decoration) */}
+          <div style={{ height: 2, background: 'linear-gradient(90deg, #ff3b3b, #b30000 70%, transparent)' }} />
+
+          {/* Layer 2 — 44px main nav (Apple standard height) */}
+          <div style={{
+            background:           'rgba(11,11,15,0.88)',
+            backdropFilter:       'saturate(180%) blur(20px)',
+            WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+            borderBottom:         '1px solid rgba(255,255,255,0.07)',
+            /* ❌ no boxShadow — Apple avoids decorative shadow on nav */
           }}>
-          {/* PRU red top stripe */}
-          <div style={{ height: 2, background: 'linear-gradient(90deg, #ff3b3b, #b30000 60%, transparent)', boxShadow: '0 0 8px rgba(255,59,59,0.4)' }} />
-          <div className="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4">
+            <div style={{
+              maxWidth: 960, margin: '0 auto', padding: '0 20px',
+              height: 44, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            }}>
 
-            {/* Left — back */}
-            <button
-              onClick={() => router.push('/')}
-              className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-150"
-              style={{ color: 'rgba(255,255,255,0.35)' }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
-            >
-              <Home size={13} />
-              <span className="hidden sm:inline">Back to Home</span>
-            </button>
-
-            {/* Center — Brand */}
-            <div className="flex flex-col items-center">
-              <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.85)' }}>BSQ Financial Assessment</span>
-              <span style={{ fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600, color: '#ff3b3b' }}>Powered by PRU Life UK</span>
-            </div>
-
-            {/* Right */}
-            <div className="flex items-center gap-3">
-              <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-                style={{ background: 'rgba(220,0,0,0.15)', color: '#ff3b3b', border: '1px solid rgba(255,59,59,0.3)' }}>
-                <CheckCircle size={10} /> Complete
-              </span>
+              {/* Left — back (quiet link, weight 400) */}
               <button
-                onClick={handleRetake}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold transition-all duration-150"
-                style={{ color: 'rgba(255,255,255,0.4)' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#ff3b3b' }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
+                onClick={() => router.push('/')}
+                style={{
+                  fontSize: 12, fontWeight: 400, letterSpacing: 0,
+                  color: 'rgba(255,255,255,0.35)',
+                  background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0',
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.8)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
               >
-                <RotateCcw size={12} />
-                <span className="hidden sm:inline">Retake</span>
+                <Home size={12} />
+                <span className="hidden sm:inline">Home</span>
               </button>
+
+              {/* Center — Brand (12px / 500 — SF Pro feel) */}
+              <div style={{ textAlign: 'center', lineHeight: 1.3 }}>
+                <div style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.01em' }}>
+                  BSQ Financial Assessment
+                </div>
+                <div style={{ fontSize: 10, fontWeight: 400, color: '#ff3b3b', letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.85 }}>
+                  PRU Life UK
+                </div>
+              </div>
+
+              {/* Right — status + retake (compact, text-only) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span className="hidden sm:inline-flex" style={{
+                  fontSize: 10, fontWeight: 400, color: '#ff3b3b',
+                  display: 'inline-flex', alignItems: 'center', gap: 4, opacity: 0.9,
+                }}>
+                  <CheckCircle size={10} /> Complete
+                </span>
+                <button
+                  onClick={handleRetake}
+                  style={{
+                    fontSize: 12, fontWeight: 400,
+                    color: 'rgba(255,255,255,0.35)',
+                    background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0',
+                    display: 'flex', alignItems: 'center', gap: 4,
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#ff3b3b')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
+                >
+                  <RotateCcw size={11} />
+                  <span className="hidden sm:inline">Retake</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1426,22 +1451,59 @@ export default function AssessmentFlow() {
         background: 'radial-gradient(ellipse 60% 50% at 70% 80%, rgba(180,0,0,0.10), transparent 60%)',
       }} />
 
-      {/* Header — sticky, matches results nav style */}
-      <div className="sticky top-0 z-30 px-6 md:px-12 py-4" style={{
-        background:          'rgba(11,11,15,0.88)',
-        backdropFilter:      'blur(16px)',
-        WebkitBackdropFilter:'blur(16px)',
-        borderBottom:        '1px solid rgba(255,255,255,0.07)',
-        boxShadow:           '0 4px 24px rgba(0,0,0,0.4)',
+      {/* ══ Apple-style two-layer sticky header ══════════════════ */}
+      <div className="sticky top-0 z-30" style={{
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+        transition: 'all 0.3s ease',
       }}>
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#ff3b3b', boxShadow: '0 0 8px rgba(255,59,59,0.8)', display: 'inline-block', animation: 'af-glow-pulse 2s ease-in-out infinite' }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>BSQ Financial Assessment</span>
+
+        {/* Layer 1 — Announcement bar (trust strip) */}
+        <div style={{
+          background:           'rgba(11,11,15,0.72)',
+          backdropFilter:       'saturate(180%) blur(20px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+          borderBottom:         '1px solid rgba(255,255,255,0.04)',
+          padding:              '6px 24px',
+        }}>
+          <div style={{ maxWidth: 960, margin: '0 auto' }}>
+            <AssessmentTrustStrip />
           </div>
-          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontVariantNumeric: 'tabular-nums' }}>{step + 1} / {questions.length}</span>
         </div>
-        <AssessmentTrustStrip className="mt-2" />
+
+        {/* Layer 2 — Main nav (44px — Apple standard) */}
+        <div style={{
+          background:           'rgba(11,11,15,0.88)',
+          backdropFilter:       'saturate(180%) blur(20px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+          borderBottom:         '1px solid rgba(255,255,255,0.07)',
+          /* ❌ no boxShadow — Apple avoids decorative shadow */
+        }}>
+          <div style={{
+            maxWidth: 960, margin: '0 auto', padding: '0 24px',
+            height: 44, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            {/* Brand (12px / 500) */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{
+                width: 5, height: 5, borderRadius: '50%', flexShrink: 0,
+                background: '#ff3b3b', display: 'inline-block',
+                animation: 'af-glow-pulse 2s ease-in-out infinite',
+              }} />
+              <span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.75)', letterSpacing: '0.01em' }}>
+                BSQ Financial Assessment
+              </span>
+            </div>
+
+            {/* Step counter (12px / 400 — quiet) */}
+            <span style={{
+              fontSize: 12, fontWeight: 400,
+              color: 'rgba(255,255,255,0.3)',
+              fontVariantNumeric: 'tabular-nums',
+            }}>
+              {step + 1} / {questions.length}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Main content — glass card */}
