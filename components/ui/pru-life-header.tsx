@@ -46,51 +46,51 @@ export function PruLifeHeader() {
   }, [])
 
   // Nav bar transitions: red at top → white when scrolled
-  const navBg      = scrolled ? '#fff'                            : PRU_RED
-  const navShadow  = scrolled ? '0 2px 12px rgba(0,0,0,0.10)'   : '0 6px 20px rgba(217,45,32,0.45), 0 2px 8px rgba(0,0,0,0.18)'
-  const navBorder  = scrolled ? '1px solid #e5e7eb'              : 'none'
+  const navBg      = scrolled ? '#fff'                          : PRU_RED
+  const navShadow  = scrolled ? '0 2px 8px rgba(0,0,0,0.08)'   : 'none'
+  const navBorder  = scrolled ? '1px solid #e5e7eb'             : 'none'
   const linkColor  = scrolled ? '#111827'                         : '#fff'
   const activeBorderColor = scrolled ? PRU_RED                   : 'rgba(255,255,255,0.9)'
   const activeBg          = scrolled ? 'rgba(217,45,32,0.06)'    : 'rgba(0,0,0,0.12)'
   const hoverBg           = scrolled ? 'rgba(217,45,32,0.06)'    : 'rgba(0,0,0,0.12)'
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 1000, boxShadow: '0 2px 12px rgba(0,0,0,0.12)' }}>
+    <header style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
 
       {/* ── Row 1 — White brand bar ──────────────────────────────── */}
       <div style={{ background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
         <div style={{
           maxWidth: 1200, margin: '0 auto',
-          padding: '0 24px',
+          padding: '0 32px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          height: 64,
+          height: 88,
         }}>
           {/* Logo + brand text */}
           <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
             <div style={{
-              width: 44, height: 44, borderRadius: 10,
+              width: 52, height: 52, borderRadius: 12,
               overflow: 'hidden', background: '#000',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
             }}>
               {imgError ? (
-                <span style={{ color: PRU_RED, fontWeight: 900, fontSize: 11 }}>BSQ</span>
+                <span style={{ color: PRU_RED, fontWeight: 900, fontSize: 12 }}>BSQ</span>
               ) : (
                 <Image
                   src="/images/bsq-logo.png"
                   alt="BSQ"
-                  width={44} height={44}
+                  width={52} height={52}
                   onError={() => setImgError(true)}
-                  style={{ objectFit: 'contain', width: 44, height: 44 }}
+                  style={{ objectFit: 'contain', width: 52, height: 52 }}
                 />
               )}
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-              <span style={{ fontWeight: 900, fontSize: 15, color: '#111827', letterSpacing: '0.01em' }}>
+              <span style={{ fontWeight: 900, fontSize: 17, color: '#111827', letterSpacing: '0.01em' }}>
                 Brilliant Star Quartz
               </span>
-              <span style={{ fontSize: 9.5, letterSpacing: '0.14em', textTransform: 'uppercase', marginTop: 3,
+              <span style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', marginTop: 4,
                 display: 'flex', alignItems: 'center', gap: 5, fontWeight: 700 }}>
                 <span style={{ color: '#9ca3af' }}>Tied Branch &amp; Area</span>
                 <span style={{ color: '#d1d5db' }}>·</span>
