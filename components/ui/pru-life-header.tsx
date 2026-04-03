@@ -36,18 +36,12 @@ export function PruLifeHeader() {
   const [menuOpen,  setMenuOpen]  = useState(false)
   const [dropOpen,  setDropOpen]  = useState(false)
   const [imgError,  setImgError]  = useState(false)
-  const [scrolled,   setScrolled]   = useState(false)
-  const [goingDown,  setGoingDown]  = useState(true)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    let lastY = window.scrollY
     const onScroll = () => {
-      const y = window.scrollY
-      setGoingDown(y >= lastY)
-      // Hysteresis: go white only after 80px down, return to red only when < 30px
-      if (y > 80)       setScrolled(true)
-      else if (y < 30)  setScrolled(false)
-      lastY = y
+      // One-way: fires immediately at 40px, never returns to red
+      if (window.scrollY > 40) setScrolled(true)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
@@ -152,25 +146,21 @@ export function PruLifeHeader() {
       {/* ── Row 2 — Nav bar (desktop) — red→white "blow-out" animation ── */}
       <div className="hidden md:block" style={{ position: 'relative', overflow: 'hidden' }}>
 
-        {/* Layer 1 — Solid red base — fades out scrolling down, snaps back scrolling up */}
+        {/* Layer 1 — Solid red base — fades out once on first scroll */}
         <div style={{
           position: 'absolute', inset: 0,
           background: PRU_RED,
           opacity: scrolled ? 0 : 1,
-          // Instant red restore on scroll-up; smooth fade on scroll-down
-          transition: goingDown ? 'opacity 0.45s ease' : 'opacity 0.25s ease',
+          transition: 'opacity 0.4s ease',
         }} />
 
-        {/* Layer 2 — White overlay — blows out from center on scroll-down, collapses on scroll-up */}
+        {/* Layer 2 — White overlay — blows out from both sides, freezes white */}
         <div style={{
           position: 'absolute', inset: 0,
           background: '#fff',
           borderBottom: scrolled ? '1px solid #e5e7eb' : 'none',
           clipPath: scrolled ? 'inset(0 0% 0 0%)' : 'inset(0 50% 0 50%)',
-          // Expand from both sides going down; quick retract going up
-          transition: goingDown
-            ? 'clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
-            : 'clip-path 0.25s ease-in',
+          transition: 'clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
           boxShadow: scrolled ? '0 2px 8px rgba(0,0,0,0.07)' : 'none',
         }} />
 
