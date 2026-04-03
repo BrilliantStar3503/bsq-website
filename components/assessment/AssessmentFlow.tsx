@@ -1401,7 +1401,7 @@ export default function AssessmentFlow() {
 
   // phase === 'question' (default)
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden"
+    <div className="min-h-screen flex flex-col relative"
       style={{
         background: `
           radial-gradient(circle at 20% 20%, rgba(220,0,0,0.18), transparent 40%),
@@ -1426,8 +1426,14 @@ export default function AssessmentFlow() {
         background: 'radial-gradient(ellipse 60% 50% at 70% 80%, rgba(180,0,0,0.10), transparent 60%)',
       }} />
 
-      {/* Header */}
-      <div className="relative px-6 md:px-12 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      {/* Header — sticky, matches results nav style */}
+      <div className="sticky top-0 z-30 px-6 md:px-12 py-4" style={{
+        background:          'rgba(11,11,15,0.88)',
+        backdropFilter:      'blur(16px)',
+        WebkitBackdropFilter:'blur(16px)',
+        borderBottom:        '1px solid rgba(255,255,255,0.07)',
+        boxShadow:           '0 4px 24px rgba(0,0,0,0.4)',
+      }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#ff3b3b', boxShadow: '0 0 8px rgba(255,59,59,0.8)', display: 'inline-block', animation: 'af-glow-pulse 2s ease-in-out infinite' }} />

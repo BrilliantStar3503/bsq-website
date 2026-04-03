@@ -173,6 +173,7 @@ export function PruLifeHeader() {
 
           </div>
         </div>
+        </div>{/* ── end outer brand-bar collapse wrapper ── */}
 
         {/* ── ROW 2: Nav bar ───────────────────────────────────────────
             TOP     → solid red (#D92D20), white text, 52px tall
