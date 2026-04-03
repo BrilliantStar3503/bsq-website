@@ -1131,6 +1131,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
   )
 }
 
+/* ─── Header height constants (mirrors pru-life-header.tsx) ────────── */
+const PRU_BRAND_H   = 88   // white brand bar
+const PRU_NAV_TOP   = 52   // red nav at scroll=0
+const PRU_NAV_SCR   = 60   // white nav when scrolled
+const PRU_FULL_H    = PRU_BRAND_H + PRU_NAV_TOP  // 140px
+
+const TRUST_H       = 32   // Layer 1 — announcement bar (trust strip)
+const BSQ_NAV_H     = 44   // Layer 2 — main nav (Apple standard)
+const ACCENT_H      = 2    // Results phase accent line
+
 /* ─── Main AssessmentFlow — phase state machine ────────────────────── */
 export default function AssessmentFlow() {
   const router = useRouter()
@@ -1139,6 +1149,19 @@ export default function AssessmentFlow() {
   const [answers, setAnswers]   = useState<Answers>({})
   const [result, setResult]     = useState<ScoreResult | null>(null)
   const [engineResult, setEngineResult] = useState<RecommendationResult | null>(null)
+
+  /* Mirrors the PRU site header scroll threshold — used to align
+     the fixed assessment header with the collapsing brand bar     */
+  const [pageScrolled, setPageScrolled] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setPageScrolled(window.scrollY > 10)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  /* Top offset tracks the PRU header height as it collapses */
+  const PRU_H = pageScrolled ? PRU_NAV_SCR : PRU_FULL_H
 
 
   const handleRetake = () => {
@@ -1189,14 +1212,24 @@ export default function AssessmentFlow() {
           .af-fade { animation: af-fade-in 0.45s ease both; }
           .scan-pulse { animation: scan-pulse 1.2s ease-in-out infinite; }
         `}</style>
-        <div className="px-5 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <div className="max-w-lg mx-auto flex items-center">
-            <div className="flex items-center gap-2">
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#dc2626', boxShadow: '0 0 6px #dc2626' }} />
-              <span className="text-xs font-bold tracking-widest uppercase text-white/40">BSQ Financial Assessment</span>
-            </div>
+        {/* Fixed scanning header */}
+        <div style={{
+          position: 'fixed', top: PRU_H, left: 0, right: 0, zIndex: 999,
+          background: pageScrolled ? 'rgba(10,10,10,0.95)' : 'rgba(11,11,15,0.88)',
+          backdropFilter: 'saturate(180%) blur(20px)',
+          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          transition: 'top 0.2s linear, background 0.3s ease',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+        }}>
+          <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 20px', height: BSQ_NAV_H, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#dc2626', boxShadow: '0 0 6px #dc2626', flexShrink: 0 }} />
+            <span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.01em' }}>
+              BSQ Financial Assessment
+            </span>
           </div>
         </div>
+        <div style={{ height: BSQ_NAV_H, flexShrink: 0 }} />{/* spacer */}
         <div className="flex-1 flex flex-col items-center justify-start py-10">
           <ScanningScreen />
         </div>
@@ -1326,21 +1359,22 @@ export default function AssessmentFlow() {
           }
         `}</style>
 
-        {/* ══ Apple-style two-layer sticky header ══════════════════ */}
-        <div className="sticky top-0 z-30" style={{
+        {/* ══ Apple-style two-layer fixed header ══════════════════ */}
+        <div style={{
+          position: 'fixed', top: PRU_H, left: 0, right: 0, zIndex: 999,
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-          transition: 'all 0.3s ease',
+          transition: 'top 0.2s linear',
         }}>
           {/* Layer 1 — 2px PRU red accent (identity, not decoration) */}
-          <div style={{ height: 2, background: 'linear-gradient(90deg, #ff3b3b, #b30000 70%, transparent)' }} />
+          <div style={{ height: ACCENT_H, background: 'linear-gradient(90deg, #ff3b3b, #b30000 70%, transparent)' }} />
 
           {/* Layer 2 — 44px main nav (Apple standard height) */}
           <div style={{
-            background:           'rgba(11,11,15,0.88)',
+            background:           pageScrolled ? 'rgba(10,10,10,0.97)' : 'rgba(11,11,15,0.88)',
             backdropFilter:       'saturate(180%) blur(20px)',
             WebkitBackdropFilter: 'saturate(180%) blur(20px)',
             borderBottom:         '1px solid rgba(255,255,255,0.07)',
-            /* ❌ no boxShadow — Apple avoids decorative shadow on nav */
+            transition:           'background 0.3s ease',
           }}>
             <div style={{
               maxWidth: 960, margin: '0 auto', padding: '0 20px',
@@ -1402,6 +1436,9 @@ export default function AssessmentFlow() {
           </div>
         </div>
 
+        {/* Spacer — compensates for fixed header height */}
+        <div style={{ height: ACCENT_H + BSQ_NAV_H, flexShrink: 0 }} />
+
         {/* Subtle grid overlay */}
         <div className="pointer-events-none fixed inset-0 z-0" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px)',
@@ -1451,19 +1488,21 @@ export default function AssessmentFlow() {
         background: 'radial-gradient(ellipse 60% 50% at 70% 80%, rgba(180,0,0,0.10), transparent 60%)',
       }} />
 
-      {/* ══ Apple-style two-layer sticky header ══════════════════ */}
-      <div className="sticky top-0 z-30" style={{
+      {/* ══ Apple-style two-layer fixed header ══════════════════ */}
+      <div style={{
+        position: 'fixed', top: PRU_H, left: 0, right: 0, zIndex: 999,
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-        transition: 'all 0.3s ease',
+        transition: 'top 0.2s linear',
       }}>
 
         {/* Layer 1 — Announcement bar (trust strip) */}
         <div style={{
-          background:           'rgba(11,11,15,0.72)',
+          background:           pageScrolled ? 'rgba(10,10,10,0.92)' : 'rgba(11,11,15,0.72)',
           backdropFilter:       'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
           borderBottom:         '1px solid rgba(255,255,255,0.04)',
           padding:              '6px 24px',
+          transition:           'background 0.3s ease',
         }}>
           <div style={{ maxWidth: 960, margin: '0 auto' }}>
             <AssessmentTrustStrip />
@@ -1472,15 +1511,16 @@ export default function AssessmentFlow() {
 
         {/* Layer 2 — Main nav (44px — Apple standard) */}
         <div style={{
-          background:           'rgba(11,11,15,0.88)',
+          background:           pageScrolled ? 'rgba(10,10,10,0.97)' : 'rgba(11,11,15,0.88)',
           backdropFilter:       'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
           borderBottom:         '1px solid rgba(255,255,255,0.07)',
-          /* ❌ no boxShadow — Apple avoids decorative shadow */
+          transition:           'background 0.3s ease',
+          /* ❌ no boxShadow */
         }}>
           <div style={{
             maxWidth: 960, margin: '0 auto', padding: '0 24px',
-            height: 44, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            height: BSQ_NAV_H, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
             {/* Brand (12px / 500) */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -1505,6 +1545,8 @@ export default function AssessmentFlow() {
           </div>
         </div>
       </div>
+      {/* Spacer — compensates for fixed header height */}
+      <div style={{ height: TRUST_H + BSQ_NAV_H, flexShrink: 0 }} />
 
       {/* Main content — glass card */}
       <div className="relative flex-1 flex flex-col justify-center px-6 md:px-12 py-16">
