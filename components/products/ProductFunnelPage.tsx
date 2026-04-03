@@ -27,7 +27,7 @@ type ProductPhotoConfig = { hero: HeroPhoto[]; benefits: string[] }
 const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
   'prulifetime-income': {
     hero: [
-      { src: '/images/products/prulifetime-income.jpg' },
+      { src: '/images/products/pru-million-protect-2-hero.jpg', pos: 'center center' }, // clean golf — retirement lifestyle ✅
       { src: '/images/products/prulifetime-income-2.jpg' },
       { src: '/images/products/prulifetime-income-3.jpg' },
       { src: '/images/products/prulifetime-income-4.jpg' },
