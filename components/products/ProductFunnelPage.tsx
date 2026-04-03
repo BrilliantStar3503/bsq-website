@@ -31,7 +31,6 @@ const PRODUCT_PHOTOS: Record<string, ProductPhotoConfig> = {
       { src: '/images/products/prulifetime-income-2.jpg' },
       { src: '/images/products/prulifetime-income-3.jpg' },
       { src: '/images/products/prulifetime-income-4.jpg' },
-      { src: '/images/products/pru-million-protect-2-hero.jpg', pos: 'center center' }, // man golfing — retirement lifestyle ✅
     ],
     benefits: [
       '/images/products/prulifetime-benefit-1.jpg',
