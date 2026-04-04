@@ -91,10 +91,10 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
   return (
     <div className="w-full mb-10">
       <div className="flex justify-between text-xs mb-3">
-        <span className="font-medium tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Step {step + 1} of {total}</span>
-        <span className="font-medium tabular-nums" style={{ color: 'rgba(255,255,255,0.35)' }}>{pct}%</span>
+        <span className="font-medium tracking-wide" style={{ color: 'rgba(0,0,0,0.4)' }}>Step {step + 1} of {total}</span>
+        <span className="font-medium tabular-nums" style={{ color: 'rgba(0,0,0,0.4)' }}>{pct}%</span>
       </div>
-      <div className="h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
+      <div className="h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
         <div
           className="h-full rounded-full transition-all duration-700 ease-out"
           style={{
@@ -122,14 +122,14 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
     <div className="af-fade w-full">
       {/* Question */}
       <div className="mb-10 text-center">
-        <h1 className="text-white mb-3">{q.question}</h1>
+        <h1 style={{ fontSize: 28, fontWeight: 600, color: '#111111', lineHeight: 1.3, marginBottom: '0.75rem' }}>{q.question}</h1>
         {q.subtitle && (
-          <p className="text-sm md:text-base text-white/50 leading-relaxed max-w-xl mx-auto">{q.subtitle}</p>
+          <p className="text-sm md:text-base leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(0,0,0,0.5)' }}>{q.subtitle}</p>
         )}
       </div>
 
       {/* Options */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {q.options.map((opt) => {
           const isSelected = selected === opt
           return (
@@ -139,34 +139,33 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
                 spread={isSelected ? 55 : 38}
                 inactiveZone={0}
                 borderWidth={1}
-                color={isSelected ? 'rgba(239,68,68,0.95)' : 'rgba(220,38,38,0.55)'}
+                color={isSelected ? 'rgba(220,38,38,0.7)' : 'rgba(0,0,0,0.12)'}
               />
               <button
                 onClick={() => choose(opt)}
-                className="relative w-full text-left px-6 py-5 rounded-2xl transition-all duration-250 active:scale-[0.98]"
+                className="relative w-full text-left px-6 py-5 rounded-2xl transition-all duration-200 active:scale-[0.99]"
                 style={{
-                  background:  isSelected ? 'rgba(220,0,0,0.08)' : 'rgba(255,255,255,0.04)',
-                  border:      `1px solid ${isSelected ? 'rgba(220,0,0,0.8)' : 'rgba(255,255,255,0.09)'}`,
-                  boxShadow:   isSelected ? '0 0 25px rgba(220,0,0,0.35)' : 'none',
-                  transform:   isSelected ? 'translateY(-2px)' : 'translateY(0)',
-                  backdropFilter: 'blur(8px)',
+                  background:  isSelected ? 'rgba(220,0,0,0.06)' : 'rgba(0,0,0,0.03)',
+                  border:      `1px solid ${isSelected ? 'rgba(220,0,0,0.5)' : 'rgba(0,0,0,0.1)'}`,
+                  boxShadow:   isSelected ? '0 4px 20px rgba(220,0,0,0.12)' : 'none',
+                  transform:   isSelected ? 'translateY(-1px)' : 'translateY(0)',
                 }}
                 onMouseEnter={e => {
                   if (!isSelected) {
                     const el = e.currentTarget
-                    el.style.background = 'rgba(255,255,255,0.07)'
-                    el.style.borderColor = 'rgba(220,0,0,0.35)'
-                    el.style.transform = 'translateY(-2px)'
-                    el.style.boxShadow = '0 4px 20px rgba(220,0,0,0.12)'
+                    el.style.background   = 'rgba(0,0,0,0.04)'
+                    el.style.borderColor  = 'rgba(220,0,0,0.3)'
+                    el.style.transform    = 'translateY(-1px)'
+                    el.style.boxShadow    = '0 4px 16px rgba(0,0,0,0.06)'
                   }
                 }}
                 onMouseLeave={e => {
                   if (!isSelected) {
                     const el = e.currentTarget
-                    el.style.background = 'rgba(255,255,255,0.04)'
-                    el.style.borderColor = 'rgba(255,255,255,0.09)'
-                    el.style.transform = 'translateY(0)'
-                    el.style.boxShadow = 'none'
+                    el.style.background   = 'rgba(0,0,0,0.03)'
+                    el.style.borderColor  = 'rgba(0,0,0,0.1)'
+                    el.style.transform    = 'translateY(0)'
+                    el.style.boxShadow    = 'none'
                   }
                 }}
               >
@@ -176,9 +175,9 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
                     className="shrink-0 flex items-center justify-center rounded-full transition-all duration-300"
                     style={{
                       width: 22, height: 22,
-                      border: `2px solid ${isSelected ? '#ef4444' : 'rgba(255,255,255,0.25)'}`,
+                      border: `2px solid ${isSelected ? '#dc2626' : 'rgba(0,0,0,0.2)'}`,
                       background: isSelected ? '#dc2626' : 'transparent',
-                      boxShadow: isSelected ? '0 0 10px rgba(220,38,38,0.4)' : 'none',
+                      boxShadow: isSelected ? '0 0 8px rgba(220,38,38,0.3)' : 'none',
                     }}
                   >
                     {isSelected && (
@@ -187,7 +186,7 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
                   </span>
                   <span
                     className="text-sm md:text-base font-medium transition-colors duration-200"
-                    style={{ color: isSelected ? '#fca5a5' : 'rgba(255,255,255,0.75)' }}
+                    style={{ color: isSelected ? '#b91c1c' : '#111111' }}
                   >
                     {opt}
                   </span>
@@ -1642,13 +1641,13 @@ export default function AssessmentFlow() {
         <div className="max-w-2xl mx-auto w-full">
           {/* Glass container */}
           <div style={{
-            background:    '#1c1c1e',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border:        '1px solid rgba(255,255,255,0.1)',
-            borderRadius:  20,
-            padding:       '40px 40px 44px',
-            boxShadow:     '0 24px 80px rgba(0,0,0,0.22), 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,255,255,0.06) inset',
+            background:           'rgba(255,255,255,0.75)',
+            backdropFilter:       'saturate(180%) blur(20px)',
+            WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+            border:               '1px solid rgba(0,0,0,0.06)',
+            borderRadius:         20,
+            padding:              '40px 40px 44px',
+            boxShadow:            '0 8px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04)',
           }}>
             <ProgressBar step={step} total={questions.length} />
             <QuestionScreen key={step} step={step} onAnswer={handleAnswer} />
