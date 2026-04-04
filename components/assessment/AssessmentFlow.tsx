@@ -671,13 +671,13 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl overflow-hidden"
         style={{
-          background: 'rgba(255,255,255,0.04)',
+          background: 'rgba(255,255,255,0.03)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.4)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          boxShadow: '0 4px 32px rgba(0,0,0,0.25)',
         }}>
-        <div style={{ height: 2, background: 'linear-gradient(90deg, #ff3b3b, #b30000 60%, transparent)', boxShadow: '0 0 6px rgba(255,59,59,0.4)' }} />
+        <div style={{ height: 2, background: 'linear-gradient(90deg, #D92D20, rgba(180,35,24,0.4) 70%, transparent)' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
 
           {/* Score ring */}
@@ -761,13 +761,13 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         <motion.div variants={fadeUp}
           className="rounded-2xl overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.04)',
+            background: 'rgba(255,255,255,0.03)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,59,59,0.2)',
-            boxShadow: '0 4px 24px rgba(220,0,0,0.08)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
           }}>
-          <div style={{ height: 2, background: 'linear-gradient(90deg, #ff3b3b, #b30000, transparent)', boxShadow: '0 0 6px rgba(255,59,59,0.3)' }} />
+          <div style={{ height: 2, background: 'linear-gradient(90deg, #D92D20, rgba(180,35,24,0.4) 70%, transparent)' }} />
           <div className="p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#ff5b5b' }}>Emergency Fund Target</p>
@@ -783,7 +783,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                   {result.emergencyFundMonths.toFixed(1)} months × ₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}/mo
                 </p>
               </div>
-              <div className="rounded-xl p-4" style={{ background: 'rgba(220,0,0,0.1)', border: '1px solid rgba(255,59,59,0.2)' }}>
+              <div className="rounded-xl p-4" style={{ background: 'rgba(217,45,32,0.07)', border: '1px solid rgba(217,45,32,0.12)' }}>
                 <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#ff5b5b', fontWeight: 600, marginBottom: 4 }}>Months Coverage</p>
                 <p style={{ fontSize: 22, fontWeight: 600, color: '#ffffff' }}>{result.emergencyFundMonths.toFixed(1)}</p>
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>Based on your income type &amp; dependents</p>
@@ -834,7 +834,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 transition={{ delay: 0.05 + i * 0.06, duration: 0.38, ease: 'easeOut' as const }}
                 className="group flex flex-col gap-4 rounded-2xl"
                 style={{
-                  background:   '#141414',
+                  background:   '#1c1c1e',
                   border:       '1px solid rgba(255,255,255,0.06)',
                   borderLeft:   `3px solid ${sev.accent}`,
                   borderRadius: 16,
@@ -958,15 +958,15 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl p-6 flex gap-4 items-start"
         style={{
-          background: 'rgba(255,255,255,0.04)',
+          background: 'rgba(255,255,255,0.03)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
         }}>
         <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: 'rgba(220,0,0,0.15)', border: '1px solid rgba(255,59,59,0.3)' }}>
-          <User size={16} style={{ color: '#ff5b5b' }} />
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <User size={16} style={{ color: 'rgba(255,255,255,0.5)' }} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -1013,10 +1013,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 <div
                   className="rounded-2xl flex flex-col relative h-full overflow-hidden transition-all duration-300"
                   style={{
-                    background: 'rgba(255,255,255,0.04)',
+                    background: 'rgba(255,255,255,0.03)',
                     backdropFilter: 'blur(16px)',
                     WebkitBackdropFilter: 'blur(16px)',
-                    boxShadow: isTopPick ? '0 4px 32px rgba(220,0,0,0.2)' : '0 2px 16px rgba(0,0,0,0.3)',
+                    boxShadow: isTopPick ? '0 4px 24px rgba(217,45,32,0.12)' : '0 2px 12px rgba(0,0,0,0.2)',
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = isTopPick ? '0 8px 40px rgba(220,0,0,0.3)' : '0 8px 32px rgba(0,0,0,0.45)' }}
                   onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = isTopPick ? '0 4px 32px rgba(220,0,0,0.2)' : '0 2px 16px rgba(0,0,0,0.3)' }}
@@ -1126,18 +1126,17 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         {/* Save Report */}
         <div className="rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.04)',
+            background: 'rgba(255,255,255,0.03)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
           }}>
-          {/* Red top stripe */}
-          <div className="absolute top-0 left-0 right-0" style={{ height: 2, background: 'linear-gradient(90deg, #ff3b3b, #b30000 60%, transparent)', boxShadow: '0 0 6px rgba(255,59,59,0.3)' }} />
+          <div className="absolute top-0 left-0 right-0" style={{ height: 2, background: 'linear-gradient(90deg, #D92D20, rgba(180,35,24,0.4) 70%, transparent)' }} />
           <div className="flex items-center gap-3 mt-1">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(220,0,0,0.15)', border: '1px solid rgba(255,59,59,0.25)' }}>
-              <Mail size={15} style={{ color: '#ff5b5b' }} />
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <Mail size={15} style={{ color: '#D92D20' }} />
             </div>
             <div>
               <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#ff5b5b', letterSpacing: '0.13em' }}>Save Your Report</p>
@@ -1166,18 +1165,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         {/* Talk to Advisor */}
         <div className="rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.04)',
+            background: 'rgba(255,255,255,0.03)',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
           }}>
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse at 10% 50%, rgba(220,0,0,0.12) 0%, transparent 60%)' }} />
           <div className="relative flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(220,0,0,0.15)', border: '1px solid rgba(255,59,59,0.25)' }}>
-              <MessageCircle size={15} style={{ color: '#ff5b5b' }} />
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <MessageCircle size={15} style={{ color: '#D92D20' }} />
             </div>
             <div>
               <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#ff5b5b', letterSpacing: '0.13em' }}>Talk to an Expert</p>
@@ -1215,11 +1212,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl p-8 md:p-10"
         style={{
-          background: 'rgba(255,255,255,0.04)',
+          background: 'rgba(255,255,255,0.03)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
         }}>
         <TestimonialForm />
       </motion.div>
@@ -1311,7 +1308,7 @@ export default function AssessmentFlow() {
   // ── Render — single source of truth ──────────────────────────────
   if (phase === 'analyzing') {
     return (
-      <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(135deg, #000000 0%, #05070d 50%, #0a0f1c 100%)' }}>
+      <div className="min-h-screen flex flex-col" style={{ background: '#121214' }}>
         <style>{`
           @keyframes af-fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
           @keyframes scan-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.35; transform:scale(0.75); } }
@@ -1321,7 +1318,7 @@ export default function AssessmentFlow() {
         {/* Fixed scanning header */}
         <div style={{
           position: 'fixed', top: BSQ_H, left: 0, right: 0, zIndex: 999,
-          background: pageScrolled ? 'rgba(10,10,10,0.95)' : 'rgba(11,11,15,0.88)',
+          background: pageScrolled ? 'rgba(18,18,20,0.97)' : 'rgba(18,18,20,0.88)',
           backdropFilter: 'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -1350,10 +1347,9 @@ export default function AssessmentFlow() {
     return (
       <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{
         background: `
-          radial-gradient(circle at 15% 10%, rgba(220,0,0,0.15), transparent 35%),
-          radial-gradient(circle at 85% 20%, rgba(255,255,255,0.04), transparent 35%),
-          radial-gradient(circle at 50% 90%, rgba(180,0,0,0.08), transparent 50%),
-          #0b0b0f
+          radial-gradient(ellipse 60% 40% at 15% 0%, rgba(217,45,32,0.05), transparent),
+          radial-gradient(ellipse 50% 30% at 85% 100%, rgba(217,45,32,0.03), transparent),
+          #121214
         `,
       }}>
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
@@ -1476,7 +1472,7 @@ export default function AssessmentFlow() {
 
           {/* Layer 2 — 44px main nav (Apple standard height) */}
           <div style={{
-            background:           pageScrolled ? 'rgba(10,10,10,0.97)' : 'rgba(11,11,15,0.88)',
+            background:           pageScrolled ? 'rgba(18,18,20,0.97)' : 'rgba(18,18,20,0.88)',
             backdropFilter:       'saturate(180%) blur(20px)',
             WebkitBackdropFilter: 'saturate(180%) blur(20px)',
             borderBottom:         '1px solid rgba(255,255,255,0.07)',
@@ -1572,9 +1568,8 @@ export default function AssessmentFlow() {
     <div className="min-h-screen flex flex-col relative"
       style={{
         background: `
-          radial-gradient(circle at 20% 20%, rgba(220,0,0,0.18), transparent 40%),
-          radial-gradient(circle at 80% 30%, rgba(255,255,255,0.05), transparent 40%),
-          #0b0b0f
+          radial-gradient(ellipse 55% 35% at 20% 10%, rgba(217,45,32,0.05), transparent),
+          #121214
         `,
       }}>
       <style>{`
@@ -1603,7 +1598,7 @@ export default function AssessmentFlow() {
 
         {/* Layer 1 — Announcement bar (trust strip) */}
         <div style={{
-          background:           pageScrolled ? 'rgba(10,10,10,0.92)' : 'rgba(11,11,15,0.72)',
+          background:           pageScrolled ? 'rgba(18,18,20,0.95)' : 'rgba(18,18,20,0.80)',
           backdropFilter:       'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
           borderBottom:         '1px solid rgba(255,255,255,0.04)',
@@ -1617,7 +1612,7 @@ export default function AssessmentFlow() {
 
         {/* Layer 2 — Main nav (44px — Apple standard) */}
         <div style={{
-          background:           pageScrolled ? 'rgba(10,10,10,0.97)' : 'rgba(11,11,15,0.88)',
+          background:           pageScrolled ? 'rgba(18,18,20,0.97)' : 'rgba(18,18,20,0.88)',
           backdropFilter:       'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
           borderBottom:         '1px solid rgba(255,255,255,0.07)',
