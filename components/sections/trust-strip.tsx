@@ -22,9 +22,9 @@ export default function TrustStrip() {
 
       {/* Fade edges — match body gradient midpoint */}
       <div className="pointer-events-none absolute left-0 top-0 h-full w-24 z-10"
-        style={{ background: 'linear-gradient(to right, #242426, transparent)' }} />
+        style={{ background: 'linear-gradient(to right, #f5f5f7, transparent)' }} />
       <div className="pointer-events-none absolute right-0 top-0 h-full w-24 z-10"
-        style={{ background: 'linear-gradient(to left, #242426, transparent)' }} />
+        style={{ background: 'linear-gradient(to left, #f5f5f7, transparent)' }} />
 
       {/* Scrolling */}
       <div className="flex gap-16 animate-scroll whitespace-nowrap">
