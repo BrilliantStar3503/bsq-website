@@ -74,8 +74,8 @@ function ScoreRing({ score }: { score: number }) {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-6xl font-black tabular-nums leading-none" style={{ color: statusColor }}>{display}</span>
-          <span className="text-[10px] tracking-[0.2em] uppercase font-semibold mt-1" style={{ color: 'rgba(255,255,255,0.3)' }}>out of 100</span>
+          <span className="metric" style={{ color: statusColor }}>{display}</span>
+          <span className="text-label uppercase tracking-[0.2em] font-medium mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>out of 100</span>
         </div>
       </div>
       <div className="text-center">
@@ -122,7 +122,7 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
     <div className="af-fade w-full">
       {/* Question */}
       <div className="mb-10 text-center">
-        <p className="text-3xl md:text-4xl font-bold text-white leading-snug mb-3 tracking-tight">{q.question}</p>
+        <h1 className="text-white mb-3">{q.question}</h1>
         {q.subtitle && (
           <p className="text-sm md:text-base text-white/50 leading-relaxed max-w-xl mx-auto">{q.subtitle}</p>
         )}
@@ -776,7 +776,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
               <div>
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 500, marginBottom: 4 }}>Recommended Target</p>
-                <p style={{ fontSize: 28, fontWeight: 600, letterSpacing: '-0.02em', color: '#ffffff' }}>
+                <p className="metric" style={{ color: '#ffffff' }}>
                   ₱{result.emergencyFundTarget.toLocaleString('en-PH')}
                 </p>
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>
@@ -785,12 +785,12 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               </div>
               <div className="rounded-xl p-4" style={{ background: 'rgba(217,45,32,0.07)', border: '1px solid rgba(217,45,32,0.12)' }}>
                 <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#ff5b5b', fontWeight: 600, marginBottom: 4 }}>Months Coverage</p>
-                <p style={{ fontSize: 22, fontWeight: 600, color: '#ffffff' }}>{result.emergencyFundMonths.toFixed(1)}</p>
+                <p className="metric" style={{ color: '#ffffff', fontSize: 32 }}>{result.emergencyFundMonths.toFixed(1)}</p>
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>Based on your income type &amp; dependents</p>
               </div>
               <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}>
                 <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginBottom: 4 }}>Monthly Expenses</p>
-                <p style={{ fontSize: 22, fontWeight: 600, color: '#ffffff' }}>₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}</p>
+                <p className="metric" style={{ color: '#ffffff', fontSize: 32 }}>₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}</p>
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>Essential expenses only</p>
               </div>
             </div>
@@ -808,8 +808,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}>
         <div className="flex items-center justify-between mb-5">
           <div>
-            <p className="text-xs uppercase tracking-widest font-medium mb-1" style={{ color: '#86868b', letterSpacing: '0.15em' }}>Risk Analysis</p>
-            <h2 className="text-xl font-semibold tracking-tight" style={{ color: '#1d1d1f' }}>Financial Gaps Identified</h2>
+            <p className="text-label uppercase tracking-widest font-medium mb-1" style={{ color: '#86868b', letterSpacing: '0.15em' }}>Risk Analysis</p>
+            <h2 style={{ color: '#1d1d1f' }}>Financial Gaps Identified</h2>
           </div>
           <span className="text-xs font-medium px-3 py-1 rounded-full tabular-nums"
             style={{ background: 'rgba(0,0,0,0.06)', color: '#6e6e73', border: '1px solid rgba(0,0,0,0.08)' }}>
@@ -985,8 +985,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       {/* ══ SECTION 5 — Recommended Plans ══════════════════════════════ */}
       <motion.div variants={fadeUp}>
         <div className="mb-6">
-          <p className="text-xs uppercase tracking-widest font-medium mb-0.5" style={{ color: '#86868b', letterSpacing: '0.15em' }}>Personalised to your profile</p>
-          <h2 className="text-xl font-semibold tracking-tight" style={{ color: '#1d1d1f' }}>Recommended Plans</h2>
+          <p className="text-label uppercase tracking-widest font-medium mb-0.5" style={{ color: '#86868b', letterSpacing: '0.15em' }}>Personalised to your profile</p>
+          <h2 style={{ color: '#1d1d1f' }}>Recommended Plans</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1224,7 +1224,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       {/* ── Disclaimer ───────────────────────────────────────────── */}
       <motion.div variants={fadeUp} className="flex items-start gap-2.5">
         <Info size={12} className="shrink-0 mt-0.5" style={{ color: '#86868b' }} />
-        <p className="text-xs leading-relaxed" style={{ color: '#86868b' }}>
+        <p className="text-label" style={{ color: '#86868b' }}>
           Results are based on financial planning models assessing risk exposure, savings behavior, and long-term readiness. Advisory purposes only — not financial advice. PRU Life UK products subject to eligibility and underwriting.
         </p>
       </motion.div>
@@ -1548,7 +1548,7 @@ export default function AssessmentFlow() {
 
         {/* ── Footer ──────────────────────────────────────────────── */}
         <div className="relative z-10 py-5 text-center" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
-          <p style={{ fontSize: 11, color: '#86868b' }}>
+          <p className="text-label" style={{ color: '#86868b' }}>
             Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Pasig City
           </p>
         </div>
