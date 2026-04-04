@@ -1308,7 +1308,7 @@ export default function AssessmentFlow() {
   // ── Render — single source of truth ──────────────────────────────
   if (phase === 'analyzing') {
     return (
-      <div className="min-h-screen flex flex-col" style={{ background: '#121214' }}>
+      <div className="min-h-screen flex flex-col" style={{ background: 'transparent' }}>
         <style>{`
           @keyframes af-fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
           @keyframes scan-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.35; transform:scale(0.75); } }
@@ -1345,13 +1345,7 @@ export default function AssessmentFlow() {
 
   if (phase === 'results') {
     return (
-      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{
-        background: `
-          radial-gradient(ellipse 60% 40% at 15% 0%, rgba(217,45,32,0.05), transparent),
-          radial-gradient(ellipse 50% 30% at 85% 100%, rgba(217,45,32,0.03), transparent),
-          #121214
-        `,
-      }}>
+      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: 'transparent' }}>
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
         <style>{`
           /* ═══════════════════════════════════════════════════════════════
@@ -1565,13 +1559,7 @@ export default function AssessmentFlow() {
 
   // phase === 'question' (default)
   return (
-    <div className="min-h-screen flex flex-col relative"
-      style={{
-        background: `
-          radial-gradient(ellipse 55% 35% at 20% 10%, rgba(217,45,32,0.05), transparent),
-          #121214
-        `,
-      }}>
+    <div className="min-h-screen flex flex-col relative" style={{ background: 'transparent' }}>
       <style>{`
         @keyframes af-fade-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
         .af-fade { animation: af-fade-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }

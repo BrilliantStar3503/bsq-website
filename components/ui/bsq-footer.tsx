@@ -66,7 +66,7 @@ export default function BsqFooter() {
   return (
     <footer
       className="relative"
-      style={{ background: 'linear-gradient(180deg, #0a0a0a 0%, #050507 100%)' }}
+      style={{ background: 'linear-gradient(180deg, #121214 0%, #0f0f11 100%)' }}
     >
       {/* Top accent line */}
       <div style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(220,38,38,0.5), rgba(220,38,38,0.2), transparent)' }} />

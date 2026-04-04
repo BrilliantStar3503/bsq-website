@@ -11,8 +11,8 @@ export default function TrustStrip() {
   ];
 
   return (
-    <section className="w-full bg-black py-10 overflow-hidden relative mb-16">
-      
+    <section className="w-full py-10 overflow-hidden relative mb-16" style={{ background: 'transparent' }}>
+
       {/* Label */}
       <div className="text-center mb-8">
         <p className="text-xs tracking-[0.3em] text-white/50 uppercase">
@@ -20,9 +20,11 @@ export default function TrustStrip() {
         </p>
       </div>
 
-      {/* Fade edges */}
-      <div className="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-black to-transparent z-10" />
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-black to-transparent z-10" />
+      {/* Fade edges — match body gradient midpoint */}
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-24 z-10"
+        style={{ background: 'linear-gradient(to right, #121214, transparent)' }} />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-24 z-10"
+        style={{ background: 'linear-gradient(to left, #121214, transparent)' }} />
 
       {/* Scrolling */}
       <div className="flex gap-16 animate-scroll whitespace-nowrap">
