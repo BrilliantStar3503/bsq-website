@@ -808,47 +808,145 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}>
         <div className="flex items-center justify-between mb-5">
           <div>
-            <p className="text-xs uppercase tracking-widest font-medium mb-0.5" style={{ color: 'rgba(255,255,255,0.3)', letterSpacing: '0.15em' }}>Risk Analysis</p>
-            <h2 className="text-xl font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>Financial Gaps Identified</h2>
+            <p className="text-xs uppercase tracking-widest font-medium mb-1" style={{ color: 'rgba(255,255,255,0.25)', letterSpacing: '0.15em' }}>Risk Analysis</p>
+            <h2 className="text-xl font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.88)' }}>Financial Gaps Identified</h2>
           </div>
-          <span className="text-xs font-medium px-3 py-1 rounded-full"
-            style={{ background: 'rgba(220,0,0,0.15)', color: '#ff5b5b', border: '1px solid rgba(255,59,59,0.3)' }}>
+          <span className="text-xs font-medium px-3 py-1 rounded-full tabular-nums"
+            style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.08)' }}>
             {result.gaps.length} found
           </span>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {result.gaps.map((gap, i) => {
-            const sv = sevStyle[gap.severity]
+            /* ── Per-severity design tokens (Apple system palette) ── */
+            const sev = gap.severity === 'high'
+              ? { accent: '#ff3b30', badgeBg: 'rgba(255,59,48,0.10)', badgeColor: '#ff3b30',  label: 'High Risk'     }
+              : gap.severity === 'medium'
+              ? { accent: '#ff9f0a', badgeBg: 'rgba(255,159,10,0.10)', badgeColor: '#ff9f0a', label: 'Moderate Risk' }
+              : { accent: '#34c759', badgeBg: 'rgba(52,199,89,0.10)',  badgeColor: '#34c759',  label: 'Low Risk'      }
+
             return (
-              <motion.div key={gap.id}
+              <motion.div
+                key={gap.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 + i * 0.06, duration: 0.4, ease: 'easeOut' as const }}
-                whileHover={{ y: -2, boxShadow: '0 8px 32px rgba(0,0,0,0.35)' }}
-                className="rounded-2xl p-5 flex flex-col gap-3 transition-all duration-200"
+                transition={{ delay: 0.05 + i * 0.06, duration: 0.38, ease: 'easeOut' as const }}
+                className="group flex flex-col gap-4 rounded-2xl"
                 style={{
-                  background: sv.bg,
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border: `1px solid ${sv.border}`,
-                  borderLeft: `3px solid ${sv.color}`,
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.25)',
-                }}>
-                <div className="flex items-start gap-3">
-                  <div className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
-                    style={{ background: 'rgba(255,255,255,0.06)', color: sv.color, border: `1px solid ${sv.border}` }}>
-                    {gapIcon[gap.id] ?? <AlertTriangle size={15} />}
+                  background:   '#141414',
+                  border:       '1px solid rgba(255,255,255,0.06)',
+                  borderLeft:   `3px solid ${sev.accent}`,
+                  borderRadius: 16,
+                  padding:      24,
+                  transition:   'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+                  cursor:       'default',
+                }}
+                whileHover={{
+                  y: -4,
+                  transition: { duration: 0.25, ease: 'easeOut' as const },
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.borderColor     = `rgba(255,255,255,0.12)`
+                  el.style.borderLeftColor = sev.accent
+                  el.style.boxShadow       = '0 8px 32px rgba(0,0,0,0.4)'
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.borderColor     = 'rgba(255,255,255,0.06)'
+                  el.style.borderLeftColor = sev.accent
+                  el.style.boxShadow       = 'none'
+                }}
+              >
+                {/* ── Top row: icon · title · badge ── */}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
+                      style={{ background: 'rgba(255,255,255,0.05)', color: sev.accent }}>
+                      {gapIcon[gap.id] ?? <AlertTriangle size={15} />}
+                    </div>
+                    <h4 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.88)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
+                      {gap.title}
+                    </h4>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold leading-snug" style={{ color: 'rgba(255,255,255,0.85)' }}>{gap.title}</h4>
-                    <span className="text-xs font-medium" style={{ color: sv.color }}>{sv.label}</span>
-                  </div>
+                  <span className="shrink-0 px-2.5 py-1 rounded-full whitespace-nowrap"
+                    style={{ fontSize: 11, fontWeight: 500, background: sev.badgeBg, color: sev.badgeColor }}>
+                    {sev.label}
+                  </span>
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>{gap.description}</p>
-                <div className="flex items-start gap-2 rounded-xl px-3 py-2.5"
-                  style={{ background: sv.bg }}>
-                  <ArrowRight size={11} className="shrink-0 mt-0.5" style={{ color: sv.color }} />
-                  <p className="text-xs font-medium leading-relaxed" style={{ color: sv.color }}>{gap.consequence}</p>
+
+                {/* ── Description ── */}
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, margin: 0 }}>
+                  {gap.description}
+                </p>
+
+                {/* ── Key impact statement ── */}
+                <div style={{
+                  background:   'rgba(255,255,255,0.03)',
+                  borderRadius: 10,
+                  padding:      '10px 12px',
+                  display:      'flex',
+                  alignItems:   'flex-start',
+                  gap:          8,
+                }}>
+                  <ArrowRight size={11} className="shrink-0 mt-0.5" style={{ color: sev.accent, opacity: 0.8 }} />
+                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.55, margin: 0 }}>
+                    {gap.consequence}
+                  </p>
+                </div>
+
+                {/* ── Actions ── */}
+                <div className="flex items-center gap-2 mt-1">
+                  <button
+                    onClick={() => openContact('gap_advisor')}
+                    style={{
+                      flex:         1,
+                      height:       36,
+                      borderRadius: 8,
+                      background:   '#D92D20',
+                      color:        '#fff',
+                      fontSize:     12,
+                      fontWeight:   600,
+                      border:       'none',
+                      cursor:       'pointer',
+                      letterSpacing: '0.01em',
+                      transition:   'background 0.15s ease',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
+                    onMouseLeave={e => (e.currentTarget.style.background = '#D92D20')}
+                  >
+                    Talk to Advisor
+                  </button>
+                  <a
+                    href="/assessment"
+                    style={{
+                      flex:         1,
+                      height:       36,
+                      borderRadius: 8,
+                      background:   'transparent',
+                      color:        'rgba(255,255,255,0.45)',
+                      fontSize:     12,
+                      fontWeight:   500,
+                      border:       '1px solid rgba(255,255,255,0.1)',
+                      cursor:       'pointer',
+                      display:      'flex',
+                      alignItems:   'center',
+                      justifyContent: 'center',
+                      textDecoration: 'none',
+                      transition:   'border-color 0.15s ease, color 0.15s ease',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'
+                      e.currentTarget.style.color = 'rgba(255,255,255,0.7)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+                      e.currentTarget.style.color = 'rgba(255,255,255,0.45)'
+                    }}
+                  >
+                    Learn More
+                  </a>
                 </div>
               </motion.div>
             )
