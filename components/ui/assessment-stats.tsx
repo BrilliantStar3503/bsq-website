@@ -145,9 +145,11 @@ export function ResultsStatsBanner({ className }: { className?: string }) {
         className,
       )}
       style={{
-        background:  'linear-gradient(135deg, #0f172a, #1e293b)',
-        border:      '1px solid rgba(255,255,255,0.07)',
-        boxShadow:   '0 1px 8px rgba(0,0,0,0.06)',
+        background:  'rgba(255,255,255,0.04)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        border:      '1px solid rgba(255,255,255,0.08)',
+        boxShadow:   '0 2px 24px rgba(0,0,0,0.35)',
       }}
     >
       <StatItem
@@ -186,8 +188,8 @@ function StatItem({
         {icon}
       </div>
       <div>
-        <p className="text-sm font-bold text-white tabular-nums leading-none">{count}</p>
-        <p className="text-[10px] text-white/40 mt-0.5 leading-none">{label}</p>
+        <p className="text-sm font-semibold tabular-nums leading-none" style={{ color: 'rgba(255,255,255,0.85)' }}>{count}</p>
+        <p className="text-[10px] mt-0.5 leading-none tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>{label}</p>
       </div>
     </div>
   )

@@ -681,7 +681,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         <div className="grid grid-cols-1 md:grid-cols-2">
 
           {/* Score ring */}
-          <div className="flex flex-col items-center justify-center p-10 gap-4"
+          <div className="flex flex-col items-center justify-center p-8 gap-3"
             style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }} >
             <ScoreRing score={result.total} />
             <div className="flex items-center gap-2 px-4 py-1.5 rounded-full"
@@ -689,7 +689,18 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: statusColor, boxShadow: `0 0 6px ${statusColor}` }} />
               <span className="text-xs font-semibold tracking-wide" style={{ color: statusColor }}>{statusLabel}</span>
             </div>
-            <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.3)', fontWeight: 500 }}>{result.riskLevel} Risk Level</p>
+            <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>Financial Risk Score</p>
+            <div className="w-full mt-1 pt-3 flex items-center justify-center gap-6" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              {subScores.map(({ label, val }) => {
+                const c = val < 40 ? '#ff5b5b' : val < 65 ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.7)'
+                return (
+                  <div key={label} className="flex flex-col items-center gap-0.5">
+                    <span style={{ fontSize: 16, fontWeight: 600, color: c, fontVariantNumeric: 'tabular-nums' }}>{val}</span>
+                    <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>{label}</span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           {/* Sub-scores */}
@@ -700,7 +711,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             </div>
             <div className="space-y-4">
               {subScores.map(({ label, val, icon }) => {
-                const barColor = val < 40 ? '#ff5b5b' : val < 65 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.7)'
+                const barColor = val < 40 ? '#ff5b5b' : val < 65 ? '#f97316' : val < 85 ? 'rgba(255,255,255,0.6)' : '#4ade80'
                 const grade    = val < 40 ? 'Needs attention' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
                 return (
                   <div key={label}>
@@ -720,8 +731,20 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                         animate={{ width: `${val}%` }}
                         transition={{ duration: 1.1, delay: 0.4, ease: 'easeOut' as const }}
                         style={{
-                          background: val < 40 ? 'linear-gradient(90deg, #ff3b3b, #b30000)' : 'rgba(255,255,255,0.35)',
-                          boxShadow: val < 40 ? '0 0 6px rgba(255,59,59,0.5)' : 'none',
+                          background: val < 40
+                            ? 'linear-gradient(90deg, #ff3b3b, #b30000)'
+                            : val < 65
+                            ? 'linear-gradient(90deg, #f97316, #c2410c)'
+                            : val < 85
+                            ? 'rgba(255,255,255,0.35)'
+                            : 'linear-gradient(90deg, #4ade80, #16a34a)',
+                          boxShadow: val < 40
+                            ? '0 0 6px rgba(255,59,59,0.45)'
+                            : val < 65
+                            ? '0 0 6px rgba(249,115,22,0.35)'
+                            : val >= 85
+                            ? '0 0 6px rgba(74,222,128,0.3)'
+                            : 'none',
                         }} />
                     </div>
                   </div>
@@ -731,22 +754,6 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           </div>
         </div>
 
-        {/* Metric mini row */}
-        <div className="grid grid-cols-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          {subScores.map(({ label, val }, idx) => {
-            const color = val < 40 ? '#ff5b5b' : val < 65 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.75)'
-            const grade = val < 40 ? 'Needs Work' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
-            return (
-              <div key={label}
-                className="flex flex-col items-center py-4 gap-0.5"
-                style={{ borderRight: idx < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-                <p style={{ fontSize: 24, fontWeight: 600, color, fontVariantNumeric: 'tabular-nums' }}>{val}</p>
-                <p style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>{label}</p>
-                <p style={{ fontSize: 10, fontWeight: 500, color }}>{grade}</p>
-              </div>
-            )
-          })}
-        </div>
       </motion.div>
 
       {/* ══ SECTION 2 — Emergency Fund (conditional) ════════════════════ */}
@@ -899,10 +906,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: 'easeOut' as const }}
                 className="h-full">
               <ShineBorder
-                color={['#7f0000', '#B42318', '#D92D20', '#ffffff', '#D92D20', '#B42318', '#7f0000']}
+                color={['#1a0000', '#6b0000', '#B42318', '#D92D20', '#B42318', '#6b0000', '#1a0000']}
                 borderRadius={16}
-                borderWidth={2}
-                duration={4 + i}
+                borderWidth={1}
+                duration={8 + i * 2}
                 className="h-full"
               >
                 <div
@@ -1131,11 +1138,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
   )
 }
 
-/* ─── Header height constants (mirrors pru-life-header.tsx) ────────── */
-const PRU_BRAND_H   = 88   // white brand bar
-const PRU_NAV_TOP   = 52   // red nav at scroll=0
-const PRU_NAV_SCR   = 60   // white nav when scrolled
-const PRU_FULL_H    = PRU_BRAND_H + PRU_NAV_TOP  // 140px
+/* ─── Header height constants ──────────────────────────────────────── */
+/**
+ * BSQ_H — the one source of truth for the main site header height.
+ * BsqHeader uses `position: fixed` with a constant h-14 (56 px) — it
+ * never collapses or resizes on scroll, so every fixed sub-header in
+ * this page simply starts at top: BSQ_H.
+ *
+ * Keep this value in sync with BSQ_HEADER_H in HeaderWrapper.tsx.
+ */
+const BSQ_H         = 56   // BsqHeader fixed height (h-14)
 
 const TRUST_H       = 32   // Layer 1 — announcement bar (trust strip)
 const BSQ_NAV_H     = 44   // Layer 2 — main nav (Apple standard)
@@ -1150,8 +1162,7 @@ export default function AssessmentFlow() {
   const [result, setResult]     = useState<ScoreResult | null>(null)
   const [engineResult, setEngineResult] = useState<RecommendationResult | null>(null)
 
-  /* Mirrors the PRU site header scroll threshold — used to align
-     the fixed assessment header with the collapsing brand bar     */
+  /* Track scroll for visual effects (backdrop opacity, etc.) */
   const [pageScrolled, setPageScrolled] = useState(false)
   useEffect(() => {
     const onScroll = () => setPageScrolled(window.scrollY > 10)
@@ -1159,9 +1170,6 @@ export default function AssessmentFlow() {
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  /* Top offset tracks the PRU header height as it collapses */
-  const PRU_H = pageScrolled ? PRU_NAV_SCR : PRU_FULL_H
 
 
   const handleRetake = () => {
@@ -1214,7 +1222,7 @@ export default function AssessmentFlow() {
         `}</style>
         {/* Fixed scanning header */}
         <div style={{
-          position: 'fixed', top: PRU_H, left: 0, right: 0, zIndex: 999,
+          position: 'fixed', top: BSQ_H, left: 0, right: 0, zIndex: 999,
           background: pageScrolled ? 'rgba(10,10,10,0.95)' : 'rgba(11,11,15,0.88)',
           backdropFilter: 'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
@@ -1361,7 +1369,7 @@ export default function AssessmentFlow() {
 
         {/* ══ Apple-style two-layer fixed header ══════════════════ */}
         <div style={{
-          position: 'fixed', top: PRU_H, left: 0, right: 0, zIndex: 999,
+          position: 'fixed', top: BSQ_H, left: 0, right: 0, zIndex: 999,
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
           transition: 'top 0.2s linear',
         }}>
@@ -1490,7 +1498,7 @@ export default function AssessmentFlow() {
 
       {/* ══ Apple-style two-layer fixed header ══════════════════ */}
       <div style={{
-        position: 'fixed', top: PRU_H, left: 0, right: 0, zIndex: 999,
+        position: 'fixed', top: BSQ_H, left: 0, right: 0, zIndex: 999,
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
         transition: 'top 0.2s linear',
       }}>

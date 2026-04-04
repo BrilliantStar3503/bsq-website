@@ -265,20 +265,25 @@ export function BsqHeader() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300',
-        scrolled
-          ? 'border-b'
-          : 'border-b border-transparent',
+        'fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300',
+        scrolled ? 'border-b' : 'border-b border-transparent',
       )}
       style={
         scrolled
           ? {
-              background: 'rgba(5,6,10,0.88)',
-              backdropFilter: 'blur(20px)',
-              borderColor: 'rgba(255,255,255,0.07)',
-              boxShadow: '0 1px 24px rgba(0,0,0,0.5)',
+              background:    'rgba(5,6,10,0.92)',
+              backdropFilter: 'saturate(180%) blur(20px)',
+              WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+              borderColor:   'rgba(255,255,255,0.07)',
+              boxShadow:     '0 1px 0 rgba(255,255,255,0.04), 0 4px 32px rgba(0,0,0,0.55)',
+              willChange:    'background, box-shadow',
             }
-          : { background: 'transparent' }
+          : {
+              background:    'rgba(5,6,10,0)',
+              backdropFilter: 'saturate(180%) blur(0px)',
+              WebkitBackdropFilter: 'saturate(180%) blur(0px)',
+              willChange:    'background, box-shadow',
+            }
       }
     >
       <nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-6 md:px-10">
