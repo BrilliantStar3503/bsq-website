@@ -1642,13 +1642,13 @@ export default function AssessmentFlow() {
         <div className="max-w-2xl mx-auto w-full">
           {/* Glass container */}
           <div style={{
-            background:    'rgba(255,255,255,0.04)',
+            background:    '#1c1c1e',
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            border:        '1px solid rgba(255,255,255,0.08)',
+            border:        '1px solid rgba(255,255,255,0.1)',
             borderRadius:  20,
             padding:       '40px 40px 44px',
-            boxShadow:     '0 8px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset',
+            boxShadow:     '0 24px 80px rgba(0,0,0,0.22), 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,255,255,0.06) inset',
           }}>
             <ProgressBar step={step} total={questions.length} />
             <QuestionScreen key={step} step={step} onAnswer={handleAnswer} />
@@ -1657,8 +1657,8 @@ export default function AssessmentFlow() {
       </div>
 
       {/* Footer */}
-      <div className="relative px-6 py-4 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
-        <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.18)', letterSpacing: '0.05em' }}>Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Manila</p>
+      <div className="relative px-6 py-4 text-center" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+        <p style={{ fontSize: 10, color: '#86868b', letterSpacing: '0.05em' }}>Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Manila</p>
       </div>
     </div>
   )
