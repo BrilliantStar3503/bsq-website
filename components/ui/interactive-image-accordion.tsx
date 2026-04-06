@@ -481,10 +481,10 @@ function MiniGapResult({ result }: { result: GapResult }) {
           </div>
         ) : (
           <div className="flex items-center gap-2 mb-4">
-            <span className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-              <CheckCircle2 size={12} color="#D92D20" />
+            <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(185,28,28,0.08)' }}>
+              <CheckCircle2 size={12} color="#b91c1c" />
             </span>
-            <p className="text-sm font-bold text-green-700">You're on track — no gap detected!</p>
+            <p className="text-sm font-bold" style={{ color: '#111111' }}>You're on track — no gap detected!</p>
           </div>
         )}
 

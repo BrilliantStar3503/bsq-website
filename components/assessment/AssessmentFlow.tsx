@@ -45,41 +45,30 @@ function ScoreRing({ score }: { score: number }) {
     requestAnimationFrame(tick)
   }, [score])
 
-  const c1 = score < 35 ? '#ff3b3b' : score < 55 ? '#D92D20' : score < 75 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.7)'
-  const c2 = score < 35 ? '#b30000' : score < 55 ? '#B42318' : score < 75 ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.5)'
-  const statusColor = score < 35 ? '#ff5b5b' : score < 55 ? '#ff8a8a' : score < 75 ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.8)'
+  const statusLabel = score < 35 ? 'Critical Risk' : score < 55 ? 'At Risk' : score < 75 ? 'Moderate Risk' : 'Well Protected'
 
   return (
-    <div className="flex flex-col items-center gap-5">
-      <div className="relative flex items-center justify-center" style={{ width: 200, height: 200 }}>
-        {/* Outer glow ring */}
-        <div className="absolute inset-0 rounded-full" style={{
-          background: `radial-gradient(circle, ${statusColor}14 0%, transparent 70%)`,
-        }} />
-        <svg width="200" height="200" style={{ transform: 'rotate(-90deg)' }}>
-          <defs>
-            <linearGradient id={gradId.current} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={c1} />
-              <stop offset="100%" stopColor={c2} />
-            </linearGradient>
-          </defs>
-          {/* Track */}
-          <circle cx="100" cy="100" r={RADIUS} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
-          {/* Fill */}
-          <circle
-            cx="100" cy="100" r={RADIUS} fill="none"
-            stroke={`url(#${gradId.current})`} strokeWidth="10" strokeLinecap="round"
-            strokeDasharray={CIRC} strokeDashoffset={offset}
-            style={{ transition: 'stroke-dashoffset 0.04s linear', filter: `drop-shadow(0 0 8px ${statusColor}60)` }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="metric" style={{ color: statusColor }}>{display}</span>
-          <span className="text-label uppercase tracking-[0.2em] font-medium mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>out of 100</span>
-        </div>
-      </div>
-      <div className="text-center">
-        <p className="text-[10px] tracking-[0.25em] uppercase font-bold mb-1" style={{ color: 'rgba(255,255,255,0.3)' }}>Financial Risk Score</p>
+    <div className="relative flex items-center justify-center" style={{ width: 180, height: 180 }}>
+      <svg width="180" height="180" style={{ transform: 'rotate(-90deg)', filter: 'drop-shadow(0 0 6px rgba(185,28,28,0.15))' }}>
+        <defs>
+          <linearGradient id={gradId.current} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#b91c1c" />
+            <stop offset="100%" stopColor="#ef4444" />
+          </linearGradient>
+        </defs>
+        {/* Track */}
+        <circle cx="90" cy="90" r={RADIUS} fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth="11" />
+        {/* Fill */}
+        <circle
+          cx="90" cy="90" r={RADIUS} fill="none"
+          stroke={`url(#${gradId.current})`} strokeWidth="11" strokeLinecap="round"
+          strokeDasharray={CIRC} strokeDashoffset={offset}
+          style={{ transition: 'stroke-dashoffset 0.04s linear' }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="metric" style={{ color: '#b91c1c', fontSize: 40, lineHeight: 1 }}>{display}</span>
+        <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(17,17,17,0.5)', fontWeight: 500, marginTop: 4 }}>{statusLabel}</span>
       </div>
     </div>
   )
@@ -91,8 +80,8 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
   return (
     <div className="w-full mb-10">
       <div className="flex justify-between text-xs mb-3">
-        <span className="font-medium tracking-wide" style={{ color: 'rgba(0,0,0,0.4)' }}>Step {step + 1} of {total}</span>
-        <span className="font-medium tabular-nums" style={{ color: 'rgba(0,0,0,0.4)' }}>{pct}%</span>
+        <span className="font-medium tracking-wide" style={{ color: 'rgba(0,0,0,0.55)' }}>Step {step + 1} of {total}</span>
+        <span className="font-medium tabular-nums" style={{ color: 'rgba(0,0,0,0.55)' }}>{pct}%</span>
       </div>
       <div className="h-[3px] rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
         <div
@@ -124,7 +113,7 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
       <div className="mb-10 text-center">
         <h1 style={{ fontSize: 28, fontWeight: 600, color: '#111111', lineHeight: 1.3, marginBottom: '0.75rem' }}>{q.question}</h1>
         {q.subtitle && (
-          <p className="text-sm md:text-base leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(0,0,0,0.5)' }}>{q.subtitle}</p>
+          <p className="text-sm md:text-base leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(0,0,0,0.65)' }}>{q.subtitle}</p>
         )}
       </div>
 
@@ -143,29 +132,33 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
               />
               <button
                 onClick={() => choose(opt)}
-                className="relative w-full text-left px-6 py-5 rounded-2xl transition-all duration-200 active:scale-[0.99]"
+                className="relative w-full text-left px-6 py-5 rounded-2xl active:scale-[0.99]"
                 style={{
-                  background:  isSelected ? 'rgba(220,0,0,0.06)' : 'rgba(0,0,0,0.03)',
-                  border:      `1px solid ${isSelected ? 'rgba(220,0,0,0.5)' : 'rgba(0,0,0,0.1)'}`,
-                  boxShadow:   isSelected ? '0 4px 20px rgba(220,0,0,0.12)' : 'none',
+                  background:  isSelected ? 'rgba(220,0,0,0.07)' : 'rgba(0,0,0,0.025)',
+                  border:      `1px solid ${isSelected ? 'rgba(220,0,0,0.6)' : 'rgba(0,0,0,0.12)'}`,
+                  boxShadow:   isSelected
+                    ? '0 4px 24px rgba(220,0,0,0.13), 0 1px 4px rgba(220,0,0,0.08)'
+                    : 'none',
                   transform:   isSelected ? 'translateY(-1px)' : 'translateY(0)',
+                  transition:  'background 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
+                  cursor:      'pointer',
                 }}
                 onMouseEnter={e => {
                   if (!isSelected) {
                     const el = e.currentTarget
-                    el.style.background   = 'rgba(0,0,0,0.04)'
-                    el.style.borderColor  = 'rgba(220,0,0,0.3)'
-                    el.style.transform    = 'translateY(-1px)'
-                    el.style.boxShadow    = '0 4px 16px rgba(0,0,0,0.06)'
+                    el.style.background  = 'rgba(0,0,0,0.02)'
+                    el.style.borderColor = 'rgba(0,0,0,0.22)'
+                    el.style.transform   = 'translateY(-2px)'
+                    el.style.boxShadow   = '0 4px 20px rgba(0,0,0,0.09), 0 1px 6px rgba(0,0,0,0.06)'
                   }
                 }}
                 onMouseLeave={e => {
                   if (!isSelected) {
                     const el = e.currentTarget
-                    el.style.background   = 'rgba(0,0,0,0.03)'
-                    el.style.borderColor  = 'rgba(0,0,0,0.1)'
-                    el.style.transform    = 'translateY(0)'
-                    el.style.boxShadow    = 'none'
+                    el.style.background  = 'rgba(0,0,0,0.025)'
+                    el.style.borderColor = 'rgba(0,0,0,0.12)'
+                    el.style.transform   = 'translateY(0)'
+                    el.style.boxShadow   = 'none'
                   }
                 }}
               >
@@ -186,7 +179,7 @@ function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: stri
                   </span>
                   <span
                     className="text-sm md:text-base font-medium transition-colors duration-200"
-                    style={{ color: isSelected ? '#b91c1c' : '#111111' }}
+                    style={{ color: isSelected ? '#991b1b' : '#111111' }}
                   >
                     {opt}
                   </span>
@@ -500,8 +493,8 @@ function LeadCaptureModal({ open, onClose, result }: LeadCaptureModalProps) {
                               onClick={() => { setContactType(type); setContact('') }}
                               className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-1 active:scale-[0.97]"
                               style={contactType === type
-                                ? { background: RED, color: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.10)' }
-                                : { background: '#f9fafb', color: '#6b7280', border: '1px solid #e5e7eb' }
+                                ? { background: RED, color: '#fff', boxShadow: '0 4px 12px rgba(185,28,28,0.25)' }
+                                : { background: 'transparent', color: '#111111', border: '1px solid rgba(0,0,0,0.10)' }
                               }
                             >
                               {type === 'email' ? <Mail size={12} /> : <Phone size={12} />}
@@ -628,7 +621,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
     low:    { color: 'rgba(255,255,255,0.40)', bg: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.09)', label: 'Low Risk'      },
   }
 
-  const statusColor = result.status === 'good' ? 'rgba(255,255,255,0.75)' : result.status === 'moderate' ? 'rgba(255,255,255,0.55)' : '#ff5b5b'
+  const statusColor = result.status === 'good' ? '#b91c1c' : result.status === 'moderate' ? '#dc2626' : '#dc2626'
   const statusLabel = result.status === 'good' ? 'Well Protected' : result.status === 'moderate' ? 'Moderate Risk' : result.status === 'at-risk' ? 'At Risk' : 'Critical Risk'
 
   const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }
@@ -670,32 +663,32 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl overflow-hidden"
         style={{
-          background: 'rgba(255,255,255,0.03)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255,255,255,0.06)',
-          boxShadow: '0 4px 32px rgba(0,0,0,0.25)',
+          background: 'rgba(255,255,255,0.98)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(0,0,0,0.08)',
+          boxShadow: '0 4px 32px rgba(0,0,0,0.10)',
         }}>
-        <div style={{ height: 2, background: 'linear-gradient(90deg, #D92D20, rgba(180,35,24,0.4) 70%, transparent)' }} />
+        <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
 
           {/* Score ring */}
           <div className="flex flex-col items-center justify-center p-8 gap-3"
-            style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }} >
+            style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }} >
             <ScoreRing score={result.total} />
             <div className="flex items-center gap-2 px-4 py-1.5 rounded-full"
               style={{ background: `${statusColor}18`, border: `1px solid ${statusColor}40` }}>
               <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: statusColor, boxShadow: `0 0 6px ${statusColor}` }} />
               <span className="text-xs font-semibold tracking-wide" style={{ color: statusColor }}>{statusLabel}</span>
             </div>
-            <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>Financial Risk Score</p>
-            <div className="w-full mt-1 pt-3 flex items-center justify-center gap-6" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(17,17,17,0.65)', fontWeight: 500 }}>Financial Risk Score</p>
+            <div className="w-full mt-1 pt-3 flex items-center justify-center gap-6" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
               {subScores.map(({ label, val }) => {
-                const c = val < 40 ? '#ff5b5b' : val < 65 ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.7)'
+                const c = val < 40 ? '#dc2626' : '#111111'
                 return (
                   <div key={label} className="flex flex-col items-center gap-0.5">
                     <span style={{ fontSize: 16, fontWeight: 600, color: c, fontVariantNumeric: 'tabular-nums' }}>{val}</span>
-                    <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>{label}</span>
+                    <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(17,17,17,0.65)', fontWeight: 500 }}>{label}</span>
                   </div>
                 )
               })}
@@ -705,44 +698,42 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           {/* Sub-scores */}
           <div className="p-8 md:p-10 flex flex-col justify-center gap-5">
             <div>
-              <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#ff5b5b', marginBottom: 6 }}>Assessment Summary</p>
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65 }}>{result.explanation}</p>
+              <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#dc2626', marginBottom: 6 }}>Assessment Summary</p>
+              <p style={{ fontSize: 14, color: 'rgba(17,17,17,0.75)', lineHeight: 1.6 }}>{result.explanation}</p>
             </div>
             <div className="space-y-4">
               {subScores.map(({ label, val, icon }) => {
-                const barColor = val < 40 ? '#ff5b5b' : val < 65 ? '#f97316' : val < 85 ? 'rgba(255,255,255,0.6)' : '#4ade80'
+                const barColor = val < 40 ? '#dc2626' : val < 65 ? '#b91c1c' : val < 85 ? 'rgba(17,17,17,0.5)' : '#b91c1c'
                 const grade    = val < 40 ? 'Needs attention' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
                 return (
                   <div key={label}>
                     <div className="flex justify-between items-center mb-1.5">
                       <div className="flex items-center gap-2">
-                        <span style={{ color: 'rgba(255,255,255,0.3)' }}>{icon}</span>
-                        <span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>{label}</span>
+                        <span style={{ color: 'rgba(17,17,17,0.65)' }}>{icon}</span>
+                        <span style={{ fontSize: 12, fontWeight: 500, color: '#111111' }}>{label}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>{grade}</span>
+                        <span style={{ fontSize: 11, color: 'rgba(17,17,17,0.65)' }}>{grade}</span>
                         <span style={{ fontSize: 12, fontWeight: 600, color: barColor, fontVariantNumeric: 'tabular-nums', minWidth: 24, textAlign: 'right' }}>{val}</span>
                       </div>
                     </div>
-                    <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                    <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
                       <motion.div className="h-full rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${val}%` }}
                         transition={{ duration: 1.1, delay: 0.4, ease: 'easeOut' as const }}
                         style={{
                           background: val < 40
-                            ? 'linear-gradient(90deg, #ff3b3b, #b30000)'
+                            ? 'linear-gradient(90deg, #dc2626, #991b1b)'
                             : val < 65
-                            ? 'linear-gradient(90deg, #f97316, #c2410c)'
+                            ? 'linear-gradient(90deg, #b91c1c, #7f1d1d)'
                             : val < 85
-                            ? 'rgba(255,255,255,0.35)'
-                            : 'linear-gradient(90deg, #4ade80, #16a34a)',
-                          boxShadow: val < 40
-                            ? '0 0 6px rgba(255,59,59,0.45)'
-                            : val < 65
-                            ? '0 0 6px rgba(249,115,22,0.35)'
+                            ? 'rgba(17,17,17,0.35)'
+                            : 'linear-gradient(90deg, #b91c1c, #991b1b)',
+                          boxShadow: val < 65
+                            ? '0 0 6px rgba(185,28,28,0.35)'
                             : val >= 85
-                            ? '0 0 6px rgba(74,222,128,0.3)'
+                            ? '0 0 6px rgba(185,28,28,0.25)'
                             : 'none',
                         }} />
                     </div>
@@ -760,43 +751,41 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         <motion.div variants={fadeUp}
           className="rounded-2xl overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+            background: 'rgba(255,255,255,0.98)',
+            border: '1px solid rgba(0,0,0,0.08)',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
           }}>
-          <div style={{ height: 2, background: 'linear-gradient(90deg, #D92D20, rgba(180,35,24,0.4) 70%, transparent)' }} />
+          <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
           <div className="p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
-              <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#ff5b5b' }}>Emergency Fund Target</p>
-              <span style={{ fontSize: 11, padding: '2px 10px', borderRadius: 999, fontWeight: 500, background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.12)' }}>Industry Grade</span>
+              <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#dc2626' }}>Emergency Fund Target</p>
+              <span style={{ fontSize: 11, padding: '2px 10px', borderRadius: 999, fontWeight: 500, background: 'rgba(0,0,0,0.05)', color: 'rgba(17,17,17,0.7)', border: '1px solid rgba(0,0,0,0.10)' }}>Industry Grade</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
               <div>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 500, marginBottom: 4 }}>Recommended Target</p>
-                <p className="metric" style={{ color: '#ffffff' }}>
+                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', fontWeight: 500, marginBottom: 4 }}>Recommended Target</p>
+                <p className="metric" style={{ color: '#111111' }}>
                   ₱{result.emergencyFundTarget.toLocaleString('en-PH')}
                 </p>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>
+                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', marginTop: 6 }}>
                   {result.emergencyFundMonths.toFixed(1)} months × ₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}/mo
                 </p>
               </div>
-              <div className="rounded-xl p-4" style={{ background: 'rgba(217,45,32,0.07)', border: '1px solid rgba(217,45,32,0.12)' }}>
-                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#ff5b5b', fontWeight: 600, marginBottom: 4 }}>Months Coverage</p>
-                <p className="metric" style={{ color: '#ffffff', fontSize: 32 }}>{result.emergencyFundMonths.toFixed(1)}</p>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>Based on your income type &amp; dependents</p>
+              <div className="rounded-xl p-4" style={{ background: 'rgba(220,0,0,0.05)', border: '1px solid rgba(220,0,0,0.15)' }}>
+                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#dc2626', fontWeight: 600, marginBottom: 4 }}>Months Coverage</p>
+                <p className="metric" style={{ color: '#111111', fontSize: 32 }}>{result.emergencyFundMonths.toFixed(1)}</p>
+                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', marginTop: 4 }}>Based on your income type &amp; dependents</p>
               </div>
-              <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}>
-                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginBottom: 4 }}>Monthly Expenses</p>
-                <p className="metric" style={{ color: '#ffffff', fontSize: 32 }}>₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}</p>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>Essential expenses only</p>
+              <div className="rounded-xl p-4" style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)' }}>
+                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(17,17,17,0.7)', fontWeight: 600, marginBottom: 4 }}>Monthly Expenses</p>
+                <p className="metric" style={{ color: '#111111', fontSize: 32 }}>₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}</p>
+                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', marginTop: 4 }}>Essential expenses only</p>
               </div>
             </div>
-            <div className="mt-5 flex items-start gap-2 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-              <Info size={12} className="shrink-0 mt-0.5" style={{ color: 'rgba(255,255,255,0.25)' }} />
-              <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>
-                <span style={{ fontWeight: 600, color: 'rgba(255,255,255,0.6)' }}>Industry standard:</span> Keep 1–2 months liquid in cash or savings. Park the remainder in a high-yield money market fund — not locked in long-term investments.
+            <div className="mt-5 flex items-start gap-2 pt-4" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+              <Info size={12} className="shrink-0 mt-0.5" style={{ color: 'rgba(17,17,17,0.4)' }} />
+              <p style={{ fontSize: 12, color: 'rgba(17,17,17,0.7)', lineHeight: 1.65 }}>
+                <span style={{ fontWeight: 600, color: '#111111' }}>Industry standard:</span> Keep 1–2 months liquid in cash or savings. Park the remainder in a high-yield money market fund — not locked in long-term investments.
               </p>
             </div>
           </div>
@@ -820,10 +809,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           {result.gaps.map((gap, i) => {
             /* ── Per-severity design tokens (Apple system palette) ── */
             const sev = gap.severity === 'high'
-              ? { accent: '#ff3b30', badgeBg: 'rgba(255,59,48,0.10)', badgeColor: '#ff3b30',  label: 'High Risk'     }
+              ? { accent: '#b91c1c', badgeBg: 'rgba(185,28,28,0.12)', badgeColor: '#b91c1c',           label: 'High Risk'     }
               : gap.severity === 'medium'
-              ? { accent: '#ff9f0a', badgeBg: 'rgba(255,159,10,0.10)', badgeColor: '#ff9f0a', label: 'Moderate Risk' }
-              : { accent: '#34c759', badgeBg: 'rgba(52,199,89,0.10)',  badgeColor: '#34c759',  label: 'Low Risk'      }
+              ? { accent: '#dc2626', badgeBg: 'rgba(220,38,38,0.08)',  badgeColor: '#dc2626',           label: 'Moderate Risk' }
+              : { accent: 'rgba(17,17,17,0.45)', badgeBg: 'rgba(0,0,0,0.05)', badgeColor: 'rgba(17,17,17,0.55)', label: 'Low Risk' }
 
             return (
               <motion.div
@@ -833,8 +822,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 transition={{ delay: 0.05 + i * 0.06, duration: 0.38, ease: 'easeOut' as const }}
                 className="group flex flex-col gap-4 rounded-2xl"
                 style={{
-                  background:   '#1c1c1e',
-                  border:       '1px solid rgba(255,255,255,0.06)',
+                  background:   '#1e1e24',
+                  border:       '1px solid rgba(255,255,255,0.09)',
                   borderLeft:   `3px solid ${sev.accent}`,
                   borderRadius: 16,
                   padding:      24,
@@ -847,13 +836,13 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = `rgba(255,255,255,0.12)`
+                  el.style.borderColor     = `rgba(255,255,255,0.16)`
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = '0 8px 32px rgba(0,0,0,0.4)'
+                  el.style.boxShadow       = '0 8px 32px rgba(0,0,0,0.35)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = 'rgba(255,255,255,0.06)'
+                  el.style.borderColor     = 'rgba(255,255,255,0.09)'
                   el.style.borderLeftColor = sev.accent
                   el.style.boxShadow       = 'none'
                 }}
@@ -862,7 +851,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
-                      style={{ background: 'rgba(255,255,255,0.05)', color: sev.accent }}>
+                      style={{ background: 'rgba(255,255,255,0.09)', color: sev.accent }}>
                       {gapIcon[gap.id] ?? <AlertTriangle size={15} />}
                     </div>
                     <h4 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.88)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
@@ -876,21 +865,21 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 </div>
 
                 {/* ── Description ── */}
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, margin: 0 }}>
                   {gap.description}
                 </p>
 
                 {/* ── Key impact statement ── */}
                 <div style={{
-                  background:   'rgba(255,255,255,0.03)',
+                  background:   'rgba(255,255,255,0.06)',
                   borderRadius: 10,
                   padding:      '10px 12px',
                   display:      'flex',
                   alignItems:   'flex-start',
                   gap:          8,
                 }}>
-                  <ArrowRight size={11} className="shrink-0 mt-0.5" style={{ color: sev.accent, opacity: 0.8 }} />
-                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.55, margin: 0 }}>
+                  <ArrowRight size={11} className="shrink-0 mt-0.5" style={{ color: sev.accent, opacity: 0.9 }} />
+                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', lineHeight: 1.55, margin: 0 }}>
                     {gap.consequence}
                   </p>
                 </div>
@@ -903,17 +892,18 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                       flex:         1,
                       height:       36,
                       borderRadius: 8,
-                      background:   '#D92D20',
+                      background:   '#b91c1c',
                       color:        '#fff',
                       fontSize:     12,
                       fontWeight:   600,
                       border:       'none',
                       cursor:       'pointer',
                       letterSpacing: '0.01em',
-                      transition:   'background 0.15s ease',
+                      boxShadow:    '0 4px 12px rgba(185,28,28,0.25)',
+                      transition:   'background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#B42318')}
-                    onMouseLeave={e => (e.currentTarget.style.background = '#D92D20')}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#991b1b'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(185,28,28,0.35)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#b91c1c'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(185,28,28,0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
                     Talk to Advisor
                   </button>
@@ -924,24 +914,26 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                       height:       36,
                       borderRadius: 8,
                       background:   'transparent',
-                      color:        'rgba(255,255,255,0.45)',
+                      color:        'rgba(255,255,255,0.6)',
                       fontSize:     12,
                       fontWeight:   500,
-                      border:       '1px solid rgba(255,255,255,0.1)',
+                      border:       '1px solid rgba(255,255,255,0.12)',
                       cursor:       'pointer',
                       display:      'flex',
                       alignItems:   'center',
                       justifyContent: 'center',
                       textDecoration: 'none',
-                      transition:   'border-color 0.15s ease, color 0.15s ease',
+                      transition:   'border-color 0.15s ease, color 0.15s ease, background 0.15s ease',
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.7)'
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
+                      e.currentTarget.style.color = '#ffffff'
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.45)'
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
+                      e.currentTarget.style.color = 'rgba(255,255,255,0.6)'
+                      e.currentTarget.style.background = 'transparent'
                     }}
                   >
                     Learn More
@@ -957,25 +949,23 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl p-6 flex gap-4 items-start"
         style={{
-          background: 'rgba(255,255,255,0.03)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255,255,255,0.06)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
+          background: 'rgba(255,255,255,0.98)',
+          border: '1px solid rgba(0,0,0,0.08)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
         }}>
         <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <User size={16} style={{ color: 'rgba(255,255,255,0.5)' }} />
+          style={{ background: 'rgba(220,0,0,0.07)', border: '1px solid rgba(220,0,0,0.15)' }}>
+          <User size={16} style={{ color: '#b91c1c' }} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#ff5b5b', letterSpacing: '0.15em' }}>Your BSQ Advisor</p>
+            <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#dc2626', letterSpacing: '0.15em' }}>Your BSQ Advisor</p>
             <span className="text-xs px-2.5 py-0.5 rounded-full font-medium"
-              style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              style={{ background: 'rgba(0,0,0,0.05)', color: 'rgba(17,17,17,0.7)', border: '1px solid rgba(0,0,0,0.10)' }}>
               {engineResult.segment} · {tierLabel}
             </span>
           </div>
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: '#111111' }}>
             &ldquo;{engineResult.positioning_message}&rdquo;
           </p>
         </div>
@@ -988,131 +978,95 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           <h2 style={{ color: '#1d1d1f' }}>Recommended Plans</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Timeline vertical list */}
+        <div className="rounded-2xl overflow-hidden" style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
           {result.recommendations.map((rec, i) => {
-            const hex          = rec.color ?? PRU_RED
-            const engineMatch  = engineResult.recommended_products.find(e => e.slug === rec.slug)
-            const isTopPick    = engineMatch?.priority === 1
-            const isIncomeFit  = !!engineMatch
-            const cc           = catColor[rec.category] ?? { text: hex, bg: `${hex}10`, border: `${hex}25` }
+            const hex         = rec.color ?? PRU_RED
+            const engineMatch = engineResult.recommended_products.find(e => e.slug === rec.slug)
+            const isTopPick   = engineMatch?.priority === 1
+            const isLast      = i === result.recommendations.length - 1
 
             return (
               <motion.div key={rec.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 + i * 0.08, duration: 0.4, ease: 'easeOut' as const }}
-                className="h-full">
-              <ShineBorder
-                color={['#1a0000', '#6b0000', '#B42318', '#D92D20', '#B42318', '#6b0000', '#1a0000']}
-                borderRadius={16}
-                borderWidth={1}
-                duration={8 + i * 2}
-                className="h-full"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05 + i * 0.08, duration: 0.35, ease: 'easeOut' as const }}
+                className="flex gap-5 p-6"
+                style={{ borderBottom: isLast ? 'none' : '1px solid rgba(0,0,0,0.06)' }}
               >
-                <div
-                  className="rounded-2xl flex flex-col relative h-full overflow-hidden transition-all duration-300"
-                  style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    boxShadow: isTopPick ? '0 4px 24px rgba(217,45,32,0.12)' : '0 2px 12px rgba(0,0,0,0.2)',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = isTopPick ? '0 8px 40px rgba(220,0,0,0.3)' : '0 8px 32px rgba(0,0,0,0.45)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = isTopPick ? '0 4px 32px rgba(220,0,0,0.2)' : '0 2px 16px rgba(0,0,0,0.3)' }}
-                  >
-
-                {/* Advisor's Pick badge */}
-                {isTopPick && (
-                  <div className="absolute top-4 right-4 z-10 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium"
-                    style={{ background: RED_SOFT, color: PRU_RED, border: `1px solid ${RED_MED}` }}>
-                    <Sparkles size={10} />
-                    Advisor&apos;s Pick
+                {/* Left — icon + connector line */}
+                <div className="flex flex-col items-center shrink-0" style={{ width: 40 }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-base shrink-0"
+                    style={{ background: 'rgba(185,28,28,0.08)', border: '1.5px solid rgba(185,28,28,0.2)' }}>
+                    {rec.emoji}
                   </div>
-                )}
-
-                {/* Top accent */}
-                <div style={{ height: 3, background: isTopPick ? PRU_RED : hex, borderRadius: '12px 12px 0 0' }} />
-
-                {/* Card header */}
-                <div className="p-6 pb-4">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-lg"
-                      style={{ background: cc.bg }}>
-                      {rec.emoji}
-                    </div>
-                    <div className="flex-1 pt-0.5 min-w-0">
-                      <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                        <span className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                          style={{ color: cc.text, background: cc.bg, border: `1px solid ${cc.border}` }}>
-                          {rec.category}
-                        </span>
-                        {isIncomeFit && !isTopPick && (
-                          <span className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                            style={{ color: '#ff8a8a', background: 'rgba(220,0,0,0.10)', border: '1px solid rgba(255,59,59,0.25)' }}>
-                            ✓ Income Fit
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-base font-semibold leading-snug" style={{ color: 'rgba(255,255,255,0.85)' }}>{rec.shortName ?? rec.name}</h3>
-                    </div>
-                  </div>
-                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>{rec.what}</p>
+                  {!isLast && (
+                    <div className="flex-1 mt-3" style={{ width: 1, background: 'rgba(0,0,0,0.07)', minHeight: 20 }} />
+                  )}
                 </div>
 
-                {/* Divider */}
-                <div className="mx-6" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }} />
+                {/* Right — content */}
+                <div className="flex-1 min-w-0 pb-1">
+                  {/* Header row */}
+                  <div className="flex items-start justify-between gap-3 mb-1">
+                    <div>
+                      {isTopPick && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full mb-1.5"
+                          style={{ background: 'rgba(185,28,28,0.07)', color: '#b91c1c', border: '1px solid rgba(185,28,28,0.15)' }}>
+                          <Sparkles size={8} /> Advisor&apos;s Pick
+                        </span>
+                      )}
+                      <h3 className="text-base font-semibold" style={{ color: '#111111', lineHeight: 1.3 }}>
+                        {rec.shortName ?? rec.name}
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-medium px-2.5 py-1 rounded-full shrink-0 mt-0.5 capitalize"
+                      style={{ background: 'rgba(185,28,28,0.07)', color: '#b91c1c', border: '1px solid rgba(185,28,28,0.15)' }}>
+                      {rec.category}
+                    </span>
+                  </div>
 
-                {/* Key benefits */}
-                <div className="p-6 pt-4 flex flex-col flex-1 gap-4">
-                  {rec.keyBenefits && rec.keyBenefits.slice(0, 2).length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-xs uppercase tracking-widest font-medium" style={{ color: 'rgba(255,255,255,0.3)', letterSpacing: '0.15em' }}>Key Benefits</p>
-                      {rec.keyBenefits.slice(0, 2).map((b, bi) => (
-                        <div key={bi} className="flex items-start gap-2.5">
-                          <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                            style={{ background: cc.bg, border: `1px solid ${cc.border}` }}>
-                            <Check size={9} style={{ color: cc.text }} />
+                  {/* One-line description */}
+                  <p className="text-sm mb-3" style={{ color: 'rgba(17,17,17,0.65)', lineHeight: 1.5 }}>
+                    {rec.what}
+                  </p>
+
+                  {/* Key benefits */}
+                  {rec.keyBenefits && rec.keyBenefits.length > 0 && (
+                    <div className="flex flex-col gap-1.5 mb-4">
+                      {rec.keyBenefits.slice(0, 3).map((b, bi) => (
+                        <div key={bi} className="flex items-center gap-2">
+                          <div className="w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0"
+                            style={{ background: 'rgba(185,28,28,0.08)', border: '1px solid rgba(185,28,28,0.22)' }}>
+                            <Check size={8} style={{ color: '#b91c1c' }} />
                           </div>
-                          <div>
-                            <p className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.75)' }}>{b.title}</p>
-                            <p className="text-xs leading-relaxed mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{b.description}</p>
-                          </div>
+                          <span className="text-sm" style={{ color: 'rgba(17,17,17,0.75)' }}>{b.title}</span>
                         </div>
                       ))}
                     </div>
                   )}
 
-                  {/* Why this fits */}
-                  <div className="rounded-xl p-3.5 mt-auto" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <p className="text-xs uppercase tracking-widest font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.3)', letterSpacing: '0.13em' }}>Why this fits you</p>
-                    <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>{rec.why}</p>
-                    {engineMatch && (
-                      <p className="text-xs leading-relaxed mt-2 pt-2 italic" style={{ color: 'rgba(255,255,255,0.3)', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-                        {engineMatch.reason}
-                      </p>
-                    )}
-                  </div>
-
                   {/* CTAs */}
-                  <div className="flex gap-2 pt-1">
-                    <a href={`/products/${rec.slug}`}
-                      className="flex-1 h-10 flex items-center justify-center gap-1.5 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-[0.97]"
-                      style={{ color: cc.text, border: `1px solid ${cc.border}`, background: cc.bg }}
-                      onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = cc.text; el.style.color = '#fff'; el.style.borderColor = cc.text }}
-                      onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = cc.bg; el.style.color = cc.text; el.style.borderColor = cc.border }}>
-                      Learn More <ArrowRight size={12} />
-                    </a>
-                    <button onClick={() => openContact(`rec_${rec.slug}`)}
-                      className="h-10 px-3 rounded-xl text-xs font-medium transition-all duration-200 flex items-center gap-1.5"
-                      style={{ color: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.1)', background: 'transparent' }}
-                      onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)' }}
-                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)' }}>
-                      <MessageCircle size={12} /> Advisor
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openContact(`rec_${rec.slug}`)}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold"
+                      style={{ background: '#b91c1c', color: '#ffffff', boxShadow: '0 4px 12px rgba(185,28,28,0.25)', transition: 'background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#991b1b'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(185,28,28,0.35)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#b91c1c'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(185,28,28,0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                    >
+                      <MessageCircle size={11} /> Talk to Advisor
                     </button>
+                    <a href={`/products/${rec.slug}`}
+                      className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium"
+                      style={{ color: '#111111', border: '1px solid rgba(0,0,0,0.10)', background: 'transparent', transition: 'background 0.15s ease, border-color 0.15s ease' }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'rgba(0,0,0,0.04)'; el.style.borderColor = 'rgba(0,0,0,0.18)' }}
+                      onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'rgba(0,0,0,0.10)' }}
+                    >
+                      Learn More <ArrowRight size={10} />
+                    </a>
                   </div>
                 </div>
-              </div>
-              </ShineBorder>
               </motion.div>
             )
           })}
@@ -1125,31 +1079,29 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         {/* Save Report */}
         <div className="rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+            background: 'rgba(255,255,255,0.98)',
+            border: '1px solid rgba(0,0,0,0.08)',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.08)',
           }}>
-          <div className="absolute top-0 left-0 right-0" style={{ height: 2, background: 'linear-gradient(90deg, #D92D20, rgba(180,35,24,0.4) 70%, transparent)' }} />
+          <div className="absolute top-0 left-0 right-0" style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
           <div className="flex items-center gap-3 mt-1">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ background: 'rgba(220,0,0,0.07)', border: '1px solid rgba(220,0,0,0.15)' }}>
               <Mail size={15} style={{ color: '#D92D20' }} />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#ff5b5b', letterSpacing: '0.13em' }}>Save Your Report</p>
-              <h3 className="text-base font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>Get it via Email or SMS</h3>
+              <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#dc2626', letterSpacing: '0.13em' }}>Save Your Report</p>
+              <h3 className="text-base font-semibold" style={{ color: '#111111' }}>Get it via Email or SMS</h3>
             </div>
           </div>
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: 'rgba(17,17,17,0.7)' }}>
             Receive a personalised copy of your financial gap report with tailored recommendations — free and instant.
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             {['Instant delivery', 'Free & private', 'No spam'].map(t => (
               <div key={t} className="flex items-center gap-1.5">
-                <Check size={11} style={{ color: '#ff5b5b' }} />
-                <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>{t}</span>
+                <Check size={11} style={{ color: '#dc2626' }} />
+                <span className="text-xs" style={{ color: 'rgba(17,17,17,0.7)' }}>{t}</span>
               </div>
             ))}
           </div>
@@ -1164,30 +1116,28 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         {/* Talk to Advisor */}
         <div className="rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.06)',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+            background: 'rgba(255,255,255,0.98)',
+            border: '1px solid rgba(0,0,0,0.08)',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.08)',
           }}>
           <div className="relative flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ background: 'rgba(220,0,0,0.07)', border: '1px solid rgba(220,0,0,0.15)' }}>
               <MessageCircle size={15} style={{ color: '#D92D20' }} />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#ff5b5b', letterSpacing: '0.13em' }}>Talk to an Expert</p>
-              <h3 className="text-base font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>Free Consultation</h3>
+              <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#dc2626', letterSpacing: '0.13em' }}>Talk to an Expert</p>
+              <h3 className="text-base font-semibold" style={{ color: '#111111' }}>Free Consultation</h3>
             </div>
           </div>
-          <p className="relative text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          <p className="relative text-sm leading-relaxed" style={{ color: 'rgba(17,17,17,0.7)' }}>
             A licensed BSQ · PRU Life UK advisor will review your results and build a personalised plan — no cost, no obligation.
           </p>
           <div className="relative flex flex-wrap gap-x-4 gap-y-1">
             {['Free consultation', 'No obligation', 'Licensed advisor'].map(t => (
               <div key={t} className="flex items-center gap-1.5">
-                <Check size={11} style={{ color: '#ff5b5b' }} />
-                <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>{t}</span>
+                <Check size={11} style={{ color: '#dc2626' }} />
+                <span className="text-xs" style={{ color: 'rgba(17,17,17,0.7)' }}>{t}</span>
               </div>
             ))}
           </div>
@@ -1353,24 +1303,24 @@ export default function AssessmentFlow() {
              Scope: .assessment-results only — zero global side-effects
              ═══════════════════════════════════════════════════════════════ */
 
-          /* PRIMARY — animated gradient sweep */
+          /* PRIMARY — deep controlled red */
           .assessment-results .ar-btn-primary {
-            background-image: linear-gradient(135deg, #7f0000, #B42318, #D92D20, #c0291f, #B42318, #7f0000);
-            background-size: 300% 100%;
-            animation: shine-pulse 5s linear infinite;
+            background: #b91c1c;
             color: #ffffff;
             border: none;
             border-radius: 6px;
-            box-shadow: none;
+            box-shadow: 0 6px 20px rgba(185,28,28,0.25);
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            transition: background 0.15s ease, box-shadow 0.15s ease;
           }
           .assessment-results .ar-btn-primary:hover:not(:disabled) {
-            filter: brightness(1.08);
+            background: #991b1b;
+            box-shadow: 0 8px 24px rgba(185,28,28,0.32);
           }
           .assessment-results .ar-btn-primary:focus-visible {
             outline: 2px solid #FCA5A5;
@@ -1381,15 +1331,15 @@ export default function AssessmentFlow() {
             cursor: not-allowed;
           }
 
-          /* SECONDARY — white base, strong red border */
+          /* SECONDARY — neutral ghost */
           .assessment-results .ar-btn-secondary {
-            background-color: #ffffff;
-            color: #D92D20;
-            border: 1.5px solid #D92D20;
+            background: transparent;
+            color: #111111;
+            border: 1px solid rgba(0,0,0,0.10);
             border-radius: 6px;
             box-shadow: none;
-            font-weight: 700;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+            transition: background 0.15s ease, border-color 0.15s ease;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -1397,32 +1347,33 @@ export default function AssessmentFlow() {
             gap: 8px;
           }
           .assessment-results .ar-btn-secondary:hover:not(:disabled) {
-            background-color: #D92D20;
-            color: #ffffff;
+            background: rgba(0,0,0,0.04);
+            border-color: rgba(0,0,0,0.18);
           }
           .assessment-results .ar-btn-secondary:focus-visible {
-            outline: 2px solid #FCA5A5;
+            outline: 2px solid rgba(0,0,0,0.2);
             outline-offset: 2px;
           }
 
-          /* SECONDARY-DARK — animated gradient on dark backgrounds */
+          /* SECONDARY-DARK — primary red on dark surfaces */
           .assessment-results .ar-btn-secondary-dark {
-            background-image: linear-gradient(135deg, #7f0000, #B42318, #D92D20, #c0291f, #B42318, #7f0000);
-            background-size: 300% 100%;
-            animation: shine-pulse 5s linear infinite;
+            background: #b91c1c;
             color: #ffffff;
             border: none;
             border-radius: 6px;
-            box-shadow: none;
+            box-shadow: 0 4px 12px rgba(185,28,28,0.25);
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
           }
           .assessment-results .ar-btn-secondary-dark:hover:not(:disabled) {
-            filter: brightness(1.08);
+            background: #991b1b;
+            box-shadow: 0 6px 18px rgba(185,28,28,0.35);
+            transform: translateY(-1px);
           }
           .assessment-results .ar-btn-secondary-dark:focus-visible {
             outline: 2px solid rgba(255,255,255,0.5);
@@ -1451,6 +1402,27 @@ export default function AssessmentFlow() {
           .assessment-results .ar-btn-tertiary:focus-visible {
             outline: 2px solid #e5e7eb;
             outline-offset: 2px;
+          }
+
+          /* ── Typography ─────────────────────────────────────────────── */
+          .assessment-results h2 {
+            font-weight: 600;
+            line-height: 1.25;
+          }
+          .assessment-results h3 {
+            font-weight: 600;
+            line-height: 1.3;
+          }
+          .assessment-results h4 {
+            font-weight: 600;
+            line-height: 1.3;
+          }
+          .assessment-results p {
+            line-height: 1.6;
+          }
+          .assessment-results .text-label {
+            letter-spacing: 0.02em;
+            color: rgba(17,17,17,0.65);
           }
         `}</style>
 
@@ -1641,10 +1613,10 @@ export default function AssessmentFlow() {
         <div className="max-w-2xl mx-auto w-full">
           {/* Glass container */}
           <div style={{
-            background:           'rgba(255,255,255,0.75)',
+            background:           'rgba(255,255,255,0.92)',
             backdropFilter:       'saturate(180%) blur(20px)',
             WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-            border:               '1px solid rgba(0,0,0,0.06)',
+            border:               '1px solid rgba(0,0,0,0.10)',
             borderRadius:         20,
             padding:              '40px 40px 44px',
             boxShadow:            '0 8px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04)',
