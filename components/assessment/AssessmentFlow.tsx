@@ -650,7 +650,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
   return (
     <motion.div
-      className="w-full max-w-6xl mx-auto px-4 md:px-8 pb-24 space-y-8"
+      className="w-full max-w-6xl mx-auto px-4 md:px-8 pb-28 space-y-10"
       variants={stagger} initial="hidden" animate="show"
     >
 
@@ -771,18 +771,18 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                   {result.emergencyFundMonths.toFixed(1)} months × ₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}/mo
                 </p>
               </div>
-              <div className="rounded-xl p-4" style={{ background: 'rgba(220,0,0,0.05)', border: '1px solid rgba(220,0,0,0.15)' }}>
-                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#dc2626', fontWeight: 600, marginBottom: 4 }}>Months Coverage</p>
+              <div className="rounded-xl p-5" style={{ background: 'rgba(220,0,0,0.05)', border: '1px solid rgba(220,0,0,0.15)' }}>
+                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#dc2626', fontWeight: 600, marginBottom: 6 }}>Months Coverage</p>
                 <p className="metric" style={{ color: '#111111', fontSize: 32 }}>{result.emergencyFundMonths.toFixed(1)}</p>
-                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', marginTop: 4 }}>Based on your income type &amp; dependents</p>
+                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', marginTop: 6 }}>Based on your income type &amp; dependents</p>
               </div>
-              <div className="rounded-xl p-4" style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)' }}>
-                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(17,17,17,0.7)', fontWeight: 600, marginBottom: 4 }}>Monthly Expenses</p>
+              <div className="rounded-xl p-5" style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)' }}>
+                <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(17,17,17,0.7)', fontWeight: 600, marginBottom: 6 }}>Monthly Expenses</p>
                 <p className="metric" style={{ color: '#111111', fontSize: 32 }}>₱{result.emergencyFundMonthlyExp.toLocaleString('en-PH')}</p>
-                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', marginTop: 4 }}>Essential expenses only</p>
+                <p style={{ fontSize: 11, color: 'rgba(17,17,17,0.7)', marginTop: 6 }}>Essential expenses only</p>
               </div>
             </div>
-            <div className="mt-5 flex items-start gap-2 pt-4" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+            <div className="mt-6 flex items-start gap-2 pt-5" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
               <Info size={12} className="shrink-0 mt-0.5" style={{ color: 'rgba(17,17,17,0.4)' }} />
               <p style={{ fontSize: 12, color: 'rgba(17,17,17,0.7)', lineHeight: 1.6 }}>
                 <span style={{ fontWeight: 600, color: '#111111' }}>Industry standard:</span> Keep 1–2 months liquid in cash or savings. Park the remainder in a high-yield money market fund — not locked in long-term investments.
@@ -794,7 +794,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
       {/* ══ SECTION 3 — Financial Gaps ══════════════════════════════════ */}
       <motion.div variants={fadeUp}>
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-6">
           <div>
             <p className="text-label uppercase tracking-widest font-medium mb-1" style={{ color: '#86868b', letterSpacing: '0.15em' }}>Risk Analysis</p>
             <h2 style={{ color: '#1d1d1f' }}>Financial Gaps Identified</h2>
@@ -805,7 +805,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {result.gaps.map((gap, i) => {
             /* ── Per-severity design tokens (Apple system palette) ── */
             const sev = gap.severity === 'high'
@@ -873,7 +873,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 <div style={{
                   background:   'rgba(255,255,255,0.06)',
                   borderRadius: 10,
-                  padding:      '10px 12px',
+                  padding:      '12px 14px',
                   display:      'flex',
                   alignItems:   'flex-start',
                   gap:          8,
@@ -885,7 +885,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 </div>
 
                 {/* ── Actions ── */}
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-2 mt-2">
                   <button
                     onClick={() => openContact('gap_advisor')}
                     style={{
@@ -947,7 +947,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
       {/* ══ SECTION 4 — Advisor Recommendation ═════════════════════════ */}
       <motion.div variants={fadeUp}
-        className="rounded-2xl p-6 flex gap-4 items-start"
+        className="rounded-2xl p-7 flex gap-4 items-start"
         style={{
           background: 'rgba(255,255,255,0.98)',
           border: '1px solid rgba(0,0,0,0.08)',
@@ -958,7 +958,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           <User size={16} style={{ color: '#b91c1c' }} />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
             <p className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#dc2626', letterSpacing: '0.15em' }}>Your BSQ Advisor</p>
             <span className="text-xs px-2.5 py-0.5 rounded-full font-medium"
               style={{ background: 'rgba(0,0,0,0.05)', color: 'rgba(17,17,17,0.7)', border: '1px solid rgba(0,0,0,0.10)' }}>
@@ -991,7 +991,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.05 + i * 0.08, duration: 0.35, ease: 'easeOut' as const }}
-                className="flex gap-5 p-6"
+                className="flex gap-5 p-7"
                 style={{ borderBottom: isLast ? 'none' : '1px solid rgba(0,0,0,0.06)' }}
               >
                 {/* Left — icon + connector line */}
@@ -1008,7 +1008,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 {/* Right — content */}
                 <div className="flex-1 min-w-0 pb-1">
                   {/* Header row */}
-                  <div className="flex items-start justify-between gap-3 mb-1">
+                  <div className="flex items-start justify-between gap-3 mb-2">
                     <div>
                       {isTopPick && (
                         <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full mb-1.5"
@@ -1077,14 +1077,14 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* Save Report */}
-        <div className="rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden"
+        <div className="rounded-2xl p-7 flex flex-col gap-5 relative overflow-hidden"
           style={{
             background: 'rgba(255,255,255,0.98)',
             border: '1px solid rgba(0,0,0,0.08)',
             boxShadow: '0 12px 40px rgba(0,0,0,0.08)',
           }}>
           <div className="absolute top-0 left-0 right-0" style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
-          <div className="flex items-center gap-3 mt-1">
+          <div className="flex items-center gap-3 mt-2">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
               style={{ background: 'rgba(220,0,0,0.07)', border: '1px solid rgba(220,0,0,0.15)' }}>
               <Mail size={15} style={{ color: '#D92D20' }} />
@@ -1114,7 +1114,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
 
         {/* Talk to Advisor */}
-        <div className="rounded-2xl p-6 flex flex-col gap-4 relative overflow-hidden"
+        <div className="rounded-2xl p-7 flex flex-col gap-5 relative overflow-hidden"
           style={{
             background: 'rgba(255,255,255,0.98)',
             border: '1px solid rgba(0,0,0,0.08)',
