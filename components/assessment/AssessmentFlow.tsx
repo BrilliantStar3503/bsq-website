@@ -784,7 +784,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             </div>
             <div className="mt-5 flex items-start gap-2 pt-4" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
               <Info size={12} className="shrink-0 mt-0.5" style={{ color: 'rgba(17,17,17,0.4)' }} />
-              <p style={{ fontSize: 12, color: 'rgba(17,17,17,0.7)', lineHeight: 1.65 }}>
+              <p style={{ fontSize: 12, color: 'rgba(17,17,17,0.7)', lineHeight: 1.6 }}>
                 <span style={{ fontWeight: 600, color: '#111111' }}>Industry standard:</span> Keep 1–2 months liquid in cash or savings. Park the remainder in a high-yield money market fund — not locked in long-term investments.
               </p>
             </div>
@@ -1408,19 +1408,23 @@ export default function AssessmentFlow() {
           .assessment-results h2 {
             font-weight: 600;
             line-height: 1.25;
+            letter-spacing: -0.015em;
           }
           .assessment-results h3 {
             font-weight: 600;
             line-height: 1.3;
+            letter-spacing: -0.01em;
           }
           .assessment-results h4 {
             font-weight: 600;
             line-height: 1.3;
           }
           .assessment-results p {
+            font-weight: 400;
             line-height: 1.6;
           }
           .assessment-results .text-label {
+            font-weight: 500;
             letter-spacing: 0.02em;
             color: rgba(17,17,17,0.65);
           }
