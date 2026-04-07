@@ -51,7 +51,7 @@ function LogoBadge({ src }: { src: string }) {
           height={52}
           onError={() => setErr(true)}
           className="object-contain"
-          style={{ filter: 'brightness(1.1) contrast(0.95)', opacity: 0.92 }}
+          style={{ filter: 'grayscale(1) brightness(1.7)', opacity: 0.88 }}
         />
       )}
     </div>
@@ -70,9 +70,9 @@ export default function TrustStrip() {
     <section
       className="w-full overflow-hidden relative"
       style={{
-        paddingTop: 40,
-        paddingBottom: 48,
-        background: 'linear-gradient(180deg, rgba(18,18,22,0.0) 0%, rgba(18,18,22,0.92) 12%, rgba(14,14,18,0.97) 50%, rgba(18,18,22,0.92) 88%, rgba(18,18,22,0.0) 100%)',
+        paddingTop: 28,
+        paddingBottom: 32,
+        background: 'linear-gradient(180deg, rgba(18,18,22,0.0) 0%, rgba(18,18,22,0.80) 18%, rgba(14,14,18,0.94) 50%, rgba(18,18,22,0.80) 82%, rgba(18,18,22,0.0) 100%)',
       }}
     >
       {/* Scanning line animation */}
