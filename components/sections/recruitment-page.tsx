@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
+import { GlobePolaroids } from '@/components/ui/cobe-globe-polaroids'
 import {
   ArrowRight,
   Brain,
@@ -761,7 +762,81 @@ export default function RecruitmentPage() {
         </div>
       </section>
 
-      {/* ── 3. FEATURED EVENTS ──────────────────────────────────────────── */}
+      {/* ── 3. TRAVEL INCENTIVES ────────────────────────────────────────── */}
+      <section
+        className="py-24 px-6 overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #18080a 60%, #0f0f0f 100%)' }}
+      >
+        {/* Glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: `radial-gradient(ellipse 60% 40% at 50% 50%, #ed1b2e14 0%, transparent 70%)` }}
+        />
+
+        <div className="relative max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+          {/* Left — globe */}
+          <FadeUp delay={0.1} className="flex justify-center">
+            <GlobePolaroids className="w-full max-w-md" speed={0.004} />
+          </FadeUp>
+
+          {/* Right — text */}
+          <div className="flex flex-col gap-6">
+            <FadeUp delay={0.15}>
+              <span className="text-xs font-semibold tracking-[0.22em] uppercase" style={{ color: RED }}>
+                PRU Life UK Travel Incentives
+              </span>
+            </FadeUp>
+
+            <FadeUp delay={0.25}>
+              <h2
+                className="font-bold text-white tracking-tight leading-snug"
+                style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}
+              >
+                Travel the World.<br />
+                <span style={{ color: RED }}>A to Z.</span>
+              </h2>
+            </FadeUp>
+
+            <FadeUp delay={0.35}>
+              <p className="text-white/50 leading-relaxed font-light text-[1.02rem]">
+                PRU Life UK rewards top-performing advisors with all-expense-paid trips to world-class
+                destinations. Tokyo, Singapore, Paris, New York — your production unlocks the world.
+              </p>
+            </FadeUp>
+
+            <FadeUp delay={0.45}>
+              <div className="grid grid-cols-2 gap-3 mt-2">
+                {[
+                  { city: 'Tokyo', flag: '🇯🇵' },
+                  { city: 'Singapore', flag: '🇸🇬' },
+                  { city: 'Paris', flag: '🇫🇷' },
+                  { city: 'New York', flag: '🇺🇸' },
+                  { city: 'Dubai', flag: '🇦🇪' },
+                  { city: 'London', flag: '🇬🇧' },
+                ].map(({ city, flag }) => (
+                  <div
+                    key={city}
+                    className="flex items-center gap-2.5 rounded-xl px-3.5 py-2.5"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  >
+                    <span style={{ fontSize: 16 }}>{flag}</span>
+                    <span className="text-white/70 text-[13px] font-medium">{city}</span>
+                  </div>
+                ))}
+              </div>
+            </FadeUp>
+
+            <FadeUp delay={0.55}>
+              <p className="text-white/30 text-[12px] font-light mt-2">
+                Destinations vary per incentive cycle. Past trips include Southeast Asia, Europe, Middle East, and the Americas.
+              </p>
+            </FadeUp>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. FEATURED EVENTS ──────────────────────────────────────────── */}
       <section id="events" className="py-24 px-6" style={{ background: '#fafafa' }}>
         <div className="max-w-5xl mx-auto">
           <FadeUp>
