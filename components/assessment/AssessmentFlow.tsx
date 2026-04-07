@@ -1519,8 +1519,8 @@ export default function AssessmentFlow() {
         </div>
 
         {/* ── Footer ──────────────────────────────────────────────── */}
-        <div className="relative z-10 py-6 text-center" style={{ borderTop: '1px solid rgba(0,0,0,0.14)', background: '#ebebed' }}>
-          <p className="text-label" style={{ color: 'rgba(17,17,17,0.80)' }}>
+        <div className="relative z-10 py-6 text-center" style={{ borderTop: '1px solid rgba(0,0,0,0.15)', background: '#e8e8ea', opacity: 1 }}>
+          <p className="text-label" style={{ color: '#111111', opacity: 1 }}>
             Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Pasig City
           </p>
         </div>
