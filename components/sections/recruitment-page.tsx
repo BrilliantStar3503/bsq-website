@@ -5,6 +5,7 @@ import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { GlobePolaroids } from '@/components/ui/cobe-globe-polaroids'
+import { Hero as BYBHero } from '@/components/ui/hero-with-image-text-and-two-buttons'
 import {
   ArrowRight,
   Brain,
@@ -670,77 +671,15 @@ export default function RecruitmentPage() {
     <div style={{ fontFamily: "'Inter', 'SF Pro Display', -apple-system, sans-serif" }}>
 
       {/* ── 1. HERO ─────────────────────────────────────────────────────── */}
-      <section
-        className="relative flex items-center min-h-screen overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #1a0505 100%)' }}
-      >
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-        }} />
-        <div className="absolute pointer-events-none" style={{
-          width: 700, height: 700, borderRadius: '50%',
-          background: `radial-gradient(circle, ${RED}1e 0%, transparent 70%)`,
-          top: '-15%', right: '-10%',
-        }} />
-
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12 py-32">
-          <FadeUp delay={0.1}>
-            <span className="inline-block text-xs font-semibold tracking-[0.22em] uppercase mb-6" style={{ color: RED }}>
-              BSQ Financial Advisory · Now Recruiting
-            </span>
-          </FadeUp>
-          <FadeUp delay={0.2}>
-            <h1
-              className="font-bold text-white leading-[1.06] tracking-tight"
-              style={{ fontSize: 'clamp(2.8rem, 7vw, 5.4rem)', maxWidth: 720 }}
-            >
-              Build a Career{' '}
-              <span style={{ color: RED }}>Worth</span>{' '}
-              Showing Up For.
-            </h1>
-          </FadeUp>
-          <FadeUp delay={0.35}>
-            <p className="text-white/50 mt-6 font-light leading-relaxed" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)', maxWidth: 500 }}>
-              Join a licensed financial advisory team backed by AI, digital systems, and a
-              culture that rewards ambition. We&#39;re not hiring — we&#39;re building.
-            </p>
-          </FadeUp>
-          <FadeUp delay={0.5}>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <a
-                href="#book"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 hover:gap-3 hover:scale-[1.02]"
-                style={{ background: RED, boxShadow: `0 4px 24px ${RED}55` }}
-              >
-                Reserve a Seat <ArrowRight size={16} strokeWidth={2.5} />
-              </a>
-              <a
-                href="#events"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm text-white/70 border border-white/15 hover:border-white/30 hover:text-white transition-all duration-200"
-              >
-                See Upcoming Events
-              </a>
-            </div>
-          </FadeUp>
-          <FadeUp delay={0.65}>
-            <div className="mt-12 flex flex-wrap gap-3">
-              {['PRU Life UK Licensed', 'Remote-Capable', 'AI-Powered Practice', 'MDRT-Qualified Leaders'].map(label => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide px-3 py-1.5 rounded-full"
-                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.55)' }}
-                >
-                  <CheckCircle2 size={10} style={{ color: RED }} />
-                  {label}
-                </span>
-              ))}
-            </div>
-          </FadeUp>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent, #fff)' }} />
-      </section>
+      {/*
+        To add your BYB event invite photo:
+        1. Drop the image into /public/images/events/
+        2. Pass it as: eventImage="/images/events/your-file.jpg"
+      */}
+      <BYBHero
+        eventLabel="Now Recruiting · Build Your Business"
+        // eventImage="/images/events/byb-invite-apr-2026.jpg"
+      />
 
       {/* ── 2. BENEFITS GRID ────────────────────────────────────────────── */}
       <section className="bg-white py-24 px-6">
