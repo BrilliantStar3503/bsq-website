@@ -862,94 +862,80 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 {/* ── Top row: icon · title · badge ── */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
-                      style={{ background: 'rgba(255,255,255,0.07)', color: sev.accentMuted }}>
-                      {gapIcon[gap.id] ?? <AlertTriangle size={15} />}
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
+                      style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.35)' }}>
+                      {gapIcon[gap.id] ?? <AlertTriangle size={14} />}
                     </div>
-                    <h4 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.90)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
+                    <h4 style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.88)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
                       {gap.title}
                     </h4>
                   </div>
-                  <span className="shrink-0 px-2.5 py-1 rounded-full whitespace-nowrap"
-                    style={{ fontSize: 10, fontWeight: 500, letterSpacing: '0.02em', background: sev.badgeBg, color: sev.badgeColor, border: `1px solid ${sev.badgeBg}` }}>
-                    {sev.label}
-                  </span>
+                  {/* Severity dot + label — minimal, no pill */}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: sev.accent, display: 'inline-block', flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: sev.badgeColor }}>
+                      {sev.label}
+                    </span>
+                  </div>
                 </div>
 
                 {/* ── Description ── */}
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.60)', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, margin: 0 }}>
                   {gap.description}
                 </p>
 
-                {/* ── Key impact statement ── */}
+                {/* ── Key impact callout ── */}
                 <div style={{
-                  background:   'rgba(255,255,255,0.04)',
-                  border:       '1px solid rgba(255,255,255,0.07)',
-                  borderRadius: 10,
-                  padding:      '11px 13px',
-                  display:      'flex',
-                  alignItems:   'flex-start',
-                  gap:          8,
+                  background:   'rgba(255,255,255,0.03)',
+                  borderLeft:   `2px solid ${sev.accent}`,
+                  borderRadius: '0 6px 6px 0',
+                  padding:      '9px 12px',
                 }}>
-                  <ArrowRight size={10} className="shrink-0 mt-0.5" style={{ color: sev.accentMuted }} />
-                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.42)', lineHeight: 1.6, margin: 0, letterSpacing: '0.01em' }}>
                     {gap.consequence}
                   </p>
                 </div>
 
                 {/* ── Actions ── */}
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center gap-4 pt-1">
                   <button
                     onClick={() => openContact('gap_advisor')}
                     style={{
-                      flex:         1,
-                      height:       36,
-                      borderRadius: 8,
-                      background:   'linear-gradient(135deg, #ff3b3b, #b30000)',
+                      height:       32,
+                      paddingLeft:  16,
+                      paddingRight: 16,
+                      borderRadius: 6,
+                      background:   '#b91c1c',
                       color:        '#fff',
-                      fontSize:     12,
+                      fontSize:     11,
                       fontWeight:   600,
                       border:       'none',
                       cursor:       'pointer',
-                      letterSpacing: '0.01em',
-                      boxShadow:    '0 6px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(255,0,0,0.15)',
-                      transition:   'background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease',
+                      letterSpacing: '0.02em',
+                      transition:   'background 0.15s ease, transform 0.15s ease',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #e02020, #990000)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.16), 0 4px 10px rgba(255,0,0,0.25)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #ff3b3b, #b30000)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(255,0,0,0.15)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#991b1b'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#b91c1c'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
                     Talk to Advisor
                   </button>
                   <a
                     href="/assessment"
                     style={{
-                      flex:         1,
-                      height:       36,
-                      borderRadius: 8,
-                      background:   'transparent',
-                      color:        'rgba(255,255,255,0.6)',
-                      fontSize:     12,
-                      fontWeight:   500,
-                      border:       '1px solid rgba(255,255,255,0.12)',
-                      cursor:       'pointer',
-                      display:      'flex',
-                      alignItems:   'center',
-                      justifyContent: 'center',
+                      fontSize:       11,
+                      fontWeight:     500,
+                      color:          'rgba(255,255,255,0.35)',
                       textDecoration: 'none',
-                      transition:   'border-color 0.15s ease, color 0.15s ease, background 0.15s ease',
+                      letterSpacing:  '0.02em',
+                      display:        'inline-flex',
+                      alignItems:     'center',
+                      gap:            4,
+                      transition:     'color 0.15s ease',
                     }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
-                      e.currentTarget.style.color = '#ffffff'
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
-                      e.currentTarget.style.color = 'rgba(255,255,255,0.6)'
-                      e.currentTarget.style.background = 'transparent'
-                    }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.70)' }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)' }}
                   >
-                    Learn More
+                    Learn more <ArrowRight size={10} />
                   </a>
                 </div>
               </motion.div>
