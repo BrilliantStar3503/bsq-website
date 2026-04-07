@@ -76,6 +76,14 @@ export default function TrustStrip() {
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}
     >
+      <style>{`
+        @keyframes trust-scroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .trust-scroll { animation: trust-scroll 25s linear infinite; }
+      `}</style>
+
       {/* Label */}
       <div className="text-center mb-7 relative z-10">
         <div className="inline-flex items-center gap-3">
@@ -100,7 +108,7 @@ export default function TrustStrip() {
         style={{ background: 'linear-gradient(to left, rgba(10,10,10,0.95), rgba(10,10,10,0))' }} />
 
       {/* Scrolling logos */}
-      <div className="relative z-10 flex gap-6 animate-scroll whitespace-nowrap" style={{ paddingLeft: 40 }}>
+      <div className="relative z-10 flex gap-6 trust-scroll whitespace-nowrap" style={{ paddingLeft: 40 }}>
         {[...logos, ...logos].map((logo, i) => (
           <LogoBadge key={i} src={logo} />
         ))}
