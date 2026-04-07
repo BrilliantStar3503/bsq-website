@@ -1294,7 +1294,9 @@ export default function AssessmentFlow() {
 
   if (phase === 'results') {
     return (
-      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f5f5f7' }}>
+      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f5f5f7', position: 'relative', zIndex: 0 }}>
+        {/* Solid background — covers any global pattern/grid beneath */}
+        <div className="fixed inset-0 -z-10" style={{ background: '#f5f5f7' }} />
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
         <style>{`
           /* ═══════════════════════════════════════════════════════════════
