@@ -51,7 +51,7 @@ function LogoBadge({ src }: { src: string }) {
           height={52}
           onError={() => setErr(true)}
           className="object-contain"
-          style={{ filter: 'grayscale(1) brightness(1.5)', opacity: 0.90 }}
+          style={{ filter: 'grayscale(1) brightness(1.6)', opacity: 0.92 }}
         />
       )}
     </div>
@@ -72,7 +72,7 @@ export default function TrustStrip() {
       style={{
         paddingTop: 28,
         paddingBottom: 32,
-        background: 'linear-gradient(180deg, rgba(18,18,22,0.0) 0%, rgba(18,18,22,0.60) 22%, rgba(14,14,18,0.88) 50%, rgba(18,18,22,0.60) 78%, rgba(18,18,22,0.0) 100%)',
+        background: 'linear-gradient(180deg, rgba(18,18,22,0.0) 0%, rgba(18,18,22,0.35) 20%, rgba(14,14,18,0.88) 50%, rgba(18,18,22,0.70) 82%, rgba(18,18,22,0.0) 100%)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}
     >
