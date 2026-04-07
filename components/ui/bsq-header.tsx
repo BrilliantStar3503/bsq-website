@@ -267,6 +267,7 @@ export function BsqHeader() {
 
   return (
     <header
+      data-scrolled={scrolled}
       className={cn(
         'fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300',
         scrolled ? 'border-b' : 'border-b border-transparent',
@@ -289,6 +290,18 @@ export function BsqHeader() {
             }
       }
     >
+      <style>{`
+        [data-scrolled="true"] button,
+        [data-scrolled="true"] [data-slot="navigation-menu-trigger"],
+        [data-scrolled="true"] .nav-link {
+          color: rgba(17,17,17,0.75) !important;
+        }
+        [data-scrolled="true"] button:hover,
+        [data-scrolled="true"] [data-slot="navigation-menu-trigger"]:hover,
+        [data-scrolled="true"] .nav-link:hover {
+          color: #111111 !important;
+        }
+      `}</style>
       <nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-6 md:px-10">
 
         {/* ── Logo ── */}
@@ -389,7 +402,7 @@ export function BsqHeader() {
                 onClick={(e) => { e.preventDefault(); openContact('nav_contact') }}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
+                className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
                 style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
               >
                 Contact
