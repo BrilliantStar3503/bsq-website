@@ -717,24 +717,14 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                         <span style={{ fontSize: 12, fontWeight: 600, color: barColor, fontVariantNumeric: 'tabular-nums', minWidth: 24, textAlign: 'right' }}>{val}</span>
                       </div>
                     </div>
-                    <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
                       <motion.div className="h-full rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${val}%` }}
                         transition={{ duration: 1.1, delay: 0.4, ease: 'easeOut' as const }}
                         style={{
-                          background: val < 40
-                            ? 'linear-gradient(90deg, #dc2626, #991b1b)'
-                            : val < 65
-                            ? 'linear-gradient(90deg, #b91c1c, #7f1d1d)'
-                            : val < 85
-                            ? 'rgba(17,17,17,0.35)'
-                            : 'linear-gradient(90deg, #b91c1c, #991b1b)',
-                          boxShadow: val < 65
-                            ? '0 0 6px rgba(185,28,28,0.35)'
-                            : val >= 85
-                            ? '0 0 6px rgba(185,28,28,0.25)'
-                            : 'none',
+                          background: 'linear-gradient(90deg, #ff3b3b, #b30000)',
+                          boxShadow: '0 0 6px rgba(255,0,0,0.12)',
                         }} />
                     </div>
                   </div>
