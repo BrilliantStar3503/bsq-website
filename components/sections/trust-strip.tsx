@@ -108,10 +108,12 @@ export default function TrustStrip() {
         style={{ background: 'linear-gradient(to left, rgba(10,10,10,0.95), rgba(10,10,10,0))' }} />
 
       {/* Scrolling logos */}
-      <div className="relative z-10 flex gap-6 trust-scroll whitespace-nowrap" style={{ paddingLeft: 40 }}>
-        {[...logos, ...logos].map((logo, i) => (
-          <LogoBadge key={i} src={logo} />
-        ))}
+      <div className="relative z-10 overflow-hidden">
+        <div className="trust-scroll flex gap-6 whitespace-nowrap" style={{ width: 'max-content' }}>
+          {[...logos, ...logos].map((logo, i) => (
+            <LogoBadge key={i} src={logo} />
+          ))}
+        </div>
       </div>
     </section>
   )
