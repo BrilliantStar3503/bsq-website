@@ -76,26 +76,6 @@ export default function TrustStrip() {
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}
     >
-      {/* Scanning line animation */}
-      <style>{`
-        @keyframes scan-line {
-          0%   { transform: translateX(-100%); }
-          100% { transform: translateX(200vw); }
-        }
-        .trust-scan { animation: scan-line 3.5s linear infinite; }
-      `}</style>
-
-      {/* Scanning line */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
-        <div
-          className="trust-scan absolute top-0 bottom-0 w-24"
-          style={{
-            background: 'linear-gradient(to right, transparent, rgba(185,28,28,0.08), transparent)',
-            width: 120,
-          }}
-        />
-      </div>
-
       {/* Label */}
       <div className="text-center mb-7 relative z-10">
         <div className="inline-flex items-center gap-3">
