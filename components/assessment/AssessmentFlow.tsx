@@ -1172,8 +1172,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
       {/* ── Disclaimer ───────────────────────────────────────────── */}
       <motion.div variants={fadeUp} className="flex items-start gap-2.5">
-        <Info size={12} className="shrink-0 mt-0.5" style={{ color: 'rgba(17,17,17,0.45)' }} />
-        <p className="text-label" style={{ color: 'rgba(17,17,17,0.55)' }}>
+        <Info size={12} className="shrink-0 mt-0.5" style={{ color: 'rgba(17,17,17,0.60)' }} />
+        <p className="text-label" style={{ color: 'rgba(17,17,17,0.75)' }}>
           Results are based on financial planning models assessing risk exposure, savings behavior, and long-term readiness. Advisory purposes only — not financial advice. PRU Life UK products subject to eligibility and underwriting.
         </p>
       </motion.div>
@@ -1519,8 +1519,8 @@ export default function AssessmentFlow() {
         </div>
 
         {/* ── Footer ──────────────────────────────────────────────── */}
-        <div className="relative z-10 py-5 text-center" style={{ borderTop: '1px solid rgba(0,0,0,0.10)' }}>
-          <p className="text-label" style={{ color: 'rgba(17,17,17,0.55)' }}>
+        <div className="relative z-10 py-6 text-center" style={{ borderTop: '1px solid rgba(0,0,0,0.14)', background: '#ebebed' }}>
+          <p className="text-label" style={{ color: 'rgba(17,17,17,0.80)' }}>
             Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Pasig City
           </p>
         </div>
