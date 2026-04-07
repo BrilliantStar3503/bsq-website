@@ -51,7 +51,7 @@ function LogoBadge({ src }: { src: string }) {
           height={52}
           onError={() => setErr(true)}
           className="object-contain"
-          style={{ filter: 'grayscale(1) brightness(1.6)', opacity: 0.92 }}
+          style={{ filter: 'brightness(1.05)', opacity: 0.92 }}
         />
       )}
     </div>
