@@ -1285,7 +1285,7 @@ export default function AssessmentFlow() {
 
   if (phase === 'results') {
     return (
-      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f5f5f7', position: 'relative', zIndex: 0 }}>
+      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, #f7f7f8, #f3f3f5)', position: 'relative', zIndex: 0 }}>
         {/* Solid background — covers any global pattern/grid beneath */}
         <div className="fixed inset-0 -z-10" style={{ background: '#f5f5f7' }} />
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
@@ -1440,6 +1440,21 @@ export default function AssessmentFlow() {
             font-weight: 400;
             letter-spacing: 0.02em;
             color: rgba(17,17,17,0.55);
+          }
+
+          /* ── Micro depth — section separators ───────────────────────── */
+          .assessment-results .space-y-10 > * + * {
+            border-top: 1px solid rgba(0,0,0,0.04);
+            padding-top: inherit;
+          }
+
+          /* ── Smooth transitions on interactive surfaces ──────────────── */
+          .assessment-results a,
+          .assessment-results button:not(:disabled) {
+            transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+          }
+          .assessment-results [class*="rounded"] {
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
           }
         `}</style>
 
