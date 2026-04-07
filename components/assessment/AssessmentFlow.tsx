@@ -882,18 +882,18 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                       flex:         1,
                       height:       36,
                       borderRadius: 8,
-                      background:   '#b91c1c',
+                      background:   'linear-gradient(135deg, #ff3b3b, #b30000)',
                       color:        '#fff',
                       fontSize:     12,
                       fontWeight:   600,
                       border:       'none',
                       cursor:       'pointer',
                       letterSpacing: '0.01em',
-                      boxShadow:    '0 4px 12px rgba(185,28,28,0.25)',
+                      boxShadow:    '0 6px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(255,0,0,0.15)',
                       transition:   'background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#991b1b'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(185,28,28,0.35)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#b91c1c'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(185,28,28,0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #e02020, #990000)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.16), 0 4px 10px rgba(255,0,0,0.25)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #ff3b3b, #b30000)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(255,0,0,0.15)'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
                     Talk to Advisor
                   </button>
@@ -1041,17 +1041,17 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                     <button
                       onClick={() => openContact(`rec_${rec.slug}`)}
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold"
-                      style={{ background: '#b91c1c', color: '#ffffff', boxShadow: '0 4px 12px rgba(185,28,28,0.25)', transition: 'background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease' }}
-                      onMouseEnter={e => { e.currentTarget.style.background = '#991b1b'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(185,28,28,0.35)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                      onMouseLeave={e => { e.currentTarget.style.background = '#b91c1c'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(185,28,28,0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                      style={{ background: 'linear-gradient(135deg, #ff3b3b, #b30000)', color: '#ffffff', boxShadow: '0 6px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(255,0,0,0.15)', transition: 'background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #e02020, #990000)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.16), 0 4px 10px rgba(255,0,0,0.25)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #ff3b3b, #b30000)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(255,0,0,0.15)'; e.currentTarget.style.transform = 'translateY(0)' }}
                     >
                       <MessageCircle size={11} /> Talk to Advisor
                     </button>
                     <a href={`/products/${rec.slug}`}
                       className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium"
-                      style={{ color: '#111111', border: '1px solid rgba(0,0,0,0.10)', background: 'transparent', transition: 'background 0.15s ease, border-color 0.15s ease' }}
-                      onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'rgba(0,0,0,0.04)'; el.style.borderColor = 'rgba(0,0,0,0.18)' }}
-                      onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'rgba(0,0,0,0.10)' }}
+                      style={{ color: '#111111', border: '1px solid rgba(0,0,0,0.15)', background: 'transparent', transition: 'background 0.15s ease, border-color 0.15s ease' }}
+                      onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'rgba(0,0,0,0.03)'; el.style.borderColor = 'rgba(0,0,0,0.22)' }}
+                      onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'rgba(0,0,0,0.15)' }}
                     >
                       Learn More <ArrowRight size={10} />
                     </a>
@@ -1297,10 +1297,11 @@ export default function AssessmentFlow() {
 
           /* PRIMARY — deep controlled red */
           .assessment-results .ar-btn-primary {
-            background: #b91c1c;
+            background: linear-gradient(135deg, #ff3b3b, #b30000);
             color: #ffffff;
             border: none;
             border-radius: 6px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12), 0 2px 6px rgba(255,0,0,0.15);
             box-shadow: 0 6px 20px rgba(185,28,28,0.25);
             font-weight: 700;
             cursor: pointer;
@@ -1311,8 +1312,8 @@ export default function AssessmentFlow() {
             transition: background 0.15s ease, box-shadow 0.15s ease;
           }
           .assessment-results .ar-btn-primary:hover:not(:disabled) {
-            background: #991b1b;
-            box-shadow: 0 8px 24px rgba(185,28,28,0.32);
+            background: linear-gradient(135deg, #e02020, #990000);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.16), 0 4px 10px rgba(255,0,0,0.25);
           }
           .assessment-results .ar-btn-primary:focus-visible {
             outline: 2px solid #FCA5A5;
