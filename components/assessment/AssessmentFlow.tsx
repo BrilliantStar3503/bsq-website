@@ -29,27 +29,36 @@ const CIRC   = 2 * Math.PI * RADIUS
 function ScoreRing({ score }: { score: number }) {
   const [display, setDisplay] = useState(0)
   const [offset, setOffset]   = useState(CIRC)
+  const [done, setDone]       = useState(false)
   const gradId = useRef(`sg-${Math.random().toString(36).slice(2)}`)
 
   useEffect(() => {
-    let start: number | null = null
-    const dur = 1800
-    const tick = (ts: number) => {
-      if (!start) start = ts
-      const p = Math.min((ts - start) / dur, 1)
-      const e = 1 - Math.pow(1 - p, 4)
-      setDisplay(Math.round(e * score))
-      setOffset(CIRC - e * (score / 100) * CIRC)
-      if (p < 1) requestAnimationFrame(tick)
-    }
-    requestAnimationFrame(tick)
+    const t = setTimeout(() => {
+      let start: number | null = null
+      const dur = 1800
+      const tick = (ts: number) => {
+        if (!start) start = ts
+        const p = Math.min((ts - start) / dur, 1)
+        const e = 1 - Math.pow(1 - p, 4)
+        setDisplay(Math.round(e * score))
+        setOffset(CIRC - e * (score / 100) * CIRC)
+        if (p < 1) requestAnimationFrame(tick)
+        else setDone(true)
+      }
+      requestAnimationFrame(tick)
+    }, 200)
+    return () => clearTimeout(t)
   }, [score])
 
   const statusLabel = score < 35 ? 'Critical Risk' : score < 55 ? 'At Risk' : score < 75 ? 'Moderate Risk' : 'Well Protected'
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: 180, height: 180 }}>
-      <svg width="180" height="180" style={{ transform: 'rotate(-90deg)', filter: 'drop-shadow(0 0 6px rgba(185,28,28,0.15))' }}>
+      <svg
+        width="180" height="180"
+        className={done ? 'ring-idle-pulse' : ''}
+        style={{ transform: 'rotate(-90deg)', filter: 'drop-shadow(0 0 6px rgba(185,28,28,0.15))' }}
+      >
         <defs>
           <linearGradient id={gradId.current} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#b91c1c" />
@@ -663,11 +672,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl overflow-hidden"
         style={{
-          background: 'rgba(255,255,255,0.95)',
+          background: 'linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(248,248,250,0.94) 100%)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           border: '1px solid rgba(0,0,0,0.06)',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
+          boxShadow: '0 6px 20px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04)',
         }}>
         <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -676,11 +685,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           <div className="flex flex-col items-center justify-center p-8 gap-3"
             style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }} >
             <ScoreRing score={result.total} />
-            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full"
-              style={{ background: `${statusColor}18`, border: `1px solid ${statusColor}40` }}>
+            <motion.div
+              className="flex items-center gap-2 px-4 py-1.5 rounded-full"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 2.2, duration: 0.4, ease: 'easeOut' }}
+              style={{ background: `${statusColor}18`, border: `1px solid ${statusColor}40`, boxShadow: `0 2px 10px ${statusColor}20` }}
+            >
               <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: statusColor, boxShadow: `0 0 6px ${statusColor}` }} />
               <span className="text-xs font-semibold tracking-wide" style={{ color: statusColor }}>{statusLabel}</span>
-            </div>
+            </motion.div>
             <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(17,17,17,0.65)', fontWeight: 500 }}>Financial Risk Score</p>
             <div className="w-full mt-1 pt-3 flex items-center justify-center gap-6" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
               {subScores.map(({ label, val }) => {
@@ -699,14 +713,15 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           <div className="p-8 md:p-10 flex flex-col justify-center gap-5">
             <div>
               <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#dc2626', marginBottom: 6 }}>Assessment Summary</p>
-              <p style={{ fontSize: 14, color: 'rgba(17,17,17,0.75)', lineHeight: 1.6 }}>{result.explanation}</p>
+              <p style={{ fontSize: 14, color: 'rgba(17,17,17,0.70)', lineHeight: 1.7 }}>{result.explanation}</p>
             </div>
             <div className="space-y-4">
-              {subScores.map(({ label, val, icon }) => {
+              {subScores.map(({ label, val, icon }, i) => {
                 const barColor = val < 40 ? '#dc2626' : '#b91c1c'
                 const grade    = val < 40 ? 'Needs attention' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
+                const barDelay = 1.1 + i * 0.08
                 return (
-                  <div key={label}>
+                  <div key={label} className="progress-row">
                     <div className="flex justify-between items-center mb-2">
                       <div className="flex items-center gap-2">
                         <span style={{ color: 'rgba(17,17,17,0.65)' }}>{icon}</span>
@@ -718,10 +733,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                       </div>
                     </div>
                     <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
-                      <motion.div className="h-full rounded-full"
+                      <motion.div
+                        className="h-full rounded-full bar-shimmer"
                         initial={{ width: 0 }}
                         animate={{ width: `${val}%` }}
-                        transition={{ duration: 1.1, delay: 0.4, ease: 'easeOut' as const }}
+                        transition={{ duration: 1.0, delay: barDelay, ease: 'easeOut' as const }}
                         style={{
                           background: 'linear-gradient(90deg, #ff3b3b, #b30000)',
                           boxShadow: '0 0 6px rgba(255,0,0,0.18)',
@@ -1455,6 +1471,34 @@ export default function AssessmentFlow() {
           }
           .assessment-results [class*="rounded"] {
             transition: box-shadow 0.2s ease, border-color 0.2s ease;
+          }
+
+          /* ── Ring idle pulse (starts after animation completes) ──────── */
+          @keyframes ring-idle-pulse {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(185,28,28,0.12)); }
+            50%       { filter: drop-shadow(0 0 12px rgba(185,28,28,0.26)); }
+          }
+          .ring-idle-pulse {
+            animation: ring-idle-pulse 3.5s ease-in-out infinite;
+          }
+
+          /* ── Bar shimmer (one-time, fires on mount) ──────────────────── */
+          @keyframes bar-shimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+          }
+          .bar-shimmer {
+            background: linear-gradient(90deg, #b30000 0%, #ff6b6b 40%, #b30000 70%) !important;
+            background-size: 200% 100% !important;
+            animation: bar-shimmer 1.2s ease-out 1 forwards;
+          }
+
+          /* ── Progress row hover ──────────────────────────────────────── */
+          .progress-row {
+            transition: transform 0.15s ease;
+          }
+          .progress-row:hover {
+            transform: translateX(2px);
           }
         `}</style>
 
