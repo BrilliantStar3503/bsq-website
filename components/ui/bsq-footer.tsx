@@ -52,12 +52,12 @@ const PARTNER_LOGOS = [
 
 function PartnerLogo({ src, alt, w, h }: { src: string; alt: string; w: number; h: number }) {
   const [err, setErr] = useState(false)
-  if (err) return <span className="text-[9px] font-bold tracking-widest uppercase text-white/20">{alt}</span>
+  if (err) return <span className="text-[9px] font-bold tracking-widest uppercase text-white/40">{alt}</span>
   return (
     <Image
       src={src} alt={alt} width={w} height={h}
       onError={() => setErr(true)}
-      style={{ objectFit: 'contain', opacity: 0.4, filter: 'grayscale(1) brightness(2)' }}
+      style={{ objectFit: 'contain', opacity: 0.55, filter: 'grayscale(1) brightness(2)' }}
     />
   )
 }
@@ -66,7 +66,7 @@ export default function BsqFooter() {
   return (
     <footer
       className="relative"
-      style={{ background: 'linear-gradient(180deg, #e8e8ed 0%, #d1d1d6 100%)' }}
+      style={{ background: 'linear-gradient(180deg, #16161a 0%, #0f0f12 100%)' }}
     >
       {/* Top accent line */}
       <div style={{ height: 1, background: 'linear-gradient(to right, transparent, rgba(220,38,38,0.5), rgba(220,38,38,0.2), transparent)' }} />
@@ -93,10 +93,10 @@ export default function BsqFooter() {
               </div>
               <div className="leading-none">
                 <p className="text-white text-xs font-black tracking-wide">Brilliant Star Quartz</p>
-                <p className="text-white/30 text-[9px] tracking-widest uppercase">Financial System</p>
+                <p className="text-white/75 text-[9px] tracking-widest uppercase">Financial System</p>
               </div>
             </div>
-            <p className="text-white/35 text-xs leading-relaxed mb-4 max-w-[200px]">
+            <p className="text-white/80 text-xs leading-relaxed mb-4 max-w-[200px]">
               AI-powered financial gap analysis. Licensed PRU Life UK advisor.
             </p>
             {/* Social icons */}
@@ -109,18 +109,18 @@ export default function BsqFooter() {
                   rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   aria-label={s.label}
                   className="w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-200"
-                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.4)' }}
+                  style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.85)' }}
                   onMouseEnter={e => {
                     const el = e.currentTarget as HTMLAnchorElement
-                    el.style.background   = 'rgba(220,38,38,0.15)'
-                    el.style.borderColor  = 'rgba(220,38,38,0.3)'
+                    el.style.background   = 'rgba(220,38,38,0.18)'
+                    el.style.borderColor  = 'rgba(220,38,38,0.35)'
                     el.style.color        = '#f87171'
                   }}
                   onMouseLeave={e => {
                     const el = e.currentTarget as HTMLAnchorElement
-                    el.style.background   = 'rgba(255,255,255,0.05)'
-                    el.style.borderColor  = 'rgba(255,255,255,0.08)'
-                    el.style.color        = 'rgba(255,255,255,0.4)'
+                    el.style.background   = 'rgba(255,255,255,0.07)'
+                    el.style.borderColor  = 'rgba(255,255,255,0.12)'
+                    el.style.color        = 'rgba(255,255,255,0.85)'
                   }}
                 >
                   {s.icon}
@@ -131,7 +131,7 @@ export default function BsqFooter() {
 
           {/* Col 2 — Navigate */}
           <div>
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/25 mb-3">Navigate</p>
+            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/70 mb-3">Navigate</p>
             <ul className="space-y-2.5">
               {NAV_LINKS.map(link => (
                 <li key={link.label}>
@@ -139,7 +139,7 @@ export default function BsqFooter() {
                     href={link.href}
                     target={link.href.startsWith('http') ? '_blank' : undefined}
                     rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    className="text-xs text-white/40 hover:text-white transition-colors duration-150 flex items-center gap-1.5 group"
+                    className="text-xs text-white/70 hover:text-white transition-colors duration-150 flex items-center gap-1.5 group"
                   >
                     <span className="w-1 h-1 rounded-full bg-red-600/50 shrink-0 group-hover:bg-red-500 transition-colors" />
                     {link.label}
@@ -151,19 +151,19 @@ export default function BsqFooter() {
 
           {/* Col 3 — Contact */}
           <div>
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/25 mb-3">Contact</p>
+            <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/70 mb-3">Contact</p>
             <div className="space-y-2.5">
               <div className="flex items-start gap-2">
-                <MapPin size={10} className="text-white/20 shrink-0 mt-0.5" />
-                <p className="text-[11px] text-white/30 leading-relaxed">18th Floor, Exquadra Tower<br />Ortigas, Pasig City, PH</p>
+                <MapPin size={10} className="text-white/40 shrink-0 mt-0.5" />
+                <p className="text-[11px] text-white/80 leading-relaxed">18th Floor, Exquadra Tower<br />Ortigas, Pasig City, PH</p>
               </div>
               <div className="flex items-center gap-2">
-                <Phone size={10} className="text-white/20 shrink-0" />
-                <p className="text-[11px] text-white/30">+63 917 823 2799</p>
+                <Phone size={10} className="text-white/40 shrink-0" />
+                <p className="text-[11px] text-white/80">+63 917 823 2799</p>
               </div>
               <div className="flex items-center gap-2">
-                <Mail size={10} className="text-white/20 shrink-0" />
-                <p className="text-[11px] text-white/30">bstarquartz@gmail.com</p>
+                <Mail size={10} className="text-white/40 shrink-0" />
+                <p className="text-[11px] text-white/80">bstarquartz@gmail.com</p>
               </div>
             </div>
           </div>
@@ -171,8 +171,8 @@ export default function BsqFooter() {
           {/* Col 4 — CTA */}
           <div className="flex flex-col justify-between gap-4">
             <div>
-              <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/25 mb-3">Get Started</p>
-              <p className="text-xs text-white/35 leading-relaxed mb-4">
+              <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/70 mb-3">Get Started</p>
+              <p className="text-xs text-white/80 leading-relaxed mb-4">
                 Know your gaps.<br />Fix them with a plan.
               </p>
               <AnimatedGradientButton
@@ -186,21 +186,21 @@ export default function BsqFooter() {
               </AnimatedGradientButton>
             </div>
             {/* PRU affiliation tag */}
-            <div className="rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <p className="text-[9px] font-bold uppercase tracking-widest text-white/20 mb-0.5">Affiliated with</p>
-              <p className="text-xs font-semibold text-white/50">PRU Life UK</p>
+            <div className="rounded-lg px-3 py-2" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
+              <p className="text-[9px] font-bold uppercase tracking-widest text-white/70 mb-0.5">Affiliated with</p>
+              <p className="text-xs font-semibold text-white/80">PRU Life UK</p>
             </div>
           </div>
 
         </div>
 
         {/* ── Divider ── */}
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: '1.25rem' }} />
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.10)', marginBottom: '1.25rem' }} />
 
         {/* ── Legal ── */}
-        <p className="text-[10px] text-white/20 text-center">
+        <p className="text-[10px] text-white/75 text-center">
           © {new Date().getFullYear()} Brilliant Star Quartz · PRU Life UK Licensed · Advisory purposes only ·{' '}
-          <a href="/privacy-policy" className="hover:text-white/50 transition-colors duration-150 underline underline-offset-2">Privacy Policy</a>
+          <a href="/privacy-policy" className="hover:text-white/80 transition-colors duration-150 underline underline-offset-2">Privacy Policy</a>
         </p>
 
       </div>
