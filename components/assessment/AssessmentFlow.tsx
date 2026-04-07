@@ -1092,13 +1092,13 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 </div>
 
                 {/* Product image */}
-                <div className="hidden md:block shrink-0 self-center" style={{ width: 120 }}>
+                <div className="hidden md:block shrink-0 self-center" style={{ width: 180 }}>
                   <div style={{
-                    width: 120, height: 88,
-                    borderRadius: 10,
+                    width: 180, height: 130,
+                    borderRadius: 12,
                     overflow: 'hidden',
                     border: '1px solid rgba(0,0,0,0.07)',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
                   }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
