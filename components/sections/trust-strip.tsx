@@ -72,7 +72,7 @@ export default function TrustStrip() {
       style={{
         paddingTop: 28,
         paddingBottom: 32,
-        background: 'linear-gradient(180deg, rgba(18,18,22,0.0) 0%, rgba(18,18,22,0.35) 20%, rgba(14,14,18,0.88) 50%, rgba(18,18,22,0.70) 82%, rgba(18,18,22,0.0) 100%)',
+        background: 'linear-gradient(180deg, #0a0a0a 0%, #111111 100%)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}
     >
