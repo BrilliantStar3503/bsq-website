@@ -1422,6 +1422,7 @@ export default function AssessmentFlow() {
           .assessment-results p {
             font-weight: 400;
             line-height: 1.6;
+            color: rgba(17,17,17,0.75);
           }
           .assessment-results .text-label {
             font-weight: 500;
