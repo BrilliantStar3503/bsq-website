@@ -663,11 +663,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl overflow-hidden"
         style={{
-          background: 'rgba(255,255,255,0.98)',
+          background: 'rgba(255,255,255,0.95)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(0,0,0,0.08)',
-          boxShadow: '0 4px 32px rgba(0,0,0,0.10)',
+          border: '1px solid rgba(0,0,0,0.06)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
         }}>
         <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -741,9 +741,9 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         <motion.div variants={fadeUp}
           className="rounded-2xl overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.98)',
-            border: '1px solid rgba(0,0,0,0.08)',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
+            background: 'rgba(255,255,255,0.95)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
           }}>
           <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
           <div className="p-6 md:p-8">
@@ -817,6 +817,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                   borderLeft:   `3px solid ${sev.accent}`,
                   borderRadius: 16,
                   padding:      24,
+                  boxShadow:    'inset 0 1px 0 rgba(255,255,255,0.04)',
                   transition:   'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
                   cursor:       'default',
                 }}
@@ -828,13 +829,13 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                   const el = e.currentTarget as HTMLDivElement
                   el.style.borderColor     = `rgba(255,255,255,0.16)`
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = '0 8px 32px rgba(0,0,0,0.35)'
+                  el.style.boxShadow       = '0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLDivElement
                   el.style.borderColor     = 'rgba(255,255,255,0.09)'
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = 'none'
+                  el.style.boxShadow       = 'inset 0 1px 0 rgba(255,255,255,0.04)'
                 }}
               >
                 {/* ── Top row: icon · title · badge ── */}
@@ -939,9 +940,9 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl p-7 flex gap-4 items-start"
         style={{
-          background: 'rgba(255,255,255,0.98)',
-          border: '1px solid rgba(0,0,0,0.08)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
+          background: 'rgba(255,255,255,0.95)',
+          border: '1px solid rgba(0,0,0,0.06)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
         }}>
         <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
           style={{ background: 'rgba(220,0,0,0.07)', border: '1px solid rgba(220,0,0,0.15)' }}>
@@ -969,7 +970,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
 
         {/* Timeline vertical list */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
+        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' }}>
           {result.recommendations.map((rec, i) => {
             const hex         = rec.color ?? PRU_RED
             const engineMatch = engineResult.recommended_products.find(e => e.slug === rec.slug)
@@ -1069,9 +1070,9 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         {/* Save Report */}
         <div className="rounded-2xl p-7 flex flex-col gap-5 relative overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.98)',
-            border: '1px solid rgba(0,0,0,0.08)',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.08)',
+            background: 'rgba(255,255,255,0.95)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
           }}>
           <div className="absolute top-0 left-0 right-0" style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
           <div className="flex items-center gap-3 mt-2">
@@ -1106,9 +1107,9 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         {/* Talk to Advisor */}
         <div className="rounded-2xl p-7 flex flex-col gap-5 relative overflow-hidden"
           style={{
-            background: 'rgba(255,255,255,0.98)',
-            border: '1px solid rgba(0,0,0,0.08)',
-            boxShadow: '0 12px 40px rgba(0,0,0,0.08)',
+            background: 'rgba(255,255,255,0.95)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
           }}>
           <div className="relative flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
