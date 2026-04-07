@@ -993,6 +993,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             const isTopPick   = engineMatch?.priority === 1
             const isLast      = i === result.recommendations.length - 1
 
+            const categoryImageMap: Record<string, string> = {
+              protection:  'https://images.unsplash.com/photo-1511895426328-dc8714191011?w=240&h=160&fit=crop&crop=center',
+              health:      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=240&h=160&fit=crop&crop=center',
+              investment:  'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=240&h=160&fit=crop&crop=center',
+              retirement:  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=240&h=160&fit=crop&crop=center',
+              education:   'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=240&h=160&fit=crop&crop=center',
+            }
+            const cardImage = categoryImageMap[(rec.category ?? '').toLowerCase()]
+              ?? 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=240&h=160&fit=crop&crop=center'
+
             return (
               <motion.div key={rec.id}
                 initial={{ opacity: 0, x: -8 }}
@@ -1072,6 +1082,24 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                     >
                       Learn More <ArrowRight size={10} />
                     </a>
+                  </div>
+                </div>
+
+                {/* Product image */}
+                <div className="hidden md:block shrink-0 self-center" style={{ width: 120 }}>
+                  <div style={{
+                    width: 120, height: 88,
+                    borderRadius: 10,
+                    overflow: 'hidden',
+                    border: '1px solid rgba(0,0,0,0.07)',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+                  }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={cardImage}
+                      alt={rec.shortName ?? rec.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
                   </div>
                 </div>
               </motion.div>
