@@ -416,6 +416,7 @@ export function BsqHeader() {
             preset="pru"
             duration={5}
             className="text-sm px-5 py-2 rounded-md"
+            style={{ color: '#ffffff' }}
             onClick={() => openContact('nav_consult')}
           >
             Talk to Advisor
@@ -424,6 +425,7 @@ export function BsqHeader() {
             preset="pru"
             duration={5}
             className="text-sm font-bold px-5 py-2 rounded-md"
+            style={{ color: '#ffffff' }}
             onClick={() => window.location.href = '/assessment'}
           >
             Start Assessment
