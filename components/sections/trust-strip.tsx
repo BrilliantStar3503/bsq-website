@@ -95,9 +95,9 @@ export default function TrustStrip() {
 
       {/* Fade edges */}
       <div className="pointer-events-none absolute left-0 top-0 h-full w-32 z-10"
-        style={{ background: 'linear-gradient(to right, rgba(14,14,18,0.97), transparent)' }} />
+        style={{ background: 'linear-gradient(to right, rgba(10,10,10,0.95), rgba(10,10,10,0))' }} />
       <div className="pointer-events-none absolute right-0 top-0 h-full w-32 z-10"
-        style={{ background: 'linear-gradient(to left, rgba(14,14,18,0.97), transparent)' }} />
+        style={{ background: 'linear-gradient(to left, rgba(10,10,10,0.95), rgba(10,10,10,0))' }} />
 
       {/* Scrolling logos */}
       <div className="relative z-10 flex gap-6 animate-scroll whitespace-nowrap" style={{ paddingLeft: 40 }}>
