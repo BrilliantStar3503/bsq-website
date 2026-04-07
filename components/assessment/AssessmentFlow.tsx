@@ -1399,8 +1399,13 @@ export default function AssessmentFlow() {
           }
 
           /* ── Typography ─────────────────────────────────────────────── */
+          .assessment-results h1 {
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+          }
           .assessment-results h2 {
-            font-weight: 600;
+            font-weight: 700;
             line-height: 1.25;
             letter-spacing: -0.015em;
           }
@@ -1412,16 +1417,29 @@ export default function AssessmentFlow() {
           .assessment-results h4 {
             font-weight: 600;
             line-height: 1.3;
+            letter-spacing: -0.005em;
           }
           .assessment-results p {
             font-weight: 400;
             line-height: 1.6;
             color: rgba(17,17,17,0.75);
           }
-          .assessment-results .text-label {
+          .assessment-results span.body-medium {
             font-weight: 500;
-            letter-spacing: 0.02em;
+            line-height: 1.55;
+          }
+          .assessment-results .text-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
             color: rgba(17,17,17,0.65);
+          }
+          .assessment-results small,
+          .assessment-results caption,
+          .assessment-results figcaption {
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: rgba(17,17,17,0.55);
           }
         `}</style>
 
