@@ -1531,18 +1531,12 @@ export default function AssessmentFlow() {
 
   // phase === 'question' (default)
   return (
-    <div className="min-h-screen flex flex-col relative" style={{ background: 'transparent' }}>
+    <div className="min-h-screen flex flex-col relative" style={{ background: '#f5f5f7' }}>
       <style>{`
         @keyframes af-fade-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
         .af-fade { animation: af-fade-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
         @keyframes af-glow-pulse { 0%,100% { opacity:0.5; } 50% { opacity:1; } }
       `}</style>
-
-      {/* Subtle grid overlay */}
-      <div className="pointer-events-none absolute inset-0" style={{
-        backgroundImage: 'linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px)',
-        backgroundSize: '52px 52px',
-      }} />
 
       {/* Extra red ambient bottom-right */}
       <div className="pointer-events-none absolute inset-0" style={{
