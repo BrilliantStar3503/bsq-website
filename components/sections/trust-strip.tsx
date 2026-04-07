@@ -8,6 +8,7 @@ const LOGO_ALT: Record<string, string> = {
   "/logos/iarfc-logo.png": "IARFC",
   "/logos/luap-logo.png":  "LUAP",
   "/logos/mdrt-logo.png":  "MDRT",
+  "/logos/bsq-logo.png":   "Brilliant Star Quartz",
 }
 
 function LogoBadge({ src }: { src: string }) {
@@ -60,6 +61,7 @@ function LogoBadge({ src }: { src: string }) {
 
 export default function TrustStrip() {
   const logos = [
+    "/logos/bsq-logo.png",
     "/logos/gama-logo.png",
     "/logos/iarfc-logo.png",
     "/logos/luap-logo.png",
