@@ -128,7 +128,7 @@ function useScroll(threshold: number) {
 }
 
 /* ─── BSQ Logo ──────────────────────────────────────────────────────── */
-function BsqLogo() {
+function BsqLogo({ scrolled }: { scrolled: boolean }) {
   const [imgError, setImgError] = React.useState(false)
   return (
     <a href="/" className="flex items-center gap-2.5 shrink-0 group">
@@ -158,12 +158,15 @@ function BsqLogo() {
         )}
       </div>
       <div className="flex flex-col leading-none">
-        <span className="text-white font-black text-sm tracking-wide">
+        <span
+          className="font-black text-sm tracking-wide transition-colors duration-300"
+          style={{ color: scrolled ? '#111111' : '#ffffff' }}
+        >
           Brilliant Star Quartz
         </span>
         <span className="text-[9px] tracking-[0.15em] uppercase font-bold flex items-center gap-1">
-          <span className="text-white/40">Tied Branch &amp; Area</span>
-          <span className="text-white/25">·</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.5)' : 'rgba(255,255,255,0.4)', transition: 'color 0.3s' }}>Tied Branch &amp; Area</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.25)' : 'rgba(255,255,255,0.25)', transition: 'color 0.3s' }}>·</span>
           <span style={{ color: '#D92D20', fontWeight: 800, letterSpacing: '0.12em' }}>PRU&nbsp;LIFE&nbsp;UK</span>
         </span>
       </div>
@@ -271,11 +274,11 @@ export function BsqHeader() {
       style={
         scrolled
           ? {
-              background:    'rgba(5,6,10,0.92)',
-              backdropFilter: 'saturate(180%) blur(20px)',
-              WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-              borderColor:   'rgba(255,255,255,0.07)',
-              boxShadow:     '0 1px 0 rgba(255,255,255,0.04), 0 4px 32px rgba(0,0,0,0.55)',
+              background:    'rgba(255,255,255,0.90)',
+              backdropFilter: 'saturate(180%) blur(12px)',
+              WebkitBackdropFilter: 'saturate(180%) blur(12px)',
+              borderColor:   'rgba(0,0,0,0.06)',
+              boxShadow:     '0 1px 0 rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.08)',
               willChange:    'background, box-shadow',
             }
           : {
@@ -289,7 +292,7 @@ export function BsqHeader() {
       <nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-6 md:px-10">
 
         {/* ── Logo ── */}
-        <BsqLogo />
+        <BsqLogo scrolled={scrolled} />
 
         {/* ── Desktop nav ── */}
         <NavigationMenu className="hidden md:flex">
@@ -297,7 +300,10 @@ export function BsqHeader() {
 
             {/* Assessment dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-white/75 hover:text-white text-sm">
+              <NavigationMenuTrigger
+                className="text-sm transition-colors duration-300"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
+              >
                 Assessment
               </NavigationMenuTrigger>
               <NavigationMenuContent style={{ background: '#0d1117' }}>
@@ -336,7 +342,10 @@ export function BsqHeader() {
 
             {/* About dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-white/75 hover:text-white text-sm">
+              <NavigationMenuTrigger
+                className="text-sm transition-colors duration-300"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
+              >
                 About
               </NavigationMenuTrigger>
               <NavigationMenuContent style={{ background: '#0d1117' }}>
@@ -380,7 +389,8 @@ export function BsqHeader() {
                 onClick={(e) => { e.preventDefault(); openContact('nav_contact') }}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 text-sm text-white/65 hover:text-white rounded-md hover:bg-white/08 transition-colors duration-150 inline-flex items-center"
+                className="px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
               >
                 Contact
               </NavigationMenuLink>
