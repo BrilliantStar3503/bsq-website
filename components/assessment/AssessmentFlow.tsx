@@ -800,93 +800,99 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
       {/* ══ SECTION 3 — Financial Gaps ══════════════════════════════════ */}
       <motion.div variants={fadeUp}>
-        <div className="flex items-center justify-between mb-6">
+        <motion.div
+          className="flex items-center justify-between mb-6"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.4, ease: 'easeOut' }}
+        >
           <div>
             <p className="text-label uppercase tracking-widest font-medium mb-1" style={{ color: '#86868b', letterSpacing: '0.15em' }}>Risk Analysis</p>
             <h2 style={{ color: '#1d1d1f' }}>Financial Gaps Identified</h2>
           </div>
           <span className="text-xs font-medium px-3 py-1 rounded-full tabular-nums"
-            style={{ background: 'rgba(0,0,0,0.06)', color: '#6e6e73', border: '1px solid rgba(0,0,0,0.08)' }}>
+            style={{ background: 'rgba(0,0,0,0.05)', color: '#6e6e73', border: '1px solid rgba(0,0,0,0.07)' }}>
             {result.gaps.length} found
           </span>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {result.gaps.map((gap, i) => {
-            /* ── Per-severity design tokens (Apple system palette) ── */
+            /* ── Per-severity design tokens ── */
             const sev = gap.severity === 'high'
-              ? { accent: '#b91c1c', badgeBg: 'rgba(185,28,28,0.12)', badgeColor: '#b91c1c',           label: 'High Risk'     }
+              ? { accent: '#b91c1c', accentMuted: 'rgba(185,28,28,0.7)', badgeBg: 'rgba(185,28,28,0.10)', badgeColor: 'rgba(185,28,28,0.9)', label: 'High Risk'     }
               : gap.severity === 'medium'
-              ? { accent: '#dc2626', badgeBg: 'rgba(220,38,38,0.08)',  badgeColor: '#dc2626',           label: 'Moderate Risk' }
-              : { accent: 'rgba(17,17,17,0.45)', badgeBg: 'rgba(0,0,0,0.05)', badgeColor: 'rgba(17,17,17,0.55)', label: 'Low Risk' }
+              ? { accent: '#c0392b', accentMuted: 'rgba(192,57,43,0.7)',  badgeBg: 'rgba(192,57,43,0.08)',  badgeColor: 'rgba(192,57,43,0.85)', label: 'Moderate Risk' }
+              : { accent: 'rgba(255,255,255,0.30)', accentMuted: 'rgba(255,255,255,0.20)', badgeBg: 'rgba(255,255,255,0.05)', badgeColor: 'rgba(255,255,255,0.45)', label: 'Low Risk' }
 
             return (
               <motion.div
                 key={gap.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 + i * 0.06, duration: 0.38, ease: 'easeOut' as const }}
+                transition={{ delay: 0.18 + i * 0.10, duration: 0.42, ease: 'easeOut' as const }}
                 className="group flex flex-col gap-4 rounded-2xl"
                 style={{
-                  background:   '#1e1e24',
-                  border:       '1px solid rgba(255,255,255,0.09)',
+                  background:   'linear-gradient(145deg, #202028 0%, #1a1a22 100%)',
+                  border:       '1px solid rgba(255,255,255,0.08)',
                   borderLeft:   `3px solid ${sev.accent}`,
                   borderRadius: 16,
                   padding:      24,
-                  boxShadow:    'inset 0 1px 0 rgba(255,255,255,0.04)',
-                  transition:   'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
+                  boxShadow:    '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04)',
+                  transition:   'transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
                   cursor:       'default',
                 }}
                 whileHover={{
-                  y: -4,
-                  transition: { duration: 0.25, ease: 'easeOut' as const },
+                  y: -2,
+                  transition: { duration: 0.18, ease: 'easeOut' as const },
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = `rgba(255,255,255,0.16)`
+                  el.style.borderColor     = 'rgba(255,255,255,0.14)'
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = '0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)'
+                  el.style.boxShadow       = '0 6px 20px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = 'rgba(255,255,255,0.09)'
+                  el.style.borderColor     = 'rgba(255,255,255,0.08)'
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = 'inset 0 1px 0 rgba(255,255,255,0.04)'
+                  el.style.boxShadow       = '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04)'
                 }}
               >
                 {/* ── Top row: icon · title · badge ── */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0"
-                      style={{ background: 'rgba(255,255,255,0.09)', color: sev.accent }}>
+                      style={{ background: 'rgba(255,255,255,0.07)', color: sev.accentMuted }}>
                       {gapIcon[gap.id] ?? <AlertTriangle size={15} />}
                     </div>
-                    <h4 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.88)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
+                    <h4 style={{ fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.90)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
                       {gap.title}
                     </h4>
                   </div>
                   <span className="shrink-0 px-2.5 py-1 rounded-full whitespace-nowrap"
-                    style={{ fontSize: 11, fontWeight: 500, background: sev.badgeBg, color: sev.badgeColor }}>
+                    style={{ fontSize: 10, fontWeight: 500, letterSpacing: '0.02em', background: sev.badgeBg, color: sev.badgeColor, border: `1px solid ${sev.badgeBg}` }}>
                     {sev.label}
                   </span>
                 </div>
 
                 {/* ── Description ── */}
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.60)', lineHeight: 1.65, margin: 0 }}>
                   {gap.description}
                 </p>
 
                 {/* ── Key impact statement ── */}
                 <div style={{
-                  background:   'rgba(255,255,255,0.06)',
+                  background:   'rgba(255,255,255,0.04)',
+                  border:       '1px solid rgba(255,255,255,0.07)',
                   borderRadius: 10,
-                  padding:      '12px 14px',
+                  padding:      '11px 13px',
                   display:      'flex',
                   alignItems:   'flex-start',
                   gap:          8,
                 }}>
-                  <ArrowRight size={11} className="shrink-0 mt-0.5" style={{ color: sev.accent, opacity: 0.9 }} />
-                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', lineHeight: 1.55, margin: 0 }}>
+                  <ArrowRight size={10} className="shrink-0 mt-0.5" style={{ color: sev.accentMuted }} />
+                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)', lineHeight: 1.6, margin: 0 }}>
                     {gap.consequence}
                   </p>
                 </div>
