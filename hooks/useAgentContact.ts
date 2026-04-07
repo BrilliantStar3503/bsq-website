@@ -83,13 +83,13 @@ export function getViberUrl(contact: AgentContact, message?: string): string | n
 export function getTelegramUrl(contact: AgentContact, message?: string): string | null {
   const raw = contact.telegram
   if (!raw) return null
-  // Already a t.me or telegram.me link
-  if (raw.startsWith('https://t.me/') || raw.startsWith('http://t.me/') || raw.startsWith('https://telegram.me/')) return raw
-  // Username with or without @
-  const username = raw.replace(/^@/, '')
+  // Extract username from any t.me / telegram.me link
+  const tmeMatch = raw.match(/(?:t\.me|telegram\.me)\/([^\s/?#]+)/)
+  const username = tmeMatch ? tmeMatch[1] : raw.replace(/^@/, '')
+  // tg:// opens the installed app directly on desktop and mobile
   return message
-    ? `https://t.me/${username}?text=${encodeURIComponent(message)}`
-    : `https://t.me/${username}`
+    ? `tg://resolve?domain=${username}&text=${encodeURIComponent(message)}`
+    : `tg://resolve?domain=${username}`
 }
 
 /**
