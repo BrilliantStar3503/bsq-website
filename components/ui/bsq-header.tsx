@@ -291,13 +291,11 @@ export function BsqHeader() {
       }
     >
       <style>{`
-        [data-scrolled="true"] button,
-        [data-scrolled="true"] [data-slot="navigation-menu-trigger"],
+        [data-scrolled="true"] .nav-menu button,
         [data-scrolled="true"] .nav-link {
           color: rgba(17,17,17,0.75) !important;
         }
-        [data-scrolled="true"] button:hover,
-        [data-scrolled="true"] [data-slot="navigation-menu-trigger"]:hover,
+        [data-scrolled="true"] .nav-menu button:hover,
         [data-scrolled="true"] .nav-link:hover {
           color: #111111 !important;
         }
@@ -308,7 +306,7 @@ export function BsqHeader() {
         <BsqLogo scrolled={scrolled} />
 
         {/* ── Desktop nav ── */}
-        <NavigationMenu className="hidden md:flex">
+        <NavigationMenu className="hidden md:flex nav-menu">
           <NavigationMenuList>
 
             {/* Assessment dropdown */}
