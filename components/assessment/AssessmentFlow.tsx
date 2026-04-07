@@ -703,11 +703,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             </div>
             <div className="space-y-4">
               {subScores.map(({ label, val, icon }) => {
-                const barColor = val < 40 ? '#dc2626' : val < 65 ? '#b91c1c' : val < 85 ? 'rgba(17,17,17,0.5)' : '#b91c1c'
+                const barColor = val < 40 ? '#dc2626' : '#b91c1c'
                 const grade    = val < 40 ? 'Needs attention' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
                 return (
                   <div key={label}>
-                    <div className="flex justify-between items-center mb-1.5">
+                    <div className="flex justify-between items-center mb-2">
                       <div className="flex items-center gap-2">
                         <span style={{ color: 'rgba(17,17,17,0.65)' }}>{icon}</span>
                         <span style={{ fontSize: 12, fontWeight: 500, color: '#111111' }}>{label}</span>
@@ -724,7 +724,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                         transition={{ duration: 1.1, delay: 0.4, ease: 'easeOut' as const }}
                         style={{
                           background: 'linear-gradient(90deg, #ff3b3b, #b30000)',
-                          boxShadow: '0 0 6px rgba(255,0,0,0.12)',
+                          boxShadow: '0 0 6px rgba(255,0,0,0.18)',
                         }} />
                     </div>
                   </div>
