@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertTriangle, Shield, TrendingUp, Clock, ArrowRight, Info, Zap, CheckCircle, BarChart2, RotateCcw, Home, Mail, Phone, X, Send, MessageCircle, Check, Sparkles, User } from 'lucide-react'
-import { questions } from '@/lib/assessment-questions'
+import { AlertTriangle, Shield, TrendingUp, Clock, ArrowRight, Info, Zap, CheckCircle, BarChart2, RotateCcw, Home, Mail, Phone, X, Send, MessageCircle, Check, Sparkles, User, GraduationCap, Briefcase, Key, Users } from 'lucide-react'
+import { questions, type Question } from '@/lib/assessment-questions'
 import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
@@ -106,9 +106,14 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
   )
 }
 
+/* ─── Visible question filter ────────────────────────────────────── */
+function getVisibleQuestions(answers: Record<string, string>): Question[] {
+  return questions.filter(q => !q.showIf || q.showIf(answers))
+}
+
 /* ─── Question Screen ──────────────────────────────────────────────── */
-function QuestionScreen({ step, onAnswer }: { step: number; onAnswer: (val: string) => void }) {
-  const q = questions[step]
+function QuestionScreen({ question, onAnswer }: { question: Question; onAnswer: (val: string) => void }) {
+  const q = question
   const [selected, setSelected] = useState<string | null>(null)
 
   const choose = (opt: string) => {
@@ -616,12 +621,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
   const RED_MED   = `${PRU_RED}30`
 
   const gapIcon: Record<string, React.ReactNode> = {
-    income:       <Shield size={15} />,
-    medical:      <AlertTriangle size={15} />,
-    savings:      <TrendingUp size={15} />,
-    retirement:   <Clock size={15} />,
-    awareness:    <Zap size={15} />,
-    optimization: <BarChart2 size={15} />,
+    income:            <Shield size={15} />,
+    medical:           <AlertTriangle size={15} />,
+    savings:           <TrendingUp size={15} />,
+    retirement:        <Clock size={15} />,
+    awareness:         <Zap size={15} />,
+    optimization:      <BarChart2 size={15} />,
+    education:         <GraduationCap size={15} />,
+    businessInsurance: <Briefcase size={15} />,
+    keyMan:            <Key size={15} />,
+    employeeRetirement:<Users size={15} />,
   }
 
   const sevStyle = {
@@ -655,6 +664,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
     Investment: { text: '#ff8a8a', bg: 'rgba(220,0,0,0.08)', border: 'rgba(255,59,59,0.2)' },
     Retirement: { text: 'rgba(255,255,255,0.55)', bg: 'rgba(255,255,255,0.06)', border: 'rgba(255,255,255,0.12)' },
     Wealth:     { text: 'rgba(255,255,255,0.45)', bg: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.09)' },
+    Education:  { text: '#38bdf8', bg: 'rgba(14,165,233,0.10)', border: 'rgba(56,189,248,0.25)' },
+    Business:   { text: '#34d399', bg: 'rgba(5,150,105,0.10)',  border: 'rgba(52,211,153,0.25)' },
   }
 
   return (
@@ -1252,15 +1263,20 @@ export default function AssessmentFlow() {
   }
 
   const handleAnswer = (value: string) => {
-    const key     = questions[step].id as keyof Answers
-    const updated = { ...answers, [key]: value }
+    // Use the CURRENT visible list to identify which question is active
+    const currentVisible = getVisibleQuestions(answers as Record<string, string>)
+    const key            = currentVisible[step].id as keyof Answers
+    const updated        = { ...answers, [key]: value }
     setAnswers(updated)
 
-    if (step < questions.length - 1) {
-      // More questions remain
+    // Re-compute visible list with updated answers (may grow if conditional Qs unlock)
+    const nextVisible = getVisibleQuestions(updated as Record<string, string>)
+
+    if (step < nextVisible.length - 1) {
+      // More visible questions remain
       setStep(step + 1)
     } else {
-      // Last question — compute gap score + engine recommendations, then show results
+      // All visible questions answered — compute results
       const computed = computeScore(updated)
       const engine   = getRecommendationsFromAnswers(updated)
       setResult(computed)
@@ -1684,7 +1700,7 @@ export default function AssessmentFlow() {
               color: 'rgba(255,255,255,0.3)',
               fontVariantNumeric: 'tabular-nums',
             }}>
-              {step + 1} / {questions.length}
+              {step + 1} / {getVisibleQuestions(answers as Record<string, string>).length}
             </span>
           </div>
         </div>
@@ -1705,8 +1721,18 @@ export default function AssessmentFlow() {
             padding:              '40px 40px 44px',
             boxShadow:            '0 8px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04)',
           }}>
-            <ProgressBar step={step} total={questions.length} />
-            <QuestionScreen key={step} step={step} onAnswer={handleAnswer} />
+            {(() => {
+              const visible  = getVisibleQuestions(answers as Record<string, string>)
+              const safeStep = Math.min(step, visible.length - 1)
+              const currentQ = visible[safeStep]
+              if (!currentQ) return null
+              return (
+                <>
+                  <ProgressBar step={safeStep} total={visible.length} />
+                  <QuestionScreen key={safeStep} question={currentQ} onAnswer={handleAnswer} />
+                </>
+              )
+            })()}
           </div>
         </div>
       </div>
