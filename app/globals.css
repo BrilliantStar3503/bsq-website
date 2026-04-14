@@ -1,0 +1,167 @@
+@import "tailwindcss";
+@source "../components/**/*.{jsx,tsx,js,ts}";
+@source "../app/**/*.{jsx,tsx,js,ts}";
+
+/* ===== Base Styles ===== */
+:root {
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #f5f5f7;
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ===== Typography System ===== */
+
+h1 {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Small text / labels */
+.text-label {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Metrics / large numbers */
+.metric {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Scroll animation ===== */
+@keyframes scroll {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+/* ===== Hide scrollbar ===== */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ===== Marquee animations (Testimonials) ===== */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+  width: max-content;
+  display: flex;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 35s linear infinite;
+  width: max-content;
+  display: flex;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATED GRADIENT BUTTON
+   Extracted animation-only from ShineBorder — no masks, no borders,
+   no pseudo elements. Pure flowing gradient background.
+
+   Usage:
+     <button class="animated-gradient-btn">Label</button>
+
+   To customize colors, set background-image via inline style:
+     style={{ backgroundImage: 'radial-gradient(...)' }}
+
+   To customize speed, set --shine-duration via inline style:
+     style={{ '--shine-duration': '4s' }}
+═══════════════════════════════════════════════════════════════ */
+
+@keyframes shine-pulse {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+/* ShineBorder — rotating conic-gradient border via transform:rotate() */
+@keyframes shine-border-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.animated-gradient-btn {
+  /* Animation engine — colors injected via inline style */
+  background-size: 300% 100%;
+  animation: shine-pulse var(--shine-duration, 5s) linear infinite;
+
+  /* Base button chrome */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.6rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  will-change: background-position;
+}
+
+.animated-gradient-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+}
+
+.animated-gradient-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
