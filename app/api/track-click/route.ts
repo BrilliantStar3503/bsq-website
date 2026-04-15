@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { sanitize, sanitizeSource } from '@/lib/api-guard'
 
 /**
  * POST /api/track-click
@@ -11,15 +12,16 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function POST(req: NextRequest) {
   try {
-    const {
-      source,
-      agent,
-      name,
-      message,
-      platform,
-      utmSource,
-      utmMedium,
-    } = await req.json()
+    const raw = await req.json()
+
+    // Sanitize every field — strip HTML, enforce max lengths
+    const source    = sanitizeSource(raw.source)
+    const agent     = sanitize(raw.agent,     64)
+    const name      = sanitize(raw.name,      120)
+    const message   = sanitize(raw.message,   500)
+    const platform  = sanitize(raw.platform,  32)
+    const utmSource = sanitize(raw.utmSource, 64)
+    const utmMedium = sanitize(raw.utmMedium, 64)
 
     const webhookUrl = process.env.N8N_WEBHOOK_ASSESSMENT_LEADS
     if (!webhookUrl) return NextResponse.json({ ok: true })
@@ -29,14 +31,14 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         type:      'click',
-        source:    source    ?? 'advisor_btn',
+        source,
         timestamp: new Date().toISOString(),
         lead: {
-          name:        name     ?? '',
+          name,
           contactType: '',
           contact:     '',
-          message:     message  ?? '',
-          platform:    platform ?? '',
+          message,
+          platform,
         },
         assessment: {
           score:           '',
@@ -46,9 +48,9 @@ export async function POST(req: NextRequest) {
           recommendations: [],
         },
         attribution: {
-          agent:     agent     ?? 'direct',
-          utmSource: utmSource ?? 'direct',
-          utmMedium: utmMedium ?? 'organic',
+          agent:     agent     || 'direct',
+          utmSource: utmSource || 'direct',
+          utmMedium: utmMedium || 'organic',
         },
       }),
     }).catch(() => {}) // silent fail

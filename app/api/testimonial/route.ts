@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { sanitize, isValidRating } from '@/lib/api-guard'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { rating, message, name, role, consent } = body
+    const rating  = body.rating
+    const message = sanitize(body.message, 1000)
+    const name    = sanitize(body.name,    120)
+    const role    = sanitize(body.role,    120)
+    const consent = Boolean(body.consent)
 
-    if (!rating || !message?.trim()) {
+    if (!isValidRating(rating) || !message) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -21,10 +26,10 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         rating,
-        message: message.trim(),
-        name:    name?.trim()    || '',
-        role:    role?.trim()    || '',
-        consent: Boolean(consent),
+        message,
+        name,
+        role,
+        consent,
         source:  'bsq_assessment_form',
         timestamp: new Date().toISOString(),
       }),

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { sanitize, isValidScore } from '@/lib/api-guard'
 
 /**
  * POST /api/track-assessment
@@ -18,7 +19,10 @@ export async function POST(req: Request) {
   }
 
   try {
-    const body = await req.json().catch(() => ({}))
+    const body      = await req.json().catch(() => ({}))
+    const score     = isValidScore(body.score) ? body.score : null
+    const segment   = sanitize(body.segment,   32)
+    const riskLevel = sanitize(body.riskLevel, 32)
 
     await fetch(webhookUrl, {
       method:  'POST',
@@ -26,9 +30,9 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         event:     'assessment_complete',
         timestamp: new Date().toISOString(),
-        score:     body.score     ?? null,
-        segment:   body.segment   ?? null,
-        riskLevel: body.riskLevel ?? null,
+        score,
+        segment,
+        riskLevel,
       }),
     })
 

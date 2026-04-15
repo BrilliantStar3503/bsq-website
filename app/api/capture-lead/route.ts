@@ -1,26 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateAssessmentEmail } from '@/lib/email-template'
+import { sanitize, sanitizeSource, isValidScore } from '@/lib/api-guard'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
-    const {
-      name,
-      contactType,
-      contact,
-      score,
-      statusLabel,
-      riskLevel,
-      gaps,
-      recommendations,
-      agent,
-      utmSource,
-      utmMedium,
-    } = body
+    const name        = sanitize(body.name,        120)
+    const contactType = sanitize(body.contactType, 16)
+    const contact     = sanitize(body.contact,     200)
+    const score       = typeof body.score === 'number' ? body.score : null
+    const statusLabel = sanitize(body.statusLabel, 32)
+    const riskLevel   = sanitize(body.riskLevel,   32)
+    const gaps        = Array.isArray(body.gaps)            ? body.gaps.slice(0, 20)            : []
+    const recommendations = Array.isArray(body.recommendations) ? body.recommendations.slice(0, 20) : []
+    const agent       = sanitize(body.agent,       64)
+    const utmSource   = sanitizeSource(body.utmSource)
+    const utmMedium   = sanitize(body.utmMedium,   64)
 
     // ── Validate required fields ──────────────────────────────────────
-    if (!name || !contact || score === undefined) {
+    if (!name || !contact || !isValidScore(score)) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { validateCalendlyUri } from '@/lib/api-guard'
 
 export async function POST(req: NextRequest) {
   try {
@@ -6,6 +7,14 @@ export async function POST(req: NextRequest) {
 
     if (!invitee_uri || !event_uri) {
       return NextResponse.json({ error: 'Missing Calendly URIs' }, { status: 400 })
+    }
+
+    // SSRF guard — only allow real Calendly API URIs
+    try {
+      validateCalendlyUri(invitee_uri)
+      validateCalendlyUri(event_uri)
+    } catch {
+      return NextResponse.json({ error: 'Invalid Calendly URI' }, { status: 400 })
     }
 
     const calendlyToken = process.env.CALENDLY_API_TOKEN
