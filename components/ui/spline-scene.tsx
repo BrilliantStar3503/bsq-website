@@ -57,51 +57,6 @@ export const SplineScene = memo(function SplineScene({ scene, className }: Splin
       style={{ position: 'relative', overflow: 'hidden' }}
     >
 
-      {/* ── Skeleton placeholder — visible until robot loads ── */}
-      <div
-        aria-hidden
-        style={{
-          position:   'absolute',
-          inset:      0,
-          display:    'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          opacity:    loaded ? 0 : 1,
-          transition: 'opacity 0.5s ease',
-          pointerEvents: 'none',
-        }}
-      >
-        {/* Robot-shaped silhouette */}
-        <div style={{
-          width: '60%', maxWidth: 240,
-          height: '80%', maxHeight: 380,
-          borderRadius: 32,
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-          border: '1px solid rgba(255,255,255,0.06)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
-          {/* Shimmer sweep */}
-          <div style={{
-            position: 'absolute',
-            top: 0, bottom: 0,
-            width: '60%',
-            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)',
-            animation: 'bsq-shimmer 2s ease-in-out infinite',
-          }} />
-        </div>
-
-        {/* Head circle */}
-        <div style={{
-          position: 'absolute',
-          top: '8%',
-          width: '28%', maxWidth: 80,
-          aspectRatio: '1',
-          borderRadius: '50%',
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.07)',
-        }} />
-      </div>
 
       {/* ── Live Spline scene — mounted on visibility, fades in on load ── */}
       {inView && !errored && (
@@ -140,13 +95,6 @@ export const SplineScene = memo(function SplineScene({ scene, className }: Splin
         </div>
       )}
 
-      {/* ── Keyframes injected once ── */}
-      <style>{`
-        @keyframes bsq-shimmer {
-          0%   { transform: translateX(-100%) }
-          100% { transform: translateX(280%) }
-        }
-      `}</style>
     </div>
   )
 })
