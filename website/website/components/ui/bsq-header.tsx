@@ -31,6 +31,7 @@ import {
   Star,
   BookOpen,
   ArrowRight,
+  Sparkles,
 } from 'lucide-react'
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -108,7 +109,7 @@ const aboutLinks: LinkItem[] = [
 ]
 
 const aboutLinks2: LinkItem[] = [
-  { title: 'Our Advisors',    href: '/about',    icon: Users    },
+  { title: 'Our Advisors',    href: '/advisors', icon: Users    },
   { title: 'Certifications',  href: '/about',    icon: BookOpen },
   { title: 'Talk to Us',      href: 'https://m.me/Bstarquartzarea', icon: MessageCircle },
 ]
@@ -393,7 +394,19 @@ export function BsqHeader() {
               </NavigationMenuContent>
             </NavigationMenuItem>
 
-            {/* Simple link */}
+            {/* Join Us */}
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                href="/advisors"
+                className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center gap-1.5"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
+              >
+                <Sparkles size={13} style={{ color: '#ed1b2e' }} />
+                Join Us
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            {/* Contact */}
             <NavigationMenuItem>
               <NavigationMenuLink
                 href="#"
@@ -478,6 +491,29 @@ export function BsqHeader() {
                 </a>
               ))}
             </div>
+          </div>
+
+          {/* Join Us */}
+          <div>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
+              Careers
+            </p>
+            <a
+              href="/advisors"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors"
+            >
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: 'rgba(220,38,38,0.12)', border: '1px solid rgba(220,38,38,0.18)' }}
+              >
+                <Sparkles size={14} className="text-red-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold leading-none mb-0.5">Join Us</p>
+                <p className="text-[11px] text-white/35">Become a BSQ Financial Advisor</p>
+              </div>
+            </a>
           </div>
 
           {/* About section */}
