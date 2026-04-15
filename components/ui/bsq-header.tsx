@@ -393,14 +393,14 @@ export function BsqHeader() {
               </NavigationMenuContent>
             </NavigationMenuItem>
 
-            {/* Recruitment link */}
+            {/* Join Us link */}
             <NavigationMenuItem>
               <NavigationMenuLink
                 href="/recruitment"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
                 style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
               >
-                Recruitment
+                Join Us
               </NavigationMenuLink>
             </NavigationMenuItem>
 
@@ -502,7 +502,7 @@ export function BsqHeader() {
               className="flex items-center gap-3 px-2 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/08 transition-colors"
             >
               <Users size={14} className="text-white/35 shrink-0" />
-              <span className="text-sm">Recruitment</span>
+              <span className="text-sm">Join Us</span>
             </a>
           </div>
 
