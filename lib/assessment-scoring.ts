@@ -13,8 +13,14 @@ export interface Answers {
   savings?: string
   retirement?: string
   priority?: string
+  realProperty?: string  // 'No — I do not own any real property' | 'Yes — I own 1 property' | 'Yes — I own 2 or more properties'
   // ── Conditional: Education Funding ──────────────────────────────
   childrenAge?: string   // 'More than 15 years' | '10–15 years' | '5–10 years' | 'Less than 5 years'
+  // ── Conditional: Freelancer / Professional ───────────────────────
+  freelancerRisk?: string  // 'I have no HMO or health coverage of my own'
+                           // | 'I have no disability protection if I cannot work'
+                           // | 'My income is highly irregular month to month'
+                           // | 'I rely on 1–2 major clients for most of my income'
   // ── Conditional: Business Owner ─────────────────────────────────
   businessStructure?: string  // 'Sole Proprietorship / Professional Practice' | 'Partnership' | 'Corporation'
   businessValue?: string      // 'Below ₱1 million' | '₱1M – ₱5M' | '₱5M – ₱10M' | '₱10M – ₱50M' | 'Above ₱50M'
@@ -238,16 +244,26 @@ export function computeScore(answers: Answers): ScoreResult {
   /* ── Gap detection ─────────────────────────────────────────────── */
   const gaps: Gap[] = []
 
+  // Segment flags — used to modulate gap severity and descriptions below
+  const isFreelancer = answers.occupation === 'Freelancer / Professional / Commission'
+
   // Income / life protection gap
   // Downgrade from high → medium if client already has life insurance,
   // since some base coverage exists (even if the amount may be insufficient).
+  // Freelancers: no employer sick pay, no 13th month, no group life —
+  // consequence language is upgraded to reflect structural exposure.
   if (incomeRaw < 2 || depRaw < 2) {
     const baseSeverity: Gap['severity'] = incomeRaw === 0 ? 'high' : 'medium'
+    const freelancerConsequence = isFreelancer
+      ? 'As a freelancer, there is no employer sick pay, no 13th month, and no group life insurance to fall back on. A single illness, disability, or death leaves your household with zero income replacement — immediately.'
+      : 'If this happens, your family may lose their primary income source with little financial buffer.'
     gaps.push({
       id: 'income',
       title: 'Income Protection Gap',
-      description: 'Your income is not fully protected if you become unable to work due to illness, disability, or death.',
-      consequence: 'If this happens, your family may lose their primary income source with little financial buffer.',
+      description: isFreelancer
+        ? 'Your income is not protected if you become unable to work. Unlike salaried employees, freelancers and professionals have no employer-mandated sick leave, disability pay, or income continuation under the Labor Code (RA 6727).'
+        : 'Your income is not fully protected if you become unable to work due to illness, disability, or death.',
+      consequence: freelancerConsequence,
       severity: hasExistingLife && baseSeverity === 'high' ? 'medium' : baseSeverity,
     })
   }
@@ -255,9 +271,12 @@ export function computeScore(answers: Answers): ScoreResult {
   // Medical coverage gap
   // PhilHealth (score 1) and HMO (score 2) both leave meaningful gaps in
   // critical illness and major surgery — flag unless they have a personal plan.
-  // Downgrade severity if HMO exists (some coverage present).
+  // Freelancers: no employer-provided HMO ever — severity is always HIGH
+  // regardless of current HMO status, because there is no employer fallback.
   if (medRaw < 3) {
     const noRealCoverage = medRaw <= 1 && !hasExistingHealth
+    // Freelancers without a personal plan are always high — no employer HMO fallback exists
+    const freelancerHighRisk = isFreelancer && medRaw <= 2 && !hasExistingHealth
     gaps.push({
       id: 'medical',
       title: 'Medical Coverage Gap',
@@ -265,9 +284,11 @@ export function computeScore(answers: Answers): ScoreResult {
         ? 'You have no health coverage. A single hospitalisation can cost ₱100,000–₱500,000+ out of pocket.'
         : medRaw === 1
           ? 'PhilHealth / SSS covers only a fraction of actual hospital costs and excludes critical illness.'
-          : 'HMO plans have annual limits and typically exclude critical illness payouts — a major diagnosis could exhaust your benefit quickly.',
+          : isFreelancer
+            ? 'HMO plans have annual limits and exclude critical illness payouts. As a freelancer, you also have no employer-provided HMO to fall back on — your personal plan is your only safety net.'
+            : 'HMO plans have annual limits and typically exclude critical illness payouts — a major diagnosis could exhaust your benefit quickly.',
       consequence: 'Medical debt is the leading cause of wiped-out savings in the Philippines.',
-      severity: noRealCoverage ? 'high' : 'medium',
+      severity: (noRealCoverage || freelancerHighRisk) ? 'high' : 'medium',
     })
   }
 
@@ -321,6 +342,85 @@ export function computeScore(answers: Answers): ScoreResult {
     })
   }
 
+  // ── Freelancer / Self-Employed Protection gap ───────────────────
+  // Always triggered for freelancers — this is a STRUCTURAL gap, not a
+  // behavioral one. Regardless of savings/retirement score, freelancers
+  // permanently lack the employer safety net that salaried employees have.
+  // Description and consequence are personalised by freelancerRisk answer.
+  if (isFreelancer) {
+    const risk = answers.freelancerRisk ?? ''
+    const isDisability   = risk === 'I have no disability protection if I cannot work'
+    const isConcentration = risk === 'I rely on 1–2 major clients for most of my income'
+    const isIrregular    = risk === 'My income is highly irregular month to month'
+
+    let freelancerDesc: string
+    let freelancerConseq: string
+
+    if (isDisability) {
+      freelancerDesc =
+        'You have identified disability as your top income risk — and it is the most overlooked gap ' +
+        'for Filipino freelancers and professionals. Under the Labor Code (RA 6727), independent ' +
+        'contractors and self-employed professionals are excluded from mandatory employer benefits: ' +
+        'no sick leave pay, no disability leave, no income continuation. SSS Disability Benefit ' +
+        'averages only ₱5,000–₱12,000/month — far below the income of most professionals. ' +
+        'If you cannot work due to illness, injury, or disability, your income stops the same day.'
+      freelancerConseq =
+        'A doctor who cannot perform surgery, a lawyer who cannot appear in court, a designer who ' +
+        'cannot use their hands — all face immediate, total income loss with no employer buffer. ' +
+        'A life insurance plan with disability income and critical illness riders is the only ' +
+        'instrument that replaces your income while you recover — keeping your household running ' +
+        'and your professional practice alive until you return.'
+
+    } else if (isConcentration) {
+      freelancerDesc =
+        'You rely on 1–2 major clients for the majority of your income — a concentration risk that ' +
+        'exposes your household to sudden income collapse if any one of those clients exits, delays ' +
+        'payment, or reduces scope. Unlike a salaried employee whose employer bears the business ' +
+        'risk, you absorb 100% of that revenue shock personally. Freelancers with no emergency fund ' +
+        'and no income protection coverage are one client termination away from financial hardship.'
+      freelancerConseq =
+        'Client concentration combined with no emergency fund means a 30-day non-payment or contract ' +
+        'termination can cascade into missed mortgage payments, depleted savings, and debt within ' +
+        '60–90 days. A structured income protection plan — combined with a 9–12 month emergency fund ' +
+        '— is the professional safety net that replaces what an employer salary would normally provide.'
+
+    } else if (isIrregular) {
+      freelancerDesc =
+        'Your income fluctuates significantly month to month — a defining feature of commission, ' +
+        'project-based, and freelance work. The financial planning industry recommends a 9–12 month ' +
+        'emergency fund for variable income earners (vs. 3–6 months for salaried employees) precisely ' +
+        'because income gaps are unpredictable. Without a structured emergency fund and income ' +
+        'protection coverage, a slow month or a gap between contracts directly hits your household expenses.'
+      freelancerConseq =
+        'Irregular income earners who lack both an adequate emergency fund and life/disability ' +
+        'coverage are the most financially vulnerable segment in the Philippines — because every ' +
+        'financial shock is amplified by income uncertainty. Structuring a plan that auto-funds your ' +
+        'emergency reserve while providing a death and disability safety net removes both risks simultaneously.'
+
+    } else {
+      // Default / no HMO selected or no answer
+      freelancerDesc =
+        'As a freelancer or self-employed professional, you operate outside the Labor Code\'s mandatory ' +
+        'employer benefit framework (RA 6727). You have no employer-provided HMO, no group life insurance, ' +
+        'no 13th month pay, no sick leave pay, and no employer contribution to your SSS (you pay both ' +
+        'the employee and employer share as a voluntary member). Every financial protection that salaried ' +
+        'employees receive automatically must be personally sourced and personally funded by you.'
+      freelancerConseq =
+        'Without a structured personal protection plan, a single medical event, disability period, or ' +
+        'income gap hits your household directly — with no employer buffer, no group coverage, and no ' +
+        'income continuation mechanism. The longer this gap goes unaddressed, the larger the exposure ' +
+        'becomes relative to your income level and lifestyle obligations.'
+    }
+
+    gaps.push({
+      id: 'freelancerProtection',
+      title: 'Freelancer / Self-Employed Protection Gap',
+      description: freelancerDesc,
+      consequence: freelancerConseq,
+      severity: 'high',
+    })
+  }
+
   // ── Educational Funding gap ─────────────────────────────────────
   // Triggered when client has children. Urgency = years to enrollment.
   // Recommended when protection baseline is met (existing coverage present)
@@ -340,21 +440,155 @@ export function computeScore(answers: Answers): ScoreResult {
     })
   }
 
+  // ── Estate Tax gap ──────────────────────────────────────────────
+  // Triggered when the client owns real property OR has a business value
+  // declared — both are taxable estate assets under TRAIN Law (RA 10963).
+  // Severity:
+  //   HIGH  → has taxable assets but NO existing life insurance (no liquidity)
+  //   MEDIUM → has taxable assets AND life insurance (may be insufficient)
+  // Life insurance with an IRREVOCABLE beneficiary is excluded from gross
+  // estate (NIRC Sec. 85[e]) — making it the primary estate tax planning tool.
+  const ownsProperty   = answers.realProperty === 'Yes — I own 1 property' ||
+                         answers.realProperty === 'Yes — I own 2 or more properties'
+  const multipleProps  = answers.realProperty === 'Yes — I own 2 or more properties'
+  const hasBusinessAssets = answers.occupation === 'Business Owner' && !!answers.businessValue
+  const hasEstatableAssets = ownsProperty || hasBusinessAssets
+
+  if (hasEstatableAssets) {
+    // Build a context-aware description based on what assets they have
+    const assetContext = hasBusinessAssets && ownsProperty
+      ? 'real property and business interests'
+      : hasBusinessAssets
+        ? 'business interests'
+        : multipleProps
+          ? 'multiple real properties'
+          : 'real property'
+
+    // Rough estate tax estimate for business owners (we know their business value range)
+    const businessValueMap: Record<string, number> = {
+      'Below ₱1 million':   500_000,
+      '₱1M – ₱5M':       3_000_000,
+      '₱5M – ₱10M':      7_500_000,
+      '₱10M – ₱50M':    30_000_000,
+      'Above ₱50M':      75_000_000,
+    }
+    const bizVal        = businessValueMap[answers.businessValue ?? ''] ?? 0
+    const standardDed   = 5_000_000
+    const familyHomeDed = ownsProperty ? 10_000_000 : 0
+    const netEstateFloor = Math.max(0, bizVal - standardDed - familyHomeDed)
+    const estTaxFloor    = Math.round(netEstateFloor * 0.06)
+    const taxEstimate    = hasBusinessAssets && estTaxFloor > 0
+      ? ` Based on your declared business value alone, the minimum estate tax your heirs could face is approximately ₱${estTaxFloor.toLocaleString()} — before adding the value of any real property or other assets.`
+      : ''
+
+    gaps.push({
+      id: 'estateTax',
+      title: 'Estate Tax Liability Gap',
+      description:
+        `Under the TRAIN Law (Republic Act 10963), your ${assetContext} form part of your gross taxable estate. ` +
+        `Upon your death, your heirs are legally required to file an Estate Tax Return (BIR Form 1801) and pay ` +
+        `a flat 6% estate tax on the net taxable estate within one year from the date of death — regardless of ` +
+        `whether the estate has been legally settled. The net taxable estate is computed as: Gross Estate minus ` +
+        `the standard deduction of ₱5,000,000, family home deduction of up to ₱10,000,000, allowable debts, ` +
+        `and other deductions.${taxEstimate} ` +
+        `Life insurance proceeds payable to an irrevocable beneficiary are fully excluded from the gross estate ` +
+        `under the National Internal Revenue Code (NIRC), Section 85(e) — making life insurance the most ` +
+        `tax-efficient liquidity instrument for estate settlement in the Philippines.`,
+      consequence:
+        `Without liquid funds readily available, your heirs face a hard deadline: pay the estate tax within ` +
+        `1 year or face a 25% surcharge plus 12% annual interest on the unpaid amount (TRAIN Law, Sec. 249). ` +
+        `If your estate consists primarily of real property or a business — both illiquid assets — your ` +
+        `family may be forced to sell the property or business at a distressed price just to meet the ` +
+        `BIR deadline. A life insurance policy with an irrevocable beneficiary designation delivers the ` +
+        `death benefit directly to your family — bypassing estate settlement entirely, zero estate tax on ` +
+        `the proceeds, immediately available to pay the BIR bill and preserve the rest of the estate intact.`,
+      severity: hasExistingLife ? 'medium' : 'high',
+    })
+  }
+
   // ── Business Insurance gap ──────────────────────────────────────
   // Triggered for all Business Owners who answered the business questions.
-  // Coverage formula differs by business structure.
+  // Coverage formula and legal basis differ by business structure:
+  //   Sole Prop   → DTI / RA 3883 + Civil Code (no juridical separation)
+  //   Partnership → Civil Code Arts. 1767–1867 (Art. 1816 + Art. 1830)
+  //   Corporation → RA 11232 Revised Corporation Code (Secs. 2, 95–104)
   if (answers.occupation === 'Business Owner' && answers.businessValue) {
-    const struct = answers.businessStructure ?? 'Sole Proprietorship / Professional Practice'
-    const isCorp = struct === 'Corporation' || struct === 'Partnership'
+    const struct       = answers.businessStructure ?? 'Sole Proprietorship / Professional Practice'
+    const isSoleProp   = struct === 'Sole Proprietorship / Professional Practice'
+    const isPartnership = struct === 'Partnership'
+    // isCorp retained for downstream recommendation logic
+    const isCorp = !isSoleProp
+
+    let gapDescription: string
+    let gapConsequence: string
+
+    if (isSoleProp) {
+      gapDescription =
+        'Under Philippine law, a sole proprietorship has no separate juridical personality from its owner. ' +
+        'It is registered under the Business Name Law (RA 3883) through the DTI, but legally, you and your ' +
+        'business are one and the same entity. Every peso of business debt is your personal debt. ' +
+        'The Civil Code of the Philippines holds you personally liable for all business obligations — ' +
+        'there is no corporate veil, no limited liability, and no legal firewall between your personal ' +
+        'estate and your business liabilities. Without life insurance equal to the full business value, ' +
+        'your family inherits both the business and all of its outstanding obligations.'
+      gapConsequence =
+        'Upon your death, creditors of the sole proprietorship can go after your personal and family assets — ' +
+        'your home, bank accounts, vehicles, and personal property — to settle unpaid business liabilities ' +
+        '(Civil Code, Art. 1816 principles applied by analogy). Your family may be forced into a distressed ' +
+        'sale of the business at a fraction of its real value just to cover debts you leave behind. ' +
+        'Life insurance equal to the full business value is the only instrument that provides immediate ' +
+        'liquidity to settle these obligations without sacrificing family assets.'
+
+    } else if (isPartnership) {
+      gapDescription =
+        'Under the Civil Code of the Philippines, Articles 1767 to 1867, a partnership is a contract ' +
+        'where two or more persons bind themselves to contribute money, property, or industry to a common fund, ' +
+        'with the intention of dividing the profits among themselves. Critically, Article 1830, paragraph 5, ' +
+        'provides that a partnership is dissolved by the death of any general partner — unless the Articles ' +
+        'of Partnership expressly provide for continuation by the surviving partners. Article 1816 further ' +
+        'holds that all general partners are liable pro rata with their personal property for all obligations ' +
+        'contracted by the partnership — meaning your death exposes your estate to full personal liability ' +
+        'collection. A life insurance-funded buy-sell agreement — documented in the Articles of Partnership ' +
+        'or a separate buy-sell deed — is the legally recognised mechanism that allows surviving partners to ' +
+        'purchase your interest cleanly and continue operations without forced dissolution.'
+      gapConsequence =
+        'Without a funded buy-sell agreement, your death legally dissolves the partnership under Article 1830. ' +
+        'Surviving partners must either liquidate and wind down the business or renegotiate new Articles of ' +
+        'Partnership — often at a loss, under time pressure, and in conflict with your heirs. Your estate ' +
+        'inherits your ownership interest, your share of undistributed profits and losses, and your exposure ' +
+        'under Article 1816 (unlimited personal liability for general partners). Disputes between heirs and ' +
+        'surviving partners over valuation, liabilities, and settlement terms frequently escalate to ' +
+        'litigation — destroying the business and the estate simultaneously.'
+
+    } else {
+      // Corporation
+      gapDescription =
+        'Under the Revised Corporation Code of the Philippines (RA 11232, signed February 2019), Section 2, ' +
+        'a corporation is a juridical person separate and distinct from its stockholders and directors. ' +
+        'Unlike a sole proprietorship or general partnership, a corporation does not automatically dissolve ' +
+        'upon the death of a shareholder. However, your shares of stock pass to your estate and heirs who ' +
+        'may have no business intent, no operational role, and no alignment with co-shareholders or the ' +
+        'board. For close corporations (RA 11232, Sections 95–104), the Articles of Incorporation may ' +
+        'restrict share transfers — but without a life insurance-funded buy-sell agreement, surviving ' +
+        'shareholders have no guaranteed, pre-funded mechanism to acquire your shares at a fair, pre-agreed ' +
+        'value. The buy-sell agreement, incorporated by reference into the Articles of Incorporation, is ' +
+        'the standard corporate governance tool used to manage this risk.'
+      gapConsequence =
+        'Your heirs become involuntary co-shareholders with full statutory rights under RA 11232 — ' +
+        'including the right to inspect books and records (Section 74), demand dividends, vote on major ' +
+        'corporate decisions, or petition for dissolution under Sections 133–136. Without a funded buy-sell ' +
+        'agreement, surviving shareholders cannot compel a buyout at fair value — and must either accept ' +
+        'unwanted co-owners, negotiate an expensive buyout against an adversarial estate, or face business ' +
+        'disruption that collapses the valuation for everyone. A life insurance-funded buy-sell agreement, ' +
+        'structured within the close corporation framework of RA 11232, gives surviving shareholders the ' +
+        'liquidity to purchase your estate\'s shares at the pre-agreed price — cleanly and immediately.'
+    }
+
     gaps.push({
       id: 'businessInsurance',
       title: 'Business Insurance Gap',
-      description: isCorp
-        ? `For ${struct}s, your insurable interest is your proportional ownership stake. Without a funded buy-sell agreement, the death of a partner or shareholder can force a distressed sale or ownership dispute.`
-        : 'As a sole proprietor, you own 100% of the business — and there is no legal separation between your personal and business assets. Your business debts are your personal debts. Without life insurance equal to the full business value, your family inherits both the business and all its liabilities.',
-      consequence: isCorp
-        ? 'Business debts, operating commitments, and partner obligations do not disappear when you do — they fall on your estate or surviving partners.'
-        : 'If you pass away, creditors can go after your personal and family assets to settle business liabilities. Your family may be forced to sell the business at a loss just to pay off debts.',
+      description: gapDescription,
+      consequence: gapConsequence,
       severity: 'high',
     })
   }
@@ -548,6 +782,106 @@ export function computeScore(answers: Answers): ScoreResult {
     })
   }
 
+  // ── Estate Tax Liquidity → PRUMillion Protect ──────────────────
+  // Life insurance with irrevocable beneficiary is the only instrument
+  // whose proceeds (a) bypass estate settlement and (b) are excluded from
+  // gross estate under NIRC Sec. 85(e) — zero estate tax on the payout.
+  // Product: PRUMillion Protect — 500% guaranteed death benefit, VUL growth.
+  if (gapIds.includes('estateTax')) {
+    const hasMultipleProps = answers.realProperty === 'Yes — I own 2 or more properties'
+    const hasBizAndProp    = hasBusinessAssets && ownsProperty
+
+    const estateContext = hasBizAndProp
+      ? 'Your estate includes both real property and business interests — two illiquid asset classes that your heirs cannot quickly convert to cash to pay the BIR.'
+      : hasBusinessAssets
+        ? 'Your business is an illiquid asset — your heirs cannot split it into portions to pay the estate tax. Without a separate liquidity source, they face a forced sale.'
+        : hasMultipleProps
+          ? 'Your multiple properties create a meaningful estate tax obligation. Selling one property to pay the BIR bill takes months — but the 1-year deadline does not.'
+          : 'Your real property is part of your gross estate. Without liquid funds set aside, your heirs must raise cash within 1 year to pay the estate tax or face surcharges.'
+
+    const whyNote = hasExistingLife
+      ? `You have existing life insurance — but it is critical to verify that the beneficiary designation is IRREVOCABLE. Only irrevocable beneficiary policies are excluded from the gross estate under NIRC Section 85(e). If your policy names a revocable beneficiary or "the estate," the death benefit is included in the taxable estate and taxed at 6%. ${estateContext}`
+      : `You currently have no life insurance. ${estateContext} A PRUMillion Protect policy with an irrevocable beneficiary designation delivers the death benefit directly to your family — bypassing estate proceedings entirely, with zero estate tax on the proceeds — available immediately to settle the BIR obligation.`
+
+    recommendations.push({
+      id: 11,
+      productId: 'pru-million-protect',
+      name: 'PRUMillion Protect (Estate Tax Fund)',
+      shortName: 'Estate Fund',
+      emoji: '🏛️',
+      layer: 'Estate Planning Layer',
+      category: 'Estate Planning',
+      color: '#b45309',
+      dot: '#f59e0b',
+      slug: 'pru-million-protect',
+      what: 'A life insurance policy with an irrevocable beneficiary designation creates an estate tax fund that bypasses settlement, is excluded from the gross estate under NIRC Section 85(e), and delivers liquidity to your heirs within days — not months.',
+      why: whyNote,
+      keyBenefits: [
+        {
+          title: 'Excluded from Gross Estate — Zero Estate Tax on Proceeds',
+          description: 'Under the National Internal Revenue Code (NIRC), Section 85(e), life insurance proceeds payable to an irrevocable beneficiary are fully excluded from the gross taxable estate. Your heirs receive the full death benefit — no 6% deduction, no BIR claim on it.',
+        },
+        {
+          title: 'Bypasses Estate Settlement — Immediate Liquidity',
+          description: 'Unlike property, bank accounts, or business shares (which are frozen during estate settlement), life insurance proceeds are paid directly to the irrevocable beneficiary — available immediately to pay the estate tax bill, settle debts, and preserve the rest of the estate intact.',
+        },
+      ],
+      idealFor: [
+        'Property owners and business owners whose estates are primarily illiquid assets',
+        'Families who want to prevent a forced sale of the family home or business just to pay the BIR',
+      ],
+      entryPoint: 'Coverage sized to cover projected estate tax liability (6% of net taxable estate)',
+      paymentTerm: 'Regular pay or limited pay — aligned to expected estate settlement timeline',
+    })
+  }
+
+  // ── Freelancer Protection → PAA Plus (disability + medical riders) ─
+  // Freelancers' primary protection need is disability income + medical
+  // cost coverage — PAA Plus with CI/disability riders addresses both.
+  // Personalised rationale driven by freelancerRisk answer.
+  if (gapIds.includes('freelancerProtection')) {
+    const risk          = answers.freelancerRisk ?? ''
+    const isDisability  = risk === 'I have no disability protection if I cannot work'
+    const isConcentration = risk === 'I rely on 1–2 major clients for most of my income'
+
+    const whyRationale = isDisability
+      ? 'You flagged disability as your top risk. PAA Plus with Life Care Benefit (LCB) and Daily Hospital Income (DHI) riders pays you a lump sum on diagnosis of any of 36 critical conditions AND a daily cash allowance during hospitalisation — replacing your professional income while you cannot work.'
+      : isConcentration
+        ? 'With income concentrated in 1–2 clients, a single contract gap or medical event can wipe your cash reserves. PAA Plus builds a growing investment fund alongside disability and medical coverage — so your protection scales as your freelance income grows.'
+        : 'As a freelancer with no employer benefits, PAA Plus is your one-plan solution: life protection, critical illness coverage (36 conditions), daily hospital income, and a growing investment account — everything an employer benefit package would cover, owned personally by you.'
+
+    recommendations.push({
+      id: 10,
+      productId: 'prulink-assurance-account-plus',
+      name: 'PRULink Assurance Account Plus',
+      shortName: 'PAA Plus',
+      emoji: '🔒',
+      layer: 'Freelancer Protection Layer',
+      category: 'Protection',
+      color: '#7c3aed',
+      dot: '#a78bfa',
+      slug: 'prulink-assurance-account-plus',
+      what: 'VUL plan with attachable critical illness (36 conditions), daily hospital income, ICU, and disability riders — the only plan that replaces both your medical costs AND your lost income when you cannot work. No employer benefit package needed.',
+      why: whyRationale,
+      keyBenefits: [
+        {
+          title: 'Disability & Critical Illness Income Replacement',
+          description: 'Life Care Benefit (LCB) pays 100% of Sum Assured on diagnosis of any of 36 critical conditions. Daily Hospital Income (DHI) pays cash per day of confinement. Together, they replace your professional income while you cannot bill clients.',
+        },
+        {
+          title: 'Your Personal Benefits Package — All in One Plan',
+          description: 'No employer HMO, no group life, no sick leave pay — PAA Plus fills all three gaps: life coverage, critical illness protection, and a growing investment fund, starting from ₱30,000/year (Peso) or USD 580/year (Dollar).',
+        },
+      ],
+      idealFor: [
+        'Freelancers, consultants, doctors, lawyers, and commission-based professionals with no employer HMO or group life',
+        'Self-employed professionals who need disability income protection and personal health coverage in a single plan',
+      ],
+      entryPoint: 'From ₱30,000/year (Peso) or USD 580/year (Dollar)',
+      paymentTerm: 'Regular pay (whole life to pay, up to age 100)',
+    })
+  }
+
   // ── Optimization / Well-Protected → PRU Elite Series ──────────
   if (recommendations.length === 0 || gapIds.includes('optimization')) {
     const isHighIncome = answers.monthlyExpenses === 'Above ₱80,000' || answers.monthlyExpenses === '₱60,001 – ₱80,000'
@@ -665,7 +999,9 @@ export function computeScore(answers: Answers): ScoreResult {
     }
     const rawValue    = businessValueMap[answers.businessValue ?? ''] ?? 3_000_000
     const struct      = answers.businessStructure ?? 'Sole Proprietorship / Professional Practice'
-    const isCorp      = struct === 'Corporation' || struct === 'Partnership'
+    const isSolePropRec  = struct === 'Sole Proprietorship / Professional Practice'
+    const isPartnershipRec = struct === 'Partnership'
+    const isCorp      = !isSolePropRec
     const ownership   = ownershipMap[answers.ownershipShare ?? ''] ?? 1.0
     const coverageNeed = isCorp ? Math.round(rawValue * ownership) : rawValue
     const premLow     = Math.round(coverageNeed * 0.03)
@@ -674,9 +1010,33 @@ export function computeScore(answers: Answers): ScoreResult {
     const coverageFmt  = `₱${(coverageNeed / 1_000_000).toFixed(1)}M`
     const premFmt      = `₱${(premLow / 1000).toFixed(0)}K – ₱${(premHigh / 1000).toFixed(0)}K`
 
-    const coverageNote = isCorp
-      ? `As a ${struct} with ${answers.ownershipShare ?? 'partial'} ownership, your insurable interest is ${coverageFmt} of the business value.`
-      : `As a sole proprietor, you own 100% of the business with no separation between personal and business assets. Full business value coverage of ${coverageFmt} is recommended. Estimated annual premium: ${premFmt}/year (3–5% of business value).`
+    let coverageNote: string
+    if (isSolePropRec) {
+      coverageNote =
+        `Under RA 3883 (Business Name Law / DTI) and the Civil Code of the Philippines, a sole ` +
+        `proprietorship has no separate juridical personality — you and your business are legally one. ` +
+        `You bear 100% personal liability for all business obligations. Full business value coverage ` +
+        `of ${coverageFmt} is recommended to protect your family from inheriting your liabilities. ` +
+        `Estimated annual premium: ${premFmt}/year (3–5% of insured business value).`
+    } else if (isPartnershipRec) {
+      coverageNote =
+        `Under Civil Code of the Philippines, Articles 1767–1867, your insurable interest as a ` +
+        `general partner is your proportional ownership stake — estimated at ${coverageFmt}. ` +
+        `Article 1816 holds all general partners personally liable for partnership obligations; ` +
+        `Article 1830 dissolves the partnership upon a partner's death unless the Articles of ` +
+        `Partnership provide otherwise. A buy-sell agreement funded by this life insurance ensures ` +
+        `surviving partners can acquire your interest cleanly without forced dissolution or litigation. ` +
+        `Estimated annual premium: ${premFmt}/year.`
+    } else {
+      coverageNote =
+        `Under the Revised Corporation Code (RA 11232, Sec. 2), your corporation is a separate ` +
+        `juridical person — but your ${answers.ownershipShare ?? 'proportional'} ownership stake ` +
+        `(${coverageFmt}) passes to your estate upon death. Without a buy-sell agreement funded by ` +
+        `this life insurance, surviving shareholders have no pre-funded mechanism to acquire your ` +
+        `shares at fair value under Sections 95–104 of RA 11232. This prevents heirs from becoming ` +
+        `involuntary co-owners or forcing dissolution under Sections 133–136. ` +
+        `Estimated annual premium: ${premFmt}/year.`
+    }
 
     recommendations.push({
       id: 7,

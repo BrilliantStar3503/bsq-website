@@ -163,7 +163,24 @@ export const questions: Question[] = [
     ],
   },
 
-  // ── 10. Medical Coverage Quality ─────────────────────────────────
+  // ── 10. Real Property Ownership ─────────────────────────────────
+  // WHY: Real property (land, house, condo) is included in the gross
+  // estate under the TRAIN Law (RA 10963) and taxed at 6% of net estate.
+  // Heirs must file and pay within 1 year of death. Without liquidity
+  // (i.e. life insurance), families are forced to sell property to pay
+  // the estate tax bill. This question gates the Estate Tax gap.
+  {
+    id: 'realProperty',
+    question: 'Do you own any real property — land, house, or condominium?',
+    subtitle: 'Real property is part of your taxable estate. Under TRAIN Law (RA 10963), heirs must settle estate tax within 1 year of your death.',
+    options: [
+      'No — I do not own any real property',
+      'Yes — I own 1 property',
+      'Yes — I own 2 or more properties',
+    ],
+  },
+
+  // ── 11. Medical Coverage Quality ─────────────────────────────────
   // Factual instrument anchors — not self-assessment.
   // PhilHealth alone covers very little; HMO has annual limits;
   // personal CI plans are most comprehensive.
@@ -179,7 +196,7 @@ export const questions: Question[] = [
     ],
   },
 
-  // ── 11. Savings Behaviour ────────────────────────────────────────
+  // ── 12. Savings Behaviour ────────────────────────────────────────
   // Behavioral anchors — not confidence self-assessment.
   // "I set aside a fixed amount" is verifiable; "I have a plan" is not.
   {
@@ -194,7 +211,7 @@ export const questions: Question[] = [
     ],
   },
 
-  // ── 12. Retirement Readiness (Fact-Based) ────────────────────────
+  // ── 13. Retirement Readiness (Fact-Based) ────────────────────────
   // Instrument inventory — not confidence.
   // SSS/GSIS pension averages ₱8K–₱15K/month.
   {
@@ -209,7 +226,7 @@ export const questions: Question[] = [
     ],
   },
 
-  // ── 13. Primary Financial Concern ────────────────────────────────
+  // ── 14. Primary Financial Concern ────────────────────────────────
   // Concern-based — less biased than "priority".
   // All goals are valid; used for awarenessScore and results narrative.
   {
@@ -230,7 +247,7 @@ export const questions: Question[] = [
   //  Shown only when client has children (dependents Q5)
   // ══════════════════════════════════════════════════════════════════
 
-  // ── 14. Children's Education Timeline ───────────────────────────
+  // ── 15. Children's Education Timeline ───────────────────────────
   // WHY: Urgency of education funding is determined by years to
   // enrollment. A child starting college in 3 years requires a
   // completely different plan than one starting in 15 years.
@@ -250,12 +267,38 @@ export const questions: Question[] = [
 
 
   // ══════════════════════════════════════════════════════════════════
+  //  CONDITIONAL — FREELANCER / PROFESSIONAL
+  //  Shown only when occupation = Freelancer / Professional / Commission
+  //  Covers: disability risk, income irregularity, client concentration
+  // ══════════════════════════════════════════════════════════════════
+
+  // ── 16. Freelancer Risk Profile ──────────────────────────────────
+  // WHY: Freelancers are excluded from the Labor Code's mandatory
+  // employer benefits (RA 6727) — no 13th month, no sick leave pay,
+  // no group life, no employer HMO. This question identifies the
+  // single biggest structural gap so the engine can prioritise
+  // the correct product and severity accordingly.
+  {
+    id: 'freelancerRisk',
+    question: 'As a freelancer or professional, what is your biggest income risk right now?',
+    subtitle: 'Unlike employees, you have no employer safety net — your answer shapes your entire protection plan.',
+    options: [
+      'I have no HMO or health coverage of my own',
+      'I have no disability protection if I cannot work',
+      'My income is highly irregular month to month',
+      'I rely on 1–2 major clients for most of my income',
+    ],
+    showIf: (a) => a.occupation === 'Freelancer / Professional / Commission',
+  },
+
+
+  // ══════════════════════════════════════════════════════════════════
   //  CONDITIONAL — BUSINESS OWNER QUESTIONS
   //  Shown only when occupation = Business Owner (Q3)
   //  Covers: Business Insurance, Key Man, Employee Retirement
   // ══════════════════════════════════════════════════════════════════
 
-  // ── 15. Business Legal Structure ────────────────────────────────
+  // ── 17. Business Legal Structure ────────────────────────────────
   // WHY: The insurance formula changes completely by business type.
   // Sole prop → 3–5% of business value as premium.
   // Corporation → coverage = ownership % × company valuation.
@@ -272,7 +315,7 @@ export const questions: Question[] = [
     showIf: (a) => a.occupation === 'Business Owner',
   },
 
-  // ── 16. Business Value ──────────────────────────────────────────
+  // ── 18. Business Value ──────────────────────────────────────────
   // WHY: Coverage amount = current market value if the business were
   // sold today (3-year valuation method as instructed).
   // For sole prop: annual premium = 3–5% of this value.
@@ -291,7 +334,7 @@ export const questions: Question[] = [
     showIf: (a) => a.occupation === 'Business Owner',
   },
 
-  // ── 17. Ownership Share ──────────────────────────────────────────
+  // ── 19. Ownership Share ──────────────────────────────────────────
   // WHY: For corporations and partnerships, the insurable interest is
   // the client's proportional ownership — not the full company value.
   // Coverage = ownership% × business valuation.
@@ -310,7 +353,7 @@ export const questions: Question[] = [
       (a.businessStructure === 'Partnership' || a.businessStructure === 'Corporation'),
   },
 
-  // ── 18. Business Role ────────────────────────────────────────────
+  // ── 20. Business Role ────────────────────────────────────────────
   // WHY: Key Man Insurance is specifically for high-level executives
   // whose death or departure would materially damage the business.
   // President, VP, CEO, C-suite = eligible for Key Man coverage.
@@ -327,7 +370,7 @@ export const questions: Question[] = [
     showIf: (a) => a.occupation === 'Business Owner',
   },
 
-  // ── 19. Number of Employees ─────────────────────────────────────
+  // ── 21. Number of Employees ─────────────────────────────────────
   // WHY: Employee Retirement plans are recommended when there are at
   // least 11 regular employees — the threshold for group benefit
   // eligibility and legal best-practice in the Philippines.
