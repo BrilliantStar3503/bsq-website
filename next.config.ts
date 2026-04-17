@@ -13,16 +13,16 @@ const securityHeaders = [
   {
     key: 'Content-Security-Policy',
     value: [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://prod.spline.design https://connect.facebook.net https://www.googletagmanager.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com",
+      "default-src 'self' https: data: blob:",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+      "style-src 'self' 'unsafe-inline' https:",
+      "font-src 'self' data: https:",
       "img-src 'self' data: blob: https:",
-      "connect-src 'self' https://prod.spline.design https://api.calendly.com wss://prod.spline.design",
-      "frame-src 'self' https://calendly.com https://www.facebook.com",
+      "connect-src 'self' https: wss:",
+      "frame-src 'self' https:",
+      "worker-src 'self' blob:",
       "object-src 'none'",
       "base-uri 'self'",
-      "form-action 'self'",
     ].join('; '),
   },
 ]
