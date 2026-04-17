@@ -351,8 +351,10 @@ export function computeScore(answers: Answers): ScoreResult {
       title: 'Business Insurance Gap',
       description: isCorp
         ? `For ${struct}s, your insurable interest is your proportional ownership stake. Without a funded buy-sell agreement, the death of a partner or shareholder can force a distressed sale or ownership dispute.`
-        : 'As a sole proprietor or professional, your business value is directly tied to your life. Without business insurance, your family may inherit business liabilities with no liquidity to settle them.',
-      consequence: 'Business debts, operating commitments, and partner obligations do not disappear when you do — they fall on your estate or surviving partners.',
+        : 'As a sole proprietor, you own 100% of the business — and there is no legal separation between your personal and business assets. Your business debts are your personal debts. Without life insurance equal to the full business value, your family inherits both the business and all its liabilities.',
+      consequence: isCorp
+        ? 'Business debts, operating commitments, and partner obligations do not disappear when you do — they fall on your estate or surviving partners.'
+        : 'If you pass away, creditors can go after your personal and family assets to settle business liabilities. Your family may be forced to sell the business at a loss just to pay off debts.',
       severity: 'high',
     })
   }
@@ -674,7 +676,7 @@ export function computeScore(answers: Answers): ScoreResult {
 
     const coverageNote = isCorp
       ? `As a ${struct} with ${answers.ownershipShare ?? 'partial'} ownership, your insurable interest is ${coverageFmt} of the business value.`
-      : `Your business is estimated at ${coverageFmt}. The recommended annual premium is ${premFmt}/year (3–5% of business value).`
+      : `As a sole proprietor, you own 100% of the business with no separation between personal and business assets. Full business value coverage of ${coverageFmt} is recommended. Estimated annual premium: ${premFmt}/year (3–5% of business value).`
 
     recommendations.push({
       id: 7,
