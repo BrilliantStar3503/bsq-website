@@ -36,6 +36,17 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+
+  async rewrites() {
+    return [
+      {
+        // Serve the standalone PLI planner HTML directly at /prulifetime
+        // — no Next.js layout, no BSQ header/footer, exactly as designed
+        source:      '/prulifetime',
+        destination: '/pli-planner.html',
+      },
+    ]
+  },
 }
 
 export default nextConfig;

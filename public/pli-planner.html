@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRULifetime Income Planner | BSQ · PRU Life UK</title>
+
+  <!-- ── Open Graph — Facebook share card ── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://prubsq.com/prulifetime" />
+  <meta property="og:title"       content="Never Outlive Your Money — PRULifetime Income" />
+  <meta property="og:description" content="Calculate your guaranteed lifetime income in 60 seconds. Pay 5 or 10 years — collect forever. 200% death benefit. Zero market risk." />
+  <meta property="og:image"       content="https://prubsq.com/pli-images/slide2.jpg" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name"   content="Brilliant Star Quartz · PRU Life UK" />
+
+  <!-- ── Twitter / X card ── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Never Outlive Your Money — PRULifetime Income" />
+  <meta name="twitter:description" content="Guaranteed income for life. Pay 5 or 10 years — collect forever." />
+  <meta name="twitter:image"       content="https://prubsq.com/pli-images/slide2.jpg" />
+
+  <!-- ── SEO ── -->
+  <meta name="description" content="Calculate your guaranteed lifetime income in 60 seconds. PRULifetime Income by PRU Life UK Philippines — guaranteed income for life, 200% death benefit, zero market risk." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'pru-red':   '#E60028',
+            'pru-dark':  '#333333',
+            'pru-gray':  '#F5F5F5',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+    .result-card { animation: slideUp 0.5s ease both; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    input:focus, select:focus { outline: none; }
+    .hero-fade {
+      animation: heroFadeUp 0.7s cubic-bezier(.22,.68,0,1.2) both;
+    }
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Hero slideshow ── */
+    .slide-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 22%;
+      border-radius: 0;
+      opacity: 0;
+      transition: opacity 1.1s ease-in-out;
+      will-change: opacity;
+    }
+    .slide-img.active { opacity: 1; }
+
+    /* Dot indicators */
+    .slide-dot {
+      width: 7px; height: 7px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.40);
+      border: 1.5px solid rgba(255,255,255,0.55);
+      transition: background 0.35s, width 0.35s;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .slide-dot.active {
+      background: #fff;
+      width: 24px;
+      border-color: #fff;
+    }
+
+    /* Slide caption fade */
+    .slide-caption-text {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .slide-caption-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="font-sans bg-white text-pru-dark antialiased">
+
+<!-- ─── NAV ──────────────────────────────────────────────── -->
+<nav class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-10 h-10 bg-pru-red rounded-lg flex items-center justify-center flex-shrink-0">
+        <span class="text-white text-xs font-black tracking-tight">PLI</span>
+      </div>
+      <span class="font-bold text-pru-dark">PRU<span class="text-pru-red">Lifetime</span> <span class="font-normal text-gray-400">Income</span></span>
+    </div>
+    <a href="#planner"
+       class="bg-pru-red text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-red-700 transition-colors">
+      Get Sample Quotation →
+    </a>
+  </div>
+</nav>
+
+<!-- ─── HERO ──────────────────────────────────────────────── -->
+<section class="bg-white pt-28 pb-20 px-6 relative overflow-hidden">
+
+  <!-- ─── Decorative ribbon — flows from below 3-gen legacy → curves down → up to CTA ─── -->
+  <svg
+    class="absolute left-0 w-full pointer-events-none"
+    style="bottom:0; height:200px; z-index:1; opacity:0.85;"
+    viewBox="0 0 1440 200"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <defs>
+      <linearGradient id="rMain" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#C40022" stop-opacity="0"/>
+        <stop offset="5%"   stop-color="#C40022" stop-opacity="1"/>
+        <stop offset="40%"  stop-color="#E60028" stop-opacity="1"/>
+        <stop offset="60%"  stop-color="#E60028" stop-opacity="1"/>
+        <stop offset="95%"  stop-color="#C40022" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#C40022" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="rHL" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#FF5070" stop-opacity="0"/>
+        <stop offset="5%"   stop-color="#FF5070" stop-opacity="0.65"/>
+        <stop offset="50%"  stop-color="#FF2244" stop-opacity="0.55"/>
+        <stop offset="95%"  stop-color="#FF5070" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#FF5070" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="rShadow" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#880018" stop-opacity="0"/>
+        <stop offset="5%"   stop-color="#880018" stop-opacity="0.40"/>
+        <stop offset="50%"  stop-color="#9C001C" stop-opacity="0.35"/>
+        <stop offset="95%"  stop-color="#880018" stop-opacity="0.30"/>
+        <stop offset="100%" stop-color="#880018" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="gMain" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#C8C8C8" stop-opacity="0"/>
+        <stop offset="5%"   stop-color="#C8C8C8" stop-opacity="0.65"/>
+        <stop offset="50%"  stop-color="#E0E0E0" stop-opacity="0.60"/>
+        <stop offset="95%"  stop-color="#C8C8C8" stop-opacity="0.50"/>
+        <stop offset="100%" stop-color="#C8C8C8" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!--
+      Path anatomy:
+        Left (x=0)   y=45  — starts just below "3-Gen Legacy / 10,000 families"
+        Middle dip   y=155 — curves down between the two columns
+        Right (x=1440) y=65 — comes back up below "Get My Personalized Plan"
+    -->
+
+    <!-- ① Gray companion — slightly below main -->
+    <path d="M0,58  C320,58  520,168 720,162 S1120,78  1440,78"
+          fill="none" stroke="url(#gMain)"   stroke-width="18" stroke-linecap="round"/>
+
+    <!-- ② Red shadow — underside depth -->
+    <path d="M0,52  C320,52  520,162 720,156 S1120,72  1440,72"
+          fill="none" stroke="url(#rShadow)" stroke-width="22" stroke-linecap="round"/>
+
+    <!-- ③ Red main ribbon -->
+    <path d="M0,45  C320,45  520,155 720,150 S1120,65  1440,65"
+          fill="none" stroke="url(#rMain)"   stroke-width="18" stroke-linecap="round"/>
+
+    <!-- ④ Top highlight -->
+    <path d="M0,38  C320,38  520,148 720,143 S1120,58  1440,58"
+          fill="none" stroke="url(#rHL)"     stroke-width="5"  stroke-linecap="round"/>
+
+  </svg>
+  <!-- ─── end ribbon ─── -->
+
+  <!-- All content — z-index 10 -->
+  <div class="max-w-6xl mx-auto relative" style="z-index:10;">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+      <!-- ══════════════════════════════════════
+           LEFT — Copy + Benefits + Card
+      ══════════════════════════════════════ -->
+      <div class="hero-fade">
+
+        <!-- Eyebrow -->
+        <div class="inline-flex items-center gap-2 bg-red-50 border border-red-100 text-pru-red text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full mb-7">
+          <span class="w-1.5 h-1.5 rounded-full bg-pru-red animate-pulse inline-block flex-shrink-0"></span>
+          Guaranteed · No Market Risk
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-[40px] sm:text-[52px] font-black text-pru-dark leading-[1.08] tracking-tight mb-5">
+          One Plan.<br>
+          Three Generations.<br>
+          <span class="text-pru-red">Lifetime Income.</span>
+        </h1>
+
+        <!-- Sub-headline -->
+        <p class="text-[17px] text-gray-400 font-normal leading-[1.7] mb-8 max-w-[420px]">
+          Pay for 5 or 10 years. Collect guaranteed income for life — and pass double to your family.
+        </p>
+
+        <!-- ── Benefits + Sample Card side by side ── -->
+        <div class="flex flex-col sm:flex-row gap-5 mb-8 items-start">
+
+          <!-- Three benefit rows -->
+          <div class="space-y-3 flex-1">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-[16px]">💰</div>
+              <div>
+                <div class="text-sm font-bold text-pru-dark">Lifetime Income</div>
+                <div class="text-xs text-gray-400 leading-snug">5% of your coverage, paid annually, forever</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-[16px]">🛡️</div>
+              <div>
+                <div class="text-sm font-bold text-pru-dark">200% Death Benefit</div>
+                <div class="text-xs text-gray-400 leading-snug">Guaranteed double coverage for your family</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-[16px]">🌿</div>
+              <div>
+                <div class="text-sm font-bold text-pru-dark">3-Generation Legacy</div>
+                <div class="text-xs text-gray-400 leading-snug">Wealth that grows and outlives you</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Sample Projection Card ── -->
+          <div class="bg-white rounded-2xl p-4 w-full sm:w-[195px] flex-shrink-0 hero-fade"
+               style="animation-delay:.3s; box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-2.5">
+              <div>
+                <div class="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Sample Projection</div>
+                <div class="text-[10px] font-semibold text-gray-500">Age 35 · 10-Pay</div>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-[9px] text-emerald-600 font-semibold">Live</span>
+              </div>
+            </div>
+
+            <!-- Big number -->
+            <div class="mb-2.5">
+              <div class="text-[26px] font-black text-pru-red leading-none tracking-tight">₱50,000</div>
+              <div class="text-[10px] text-gray-400 mt-0.5">guaranteed income / year</div>
+            </div>
+
+            <!-- Divider -->
+            <div class="h-px bg-gray-100 mb-2.5"></div>
+
+            <!-- Stats -->
+            <div class="space-y-1.5 mb-2.5">
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="text-gray-400">Annual premium</span>
+                <span class="font-bold text-pru-dark">₱187,400</span>
+              </div>
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="text-gray-400">Death benefit</span>
+                <span class="font-bold text-emerald-600">₱2,000,000</span>
+              </div>
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="text-gray-400">Income starts</span>
+                <span class="font-bold text-pru-dark">Age 41</span>
+              </div>
+            </div>
+
+            <!-- PRU Life badge -->
+            <div class="flex items-center gap-1.5 bg-red-50 rounded-lg px-2.5 py-1.5">
+              <svg class="w-2.5 h-2.5 text-pru-red flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
+              <span class="text-[9px] font-bold text-pru-red">PRU Life rate table</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Social proof ── -->
+        <div class="flex items-center gap-3 pt-6 relative" style="z-index:2;">
+          <div class="flex -space-x-2 flex-shrink-0">
+            <div class="w-8 h-8 rounded-full bg-red-100 border-2 border-white flex items-center justify-center text-sm">👨</div>
+            <div class="w-8 h-8 rounded-full bg-rose-100 border-2 border-white flex items-center justify-center text-sm">👩</div>
+            <div class="w-8 h-8 rounded-full bg-red-50 border-2 border-white flex items-center justify-center text-sm">👨</div>
+          </div>
+          <p class="text-xs text-gray-400 leading-snug">
+            <strong class="text-pru-dark font-semibold">10,000+ Filipino families</strong><br>
+            already building guaranteed lifetime income
+          </p>
+        </div>
+
+      </div>
+
+      <!-- ══════════════════════════════════════
+           RIGHT — Slideshow + CTA below
+      ══════════════════════════════════════ -->
+      <div class="flex justify-center lg:justify-end hero-fade" style="animation-delay:.15s">
+        <div class="relative w-full max-w-[500px]">
+
+          <!-- Soft glow behind frame -->
+          <div class="absolute -inset-4 bg-gradient-to-br from-red-50/80 via-rose-50/40 to-transparent rounded-3xl -z-10 blur-sm"></div>
+
+          <!-- ── Slideshow frame ── -->
+          <div id="heroSlideshow"
+               class="relative w-full h-[300px] sm:h-[420px] lg:h-[480px] rounded-2xl overflow-hidden"
+               style="box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.10);">
+
+            <!-- Images -->
+            <img class="slide-img active" src="/pli-images/slide1.jpg" alt="Family — PRULifetime Income" />
+            <img class="slide-img"        src="/pli-images/slide2.jpg" alt="Couple — PRULifetime Income" />
+            <img class="slide-img"        src="/pli-images/slide3.jpg" alt="Love of a Lifetime — PRULifetime Income" />
+            <img class="slide-img"        src="/pli-images/slide4.jpg" alt="Father and son — PRULifetime Income" />
+            <img class="slide-img"        src="/pli-images/slide5.jpg" alt="Family — PRULifetime Income" />
+
+            <!-- ① Top gradient — masks PRU logo / header text -->
+            <div class="absolute inset-x-0 top-0 pointer-events-none z-10"
+                 style="height:42%; background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.50) 30%, rgba(0,0,0,0.20) 65%, transparent 100%);"></div>
+
+            <!-- ② Bottom gradient — masks marketing copy text -->
+            <div class="absolute inset-x-0 bottom-0 pointer-events-none z-10"
+                 style="height:55%; background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.52) 28%, rgba(0,0,0,0.15) 65%, transparent 100%);"></div>
+
+            <!-- Zero Market Risk pill — top-left -->
+            <div class="absolute top-4 left-4 z-20 flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 text-white text-[11px] font-semibold pl-2 pr-3 py-1.5 rounded-full">
+              <svg class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>
+              Zero Market Risk
+            </div>
+
+            <!-- Slide caption — bottom-left -->
+            <div class="absolute bottom-14 left-5 right-5 z-20">
+              <div id="slideCaption" class="slide-caption-text visible">
+                <div class="text-white/60 text-[10px] font-semibold tracking-widest uppercase mb-0.5">PRULifetime Income</div>
+                <div class="text-white font-bold text-[15px] leading-snug" id="slideCaptionTitle">One plan. A lifetime of security.</div>
+              </div>
+            </div>
+
+            <!-- Dot indicators — bottom-center -->
+            <div id="slideDots" class="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+              <div class="slide-dot active" data-idx="0"></div>
+              <div class="slide-dot" data-idx="1"></div>
+              <div class="slide-dot" data-idx="2"></div>
+              <div class="slide-dot" data-idx="3"></div>
+              <div class="slide-dot" data-idx="4"></div>
+            </div>
+
+          </div>
+          <!-- ── end slideshow ── -->
+
+          <!-- ── CTA below the slideshow ── -->
+          <div class="mt-5 hero-fade relative" style="animation-delay:.35s; z-index:2;">
+            <a href="#planner"
+               class="group flex items-center justify-center gap-3 bg-pru-red text-white font-bold text-[15px]
+                      w-full px-8 py-4 rounded-xl
+                      hover:bg-red-700 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-red-200
+                      active:scale-[.97] transition-all duration-200 shadow-lg shadow-red-100/60 mb-3">
+              Get My Personalized Plan
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+              </svg>
+            </a>
+            <p class="text-center text-gray-400 text-xs flex items-center justify-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+              See your projected income in 60 seconds · Free · No commitment
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end content wrapper -->
+</section>
+
+<!-- ─── PLANNER ────────────────────────────────────────────── -->
+<section id="planner" class="py-20 px-6 relative overflow-hidden"
+         style="background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);">
+
+  <!-- Subtle bg decoration -->
+  <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-[0.04]"
+       style="background: radial-gradient(circle, #E60028, transparent);"></div>
+  <div class="absolute -bottom-20 -left-16 w-80 h-80 rounded-full opacity-[0.03]"
+       style="background: radial-gradient(circle, #E60028, transparent);"></div>
+
+  <div class="max-w-5xl mx-auto relative">
+
+    <!-- Section header -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 bg-red-50 border border-red-100 text-pru-red text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-pru-red animate-pulse inline-block"></span>
+        Free · No Commitment
+      </div>
+      <h2 class="text-[40px] sm:text-[52px] font-black text-pru-dark mb-3 leading-tight">See Exactly What<br class="hidden sm:block"> You'll Receive</h2>
+      <p class="text-gray-400 text-base max-w-md mx-auto">3 questions. Your guaranteed lifetime income estimate — based on real PRU Life rates.</p>
+    </div>
+
+    <!-- 2-column grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-6 items-start">
+
+      <!-- ── LEFT — Context panel ── -->
+      <div class="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+
+        <div class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-5">Your plan will include</div>
+
+        <div class="space-y-5 mb-7">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">💰</div>
+            <div>
+              <div class="text-sm font-bold text-pru-dark leading-tight">Guaranteed Annual Income</div>
+              <div class="text-xs text-gray-400 mt-0.5 leading-snug">5% of your coverage — paid every year, for life</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">📅</div>
+            <div>
+              <div class="text-sm font-bold text-pru-dark leading-tight">When Income Starts</div>
+              <div class="text-xs text-gray-400 mt-0.5 leading-snug">Exact age of first payout + years until it begins</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">💎</div>
+            <div>
+              <div class="text-sm font-bold text-pru-dark leading-tight">Death Benefit for Your Family</div>
+              <div class="text-xs text-gray-400 mt-0.5 leading-snug">200% of your sum assured — guaranteed transfer</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">📈</div>
+            <div>
+              <div class="text-sm font-bold text-pru-dark leading-tight">Lifetime Return on Investment</div>
+              <div class="text-xs text-gray-400 mt-0.5 leading-snug">Total payouts vs. total paid in — to age 100</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust strip -->
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+          <div class="flex items-center gap-2 mb-1.5">
+            <svg class="w-3.5 h-3.5 text-pru-red flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/>
+            </svg>
+            <span class="text-[11px] font-bold text-pru-dark">Official PRU Life rate tables</span>
+          </div>
+          <p class="text-[11px] text-gray-400 leading-snug">Figures use PRU Life UK's actual published premium rates — not rough estimates.</p>
+        </div>
+
+      </div>
+
+      <!-- ── RIGHT — Form card ── -->
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+
+        <!-- Step indicators -->
+        <div class="flex items-center px-7 pt-7 pb-5 border-b border-gray-50 gap-2">
+          <div class="flex items-center gap-2 flex-1">
+            <div class="w-6 h-6 rounded-full bg-pru-red text-white text-[11px] font-black flex items-center justify-center flex-shrink-0">1</div>
+            <span class="text-xs font-semibold text-pru-dark">Age</span>
+          </div>
+          <div class="flex-1 h-px bg-gray-100"></div>
+          <div class="flex items-center gap-2 flex-1 justify-center">
+            <div class="w-6 h-6 rounded-full bg-gray-100 text-gray-400 text-[11px] font-black flex items-center justify-center flex-shrink-0" id="step2-dot">2</div>
+            <span class="text-xs font-semibold text-gray-400" id="step2-label">Budget</span>
+          </div>
+          <div class="flex-1 h-px bg-gray-100"></div>
+          <div class="flex items-center gap-2 flex-1 justify-end">
+            <div class="w-6 h-6 rounded-full bg-gray-100 text-gray-400 text-[11px] font-black flex items-center justify-center flex-shrink-0" id="step3-dot">3</div>
+            <span class="text-xs font-semibold text-gray-400" id="step3-label">Priority</span>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="h-1 bg-gray-50">
+          <div id="progress-bar" class="h-full bg-pru-red transition-all duration-500 rounded-full" style="width: 0%"></div>
+        </div>
+
+        <div class="p-7">
+
+          <!-- Field 1: Age -->
+          <div class="mb-6" id="field-age">
+            <label class="block text-sm font-bold text-pru-dark mb-2">
+              How old are you?
+              <span class="text-gray-400 font-normal ml-1">— This shapes when your income starts</span>
+            </label>
+            <div class="relative">
+              <input
+                id="age"
+                type="number"
+                min="18" max="60"
+                placeholder="e.g. 35"
+                oninput="onFieldChange()"
+                class="w-full border-2 border-gray-100 rounded-xl px-5 py-4 text-2xl font-bold text-pru-dark placeholder-gray-300 focus:border-pru-red transition-colors bg-gray-50"
+              />
+              <span class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-semibold">years old</span>
+            </div>
+            <p id="age-hint" class="text-xs text-gray-400 mt-2 min-h-[1rem]"></p>
+          </div>
+
+          <!-- Field 2: Budget -->
+          <div class="mb-6" id="field-budget">
+            <label class="block text-sm font-bold text-pru-dark mb-2">
+              What's your monthly budget?
+              <span class="text-gray-400 font-normal ml-1">— Minimum ≈ ₱2,290/mo · Sets your SA &amp; income</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-2xl">₱</span>
+              <input
+                id="budget"
+                type="number"
+                min="2290"
+                placeholder="e.g. 5,000"
+                oninput="onFieldChange()"
+                class="w-full border-2 border-gray-100 rounded-xl pl-10 pr-5 py-4 text-2xl font-bold text-pru-dark placeholder-gray-300 focus:border-pru-red transition-colors bg-gray-50"
+              />
+            </div>
+            <p id="budget-hint" class="text-base text-gray-500 mt-2 min-h-[1rem] leading-snug font-medium"></p>
+          </div>
+
+          <!-- Field 3: Goal -->
+          <div class="mb-7" id="field-goal">
+            <label class="block text-sm font-bold text-pru-dark mb-3">
+              What matters most to you?
+              <span class="text-gray-400 font-normal ml-1">— Personalizes your results</span>
+            </label>
+            <div class="grid grid-cols-3 gap-3">
+              <button onclick="selectGoal('income')" id="goal-income"
+                class="goal-btn border-2 border-gray-100 rounded-xl p-4 text-left hover:border-pru-red hover:bg-red-50/40 transition-all bg-gray-50 group">
+                <div class="text-xl mb-2">💰</div>
+                <div class="text-sm font-bold text-gray-700 group-hover:text-pru-red leading-tight">Guaranteed Income</div>
+                <div class="text-xs text-gray-400 mt-1 leading-snug hidden sm:block">Reliable retirement income</div>
+              </button>
+              <button onclick="selectGoal('protection')" id="goal-protection"
+                class="goal-btn border-2 border-gray-100 rounded-xl p-4 text-left hover:border-pru-red hover:bg-red-50/40 transition-all bg-gray-50 group">
+                <div class="text-xl mb-2">🛡️</div>
+                <div class="text-sm font-bold text-gray-700 group-hover:text-pru-red leading-tight">Family Protection</div>
+                <div class="text-xs text-gray-400 mt-1 leading-snug hidden sm:block">Security if I'm gone</div>
+              </button>
+              <button onclick="selectGoal('legacy')" id="goal-legacy"
+                class="goal-btn border-2 border-gray-100 rounded-xl p-4 text-left hover:border-pru-red hover:bg-red-50/40 transition-all bg-gray-50 group">
+                <div class="text-xl mb-2">🌿</div>
+                <div class="text-sm font-bold text-gray-700 group-hover:text-pru-red leading-tight">Legacy & Wealth</div>
+                <div class="text-xs text-gray-400 mt-1 leading-snug hidden sm:block">3-generation transfer</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <button
+            id="calc-btn"
+            onclick="calculate()"
+            disabled
+            class="w-full py-3.5 bg-gray-100 text-gray-400 font-bold text-base rounded-xl transition-all duration-300 cursor-not-allowed"
+          >
+            Calculate My Plan →
+          </button>
+          <p class="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1.5">
+            <svg class="w-3 h-3 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+            Free · Confidential · No spam
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── RESULTS ────────────────────────────────────────────── -->
+<section id="results" class="py-20 px-6 bg-white hidden">
+  <div class="max-w-xl mx-auto">
+
+    <!-- Match badge -->
+    <div class="bg-green-50 border border-green-200 rounded-xl px-5 py-3 flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <div>
+        <div class="text-xs font-bold text-green-700 uppercase tracking-wide">Plan Found</div>
+        <div id="match-label" class="text-sm text-green-800 font-medium"></div>
+      </div>
+    </div>
+
+    <!-- Hero number card -->
+    <div class="bg-pru-red rounded-2xl p-8 text-center mb-5 relative overflow-hidden result-card">
+      <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-white/10"></div>
+      <div class="absolute -bottom-16 -left-8 w-48 h-48 rounded-full bg-white/5"></div>
+      <div class="relative z-10">
+        <div class="text-sm text-white/70 mb-1">Your guaranteed annual income</div>
+        <div id="res-income" class="text-6xl sm:text-7xl font-black text-white leading-none mb-2"></div>
+        <div id="res-income-mo" class="text-base text-white/70 mb-5"></div>
+        <div id="res-emotional" class="bg-black/20 rounded-xl px-5 py-3 text-sm text-white/90 italic leading-relaxed"></div>
+      </div>
+    </div>
+
+    <!-- Upgrade banner (shown when next tier is available) -->
+    <div id="upgrade-banner" class="hidden"></div>
+
+    <!-- Stats grid -->
+    <div class="grid grid-cols-2 gap-4 mb-5 result-card" style="animation-delay: 0.1s">
+
+      <div class="bg-pru-gray rounded-xl p-5">
+        <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Annual Premium</div>
+        <div id="res-premium" class="text-xl font-black text-pru-dark"></div>
+        <div id="res-premium-mo" class="text-xs text-gray-400 mt-0.5"></div>
+      </div>
+
+      <div class="bg-pru-gray rounded-xl p-5">
+        <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Sum Assured</div>
+        <div id="res-sa" class="text-xl font-black text-pru-dark"></div>
+        <div class="text-xs text-gray-400 mt-0.5">coverage base</div>
+      </div>
+
+      <div class="bg-pru-gray rounded-xl p-5">
+        <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Income Starts</div>
+        <div id="res-start" class="text-xl font-black text-pru-red"></div>
+        <div class="text-xs text-gray-400 mt-0.5">end of Year 6</div>
+      </div>
+
+      <div class="bg-pru-gray rounded-xl p-5">
+        <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Death Benefit</div>
+        <div id="res-db" class="text-xl font-black text-emerald-600"></div>
+        <div class="text-xs text-gray-400 mt-0.5">200% guaranteed</div>
+      </div>
+
+    </div>
+
+    <!-- Lifetime stats -->
+    <div class="bg-pru-dark rounded-xl p-5 mb-5 result-card" style="animation-delay: 0.2s">
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <div class="text-xs text-gray-400 mb-1">Total Paid In</div>
+          <div id="res-total-paid" class="text-base font-black text-white"></div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-400 mb-1">Lifetime Payouts</div>
+          <div id="res-lifetime" class="text-base font-black text-pru-red"></div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-400 mb-1">Return</div>
+          <div id="res-roi" class="text-base font-black text-emerald-400"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="bg-white border border-gray-100 rounded-xl p-6 mb-5 result-card" style="animation-delay: 0.3s">
+      <h3 class="text-sm font-bold text-pru-dark mb-5">Your Income Timeline</h3>
+      <div id="timeline" class="space-y-4 relative">
+        <div class="absolute left-[5px] top-2 bottom-2 w-0.5 bg-gray-100"></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="bg-pru-dark rounded-2xl px-8 py-8 text-center result-card" style="animation-delay: 0.4s">
+      <h3 id="cta-headline" class="text-xl font-bold text-white mb-2"></h3>
+      <p class="text-sm text-gray-400 mb-6">A licensed PRU Life advisor will finalize your plan — no jargon, no pressure.</p>
+      <button
+        onclick="advisorCTA()"
+        class="w-full py-4 bg-pru-red text-white font-bold text-base rounded-xl hover:bg-red-700 hover:-translate-y-0.5 transition-all mb-3"
+      >
+        Talk to a PRU Life Advisor →
+      </button>
+      <p class="text-xs text-gray-500">Free consultation · No obligation</p>
+    </div>
+
+    <!-- Recalculate -->
+    <div class="text-center mt-5">
+      <button onclick="recalculate()" class="text-sm text-gray-400 underline hover:text-pru-dark transition-colors">
+        ← Recalculate with different numbers
+      </button>
+    </div>
+
+    <!-- Disclaimer -->
+    <p class="text-center text-xs text-gray-300 mt-6 leading-relaxed">
+      For illustration purposes only. Figures are estimates based on stated assumptions and do not constitute an offer or guarantee.
+      Actual benefits subject to underwriting and policy terms.
+    </p>
+
+  </div>
+</section>
+
+<!-- ─── FAQ ───────────────────────────────────────────────── -->
+<section class="py-20 bg-pru-gray px-6">
+  <div class="max-w-2xl mx-auto">
+    <div class="text-center mb-10">
+      <span class="text-pru-red text-xs font-bold tracking-widest uppercase">Common Questions</span>
+      <h2 class="text-3xl font-black text-pru-dark mt-2">You're Probably Wondering...</h2>
+    </div>
+    <div class="space-y-3" id="faq-list"></div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────── -->
+<footer class="bg-pru-dark px-6 pt-14 pb-8">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Top section — 3 columns -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 pb-10 border-b border-white/10">
+
+      <!-- Col 1 — BSQ Brand -->
+      <div class="flex flex-col items-start">
+        <img src="/pli-images/bsq-logo.png"
+             alt="Brilliant Star Quartz"
+             class="w-24 h-24 object-contain mb-4 opacity-90" />
+        <div class="text-white font-black text-lg leading-tight mb-1">
+          Brilliant Star Quartz
+        </div>
+        <div class="text-xs text-yellow-400/80 font-semibold mb-3 uppercase tracking-wider">
+          A Tied Branch of PRU Life UK
+        </div>
+        <p class="text-gray-500 text-xs leading-relaxed max-w-[220px]">
+          Building guaranteed lifetime income for Filipino families — one plan at a time.
+        </p>
+      </div>
+
+      <!-- Col 2 — Contact & Address -->
+      <div>
+        <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-5">Contact Us</div>
+
+        <!-- Address -->
+        <div class="flex items-start gap-3 mb-4">
+          <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+            </svg>
+          </div>
+          <div class="text-xs text-gray-400 leading-relaxed">
+            18F Exquadra Tower<br>
+            1 Jade Street corner Exchange Road<br>
+            Ortigas Center, 1605 Pasig City
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
+            </svg>
+          </div>
+          <a href="tel:+639178232799" class="text-xs text-gray-400 hover:text-white transition-colors">
+            0917 823 2799
+          </a>
+        </div>
+
+        <!-- Email -->
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+            </svg>
+          </div>
+          <a href="mailto:bstarquartz@gmail.com" class="text-xs text-gray-400 hover:text-white transition-colors">
+            bstarquartz@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 3 — PRULifetime + Quick links -->
+      <div>
+        <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-5">Product</div>
+
+        <!-- PLI Logo -->
+        <div class="flex items-center gap-2.5 mb-5">
+          <div class="w-9 h-9 bg-pru-red rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-white text-[10px] font-black tracking-tight">PLI</span>
+          </div>
+          <div>
+            <div class="text-white font-bold text-sm leading-none">PRU<span class="text-pru-red">Lifetime</span></div>
+            <div class="text-gray-500 text-xs font-normal">Income</div>
+          </div>
+        </div>
+
+        <!-- Quick links -->
+        <div class="space-y-2.5 mb-6">
+          <a href="#how" class="block text-xs text-gray-500 hover:text-white transition-colors">→ How It Works</a>
+          <a href="#planner" class="block text-xs text-gray-500 hover:text-white transition-colors">→ Free Income Planner</a>
+          <a href="#faq" class="block text-xs text-gray-500 hover:text-white transition-colors">→ FAQs</a>
+        </div>
+
+        <!-- CTA -->
+        <a href="#planner"
+           class="inline-flex items-center gap-2 bg-pru-red text-white text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-red-700 transition-colors">
+          Get My Free Plan →
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="pt-7 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-gray-600 text-[11px] text-center sm:text-left leading-relaxed max-w-xl">
+        For illustration purposes only. Actual benefits subject to underwriting approval and policy terms and conditions.
+        PRU Life UK Philippines · Licensed Insurance Company · IC Reg. No. 2004-0005
+      </p>
+      <p class="text-gray-600 text-[11px] flex-shrink-0">© 2026 Brilliant Star Quartz</p>
+    </div>
+
+  </div>
+</footer>
+
+
+<!-- ─── JAVASCRIPT ─────────────────────────────────────────── -->
+<script>
+// ──────────────────────────────────────────────────────────────
+// REAL PREMIUM TABLES — source: PRU Life product rate sheets
+// Do NOT estimate. All values exact.
+// ──────────────────────────────────────────────────────────────
+const TABLES = {
+  10: {
+    label:   '10-Pay',
+    SAs:     [150000, 200000, 250000, 500000, 1000000, 1500000, 2000000],
+    payouts: [  7500,  10000,  12500,  25000,   50000,   75000,  100000],
+    dbs:     [300000, 400000, 500000, 1000000,2000000, 3000000, 4000000],
+    ages:    [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+    prems: [
+      [27475, 36500, 45525,  90650, 169210, 253615, 338020], // age 0
+      [27738, 36850, 45963,  91525, 170910, 256165, 341420], // age 5
+      [28000, 37200, 46400,  92400, 172600, 258700, 344800], // age 10
+      [28383, 37710, 47038,  93675, 175500, 263050, 350600], // age 15
+      [28765, 38220, 47675,  94950, 178400, 267400, 356400], // age 20
+      [29331, 38974, 48618,  96835, 182900, 274150, 365400], // age 25
+      [29896, 39728, 49560,  98720, 187400, 280900, 374400], // age 30
+      [30516, 40554, 50593, 100785, 192400, 288400, 384400], // age 35
+      [31135, 41380, 51625, 102850, 197400, 295900, 394400], // age 40
+      [31885, 42380, 52875, 105350, 203400, 304900, 406400], // age 45
+      [32635, 43380, 54125, 107850, 209400, 313900, 418400], // age 50
+      [33292, 44256, 55220, 110040, 215250, 322675, 430100], // age 55
+      [33949, 45132, 56315, 112230, 221100, 331450, 441800], // age 60
+    ],
+  },
+  5: {
+    label:   '5-Pay',
+    SAs:     [250000, 500000, 1000000, 1500000, 2000000],
+    payouts: [ 12500,  25000,   50000,   75000,  100000],
+    dbs:     [500000,1000000, 2000000, 3000000, 4000000],
+    ages:    [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+    prems: [
+      [ 84735, 169070, 331400, 496900, 662400], // age 0
+      [ 85580, 170760, 334750, 501925, 669100], // age 5
+      [ 86425, 172450, 338100, 506950, 675800], // age 10
+      [ 87705, 175010, 343250, 514675, 686100], // age 15
+      [ 88985, 177570, 348400, 522400, 696400], // age 20
+      [ 90318, 180235, 354000, 530800, 707600], // age 25
+      [ 91650, 182900, 359600, 539200, 718800], // age 30
+      [ 92900, 185400, 365050, 547375, 729700], // age 35
+      [ 94150, 187900, 370500, 555550, 740600], // age 40
+      [ 95525, 190650, 376550, 564625, 752700], // age 45
+      [ 96900, 193400, 382600, 573700, 764800], // age 50
+      [ 98483, 196565, 389500, 584050, 778600], // age 55
+      [100065, 199730, 396400, 594400, 792400], // age 60
+    ],
+  },
+};
+
+// ──────────────────────────────────────────────────────────────
+// Interpolate premiums for any age between brackets
+// ──────────────────────────────────────────────────────────────
+function getPrems(table, age) {
+  const ages = table.ages;
+  const a    = Math.min(Math.max(Math.round(age), ages[0]), ages[ages.length - 1]);
+  const ei   = ages.indexOf(a);
+  if (ei !== -1) return [...table.prems[ei]];
+  let lo = 0;
+  for (let i = 0; i < ages.length - 1; i++) {
+    if (ages[i] <= a && ages[i + 1] >= a) { lo = i; break; }
+  }
+  const hi = lo + 1;
+  const t  = (a - ages[lo]) / (ages[hi] - ages[lo]);
+  return table.prems[lo].map((v, i) => Math.round(v + t * (table.prems[hi][i] - v)));
+}
+
+// ──────────────────────────────────────────────────────────────
+// Build all plan options for a given age + pay term
+// ──────────────────────────────────────────────────────────────
+function buildOptions(age, term) {
+  const tbl   = TABLES[term];
+  const prems = getPrems(tbl, age);
+  return tbl.SAs.map((sa, i) => ({
+    sa,
+    saLabel:    fmtM(sa),
+    prem:       prems[i],
+    premMo:     Math.round(prems[i] / 12),
+    payout:     tbl.payouts[i],
+    payoutMo:   Math.round(tbl.payouts[i] / 12),
+    db:         tbl.dbs[i],
+    totalPaid:  prems[i] * term,
+  }));
+}
+
+// ──────────────────────────────────────────────────────────────
+// Match budget → best plan
+// ──────────────────────────────────────────────────────────────
+function matchPlan(age, annBudget, term) {
+  const opts = buildOptions(age, term);
+  const aff  = opts.filter(o => o.prem <= annBudget);
+  if (!aff.length) return { tooLow: true, minimum: opts[0], rec: null, up: null, opts };
+  const rec  = aff[aff.length - 1];
+  const recI = opts.indexOf(rec);
+  const up   = recI < opts.length - 1 ? opts[recI + 1] : null;
+  return { tooLow: false, rec, up, minimum: opts[0], opts };
+}
+
+// ──────────────────────────────────────────────────────────────
+// Recommend pay term based on budget
+// ──────────────────────────────────────────────────────────────
+function recTerm(age, annBudget) {
+  return annBudget >= buildOptions(age, 5)[0].prem ? 5 : 10;
+}
+
+// ──────────────────────────────────────────────────────────────
+// Compute derived stats
+// ──────────────────────────────────────────────────────────────
+function computeStats(plan, age, term) {
+  const startAge     = age + 6;
+  const premEndAge   = age + term;
+  const payoutYrs    = Math.max(0, 100 - startAge);
+  const lifetime     = plan.payout * payoutYrs;
+  const roi          = (lifetime / plan.totalPaid).toFixed(1);
+  const breakevenAge = startAge + Math.ceil(plan.totalPaid / plan.payout);
+  return { ...plan, age, term, startAge, premEndAge, payoutYrs, lifetime, roi, breakevenAge };
+}
+
+// ──────────────────────────────────────────────────────────────
+// Formatters
+// ──────────────────────────────────────────────────────────────
+function fmt(n) {
+  return '₱' + Math.round(n).toLocaleString('en-PH');
+}
+function fmtM(n) {
+  if (n >= 1_000_000) return '₱' + (n / 1_000_000).toFixed(2).replace(/\.?0+$/, '') + 'M';
+  if (n >= 1_000)     return '₱' + (n / 1_000).toFixed(0) + 'K';
+  return fmt(n);
+}
+
+// ──────────────────────────────────────────────────────────────
+// State
+// ──────────────────────────────────────────────────────────────
+let selectedGoal = null;
+
+// ──────────────────────────────────────────────────────────────
+// Goal selection
+// ──────────────────────────────────────────────────────────────
+function selectGoal(g) {
+  selectedGoal = g;
+  ['income', 'protection', 'legacy'].forEach(id => {
+    const el = document.getElementById('goal-' + id);
+    if (id === g) {
+      el.classList.add('border-pru-red', 'bg-red-50');
+      el.classList.remove('border-gray-100', 'bg-gray-50');
+    } else {
+      el.classList.remove('border-pru-red', 'bg-red-50');
+      el.classList.add('border-gray-100', 'bg-gray-50');
+    }
+  });
+  onFieldChange();
+}
+
+// ──────────────────────────────────────────────────────────────
+// Live hints & button state
+// ──────────────────────────────────────────────────────────────
+function onFieldChange() {
+  const age    = parseInt(document.getElementById('age').value);
+  const budget = parseFloat(document.getElementById('budget').value);
+  const budgetInput = document.getElementById('budget');
+
+  // ── Age hint ──────────────────────────────────────────────
+  const ah = document.getElementById('age-hint');
+  if (!isNaN(age) && age >= 0 && age <= 60) {
+    if (age < 30)      ah.innerHTML = `At <strong>${age}</strong>, time is your biggest advantage — lower premiums, more lifetime income.`;
+    else if (age < 45) ah.innerHTML = `At <strong>${age}</strong>, you're in peak earning years. Lock in income before retirement.`;
+    else if (age < 55) ah.innerHTML = `At <strong>${age}</strong>, income starts at age <strong>${age + 6}</strong> — just 6 years away.`;
+    else               ah.innerHTML = `At <strong>${age}</strong>, guaranteed income starting at <strong>age ${age + 6}</strong> is achievable.`;
+  } else if (!isNaN(age) && (age < 0 || age > 60)) {
+    ah.innerHTML = `<span class="text-red-500">Please enter an age between 0 and 60.</span>`;
+  } else {
+    ah.textContent = '';
+  }
+
+  // ── Budget validation against actual plan minimums ───────
+  // The cheapest PRULifetime Income plan is 10-Pay SA 150K.
+  // We must reject any budget below that minimum for the entered age.
+  const ageOk = !isNaN(age) && age >= 0 && age <= 60;
+
+  let minMonthly    = null;  // minimum monthly budget for this age (10-Pay lowest SA)
+  let minAnnual     = null;
+  let budgetTooLow  = false;
+
+  if (ageOk) {
+    const minOpts = buildOptions(age, 10);   // 10-Pay is the cheaper plan
+    minMonthly    = minOpts[0].premMo;        // cheapest SA at this age
+    minAnnual     = minOpts[0].prem;
+  }
+
+  const bh = document.getElementById('budget-hint');
+  let budgetOk = false;
+
+  if (!isNaN(budget) && budget > 0 && ageOk) {
+    const annual = budget * 12;
+    if (budget < minMonthly) {
+      // Below table minimum — hard block
+      budgetTooLow = true;
+      bh.innerHTML =
+        `<span class="text-red-500 font-medium">⚠️ Budget is below PRULifetime Income's minimum.<br>` +
+        `Minimum for age <strong>${age}</strong>: <strong>${fmt(minAnnual)}/year</strong> ` +
+        `(<strong>${fmt(minMonthly)}/month</strong>) — 10-Pay, ₱150K SA.<br>` +
+        `<span class="text-gray-400">A different product may suit this budget. Ask your advisor.</span></span>`;
+      budgetInput.classList.add('border-red-400');
+      budgetInput.classList.remove('border-gray-100', 'border-green-400');
+    } else {
+      // Within range — show what plan they qualify for
+      const term  = recTerm(age, annual);
+      const match = matchPlan(age, annual, term);
+      budgetOk = true;
+      bh.innerHTML =
+        `<span class="text-green-600">✓ Qualifies for <strong>${match.rec.saLabel} SA</strong> · ` +
+        `<strong>${TABLES[term].label}</strong> · ` +
+        `<strong>${fmt(match.rec.payout)}/year</strong> guaranteed income for life.</span>`;
+      budgetInput.classList.add('border-green-400');
+      budgetInput.classList.remove('border-gray-100', 'border-red-400');
+    }
+  } else if (!isNaN(budget) && budget > 0 && !ageOk) {
+    // Budget entered but age not yet valid — neutral
+    bh.textContent = 'Enter your age first to validate your budget.';
+    budgetInput.classList.remove('border-red-400', 'border-green-400');
+    budgetInput.classList.add('border-gray-100');
+  } else {
+    bh.textContent = ageOk
+      ? `Minimum monthly budget for your age: ${minMonthly ? fmt(minMonthly) : '—'}`
+      : '';
+    budgetInput.classList.remove('border-red-400', 'border-green-400');
+    budgetInput.classList.add('border-gray-100');
+  }
+
+  // ── Progress + step dot activation ───────────────────────
+  let filled = 0;
+  if (ageOk)        filled++;
+  if (budgetOk)     filled++;   // only counts if meets minimum
+  if (selectedGoal) filled++;
+  document.getElementById('progress-bar').style.width = (filled / 3 * 100) + '%';
+
+  // Step 2 dot (age)
+  const s2d = document.getElementById('step2-dot');
+  const s2l = document.getElementById('step2-label');
+  if (s2d && s2l) {
+    if (ageOk) {
+      s2d.className = 'w-6 h-6 rounded-full bg-pru-red text-white text-[11px] font-black flex items-center justify-center flex-shrink-0';
+      s2l.className = 'text-xs font-semibold text-pru-dark';
+    } else {
+      s2d.className = 'w-6 h-6 rounded-full bg-gray-100 text-gray-400 text-[11px] font-black flex items-center justify-center flex-shrink-0';
+      s2l.className = 'text-xs font-semibold text-gray-400';
+    }
+  }
+  // Step 3 dot (budget) — only activates when budget meets minimum
+  const s3d = document.getElementById('step3-dot');
+  const s3l = document.getElementById('step3-label');
+  if (s3d && s3l) {
+    if (budgetOk) {
+      s3d.className = 'w-6 h-6 rounded-full bg-pru-red text-white text-[11px] font-black flex items-center justify-center flex-shrink-0';
+      s3l.className = 'text-xs font-semibold text-pru-dark';
+    } else {
+      s3d.className = 'w-6 h-6 rounded-full bg-gray-100 text-gray-400 text-[11px] font-black flex items-center justify-center flex-shrink-0';
+      s3l.className = 'text-xs font-semibold text-gray-400';
+    }
+  }
+
+  // ── Button state — locked out until all 3 valid ──────────
+  const btn = document.getElementById('calc-btn');
+  if (filled === 3) {
+    btn.disabled = false;
+    btn.className = 'w-full py-3.5 bg-pru-red text-white font-bold text-base rounded-xl hover:bg-red-700 hover:-translate-y-0.5 transition-all cursor-pointer shadow-lg shadow-red-100';
+  } else {
+    btn.disabled = true;
+    btn.className = 'w-full py-3.5 bg-gray-100 text-gray-400 font-bold text-base rounded-xl transition-all cursor-not-allowed';
+  }
+}
+
+// ──────────────────────────────────────────────────────────────
+// Calculate & show results
+// ──────────────────────────────────────────────────────────────
+function calculate() {
+  const age    = parseInt(document.getElementById('age').value);
+  const budget = parseFloat(document.getElementById('budget').value);
+  const annual = budget * 12;
+  const term   = recTerm(age, annual);
+  const match  = matchPlan(age, annual, term);
+
+  // Hard failsafe — should never reach here because button is disabled for tooLow,
+  // but guard against direct JS calls or edge cases.
+  if (match.tooLow) {
+    const minOpts = buildOptions(age, 10);
+    const minMo   = minOpts[0].premMo;
+    const minYr   = minOpts[0].prem;
+    document.getElementById('budget-hint').innerHTML =
+      `<span class="text-red-500 font-medium">⚠️ Budget is below PRULifetime Income's minimum.<br>` +
+      `Minimum for age <strong>${age}</strong>: <strong>${fmt(minYr)}/year</strong> ` +
+      `(<strong>${fmt(minMo)}/month</strong>) — 10-Pay, ₱150K SA.<br>` +
+      `<span class="text-gray-400">A different product may suit this budget. Ask your advisor.</span></span>`;
+    return;
+  }
+
+  const plan = computeStats(match.rec, age, term);
+  const up   = match.up;
+
+  // ── Match badge ──
+  document.getElementById('match-label').innerHTML =
+    `Matched to <strong>${plan.saLabel} Sum Assured</strong> · ${TABLES[term].label} · From official PRU Life rate table`;
+
+  // ── Hero income ──
+  document.getElementById('res-income').textContent    = fmt(plan.payout);
+  document.getElementById('res-income-mo').textContent =
+    `${fmt(plan.payoutMo)}/month · starting at age ${plan.startAge} · guaranteed for life`;
+
+  // ── Emotional copy ──
+  const emotionalMap = {
+    income:     `You're <strong>${age} years old</strong>. At <strong>age ${plan.startAge}</strong>, ${fmt(plan.payoutMo)}/month starts — and never stops. In a world where everything fluctuates, <strong>this is the one thing that never will.</strong>`,
+    protection: `If anything happens to you, your family receives <strong>${fmtM(plan.db)}</strong> — guaranteed. And while you're here, you collect <strong>${fmt(plan.payoutMo)}/month for life</strong>.`,
+    legacy:     `Your <strong>${plan.saLabel} coverage</strong> doubles to <strong>${fmtM(plan.db)}</strong> on transfer — and can reach three generations. One decision today. A legacy that outlives you.`,
+  };
+  document.getElementById('res-emotional').innerHTML = emotionalMap[selectedGoal];
+
+  // ── Stats cards ──
+  document.getElementById('res-premium').textContent    = fmt(plan.prem);
+  document.getElementById('res-premium-mo').textContent = `${fmt(plan.premMo)}/month`;
+  document.getElementById('res-sa').textContent         = plan.saLabel;
+  document.getElementById('res-start').textContent      = `Age ${plan.startAge}`;
+  document.getElementById('res-db').textContent         = fmtM(plan.db);
+
+  // ── Lifetime row ──
+  document.getElementById('res-total-paid').textContent = fmt(plan.totalPaid);
+  document.getElementById('res-lifetime').textContent   = fmtM(plan.lifetime);
+  document.getElementById('res-roi').textContent        = plan.roi + '×';
+
+  // ── Upgrade banner ──
+  const upBanner = document.getElementById('upgrade-banner');
+  if (up) {
+    const diff = up.premMo - plan.premMo;
+    upBanner.innerHTML = `
+      <div class="border-2 border-dashed border-pru-red rounded-xl px-5 py-4 flex items-start gap-3 mb-5 result-card bg-red-50">
+        <div class="text-pru-red text-lg mt-0.5">↑</div>
+        <div>
+          <div class="text-xs font-bold text-pru-red uppercase tracking-wide mb-0.5">Upgrade Available</div>
+          <div class="text-sm text-gray-700">
+            Add <strong>${fmt(diff)}/month</strong> more → unlock <strong>${fmtM(up.sa)} SA</strong>
+            with <strong>${fmt(up.payout)}/year</strong> income and <strong>${fmtM(up.db)}</strong> death benefit.
+          </div>
+        </div>
+      </div>`;
+    upBanner.classList.remove('hidden');
+  } else {
+    upBanner.classList.add('hidden');
+  }
+
+  // ── Timeline ──
+  const is10Pay  = term === 10;
+  const tlData   = [
+    {
+      label: `Today · Age ${age}`,
+      text:  `Start your <strong>${TABLES[term].label} plan</strong>. Pay <strong>${fmt(plan.prem)}/year</strong> (${fmt(plan.premMo)}/month) for ${term} years. Sum Assured: <strong>${plan.saLabel}</strong>.`,
+    },
+  ];
+  if (is10Pay) {
+    tlData.push({
+      label: `Age ${plan.startAge} · Year 6 — Income Begins`,
+      text:  `Your <strong>${fmt(plan.payout)}/year</strong> guaranteed income starts — even while you continue premium payments for ${plan.premEndAge - plan.startAge} more years.`,
+    });
+    tlData.push({
+      label: `Age ${plan.premEndAge} · Year 10 — Premiums End`,
+      text:  `<strong>Final premium paid.</strong> You now collect <strong>${fmt(plan.payout)}/year</strong> with zero ongoing obligation.`,
+    });
+  } else {
+    tlData.push({
+      label: `Age ${plan.premEndAge} · Year 5 — Premiums End`,
+      text:  `<strong>Final premium paid.</strong> Plan is fully funded. You owe nothing more — ever.`,
+    });
+    tlData.push({
+      label: `Age ${plan.startAge} · Year 6 — Income Begins`,
+      text:  `Your <strong>${fmt(plan.payout)}/year</strong> guaranteed income starts — paid out once a year, for life.`,
+    });
+  }
+  tlData.push({
+    label: `Age ${plan.breakevenAge} · Breakeven`,
+    text:  `You've received back <strong>everything you paid in</strong> (${fmt(plan.totalPaid)}). Every peso earned after this is pure gain.`,
+  });
+  tlData.push({
+    label: `Age 100 · Full Coverage`,
+    text:  `Total lifetime payouts: <strong>${fmtM(plan.lifetime)}</strong> — <strong>${plan.roi}× your total investment</strong>. Death benefit of <strong>${fmtM(plan.db)}</strong> active throughout.`,
+  });
+
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '<div class="absolute left-[5px] top-2 bottom-2 w-0.5 bg-gray-100"></div>';
+  tlData.forEach(item => {
+    tl.innerHTML += `
+      <div class="flex gap-4 relative">
+        <div class="w-2.5 h-2.5 rounded-full bg-pru-red border-2 border-white ring-2 ring-red-200 flex-shrink-0 mt-1 z-10"></div>
+        <div class="pb-1">
+          <div class="text-[11px] font-bold text-pru-red tracking-wide mb-0.5">${item.label}</div>
+          <div class="text-sm text-gray-600 leading-relaxed">${item.text}</div>
+        </div>
+      </div>`;
+  });
+
+  // ── CTA headline ──
+  const ctaMap = {
+    income:     `Your ${fmt(plan.payoutMo)}/month income is ready to lock in.`,
+    protection: `Protect your family with ${fmtM(plan.db)} — guaranteed.`,
+    legacy:     `Start your 3-generation legacy today.`,
+  };
+  document.getElementById('cta-headline').textContent = ctaMap[selectedGoal];
+
+  // Store plan globally so advisorCTA() can access it
+  window._currentPlan = {
+    age:      age,
+    goal:     selectedGoal,
+    term:     term,
+    sa:       plan.sa,
+    payout:   plan.payout,
+    payoutMo: plan.payoutMo,
+    premMo:   plan.premMo,
+    db:       plan.db,
+    startAge: plan.startAge,
+  };
+
+  // Show results, hide planner
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('planner').classList.add('hidden');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ──────────────────────────────────────────────────────────────
+// Lead Modal — open / close
+// ──────────────────────────────────────────────────────────────
+let _leadPlan = null;  // stores current calc results for WhatsApp message
+
+function openLeadModal(planSnap) {
+  _leadPlan = planSnap || null;
+
+  // Populate plan snapshot if we have results
+  const snap = document.getElementById('lead-plan-snap');
+  if (_leadPlan) {
+    snap.classList.remove('hidden');
+    snap.innerHTML =
+      `<div class="font-bold text-pru-dark mb-1">Your Calculated Plan</div>` +
+      `<div class="grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs mt-1">` +
+        `<span class="text-gray-400">Annual Payout</span><span class="font-bold text-pru-red">${fmt(_leadPlan.payout)}/year</span>` +
+        `<span class="text-gray-400">Sum Assured</span><span class="font-semibold">${fmtM(_leadPlan.sa)}</span>` +
+        `<span class="text-gray-400">Death Benefit</span><span class="font-semibold text-green-600">${fmtM(_leadPlan.db)}</span>` +
+        `<span class="text-gray-400">Plan</span><span class="font-semibold">${_leadPlan.term}-Pay · Age ${_leadPlan.age}</span>` +
+      `</div>`;
+  } else {
+    snap.classList.add('hidden');
+  }
+
+  // Reset form
+  document.getElementById('lead-form').reset();
+  document.getElementById('lead-error').classList.add('hidden');
+
+  // Show modal
+  const modal = document.getElementById('lead-modal');
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+
+  // Focus first field
+  setTimeout(() => document.getElementById('lead-name').focus(), 80);
+}
+
+function closeLeadModal() {
+  document.getElementById('lead-modal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLeadModal();
+});
+
+// ──────────────────────────────────────────────────────────────
+// Lead form submit → WhatsApp redirect with full brief
+// ──────────────────────────────────────────────────────────────
+function submitLead(e) {
+  e.preventDefault();
+  const name  = document.getElementById('lead-name').value.trim();
+  const phone = document.getElementById('lead-phone').value.trim();
+  const email = document.getElementById('lead-email').value.trim();
+  const time  = document.getElementById('lead-time').value;
+  const errEl = document.getElementById('lead-error');
+
+  // Validate
+  if (!name) { showLeadError('Please enter your name.'); return; }
+  if (!phone || phone.length < 9) { showLeadError('Please enter a valid mobile number.'); return; }
+  errEl.classList.add('hidden');
+
+  // Build WhatsApp message
+  let msg = `Hi! I used the PRULifetime Income planner and I'm interested in getting a personalized plan.\n\n`;
+  msg += `👤 *Name:* ${name}\n`;
+  msg += `📞 *Mobile:* +63 ${phone}\n`;
+  if (email) msg += `📧 *Email:* ${email}\n`;
+  if (time)  msg += `⏰ *Best time to call:* ${time}\n`;
+
+  if (_leadPlan) {
+    msg += `\n📊 *My Calculated Plan:*\n`;
+    msg += `• Age: ${_leadPlan.age}\n`;
+    msg += `• Goal: ${_leadPlan.goal || '—'}\n`;
+    msg += `• Monthly Budget: ${fmt(_leadPlan.premMo)}\n`;
+    msg += `• Plan: ${_leadPlan.term}-Pay · ${fmtM(_leadPlan.sa)} SA\n`;
+    msg += `• Annual Payout: ${fmt(_leadPlan.payout)}/year\n`;
+    msg += `• Death Benefit: ${fmtM(_leadPlan.db)}\n`;
+    msg += `• Income Starts: Age ${_leadPlan.startAge}\n`;
+  }
+
+  msg += `\nPlease contact me. Thank you!`;
+
+  const waUrl = `https://wa.me/639178232799?text=${encodeURIComponent(msg)}`;
+  window.open(waUrl, '_blank');
+  closeLeadModal();
+}
+
+function showLeadError(msg) {
+  const el = document.getElementById('lead-error');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+// ──────────────────────────────────────────────────────────────
+// Advisor CTA — opens lead modal with current plan data
+// ──────────────────────────────────────────────────────────────
+function advisorCTA() {
+  // Gather current plan snapshot if results are visible
+  let snap = null;
+  const resultsVisible = !document.getElementById('results').classList.contains('hidden');
+  if (resultsVisible && window._currentPlan) {
+    snap = window._currentPlan;
+  }
+  openLeadModal(snap);
+}
+
+// ──────────────────────────────────────────────────────────────
+// Recalculate
+// ──────────────────────────────────────────────────────────────
+function recalculate() {
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('planner').classList.remove('hidden');
+  document.getElementById('planner').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ──────────────────────────────────────────────────────────────
+// FAQ
+// ──────────────────────────────────────────────────────────────
+const faqs = [
+  {
+    q: '"It feels too expensive."',
+    a: 'Most clients start at <strong>₱3,000–₱5,000/month</strong> and are surprised how much coverage that unlocks. Use the calculator above — no obligation. The real question isn\'t whether you can afford the plan. It\'s whether you can afford to retire without one.',
+  },
+  {
+    q: '"I prefer VUL or MP2."',
+    a: 'Both are excellent for growth. But if the market drops the year you retire, that\'s your income at risk. <strong>PRULifetime Income is the floor beneath your investments</strong> — guaranteed income that never goes down.',
+  },
+  {
+    q: '"What if I pass away early?"',
+    a: 'Your family receives <strong>200% of your coverage — guaranteed</strong>, regardless of when you pass. If you live long, you collect for decades. If you pass early, your family receives double. <strong>You cannot lose.</strong>',
+  },
+  {
+    q: '"I\'ll start next year."',
+    a: 'Every year you wait is a year of guaranteed income permanently lost. A plan at 35 pays from age 41. At 36, it pays from 42. <strong>That\'s one full year of income gone forever</strong> — and your premium goes up with age.',
+  },
+];
+
+(function buildFAQ() {
+  const list = document.getElementById('faq-list');
+  faqs.forEach((item, i) => {
+    list.innerHTML += `
+      <div class="bg-white rounded-xl overflow-hidden border border-gray-100">
+        <button
+          onclick="toggleFAQ(${i})"
+          class="w-full text-left px-6 py-5 font-semibold text-pru-dark flex justify-between items-center hover:bg-gray-50 transition-colors"
+        >
+          <span>${item.q}</span>
+          <svg id="faq-icon-${i}" class="w-5 h-5 text-gray-400 flex-shrink-0 ml-3 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div id="faq-body-${i}" class="hidden px-6 pb-5 text-sm text-gray-500 leading-relaxed border-t border-gray-50 pt-4">
+          <span>${item.a}</span>
+        </div>
+      </div>`;
+  });
+})();
+
+function toggleFAQ(i) {
+  const body = document.getElementById('faq-body-' + i);
+  const icon = document.getElementById('faq-icon-' + i);
+  const open = !body.classList.contains('hidden');
+  body.classList.toggle('hidden', open);
+  icon.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+// ── Hero Slideshow ───────────────────────────────────────
+(function () {
+  const slides   = document.querySelectorAll('#heroSlideshow .slide-img');
+  const dots     = document.querySelectorAll('#slideDots .slide-dot');
+  const caption  = document.getElementById('slideCaption');
+  const capTitle = document.getElementById('slideCaptionTitle');
+  let current    = 0;
+  let timer;
+
+  const captions = [
+    'One plan. A lifetime of security.',
+    'Guaranteed income — the gift that never stops.',
+    'Love of a Lifetime. Secured forever.',
+    'Building a future they can count on.',
+    'One decision. Three generations of impact.',
+  ];
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+
+    // Animate caption
+    if (caption && capTitle) {
+      caption.classList.remove('visible');
+      setTimeout(() => {
+        capTitle.textContent = captions[current];
+        caption.classList.add('visible');
+      }, 320);
+    }
+  }
+
+  function next() { goTo(current + 1); }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(next, 4500);
+  }
+
+  // Dot click
+  dots.forEach((dot) => {
+    dot.addEventListener('click', () => {
+      goTo(Number(dot.dataset.idx));
+      startTimer();
+    });
+  });
+
+  // Pause on hover
+  const container = document.getElementById('heroSlideshow');
+  container.addEventListener('mouseenter', () => clearInterval(timer));
+  container.addEventListener('mouseleave', startTimer);
+
+  startTimer();
+})();
+</script>
+
+<!-- ─────────────────────────────────────────────────────────
+     LEAD CAPTURE MODAL
+───────────────────────────────────────────────────────────── -->
+<div id="lead-modal"
+     class="fixed inset-0 z-[999] flex items-center justify-center p-4 hidden"
+     onclick="if(event.target===this) closeLeadModal()">
+
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+  <!-- Card -->
+  <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-rise">
+
+    <!-- Red header -->
+    <div class="bg-pru-red px-7 pt-7 pb-5">
+      <button onclick="closeLeadModal()"
+              class="absolute top-4 right-4 text-white/60 hover:text-white text-2xl leading-none font-light transition-colors">×</button>
+      <div class="text-xs font-bold tracking-[2px] uppercase text-white/70 mb-1">Free Consultation</div>
+      <h3 class="text-xl font-black text-white leading-tight">Let's Build Your Plan Together</h3>
+      <p class="text-sm text-white/75 mt-1.5">A licensed PRU Life advisor will call you — zero pressure, zero jargon.</p>
+    </div>
+
+    <!-- Plan snapshot (populated by JS) -->
+    <div id="lead-plan-snap"
+         class="hidden mx-7 mt-5 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-gray-700 leading-relaxed">
+    </div>
+
+    <!-- Form -->
+    <form id="lead-form" onsubmit="submitLead(event)" class="px-7 pb-7 pt-5 space-y-4" novalidate>
+
+      <!-- Name -->
+      <div>
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Full Name *</label>
+        <input id="lead-name" type="text" required autocomplete="name"
+               placeholder="e.g. Juan dela Cruz"
+               class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-base font-medium text-pru-dark placeholder-gray-300 focus:border-pru-red focus:outline-none transition-colors bg-gray-50" />
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Mobile Number *</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-sm">+63</span>
+          <input id="lead-phone" type="tel" required autocomplete="tel"
+                 placeholder="917 123 4567"
+                 class="w-full border-2 border-gray-100 rounded-xl pl-12 pr-4 py-3 text-base font-medium text-pru-dark placeholder-gray-300 focus:border-pru-red focus:outline-none transition-colors bg-gray-50" />
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Email Address</label>
+        <input id="lead-email" type="email" autocomplete="email"
+               placeholder="you@email.com"
+               class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-base font-medium text-pru-dark placeholder-gray-300 focus:border-pru-red focus:outline-none transition-colors bg-gray-50" />
+      </div>
+
+      <!-- Best time -->
+      <div>
+        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Best Time to Call</label>
+        <select id="lead-time"
+                class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 text-base font-medium text-pru-dark focus:border-pru-red focus:outline-none transition-colors bg-gray-50">
+          <option value="">Any time</option>
+          <option>Morning (8AM–12PM)</option>
+          <option>Afternoon (12PM–5PM)</option>
+          <option>Evening (5PM–8PM)</option>
+          <option>Weekends only</option>
+        </select>
+      </div>
+
+      <!-- Error message -->
+      <p id="lead-error" class="text-sm text-red-500 hidden"></p>
+
+      <!-- Submit -->
+      <button type="submit"
+              class="w-full py-4 bg-pru-red text-white font-black text-base rounded-xl hover:bg-red-700 hover:-translate-y-0.5 transition-all shadow-lg shadow-red-100 mt-1">
+        Send via WhatsApp →
+      </button>
+      <p class="text-center text-xs text-gray-400">Your info is sent directly to your advisor's WhatsApp — no spam, ever.</p>
+    </form>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────
+     FLOATING WHATSAPP CHAT BUTTON
+───────────────────────────────────────────────────────────── -->
+<a id="wa-float"
+   href="https://wa.me/639178232799?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20PRULifetime%20Income."
+   target="_blank" rel="noopener"
+   title="Chat with us on WhatsApp"
+   class="fixed bottom-6 right-6 z-[998] flex items-center gap-2.5 bg-[#25D366] text-white font-bold text-sm px-4 py-3.5 rounded-full shadow-xl hover:bg-[#1ebe5d] hover:scale-105 transition-all duration-200 group"
+   style="box-shadow: 0 4px 24px rgba(37,211,102,0.45);">
+  <!-- WhatsApp SVG icon -->
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 flex-shrink-0">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L.057 23.882a.5.5 0 00.61.61l6.057-1.47A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.866 9.866 0 01-5.034-1.378l-.36-.214-3.733.905.923-3.641-.235-.374A9.867 9.867 0 012.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/>
+  </svg>
+  <span class="hidden sm:inline">Chat with us</span>
+
+  <!-- Pulse ring -->
+  <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
+    <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-white/80"></span>
+  </span>
+</a>
+
+<!-- ─────────────────────────────────────────────────────────
+     TAWK.TO LIVE CHAT WIDGET
+     ➜ Sign up free at https://www.tawk.to/
+     ➜ Create a property → copy your widget script → paste here
+     ➜ Replace the placeholder script below with yours
+───────────────────────────────────────────────────────────── -->
+<!--
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/YOUR_PROPERTY_ID/YOUR_WIDGET_ID';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+-->
+
+</body>
+</html>
