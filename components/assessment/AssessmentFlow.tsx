@@ -1077,7 +1077,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                     >
                       <MessageCircle size={11} /> Talk to Advisor
                     </button>
-                    <a href={`/products/${rec.slug}`}
+                    <a href={rec.slug === 'prulifetime-income' ? '/prulifetime' : `/products/${rec.slug}`}
                       className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium"
                       style={{ color: '#111111', border: '1px solid rgba(0,0,0,0.15)', background: 'transparent', transition: 'background 0.15s ease, border-color 0.15s ease' }}
                       onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'rgba(0,0,0,0.03)'; el.style.borderColor = 'rgba(0,0,0,0.22)' }}
