@@ -49,10 +49,14 @@ export async function POST(req: NextRequest) {
       },
     }
 
-    const webhookUrl = process.env.N8N_WEBHOOK_PLI_LEADS
+    // Use dedicated PLI webhook if set, otherwise fall back to the
+    // shared assessment webhook (payload type='pli_lead' distinguishes it).
+    const webhookUrl =
+      process.env.N8N_WEBHOOK_PLI_LEADS ??
+      process.env.N8N_WEBHOOK_ASSESSMENT_LEADS
 
     if (!webhookUrl) {
-      console.warn('[pli-lead] N8N_WEBHOOK_PLI_LEADS is not set — lead not forwarded to CRM.')
+      console.warn('[pli-lead] No n8n webhook configured — lead not forwarded to CRM.')
       return NextResponse.json({ success: true, forwarded: false })
     }
 
