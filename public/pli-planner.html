@@ -3,26 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRULifetime Income Planner | BSQ · PRU Life UK</title>
-
-  <!-- ── Open Graph — Facebook share card ── -->
-  <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://prubsq.com/prulifetime" />
-  <meta property="og:title"       content="Never Outlive Your Money — PRULifetime Income" />
-  <meta property="og:description" content="Calculate your guaranteed lifetime income in 60 seconds. Pay 5 or 10 years — collect forever. 200% death benefit. Zero market risk." />
-  <meta property="og:image"       content="https://prubsq.com/pli-images/slide2.jpg" />
-  <meta property="og:image:width"  content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:site_name"   content="Brilliant Star Quartz · PRU Life UK" />
-
-  <!-- ── Twitter / X card ── -->
-  <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="Never Outlive Your Money — PRULifetime Income" />
-  <meta name="twitter:description" content="Guaranteed income for life. Pay 5 or 10 years — collect forever." />
-  <meta name="twitter:image"       content="https://prubsq.com/pli-images/slide2.jpg" />
-
-  <!-- ── SEO ── -->
-  <meta name="description" content="Calculate your guaranteed lifetime income in 60 seconds. PRULifetime Income by PRU Life UK Philippines — guaranteed income for life, 200% death benefit, zero market risk." />
+  <title>PRULifetime Income Planner</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -1554,47 +1535,167 @@ function toggleFAQ(i) {
 </div>
 
 <!-- ─────────────────────────────────────────────────────────
-     FLOATING WHATSAPP CHAT BUTTON
+     BSQ CHAT LAUNCHER — matches prubsq.com homepage widget
+     Agent-aware: respects ?agent_id= / ?utm_agent= UTM params
 ───────────────────────────────────────────────────────────── -->
-<a id="wa-float"
-   href="https://wa.me/639178232799?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20PRULifetime%20Income."
-   target="_blank" rel="noopener"
-   title="Chat with us on WhatsApp"
-   class="fixed bottom-6 right-6 z-[998] flex items-center gap-2.5 bg-[#25D366] text-white font-bold text-sm px-4 py-3.5 rounded-full shadow-xl hover:bg-[#1ebe5d] hover:scale-105 transition-all duration-200 group"
-   style="box-shadow: 0 4px 24px rgba(37,211,102,0.45);">
-  <!-- WhatsApp SVG icon -->
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 flex-shrink-0">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L.057 23.882a.5.5 0 00.61.61l6.057-1.47A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.866 9.866 0 01-5.034-1.378l-.36-.214-3.733.905.923-3.641-.235-.374A9.867 9.867 0 012.1 12C2.1 6.534 6.534 2.1 12 2.1S21.9 6.534 21.9 12 17.466 21.9 12 21.9z"/>
-  </svg>
-  <span class="hidden sm:inline">Chat with us</span>
+<div id="bsq-chat-root" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;"></div>
 
-  <!-- Pulse ring -->
-  <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
-    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-50"></span>
-    <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-white/80"></span>
-  </span>
-</a>
+<style>
+  @keyframes bsqSlideUp {
+    from { opacity:0; transform:translateY(12px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .bsq-plat-btn {
+    flex:1; padding:14px 6px; color:#fff; font-size:11px; font-weight:700;
+    border:none; border-radius:12px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:7px; transition:opacity .15s,transform .1s; min-width:0;
+  }
+  .bsq-plat-btn:hover { opacity:.85; transform:translateY(-2px); }
+</style>
 
-<!-- ─────────────────────────────────────────────────────────
-     TAWK.TO LIVE CHAT WIDGET
-     ➜ Sign up free at https://www.tawk.to/
-     ➜ Create a property → copy your widget script → paste here
-     ➜ Replace the placeholder script below with yours
-───────────────────────────────────────────────────────────── -->
-<!--
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/YOUR_PROPERTY_ID/YOUR_WIDGET_ID';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
+<script>
+(function() {
+  const OPENER = "Hi! I'm interested in learning more about PRULifetime Income from BSQ. Can you help me?";
+  const BSQ_DEFAULT = {
+    name:      'BSQ Financial Advisory',
+    messenger: 'https://m.me/Bstarquartzarea',
+    whatsapp:  null,
+    viber:     null,
+    telegram:  null,
+  };
+
+  const PLATFORMS = {
+    whatsapp:  { label:'WhatsApp', color:'#25D366', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.374 0 0 5.373 0 12c0 2.126.556 4.122 1.527 5.856L.057 23.882a.5.5 0 00.613.613l6.026-1.47A11.95 11.95 0 0012 24c6.626 0 12-5.373 12-12S18.626 0 12 0zm0 21.9a9.9 9.9 0 01-5.032-1.372l-.36-.214-3.742.912.928-3.742-.232-.374A9.866 9.866 0 012.1 12c0-5.467 4.432-9.9 9.9-9.9 5.467 0 9.9 4.433 9.9 9.9 0 5.468-4.433 9.9-9.9 9.9z"/></svg>' },
+    viber:     { label:'Viber',    color:'#7360F2', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.4 0C6 .1 1.6 4.4 1.4 9.8c-.1 2.9.9 5.5 2.7 7.5.2.2.3.5.2.7l-.9 3.3c-.1.4.3.8.7.7l3.4-.9c.3-.1.5 0 .8.1 1.3.7 2.7 1 4.2 1.1 5.4.1 9.9-4.1 10.1-9.5C22.7 6.7 17.7.4 11.4 0zm5.8 15.6c-.6.6-1.3 1-2.1 1.1-.5.1-1.3.1-4.7-1.9-3.1-1.8-5.1-4.9-5.3-5.2-.2-.2-1.4-1.9-1.4-3.6 0-1.7.9-2.5 1.2-2.8.3-.3.7-.5 1.1-.5.1 0 .3 0 .4.1.4.1.7.5 1 1.2.2.6.8 2 .9 2.2.1.2.2.4.1.6-.1.2-.1.4-.3.5-.1.1-.3.3-.4.4-.1.2-.3.3-.1.6.2.3.8 1.2 1.7 2 1.1 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.7-.8.9-1 .2-.3.4-.2.7-.1.3.1 1.8.8 2.1 1 .3.1.5.2.6.3.1.4.1 1-.3 1.7z"/></svg>' },
+    telegram:  { label:'Telegram', color:'#2CA5E0', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' },
+    messenger: { label:'Messenger',color:'#0099FF', icon:'<svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 2C7.373 2 2 7.09 2 13.333c0 3.311 1.42 6.278 3.7 8.4V26l4.2-2.31A12.7 12.7 0 0014 24c6.627 0 12-5.09 12-10.667S20.627 2 14 2z" fill="currentColor"/><path d="M15.273 17.067l-3.054-3.254-5.965 3.254 6.563-6.967 3.127 3.254 5.892-3.254-6.563 6.967z" fill="#0055cc"/></svg>' },
+  };
+
+  // Build platform URLs with pre-filled opener
+  function buildPlatforms(contact) {
+    const list = [];
+    if (contact.whatsapp) {
+      const num = contact.whatsapp.replace(/\D/g,'');
+      list.push({ id:'whatsapp', url:`https://wa.me/${num}?text=${encodeURIComponent(OPENER)}` });
+    }
+    if (contact.viber) {
+      const num = contact.viber.replace(/\D/g,'');
+      list.push({ id:'viber', url:`viber://chat?number=${num}` });
+    }
+    if (contact.telegram) {
+      const t = contact.telegram.replace(/.*t\.me\//,'').replace(/^@/,'');
+      list.push({ id:'telegram', url:`https://t.me/${t}?text=${encodeURIComponent(OPENER)}` });
+    }
+    if (contact.messenger) {
+      list.push({ id:'messenger', url: contact.messenger });
+    }
+    if (list.length === 0) {
+      list.push({ id:'messenger', url: BSQ_DEFAULT.messenger });
+    }
+    return list;
+  }
+
+  let open = false;
+  let contact = { ...BSQ_DEFAULT };
+  let agentName = 'BSQ Financial Advisory';
+
+  // Render the widget
+  function render() {
+    const root = document.getElementById('bsq-chat-root');
+    if (!root) return;
+    const platforms = buildPlatforms(contact);
+
+    root.innerHTML = `
+      ${open ? `
+      <div style="position:absolute;bottom:68px;right:0;width:280px;background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.6);animation:bsqSlideUp .25s ease;" id="bsq-panel">
+
+        <!-- Header -->
+        <div style="background:linear-gradient(135deg,#7f0000,#D92D20);padding:14px 18px;display:flex;align-items:center;gap:12px;">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div style="flex:1;">
+            <p style="color:#fff;font-weight:700;font-size:14px;margin:0;">${agentName}</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:11px;margin:0;">Typically replies instantly</p>
+          </div>
+          <button onclick="window._bsqClose()" style="background:none;border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:20px;line-height:1;padding:4px;">×</button>
+        </div>
+
+        <!-- Platform buttons -->
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
+          <p style="color:rgba(255,255,255,0.45);font-size:12px;margin:0;text-align:center;">How would you like to reach us?</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            ${platforms.map(p => `
+              <button class="bsq-plat-btn" onclick="window._bsqOpen('${p.id}','${p.url.replace(/'/g,"\\'")}') "
+                style="background:${PLATFORMS[p.id].color};">
+                ${PLATFORMS[p.id].icon}
+                <span>${PLATFORMS[p.id].label}</span>
+              </button>
+            `).join('')}
+          </div>
+          ${platforms.length > 1 ? '<p style="color:rgba(255,255,255,0.25);font-size:10px;margin:0;text-align:center;">Tap your preferred app above</p>' : ''}
+        </div>
+      </div>
+      ` : ''}
+
+      <!-- Floating button -->
+      <button
+        onclick="window._bsqToggle()"
+        aria-label="Chat with us"
+        style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7f0000,#D92D20);display:flex;align-items:center;justify-content:center;box-shadow:${open ? '0 6px 24px rgba(217,45,32,0.7)' : '0 4px 16px rgba(217,45,32,0.5)'};cursor:pointer;border:none;transform:${open ? 'scale(1.1)' : 'scale(1)'};transition:transform .2s ease,box-shadow .2s ease;">
+        ${open
+          ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>'
+          : '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>'
+        }
+      </button>
+    `;
+  }
+
+  // Controls
+  window._bsqToggle = function() { open = !open; render(); };
+  window._bsqClose  = function() { open = false;  render(); };
+  window._bsqOpen   = function(platform, url) {
+    // For platforms without pre-fill, copy opener to clipboard
+    if (platform === 'viber' || platform === 'messenger') {
+      try { navigator.clipboard.writeText(OPENER); } catch(e) {}
+    }
+    window.open(url, '_blank');
+    setTimeout(() => { open = false; render(); }, 400);
+  };
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    const root = document.getElementById('bsq-chat-root');
+    if (open && root && !root.contains(e.target)) {
+      open = false; render();
+    }
+  });
+
+  // Agent-aware: fetch contact from /api/agent if agent_id param exists
+  (function() {
+    const params  = new URLSearchParams(window.location.search);
+    const agentId = params.get('agent_id') || params.get('utm_agent')
+                  || localStorage.getItem('bsq_utm_agent');
+    if (agentId) {
+      localStorage.setItem('bsq_utm_agent', agentId);
+      fetch('/api/agent?id=' + encodeURIComponent(agentId))
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data && data.found) {
+            contact   = { ...BSQ_DEFAULT, ...data.contact };
+            agentName = data.contact.name || agentName;
+            render();
+          }
+        })
+        .catch(() => {});
+    }
+  })();
+
+  // Initial render
+  render();
 })();
 </script>
--->
 
 </body>
 </html>
