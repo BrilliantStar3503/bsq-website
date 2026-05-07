@@ -1672,24 +1672,25 @@ function toggleFAQ(i) {
     }
   });
 
-  // Agent-aware: fetch contact from /api/agent if agent_id param exists
+  // Agent-aware: fetch contact from /api/agent
+  // Falls back to christopher_bantoc_garcia so direct visits always show
+  // Christopher's live contacts from the Google Sheet.
   (function() {
     const params  = new URLSearchParams(window.location.search);
     const agentId = params.get('agent_id') || params.get('utm_agent')
-                  || localStorage.getItem('bsq_utm_agent');
-    if (agentId) {
-      localStorage.setItem('bsq_utm_agent', agentId);
-      fetch('/api/agent?id=' + encodeURIComponent(agentId))
-        .then(r => r.ok ? r.json() : null)
-        .then(data => {
-          if (data && data.found) {
-            contact   = { ...BSQ_DEFAULT, ...data.contact };
-            agentName = data.contact.name || agentName;
-            render();
-          }
-        })
-        .catch(() => {});
-    }
+                  || localStorage.getItem('bsq_utm_agent')
+                  || 'christopher_bantoc_garcia';
+    localStorage.setItem('bsq_utm_agent', agentId);
+    fetch('/api/agent?id=' + encodeURIComponent(agentId))
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data && data.found) {
+          contact   = { ...BSQ_DEFAULT, ...data.contact };
+          agentName = data.contact.name || agentName;
+          render();
+        }
+      })
+      .catch(() => {});
   })();
 
   // Initial render
