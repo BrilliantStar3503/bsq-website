@@ -828,10 +828,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           {result.gaps.map((gap, i) => {
             /* ── Per-severity design tokens ── */
             const sev = gap.severity === 'high'
-              ? { accent: '#b91c1c', badgeBg: 'rgba(185,28,28,0.12)', badgeColor: 'rgba(220,60,60,0.85)',  label: 'High Risk'     }
+              ? { accent: '#ED1B2E', iconBg: '#FEF2F2', iconColor: '#DC2626', badgeBg: '#FCEBED', badgeColor: '#ED1B2E', calloutBg: 'rgba(237,27,46,0.04)', label: 'High Risk'     }
               : gap.severity === 'medium'
-              ? { accent: '#c0392b', badgeBg: 'rgba(192,57,43,0.10)', badgeColor: 'rgba(210,80,70,0.80)',  label: 'Moderate Risk' }
-              : { accent: '#6b7280', badgeBg: 'rgba(107,114,128,0.10)', badgeColor: 'rgba(160,165,175,0.75)', label: 'Low Risk'   }
+              ? { accent: '#C0392B', iconBg: '#FEF3F2', iconColor: '#C0392B', badgeBg: '#FEF3F2', badgeColor: '#C0392B', calloutBg: 'rgba(192,57,43,0.04)', label: 'Moderate Risk' }
+              : { accent: '#6B7280', iconBg: '#F3F4F6', iconColor: '#6B7280', badgeBg: '#F3F4F6', badgeColor: '#6B7280', calloutBg: 'rgba(107,114,128,0.04)', label: 'Low Risk'  }
 
             return (
               <motion.div
@@ -841,13 +841,13 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 transition={{ delay: 0.18 + i * 0.10, duration: 0.42, ease: 'easeOut' as const }}
                 className="group flex flex-col gap-4 rounded-2xl"
                 style={{
-                  background:   '#1c1c1e',
-                  border:       '1px solid rgba(255,255,255,0.07)',
-                  borderLeft:   `2.5px solid ${sev.accent}`,
+                  background:   '#ffffff',
+                  border:       '1px solid #E5E7EB',
+                  borderLeft:   `3px solid ${sev.accent}`,
                   borderRadius: 16,
                   padding:      24,
-                  boxShadow:    '0 1px 3px rgba(0,0,0,0.14), 0 4px 14px rgba(0,0,0,0.10)',
-                  transition:   'transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
+                  boxShadow:    '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)',
+                  transition:   'transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease',
                   cursor:       'default',
                 }}
                 whileHover={{
@@ -856,74 +856,77 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = 'rgba(255,255,255,0.12)'
+                  el.style.borderColor     = '#D1D5DB'
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = '0 2px 8px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.14)'
+                  el.style.boxShadow       = '0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = 'rgba(255,255,255,0.07)'
+                  el.style.borderColor     = '#E5E7EB'
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = '0 1px 3px rgba(0,0,0,0.14), 0 4px 14px rgba(0,0,0,0.10)'
+                  el.style.boxShadow       = '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04)'
                 }}
               >
                 {/* ── Top row: icon · title · badge ── */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
-                      style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.42)' }}>
+                      style={{ background: sev.iconBg, color: sev.iconColor }}>
                       {gapIcon[gap.id] ?? <AlertTriangle size={14} />}
                     </div>
-                    <h4 style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.92)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
+                    <h4 style={{ fontSize: 14, fontWeight: 600, color: '#1F1F1F', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
                       {gap.title}
                     </h4>
                   </div>
-                  {/* Severity dot + label — minimal, no pill */}
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: sev.accent, display: 'inline-block', flexShrink: 0 }} />
-                    <span style={{ fontSize: 10, fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: sev.badgeColor }}>
-                      {sev.label}
-                    </span>
-                  </div>
+                  {/* Severity badge — soft pill */}
+                  <span style={{
+                    fontSize: 10, fontWeight: 600, letterSpacing: '0.05em',
+                    textTransform: 'uppercase', color: sev.badgeColor,
+                    background: sev.badgeBg, padding: '3px 8px', borderRadius: 99,
+                    flexShrink: 0, whiteSpace: 'nowrap',
+                  }}>
+                    {sev.label}
+                  </span>
                 </div>
 
                 {/* ── Description ── */}
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.50)', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.65, margin: 0 }}>
                   {gap.description}
                 </p>
 
                 {/* ── Key impact callout ── */}
                 <div style={{
-                  background:   'rgba(255,255,255,0.04)',
+                  background:   sev.calloutBg,
+                  border:       '1px solid rgba(0,0,0,0.05)',
                   borderLeft:   `2px solid ${sev.accent}`,
-                  borderRadius: '0 6px 6px 0',
+                  borderRadius: '0 8px 8px 0',
                   padding:      '9px 12px',
                 }}>
-                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.40)', lineHeight: 1.6, margin: 0, letterSpacing: '0.01em' }}>
+                  <p style={{ fontSize: 11, color: '#6B7280', lineHeight: 1.65, margin: 0, letterSpacing: '0.01em' }}>
                     {gap.consequence}
                   </p>
                 </div>
 
                 {/* ── Actions ── */}
-                <div className="flex items-center gap-4 pt-1">
+                <div className="flex items-center gap-3 pt-1">
                   <button
                     onClick={() => openContact('gap_advisor')}
                     style={{
-                      height:       32,
-                      paddingLeft:  16,
-                      paddingRight: 16,
-                      borderRadius: 6,
-                      background:   '#b91c1c',
-                      color:        '#fff',
-                      fontSize:     11,
-                      fontWeight:   600,
-                      border:       'none',
-                      cursor:       'pointer',
+                      height:        32,
+                      paddingLeft:   16,
+                      paddingRight:  16,
+                      borderRadius:  6,
+                      background:    '#ED1B2E',
+                      color:         '#fff',
+                      fontSize:      11,
+                      fontWeight:    600,
+                      border:        'none',
+                      cursor:        'pointer',
                       letterSpacing: '0.02em',
-                      transition:   'background 0.15s ease, transform 0.15s ease',
+                      transition:    'background 0.15s ease, transform 0.15s ease',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#991b1b'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#b91c1c'; e.currentTarget.style.transform = 'translateY(0)' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#C0111F'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#ED1B2E'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
                     Talk to Advisor
                   </button>
@@ -932,7 +935,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                     style={{
                       fontSize:       11,
                       fontWeight:     500,
-                      color:          'rgba(255,255,255,0.30)',
+                      color:          '#9CA3AF',
                       textDecoration: 'none',
                       letterSpacing:  '0.02em',
                       display:        'inline-flex',
@@ -940,8 +943,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                       gap:            4,
                       transition:     'color 0.15s ease',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)' }}
-                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.30)' }}
+                    onMouseEnter={e => { e.currentTarget.style.color = '#1F1F1F' }}
+                    onMouseLeave={e => { e.currentTarget.style.color = '#9CA3AF' }}
                   >
                     Learn more <ArrowRight size={10} />
                   </a>
