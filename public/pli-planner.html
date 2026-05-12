@@ -299,6 +299,14 @@
           <!-- Soft glow behind frame -->
           <div class="absolute -inset-4 bg-gradient-to-br from-red-50/80 via-rose-50/40 to-transparent rounded-3xl -z-10 blur-sm"></div>
 
+          <!-- ── Slide caption — above the image ── -->
+          <div class="mb-3 px-1 min-h-[42px]">
+            <div id="slideCaption" class="slide-caption-text visible">
+              <div class="text-[10px] font-bold tracking-widest uppercase mb-0.5" style="color:#E60028; opacity:.7;">PRULifetime Income</div>
+              <div class="font-bold text-[15px] leading-snug text-gray-800" id="slideCaptionTitle">One plan. A lifetime of security.</div>
+            </div>
+          </div>
+
           <!-- ── Slideshow frame ── -->
           <div id="heroSlideshow"
                class="relative w-full h-[300px] sm:h-[420px] lg:h-[480px] rounded-2xl overflow-hidden"
@@ -311,24 +319,12 @@
             <img class="slide-img"        src="/pli-images/slide4.jpg" alt="Father and son — PRULifetime Income" />
             <img class="slide-img"        src="/pli-images/slide5.jpg" alt="Family — PRULifetime Income" />
 
-            <!-- ① Top gradient — masks PRU logo / header text -->
+            <!-- Subtle top scrim — keeps corners polished, doesn't obscure content -->
             <div class="absolute inset-x-0 top-0 pointer-events-none z-10"
-                 style="height:42%; background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.50) 30%, rgba(0,0,0,0.20) 65%, transparent 100%);"></div>
-
-            <!-- ② Bottom gradient — masks marketing copy text -->
-            <div class="absolute inset-x-0 bottom-0 pointer-events-none z-10"
-                 style="height:55%; background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.52) 28%, rgba(0,0,0,0.15) 65%, transparent 100%);"></div>
-
-            <!-- Slide caption — bottom-left -->
-            <div class="absolute bottom-14 left-5 right-5 z-20">
-              <div id="slideCaption" class="slide-caption-text visible">
-                <div class="text-white/60 text-[10px] font-semibold tracking-widest uppercase mb-0.5">PRULifetime Income</div>
-                <div class="text-white font-bold text-[15px] leading-snug" id="slideCaptionTitle">One plan. A lifetime of security.</div>
-              </div>
-            </div>
+                 style="height:20%; background: linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, transparent 100%);"></div>
 
             <!-- Dot indicators — bottom-center -->
-            <div id="slideDots" class="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+            <div id="slideDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
               <div class="slide-dot active" data-idx="0"></div>
               <div class="slide-dot" data-idx="1"></div>
               <div class="slide-dot" data-idx="2"></div>
