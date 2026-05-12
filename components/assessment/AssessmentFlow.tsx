@@ -1219,17 +1219,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
 /* ─── Header height constants ──────────────────────────────────────── */
 /**
- * BSQ_H — the one source of truth for the main site header height.
- * BsqHeader uses `position: fixed` with a constant h-14 (56 px) — it
- * never collapses or resizes on scroll, so every fixed sub-header in
- * this page simply starts at top: BSQ_H.
- *
- * Keep this value in sync with BSQ_HEADER_H in HeaderWrapper.tsx.
+ * BSQ_H — offset for the global BsqHeader.
+ * HeaderWrapper returns null on /assessment, so the global header does
+ * NOT render here at all. Assessment navbars must start at top: 0.
+ * BSQ_H is kept as 0 so existing `top: BSQ_H` expressions still compile
+ * correctly without touching every call-site.
  */
-const BSQ_H         = 56   // BsqHeader fixed height (h-14)
+const BSQ_H         = 0    // Global header suppressed on /assessment
 
-const TRUST_H       = 32   // Layer 1 — announcement bar (trust strip)
-const BSQ_NAV_H     = 44   // Layer 2 — main nav (Apple standard)
+const TRUST_H       = 32   // (unused on assessment — kept for reference)
+const BSQ_NAV_H     = 44   // Assessment nav height (Apple standard)
 const ACCENT_H      = 2    // Results phase accent line
 
 /* ─── Main AssessmentFlow — phase state machine ────────────────────── */
@@ -1297,8 +1296,9 @@ export default function AssessmentFlow() {
   // ── Render — single source of truth ──────────────────────────────
   if (phase === 'analyzing') {
     return (
-      <div className="min-h-screen flex flex-col" style={{ background: 'transparent' }}>
+      <div className="min-h-screen flex flex-col" style={{ background: 'transparent', overscrollBehavior: 'none' }}>
         <style>{`
+          html, body { overscroll-behavior: none; background: #0d1117; }
           @keyframes af-fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
           @keyframes scan-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.35; transform:scale(0.75); } }
           .af-fade { animation: af-fade-in 0.45s ease both; }
@@ -1334,11 +1334,20 @@ export default function AssessmentFlow() {
 
   if (phase === 'results') {
     return (
-      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, #f7f7f8, #f3f3f5)', position: 'relative', zIndex: 0 }}>
-        {/* Solid background — covers any global pattern/grid beneath */}
-        <div className="fixed inset-0 -z-10" style={{ background: '#f5f5f7' }} />
+      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f5f5f7', position: 'relative', zIndex: 0, overscrollBehavior: 'none' }}>
+        {/* Full-viewport background — fixed so iOS bounce never reveals white */}
+        <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#f5f5f7' }} />
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
         <style>{`
+          /* ── Scroll containment — prevents iOS/macOS overscroll bounce ──
+             revealing content above the fixed navbar. Applied to html+body
+             only while this phase is mounted; cleaned up on unmount via
+             React's style tag lifecycle (tag removed when component unmounts). */
+          html, body {
+            overscroll-behavior: none;
+            background: #f5f5f7;
+          }
+
           /* ═══════════════════════════════════════════════════════════════
              Assessment Results — Scoped Button System
              Inspired by Prudential Singapore (prudential.com.sg)
@@ -1650,6 +1659,7 @@ export default function AssessmentFlow() {
       }}
     >
       <style>{`
+        html, body { overscroll-behavior: none; background: #f6f8ff; }
         @keyframes af-fade-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
         .af-fade { animation: af-fade-in 0.45s cubic-bezier(0.16,1,0.3,1) both; }
         @keyframes af-glow-pulse { 0%,100% { opacity:0.40; } 50% { opacity:1; } }
