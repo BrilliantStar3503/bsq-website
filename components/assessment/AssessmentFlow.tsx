@@ -683,37 +683,35 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       <motion.div variants={fadeUp}
         className="rounded-2xl overflow-hidden"
         style={{
-          background: 'linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(248,248,250,0.94) 100%)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(0,0,0,0.06)',
-          boxShadow: '0 6px 20px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04)',
+          background: '#ffffff',
+          border: '1px solid rgba(0,0,0,0.07)',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.04)',
         }}>
-        <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
+        <div style={{ height: 3, background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 45%, rgba(185,28,28,0.25) 80%, transparent 100%)' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
 
           {/* Score ring */}
-          <div className="flex flex-col items-center justify-center p-8 gap-3"
-            style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }} >
+          <div className="flex flex-col items-center justify-center px-8 py-10 gap-4"
+            style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
             <ScoreRing score={result.total} />
             <motion.div
               className="flex items-center gap-2 px-4 py-1.5 rounded-full"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 2.2, duration: 0.4, ease: 'easeOut' }}
-              style={{ background: `${statusColor}18`, border: `1px solid ${statusColor}40`, boxShadow: `0 2px 10px ${statusColor}20` }}
+              style={{ background: `${statusColor}10`, border: `1px solid ${statusColor}30` }}
             >
-              <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: statusColor, boxShadow: `0 0 6px ${statusColor}` }} />
-              <span className="text-xs font-semibold tracking-wide" style={{ color: statusColor }}>{statusLabel}</span>
+              <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: statusColor }} />
+              <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.04em', color: statusColor }}>{statusLabel}</span>
             </motion.div>
-            <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(17,17,17,0.65)', fontWeight: 500 }}>Financial Risk Score</p>
-            <div className="w-full mt-1 pt-3 flex items-center justify-center gap-6" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+            <p style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'rgba(17,17,17,0.38)', fontWeight: 500 }}>Financial Risk Score</p>
+            <div className="w-full pt-4 flex items-center justify-center gap-7" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
               {subScores.map(({ label, val }) => {
                 const c = val < 40 ? '#dc2626' : '#111111'
                 return (
-                  <div key={label} className="flex flex-col items-center gap-0.5">
-                    <span style={{ fontSize: 16, fontWeight: 600, color: c, fontVariantNumeric: 'tabular-nums' }}>{val}</span>
-                    <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(17,17,17,0.65)', fontWeight: 500 }}>{label}</span>
+                  <div key={label} className="flex flex-col items-center gap-1">
+                    <span style={{ fontSize: 18, fontWeight: 700, color: c, fontVariantNumeric: 'tabular-nums', lineHeight: 1 }}>{val}</span>
+                    <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'rgba(17,17,17,0.40)', fontWeight: 500 }}>{label}</span>
                   </div>
                 )
               })}
@@ -721,10 +719,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           </div>
 
           {/* Sub-scores */}
-          <div className="p-8 md:p-10 flex flex-col justify-center gap-5">
+          <div className="p-8 md:p-9 flex flex-col justify-center gap-6"
+            style={{ borderLeft: '1px solid rgba(0,0,0,0.06)' }}>
             <div>
-              <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#dc2626', marginBottom: 6 }}>Assessment Summary</p>
-              <p style={{ fontSize: 14, color: 'rgba(17,17,17,0.70)', lineHeight: 1.7 }}>{result.explanation}</p>
+              <p style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 600, color: 'rgba(17,17,17,0.38)', marginBottom: 8 }}>Assessment Summary</p>
+              <p style={{ fontSize: 14, color: 'rgba(17,17,17,0.68)', lineHeight: 1.75 }}>{result.explanation}</p>
             </div>
             <div className="space-y-4">
               {subScores.map(({ label, val, icon }, i) => {
@@ -732,27 +731,25 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 const grade    = val < 40 ? 'Needs attention' : val < 65 ? 'Fair' : val < 85 ? 'Good' : 'Excellent'
                 const barDelay = 1.1 + i * 0.08
                 return (
-                  <div key={label} className="progress-row">
+                  <div key={label}>
                     <div className="flex justify-between items-center mb-2">
                       <div className="flex items-center gap-2">
-                        <span style={{ color: 'rgba(17,17,17,0.65)' }}>{icon}</span>
+                        <span style={{ color: 'rgba(17,17,17,0.40)' }}>{icon}</span>
                         <span style={{ fontSize: 12, fontWeight: 500, color: '#111111' }}>{label}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span style={{ fontSize: 11, color: 'rgba(17,17,17,0.65)' }}>{grade}</span>
-                        <span style={{ fontSize: 12, fontWeight: 600, color: barColor, fontVariantNumeric: 'tabular-nums', minWidth: 24, textAlign: 'right' }}>{val}</span>
+                      <div className="flex items-center gap-2.5">
+                        <span style={{ fontSize: 10, color: 'rgba(17,17,17,0.38)', letterSpacing: '0.02em' }}>{grade}</span>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: barColor, fontVariantNumeric: 'tabular-nums', minWidth: 22, textAlign: 'right' }}>{val}</span>
                       </div>
                     </div>
-                    <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
+                    <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.06)' }}>
                       <motion.div
-                        className="h-full rounded-full bar-shimmer"
+                        className="h-full rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${val}%` }}
                         transition={{ duration: 1.0, delay: barDelay, ease: 'easeOut' as const }}
-                        style={{
-                          background: 'linear-gradient(90deg, #ff3b3b, #b30000)',
-                          boxShadow: '0 0 6px rgba(255,0,0,0.18)',
-                        }} />
+                        style={{ background: 'linear-gradient(90deg, #dc2626 0%, #991b1b 100%)' }}
+                      />
                     </div>
                   </div>
                 )
