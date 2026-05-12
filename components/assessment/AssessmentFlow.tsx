@@ -1643,33 +1643,101 @@ export default function AssessmentFlow() {
 
   return (
     <div
-      className="flex flex-col overflow-hidden"
+      className="flex flex-col"
       style={{
         minHeight: '100dvh',
-        background: 'linear-gradient(160deg, #ffffff 0%, #f5f7ff 55%, #eef1ff 100%)',
+        background: 'linear-gradient(165deg, #ffffff 0%, #f6f8ff 50%, #eef1ff 100%)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       <style>{`
         @keyframes af-fade-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
         .af-fade { animation: af-fade-in 0.45s cubic-bezier(0.16,1,0.3,1) both; }
-        @keyframes af-glow-pulse { 0%,100% { opacity:0.45; } 50% { opacity:1; } }
-        @keyframes af-bar-grow { from { width: 0%; } to { width: ${pct}%; } }
+        @keyframes af-glow-pulse { 0%,100% { opacity:0.40; } 50% { opacity:1; } }
       `}</style>
 
-      {/* ── Subtle ambient glows ── */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-        <div style={{ position:'absolute', top:'-10%', right:'-5%', width:480, height:480, borderRadius:'50%', background:'radial-gradient(circle, rgba(237,27,46,0.055) 0%, transparent 70%)' }} />
-        <div style={{ position:'absolute', bottom:'-8%', left:'-5%', width:420, height:420, borderRadius:'50%', background:'radial-gradient(circle, rgba(100,116,255,0.045) 0%, transparent 70%)' }} />
+      {/* ─── Z-INDEX MAP: z-1 glows · z-2 ribbon · z-10 card · z-20 footer · z-999 header ─── */}
+
+      {/* z-1 — Ambient glows */}
+      <div aria-hidden className="pointer-events-none" style={{ position:'fixed', inset:0, zIndex:1 }}>
+        <div style={{ position:'absolute', top:'-15%', right:'-8%', width:520, height:520, borderRadius:'50%', background:'radial-gradient(circle, rgba(237,27,46,0.050) 0%, transparent 68%)' }} />
+        <div style={{ position:'absolute', bottom:'-10%', left:'-6%', width:460, height:460, borderRadius:'50%', background:'radial-gradient(circle, rgba(100,116,255,0.040) 0%, transparent 68%)' }} />
+        <div style={{ position:'absolute', top:'38%', left:'18%', width:320, height:320, borderRadius:'50%', background:'radial-gradient(circle, rgba(237,27,46,0.025) 0%, transparent 60%)' }} />
       </div>
 
-      {/* ══════════════════════════════════════════════════════════
-          FOCUSED HEADER — logo · progress bar · step counter
-          Single 52 px bar — no nav, no clutter
-      ══════════════════════════════════════════════════════════ */}
+      {/* z-2 — PRU RIBBON: diagonal band flowing THROUGH the layout, behind the card.
+          ViewBox 0 0 1440 900 → maps to full viewport via preserveAspectRatio="none".
+          Path anatomy:
+            Enters top-left at ~42% vh (y≈384) → descends asymmetrically, faster left side
+            Deepest point ~61% vh (y≈549) around x=695 (slightly left-of-centre)
+            Gradual rise through right half → exits at ~50% vh (y≈452) right edge
+          Control-point strategy:
+            Left quarter:  wide handle spans → steep "compression" descent
+            Centre:        narrower handles, path flattens into trough → organic "stretch"
+            Right quarter: elongated handles, smooth accelerating rise → elegant exit
+      */}
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none"
+        style={{ position:'fixed', top:0, left:0, width:'100%', height:'100%', zIndex:2 }}
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="afRMain" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stopColor="#BE0020" stopOpacity="0"/>
+            <stop offset="3%"   stopColor="#C8001E" stopOpacity="0.92"/>
+            <stop offset="28%"  stopColor="#E20026" stopOpacity="1"/>
+            <stop offset="55%"  stopColor="#D92D20" stopOpacity="1"/>
+            <stop offset="82%"  stopColor="#C8001E" stopOpacity="0.96"/>
+            <stop offset="97%"  stopColor="#BE0020" stopOpacity="0.75"/>
+            <stop offset="100%" stopColor="#BE0020" stopOpacity="0"/>
+          </linearGradient>
+          <linearGradient id="afRHL" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stopColor="#FF7088" stopOpacity="0"/>
+            <stop offset="3%"   stopColor="#FF607A" stopOpacity="0.42"/>
+            <stop offset="35%"  stopColor="#FF3A5C" stopOpacity="0.38"/>
+            <stop offset="65%"  stopColor="#FF4A6A" stopOpacity="0.34"/>
+            <stop offset="97%"  stopColor="#FF607A" stopOpacity="0.28"/>
+            <stop offset="100%" stopColor="#FF7088" stopOpacity="0"/>
+          </linearGradient>
+          <linearGradient id="afRShadow" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stopColor="#6E0012" stopOpacity="0"/>
+            <stop offset="3%"   stopColor="#7A0016" stopOpacity="0.28"/>
+            <stop offset="42%"  stopColor="#880018" stopOpacity="0.24"/>
+            <stop offset="75%"  stopColor="#7A0016" stopOpacity="0.20"/>
+            <stop offset="97%"  stopColor="#6E0012" stopOpacity="0.16"/>
+            <stop offset="100%" stopColor="#6E0012" stopOpacity="0"/>
+          </linearGradient>
+          <linearGradient id="afGComp" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stopColor="#C0C0C8" stopOpacity="0"/>
+            <stop offset="3%"   stopColor="#C8C8D0" stopOpacity="0.30"/>
+            <stop offset="50%"  stopColor="#D8D8E0" stopOpacity="0.26"/>
+            <stop offset="97%"  stopColor="#C8C8D0" stopOpacity="0.20"/>
+            <stop offset="100%" stopColor="#C0C0C8" stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        {/* Gray companion — bottommost, +16px below main */}
+        <path d="M -20,410  C 110,403  230,420  375,472  C 490,512  580,546  690,563  C 780,577  858,574  946,558  C 1052,538  1168,513  1292,494  C 1368,484  1415,479  1460,478"
+              fill="none" stroke="url(#afGComp)" strokeWidth="13" strokeLinecap="round"/>
+        {/* Shadow underside — +8px below main, wide stroke for depth */}
+        <path d="M -20,398  C 112,391  232,408  377,460  C 492,500  582,534  692,551  C 782,565  860,562  948,546  C 1054,526  1170,501  1294,482  C 1370,472  1417,467  1460,466"
+              fill="none" stroke="url(#afRShadow)" strokeWidth="22" strokeLinecap="round"/>
+        {/* Main red ribbon */}
+        <path d="M -20,384  C 115,377  235,394  380,446  C 495,486  585,520  695,537  C 785,551  863,548  951,532  C 1057,512  1173,487  1297,468  C 1373,458  1420,453  1460,452"
+              fill="none" stroke="url(#afRMain)" strokeWidth="13" strokeLinecap="round"/>
+        {/* Top highlight — topmost, thin, -12px above main */}
+        <path d="M -20,372  C 118,365  238,382  383,434  C 498,474  588,508  698,525  C 788,539  866,536  954,520  C 1060,500  1176,475  1300,456  C 1376,446  1423,441  1460,440"
+              fill="none" stroke="url(#afRHL)" strokeWidth="3.5" strokeLinecap="round"/>
+      </svg>
+
+      {/* z-999 — FOCUSED HEADER */}
       <header style={{
         position:             'fixed',
-        top: 0, left: 0, right: 0,
+        top:0, left:0, right:0,
         height:               52,
         zIndex:               999,
         display:              'flex',
@@ -1727,24 +1795,20 @@ export default function AssessmentFlow() {
       {/* Header spacer */}
       <div style={{ height:52, flexShrink:0 }} />
 
-      {/* ══════════════════════════════════════════════════════════
-          QUESTION AREA — full-bleed, vertically centred
-          No card box — question breathes on the page directly
-      ══════════════════════════════════════════════════════════ */}
+      {/* z-10 — MAIN CONTENT */}
       <main
         className="relative flex-1 flex flex-col justify-center"
-        style={{ padding:'32px 24px 100px', zIndex:2 }}
+        style={{ padding:'28px 24px 68px', zIndex:10 }}
       >
-        {/* Question card — generous max-width, subtle elevation */}
-        <div style={{ maxWidth:640, margin:'0 auto', width:'100%' }}>
+        <div style={{ maxWidth:620, margin:'0 auto', width:'100%' }}>
           <div style={{
-            background:           'rgba(255,255,255,0.88)',
-            backdropFilter:       'saturate(180%) blur(24px)',
-            WebkitBackdropFilter: 'saturate(180%) blur(24px)',
-            border:               '1px solid rgba(0,0,0,0.08)',
+            background:           'rgba(255,255,255,0.93)',
+            backdropFilter:       'saturate(180%) blur(28px)',
+            WebkitBackdropFilter: 'saturate(180%) blur(28px)',
+            border:               '1px solid rgba(255,255,255,0.90)',
             borderRadius:         24,
             padding:              '44px 44px 48px',
-            boxShadow:            '0 4px 32px rgba(0,0,0,0.06), 0 1px 8px rgba(0,0,0,0.04)',
+            boxShadow:            '0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.05), 0 12px 32px rgba(0,0,0,0.07), 0 28px 60px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
           }}>
             {currentQ && (
               <QuestionScreen
@@ -1757,68 +1821,15 @@ export default function AssessmentFlow() {
         </div>
       </main>
 
-      {/* ══════════════════════════════════════════════════════════
-          PRU RIBBON — bottom decorative accent
-      ══════════════════════════════════════════════════════════ */}
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none fixed left-0 w-full"
-        style={{ bottom:0, height:140, zIndex:0, opacity:0.70 }}
-        viewBox="0 0 1440 140"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <linearGradient id="afRMain" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"   stopColor="#C40022" stopOpacity="0"/>
-            <stop offset="5%"   stopColor="#C40022" stopOpacity="1"/>
-            <stop offset="50%"  stopColor="#E60028" stopOpacity="1"/>
-            <stop offset="95%"  stopColor="#C40022" stopOpacity="1"/>
-            <stop offset="100%" stopColor="#C40022" stopOpacity="0"/>
-          </linearGradient>
-          <linearGradient id="afRHL" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"   stopColor="#FF5070" stopOpacity="0"/>
-            <stop offset="5%"   stopColor="#FF5070" stopOpacity="0.60"/>
-            <stop offset="50%"  stopColor="#FF2244" stopOpacity="0.50"/>
-            <stop offset="95%"  stopColor="#FF5070" stopOpacity="0.50"/>
-            <stop offset="100%" stopColor="#FF5070" stopOpacity="0"/>
-          </linearGradient>
-          <linearGradient id="afRShadow" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"   stopColor="#880018" stopOpacity="0"/>
-            <stop offset="5%"   stopColor="#880018" stopOpacity="0.35"/>
-            <stop offset="50%"  stopColor="#9C001C" stopOpacity="0.30"/>
-            <stop offset="95%"  stopColor="#880018" stopOpacity="0.25"/>
-            <stop offset="100%" stopColor="#880018" stopOpacity="0"/>
-          </linearGradient>
-          <linearGradient id="afGMain" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"   stopColor="#C8C8C8" stopOpacity="0"/>
-            <stop offset="5%"   stopColor="#C8C8C8" stopOpacity="0.40"/>
-            <stop offset="50%"  stopColor="#E0E0E0" stopOpacity="0.35"/>
-            <stop offset="95%"  stopColor="#C8C8C8" stopOpacity="0.30"/>
-            <stop offset="100%" stopColor="#C8C8C8" stopOpacity="0"/>
-          </linearGradient>
-        </defs>
-        <path d="M0,80  C360,80  560,128 720,122 S1080,88  1440,88"  fill="none" stroke="url(#afGMain)"   strokeWidth="16" strokeLinecap="round"/>
-        <path d="M0,74  C360,74  560,122 720,116 S1080,82  1440,82"  fill="none" stroke="url(#afRShadow)" strokeWidth="20" strokeLinecap="round"/>
-        <path d="M0,68  C360,68  560,116 720,110 S1080,76  1440,76"  fill="none" stroke="url(#afRMain)"   strokeWidth="16" strokeLinecap="round"/>
-        <path d="M0,62  C360,62  560,110 720,104 S1080,70  1440,70"  fill="none" stroke="url(#afRHL)"     strokeWidth="4"  strokeLinecap="round"/>
-      </svg>
-
-      {/* ══════════════════════════════════════════════════════════
-          TRUST FOOTER — fixed, minimal, above the ribbon
-      ══════════════════════════════════════════════════════════ */}
+      {/* z-20 — TRUST FOOTER: transparent, floats above ribbon */}
       <footer style={{
-        position:             'fixed',
-        bottom:               0, left:0, right:0,
-        zIndex:               5,
-        padding:              '9px 24px 10px',
-        textAlign:            'center',
-        background:           'rgba(255,255,255,0.82)',
-        backdropFilter:       'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderTop:            '1px solid rgba(0,0,0,0.05)',
+        position:   'fixed',
+        bottom:     0, left:0, right:0,
+        zIndex:     20,
+        padding:    '10px 24px 11px',
+        textAlign:  'center',
       }}>
-        <p style={{ fontSize:10, color:'rgba(17,17,17,0.32)', letterSpacing:'0.06em', margin:0 }}>
+        <p style={{ fontSize:10, color:'rgba(17,17,17,0.30)', letterSpacing:'0.06em', margin:0 }}>
           🔒&nbsp; Confidential &nbsp;·&nbsp; Free &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; PRU Life UK Licensed Advisor
         </p>
       </footer>
