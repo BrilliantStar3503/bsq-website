@@ -1298,7 +1298,7 @@ export default function AssessmentFlow() {
     return (
       <div className="min-h-screen flex flex-col" style={{ background: 'transparent' }}>
         <style>{`
-          html, body { overscroll-behavior: none; background: #0d1117; }
+          html, body { background: #0d1117; }
           @keyframes af-fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
           @keyframes scan-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.35; transform:scale(0.75); } }
           .af-fade { animation: af-fade-in 0.45s ease both; }
@@ -1339,14 +1339,7 @@ export default function AssessmentFlow() {
         <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#f5f5f7' }} />
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
         <style>{`
-          /* ── Scroll containment — prevents iOS/macOS overscroll bounce ──
-             revealing content above the fixed navbar. Applied to html+body
-             only while this phase is mounted; cleaned up on unmount via
-             React's style tag lifecycle (tag removed when component unmounts). */
-          html, body {
-            overscroll-behavior: none;
-            background: #f5f5f7;
-          }
+          html, body { background: #f5f5f7; }
 
           /* ═══════════════════════════════════════════════════════════════
              Assessment Results — Scoped Button System
@@ -1659,7 +1652,7 @@ export default function AssessmentFlow() {
       }}
     >
       <style>{`
-        html, body { overscroll-behavior: none; background: #f6f8ff; }
+        html, body { background: #f6f8ff; }
         @keyframes af-fade-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
         .af-fade { animation: af-fade-in 0.45s cubic-bezier(0.16,1,0.3,1) both; }
         @keyframes af-glow-pulse { 0%,100% { opacity:0.40; } 50% { opacity:1; } }
@@ -1809,7 +1802,7 @@ export default function AssessmentFlow() {
       {/* z-10 — MAIN CONTENT */}
       <main
         className="relative flex-1 flex flex-col justify-center"
-        style={{ padding:'12px 20px 44px', zIndex:10, minHeight:0, overflow:'hidden' }}
+        style={{ padding:'12px 20px 44px', zIndex:10, minHeight:0 }}
       >
         {/* Constrains card height to remaining viewport minus header (52px) + padding */}
         <div style={{ maxWidth:620, margin:'0 auto', width:'100%', display:'flex', flexDirection:'column', maxHeight:'calc(100dvh - 116px)' }}>
