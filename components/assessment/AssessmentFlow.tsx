@@ -1296,7 +1296,7 @@ export default function AssessmentFlow() {
   // ── Render — single source of truth ──────────────────────────────
   if (phase === 'analyzing') {
     return (
-      <div className="min-h-screen flex flex-col" style={{ background: 'transparent', overscrollBehavior: 'none' }}>
+      <div className="min-h-screen flex flex-col" style={{ background: 'transparent' }}>
         <style>{`
           html, body { overscroll-behavior: none; background: #0d1117; }
           @keyframes af-fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
@@ -1334,7 +1334,7 @@ export default function AssessmentFlow() {
 
   if (phase === 'results') {
     return (
-      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f5f5f7', position: 'relative', zIndex: 0, overscrollBehavior: 'none' }}>
+      <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f5f5f7', position: 'relative', zIndex: 0 }}>
         {/* Full-viewport background — fixed so iOS bounce never reveals white */}
         <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#f5f5f7' }} />
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
