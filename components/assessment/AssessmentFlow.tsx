@@ -1540,30 +1540,71 @@ export default function AssessmentFlow() {
           }
         `}</style>
 
-        {/* ══ Results — premium light navbar ══════════════════════ */}
+        {/* ══ Results — Prudential red navbar with ribbon ══════════ */}
         <div style={{
           position:   'fixed', top: 0, left: 0, right: 0, zIndex: 999,
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
         }}>
-          {/* PRU red accent line */}
-          <div style={{ height: 3, background: 'linear-gradient(90deg, #ED1B2E 0%, #c0111f 55%, rgba(237,27,46,0.18) 85%, transparent 100%)' }} />
-
-          {/* Main nav bar */}
           <div style={{
+            position:             'relative',
+            overflow:             'hidden',
             background:           pageScrolled
-              ? 'rgba(255,255,255,0.98)'
-              : 'rgba(255,255,255,0.94)',
-            backdropFilter:       'saturate(180%) blur(20px)',
-            WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-            borderBottom:         '1px solid #E5E7EB',
+              ? 'rgba(176,12,28,0.97)'
+              : 'linear-gradient(100deg, #B91C1C 0%, #ED1B2E 48%, #C0111F 100%)',
+            backdropFilter:       'saturate(200%) blur(20px)',
+            WebkitBackdropFilter: 'saturate(200%) blur(20px)',
+            borderBottom:         '1px solid rgba(0,0,0,0.14)',
             boxShadow:            pageScrolled
-              ? '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05)'
-              : '0 1px 2px rgba(0,0,0,0.04)',
-            transition:           'background 0.25s ease, box-shadow 0.25s ease',
+              ? '0 2px 20px rgba(176,12,28,0.35), 0 1px 4px rgba(0,0,0,0.18)'
+              : '0 2px 16px rgba(185,28,28,0.28), 0 1px 3px rgba(0,0,0,0.12)',
+            transition:           'background 0.3s ease, box-shadow 0.3s ease',
           }}>
+
+            {/* Ribbon — flows behind nav content */}
+            <svg
+              aria-hidden="true"
+              style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
+              viewBox="0 0 1440 48"
+              preserveAspectRatio="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <linearGradient id="nbRMain" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%"   stopColor="#ffffff" stopOpacity="0"/>
+                  <stop offset="12%"  stopColor="#ffffff" stopOpacity="0.14"/>
+                  <stop offset="52%"  stopColor="#ffffff" stopOpacity="0.09"/>
+                  <stop offset="88%"  stopColor="#ffffff" stopOpacity="0.12"/>
+                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
+                </linearGradient>
+                <linearGradient id="nbRHL" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%"   stopColor="#ffffff" stopOpacity="0"/>
+                  <stop offset="18%"  stopColor="#ffffff" stopOpacity="0.26"/>
+                  <stop offset="58%"  stopColor="#ffffff" stopOpacity="0.16"/>
+                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
+                </linearGradient>
+                <linearGradient id="nbRDark" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%"   stopColor="#000000" stopOpacity="0"/>
+                  <stop offset="10%"  stopColor="#000000" stopOpacity="0.12"/>
+                  <stop offset="60%"  stopColor="#000000" stopOpacity="0.08"/>
+                  <stop offset="100%" stopColor="#000000" stopOpacity="0"/>
+                </linearGradient>
+              </defs>
+              {/* Depth shadow */}
+              <path d="M -20,38  C 220,34  460,44  720,40  C 980,36  1220,30  1460,34"
+                    fill="none" stroke="url(#nbRDark)" strokeWidth="18" strokeLinecap="round"/>
+              {/* Main ribbon */}
+              <path d="M -20,30  C 220,26  460,36  720,32  C 980,28  1220,22  1460,26"
+                    fill="none" stroke="url(#nbRMain)" strokeWidth="13" strokeLinecap="round"/>
+              {/* Top highlight */}
+              <path d="M -20,21  C 220,17  460,27  720,23  C 980,19  1220,13  1460,17"
+                    fill="none" stroke="url(#nbRHL)"  strokeWidth="3.5" strokeLinecap="round"/>
+            </svg>
+
+            {/* Nav content — above ribbon */}
             <div style={{
+              position: 'relative', zIndex: 1,
               maxWidth: 960, margin: '0 auto', padding: '0 24px',
-              height: 44, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              height: 48, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
 
               {/* Left — Home */}
@@ -1571,14 +1612,14 @@ export default function AssessmentFlow() {
                 onClick={() => router.push('/')}
                 style={{
                   fontSize: 12, fontWeight: 500,
-                  color: '#6B7280',
+                  color: 'rgba(255,255,255,0.70)',
                   background: 'none', border: 'none', cursor: 'pointer',
-                  padding: '5px 8px', borderRadius: 6,
+                  padding: '5px 9px', borderRadius: 6,
                   display: 'flex', alignItems: 'center', gap: 5,
                   transition: 'color 0.15s ease, background 0.15s ease',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#1F1F1F'; e.currentTarget.style.background = '#F5F5F7' }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.background = 'transparent' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.70)'; e.currentTarget.style.background = 'transparent' }}
               >
                 <Home size={12} strokeWidth={2} />
                 <span className="hidden sm:inline">Home</span>
@@ -1586,10 +1627,10 @@ export default function AssessmentFlow() {
 
               {/* Center — Brand */}
               <div style={{ textAlign: 'center', lineHeight: 1.4 }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: '#1F1F1F', letterSpacing: '-0.01em' }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#ffffff', letterSpacing: '-0.01em' }}>
                   BSQ Financial Assessment
                 </div>
-                <div style={{ fontSize: 10, fontWeight: 500, color: '#ED1B2E', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.10em', textTransform: 'uppercase' }}>
                   PRU Life UK
                 </div>
               </div>
@@ -1597,10 +1638,11 @@ export default function AssessmentFlow() {
               {/* Right — Complete + Retake */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span className="hidden sm:inline-flex" style={{
-                  fontSize: 11, fontWeight: 500, color: '#ED1B2E',
+                  fontSize: 11, fontWeight: 600, color: '#ffffff',
                   display: 'inline-flex', alignItems: 'center', gap: 4,
-                  padding: '3px 8px', borderRadius: 99,
-                  background: '#FCEBED',
+                  padding: '3px 9px', borderRadius: 99,
+                  background: 'rgba(255,255,255,0.18)',
+                  border: '1px solid rgba(255,255,255,0.22)',
                 }}>
                   <CheckCircle size={10} strokeWidth={2.5} /> Complete
                 </span>
@@ -1608,14 +1650,14 @@ export default function AssessmentFlow() {
                   onClick={handleRetake}
                   style={{
                     fontSize: 12, fontWeight: 500,
-                    color: '#6B7280',
+                    color: 'rgba(255,255,255,0.70)',
                     background: 'none', border: 'none', cursor: 'pointer',
-                    padding: '5px 8px', borderRadius: 6,
+                    padding: '5px 9px', borderRadius: 6,
                     display: 'flex', alignItems: 'center', gap: 5,
                     transition: 'color 0.15s ease, background 0.15s ease',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#1F1F1F'; e.currentTarget.style.background = '#F5F5F7' }}
-                  onMouseLeave={e => { e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.background = 'transparent' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)' }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.70)'; e.currentTarget.style.background = 'transparent' }}
                 >
                   <RotateCcw size={11} strokeWidth={2} />
                   <span className="hidden sm:inline">Retake</span>
@@ -1626,8 +1668,8 @@ export default function AssessmentFlow() {
           </div>
         </div>
 
-        {/* Spacer — 3px accent + 44px nav */}
-        <div style={{ height: 47, flexShrink: 0 }} />
+        {/* Spacer — 48px red navbar */}
+        <div style={{ height: 48, flexShrink: 0 }} />
 
         {/* ── Main content ────────────────────────────────────────── */}
         <div className="relative z-10 flex-1 py-10">
