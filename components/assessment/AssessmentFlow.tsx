@@ -1537,85 +1537,94 @@ export default function AssessmentFlow() {
           }
         `}</style>
 
-        {/* ══ Apple-style two-layer fixed header ══════════════════ */}
+        {/* ══ Results — premium light navbar ══════════════════════ */}
         <div style={{
-          position: 'fixed', top: BSQ_H, left: 0, right: 0, zIndex: 999,
+          position:   'fixed', top: 0, left: 0, right: 0, zIndex: 999,
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-          transition: 'top 0.2s linear',
         }}>
-          {/* Layer 1 — 2px PRU red accent (identity, not decoration) */}
-          <div style={{ height: ACCENT_H, background: 'linear-gradient(90deg, #ff3b3b, #b30000 70%, transparent)' }} />
+          {/* PRU red accent line */}
+          <div style={{ height: 3, background: 'linear-gradient(90deg, #ED1B2E 0%, #c0111f 55%, rgba(237,27,46,0.18) 85%, transparent 100%)' }} />
 
-          {/* Layer 2 — 44px main nav (Apple standard height) */}
+          {/* Main nav bar */}
           <div style={{
-            background:           pageScrolled ? 'rgba(18,18,20,0.97)' : 'rgba(18,18,20,0.88)',
+            background:           pageScrolled
+              ? 'rgba(255,255,255,0.98)'
+              : 'rgba(255,255,255,0.94)',
             backdropFilter:       'saturate(180%) blur(20px)',
             WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-            borderBottom:         '1px solid rgba(255,255,255,0.07)',
-            transition:           'background 0.3s ease',
+            borderBottom:         '1px solid #E5E7EB',
+            boxShadow:            pageScrolled
+              ? '0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05)'
+              : '0 1px 2px rgba(0,0,0,0.04)',
+            transition:           'background 0.25s ease, box-shadow 0.25s ease',
           }}>
             <div style={{
-              maxWidth: 960, margin: '0 auto', padding: '0 20px',
+              maxWidth: 960, margin: '0 auto', padding: '0 24px',
               height: 44, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
 
-              {/* Left — back (quiet link, weight 400) */}
+              {/* Left — Home */}
               <button
                 onClick={() => router.push('/')}
                 style={{
-                  fontSize: 12, fontWeight: 400, letterSpacing: 0,
-                  color: 'rgba(255,255,255,0.35)',
-                  background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0',
-                  display: 'flex', alignItems: 'center', gap: 4,
-                  transition: 'color 0.2s ease',
+                  fontSize: 12, fontWeight: 500,
+                  color: '#6B7280',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  padding: '5px 8px', borderRadius: 6,
+                  display: 'flex', alignItems: 'center', gap: 5,
+                  transition: 'color 0.15s ease, background 0.15s ease',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.8)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
+                onMouseEnter={e => { e.currentTarget.style.color = '#1F1F1F'; e.currentTarget.style.background = '#F5F5F7' }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.background = 'transparent' }}
               >
-                <Home size={12} />
+                <Home size={12} strokeWidth={2} />
                 <span className="hidden sm:inline">Home</span>
               </button>
 
-              {/* Center — Brand (12px / 500 — SF Pro feel) */}
-              <div style={{ textAlign: 'center', lineHeight: 1.3 }}>
-                <div style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.01em' }}>
+              {/* Center — Brand */}
+              <div style={{ textAlign: 'center', lineHeight: 1.4 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#1F1F1F', letterSpacing: '-0.01em' }}>
                   BSQ Financial Assessment
                 </div>
-                <div style={{ fontSize: 10, fontWeight: 400, color: '#ff3b3b', letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.85 }}>
+                <div style={{ fontSize: 10, fontWeight: 500, color: '#ED1B2E', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                   PRU Life UK
                 </div>
               </div>
 
-              {/* Right — status + retake (compact, text-only) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {/* Right — Complete + Retake */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span className="hidden sm:inline-flex" style={{
-                  fontSize: 10, fontWeight: 400, color: '#ff3b3b',
-                  display: 'inline-flex', alignItems: 'center', gap: 4, opacity: 0.9,
+                  fontSize: 11, fontWeight: 500, color: '#ED1B2E',
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  padding: '3px 8px', borderRadius: 99,
+                  background: '#FCEBED',
                 }}>
-                  <CheckCircle size={10} /> Complete
+                  <CheckCircle size={10} strokeWidth={2.5} /> Complete
                 </span>
                 <button
                   onClick={handleRetake}
                   style={{
-                    fontSize: 12, fontWeight: 400,
-                    color: 'rgba(255,255,255,0.35)',
-                    background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0',
-                    display: 'flex', alignItems: 'center', gap: 4,
-                    transition: 'color 0.2s ease',
+                    fontSize: 12, fontWeight: 500,
+                    color: '#6B7280',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    padding: '5px 8px', borderRadius: 6,
+                    display: 'flex', alignItems: 'center', gap: 5,
+                    transition: 'color 0.15s ease, background 0.15s ease',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#ff3b3b')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.35)')}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#1F1F1F'; e.currentTarget.style.background = '#F5F5F7' }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.background = 'transparent' }}
                 >
-                  <RotateCcw size={11} />
+                  <RotateCcw size={11} strokeWidth={2} />
                   <span className="hidden sm:inline">Retake</span>
                 </button>
               </div>
+
             </div>
           </div>
         </div>
 
-        {/* Spacer — compensates for fixed header height */}
-        <div style={{ height: ACCENT_H + BSQ_NAV_H, flexShrink: 0 }} />
+        {/* Spacer — 3px accent + 44px nav */}
+        <div style={{ height: 47, flexShrink: 0 }} />
 
         {/* ── Main content ────────────────────────────────────────── */}
         <div className="relative z-10 flex-1 py-10">
