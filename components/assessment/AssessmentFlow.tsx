@@ -87,8 +87,8 @@ function ScoreRing({ score }: { score: number }) {
 function ProgressBar({ step, total }: { step: number; total: number }) {
   const pct = Math.round((step / total) * 100)
   return (
-    <div className="w-full mb-10">
-      <div className="flex justify-between text-xs mb-3">
+    <div className="w-full mb-4">
+      <div className="flex justify-between text-xs mb-2">
         <span className="font-medium tracking-wide" style={{ color: 'rgba(0,0,0,0.55)' }}>Step {step + 1} of {total}</span>
         <span className="font-medium tabular-nums" style={{ color: 'rgba(0,0,0,0.55)' }}>{pct}%</span>
       </div>
@@ -124,34 +124,34 @@ function QuestionScreen({ question, onAnswer }: { question: Question; onAnswer: 
   return (
     <div className="af-fade w-full">
       {/* Question */}
-      <div className="mb-10 text-center">
-        <h1 style={{ fontSize: 28, fontWeight: 600, color: '#111111', lineHeight: 1.3, marginBottom: '0.75rem' }}>{q.question}</h1>
+      <div className="mb-4 text-center">
+        <h1 style={{ fontSize: 'clamp(18px, 4vh, 26px)', fontWeight: 600, color: '#111111', lineHeight: 1.3, marginBottom: '0.5rem' }}>{q.question}</h1>
         {q.subtitle && (
-          <p className="text-sm md:text-base leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(0,0,0,0.65)' }}>{q.subtitle}</p>
+          <p className="text-xs sm:text-sm leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(0,0,0,0.60)' }}>{q.subtitle}</p>
         )}
       </div>
 
       {/* Options */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         {q.options.map((opt) => {
           const isSelected = selected === opt
           return (
-            <div key={opt} className="relative rounded-2xl">
+            <div key={opt} className="relative rounded-xl">
               <GlowingEffect
-                proximity={90}
-                spread={isSelected ? 55 : 38}
+                proximity={80}
+                spread={isSelected ? 50 : 32}
                 inactiveZone={0}
                 borderWidth={1}
                 color={isSelected ? 'rgba(220,38,38,0.7)' : 'rgba(0,0,0,0.12)'}
               />
               <button
                 onClick={() => choose(opt)}
-                className="relative w-full text-left px-6 py-5 rounded-2xl active:scale-[0.99]"
+                className="relative w-full text-left px-5 py-3 rounded-xl active:scale-[0.99]"
                 style={{
                   background:  isSelected ? 'rgba(220,0,0,0.07)' : 'rgba(0,0,0,0.025)',
                   border:      `1px solid ${isSelected ? 'rgba(220,0,0,0.6)' : 'rgba(0,0,0,0.12)'}`,
                   boxShadow:   isSelected
-                    ? '0 4px 24px rgba(220,0,0,0.13), 0 1px 4px rgba(220,0,0,0.08)'
+                    ? '0 3px 16px rgba(220,0,0,0.12), 0 1px 4px rgba(220,0,0,0.07)'
                     : 'none',
                   transform:   isSelected ? 'translateY(-1px)' : 'translateY(0)',
                   transition:  'background 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
@@ -162,8 +162,8 @@ function QuestionScreen({ question, onAnswer }: { question: Question; onAnswer: 
                     const el = e.currentTarget
                     el.style.background  = 'rgba(0,0,0,0.02)'
                     el.style.borderColor = 'rgba(0,0,0,0.22)'
-                    el.style.transform   = 'translateY(-2px)'
-                    el.style.boxShadow   = '0 4px 20px rgba(0,0,0,0.09), 0 1px 6px rgba(0,0,0,0.06)'
+                    el.style.transform   = 'translateY(-1px)'
+                    el.style.boxShadow   = '0 3px 14px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05)'
                   }
                 }}
                 onMouseLeave={e => {
@@ -1645,7 +1645,7 @@ export default function AssessmentFlow() {
     <div
       className="flex flex-col"
       style={{
-        minHeight: '100dvh',
+        height: '100dvh',
         background: 'linear-gradient(165deg, #ffffff 0%, #f6f8ff 50%, #eef1ff 100%)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
         position: 'relative',
@@ -1656,6 +1656,10 @@ export default function AssessmentFlow() {
         @keyframes af-fade-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
         .af-fade { animation: af-fade-in 0.45s cubic-bezier(0.16,1,0.3,1) both; }
         @keyframes af-glow-pulse { 0%,100% { opacity:0.40; } 50% { opacity:1; } }
+        .af-card-scroll { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.10) transparent; }
+        .af-card-scroll::-webkit-scrollbar { width: 3px; }
+        .af-card-scroll::-webkit-scrollbar-track { background: transparent; }
+        .af-card-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.10); border-radius: 9999px; }
       `}</style>
 
       {/* ─── Z-INDEX MAP: z-1 glows · z-2 ribbon · z-10 card · z-20 footer · z-999 header ─── */}
@@ -1798,18 +1802,25 @@ export default function AssessmentFlow() {
       {/* z-10 — MAIN CONTENT */}
       <main
         className="relative flex-1 flex flex-col justify-center"
-        style={{ padding:'28px 24px 68px', zIndex:10 }}
+        style={{ padding:'12px 20px 44px', zIndex:10, minHeight:0, overflow:'hidden' }}
       >
-        <div style={{ maxWidth:620, margin:'0 auto', width:'100%' }}>
-          <div style={{
-            background:           'rgba(255,255,255,0.93)',
-            backdropFilter:       'saturate(180%) blur(28px)',
-            WebkitBackdropFilter: 'saturate(180%) blur(28px)',
-            border:               '1px solid rgba(255,255,255,0.90)',
-            borderRadius:         24,
-            padding:              '44px 44px 48px',
-            boxShadow:            '0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.05), 0 12px 32px rgba(0,0,0,0.07), 0 28px 60px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
-          }}>
+        {/* Constrains card height to remaining viewport minus header (52px) + padding */}
+        <div style={{ maxWidth:620, margin:'0 auto', width:'100%', display:'flex', flexDirection:'column', maxHeight:'calc(100dvh - 116px)' }}>
+          <div
+            className="af-card-scroll"
+            style={{
+              background:           'rgba(255,255,255,0.93)',
+              backdropFilter:       'saturate(180%) blur(28px)',
+              WebkitBackdropFilter: 'saturate(180%) blur(28px)',
+              border:               '1px solid rgba(255,255,255,0.90)',
+              borderRadius:         24,
+              padding:              'clamp(24px, 3.5vh, 40px) clamp(22px, 3.5vw, 40px)',
+              boxShadow:            '0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.05), 0 12px 32px rgba(0,0,0,0.07), 0 28px 60px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
+              flex:                 1,
+              minHeight:            0,
+              overflowY:            'auto',
+            }}
+          >
             {currentQ && (
               <QuestionScreen
                 key={safeStep}
