@@ -54,16 +54,35 @@ export default function HeroSection() {
       */}
       <link rel="preload" href={SCENE_URL} as="fetch" crossOrigin="anonymous" />
 
-      <section className="relative bg-gradient-to-b from-[#05060a] to-black text-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-10">
+      {/* ── Glass-white hero ── */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(160deg, #ffffff 0%, #f5f7ff 55%, #eef1ff 100%)',
+        }}
+      >
+        {/* Subtle decorative radial glow — top-right */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(237,27,46,0.07) 0%, transparent 70%)' }}
+        />
+        {/* Subtle decorative radial glow — bottom-left */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(100,116,255,0.06) 0%, transparent 70%)' }}
+        />
+
+        <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-10 relative">
 
           {/* ── LEFT — Text content ──────────────────────────────────── */}
           <div className="w-full md:w-1/2 min-w-0">
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-              <RotatingHook />
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900">
+              <RotatingHook theme="light" />
             </h1>
 
-            <p className="text-gray-400 mt-5 max-w-lg">
+            <p className="text-gray-500 mt-5 max-w-lg">
               Our system analyzes your income, coverage, and goals to detect gaps —
               and show what needs attention.
             </p>
@@ -76,31 +95,35 @@ export default function HeroSection() {
                 className="group relative inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm text-white transition-all duration-200 overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, #ed1b2e, #c1121f)',
-                  boxShadow: '0 6px 28px rgba(237,27,46,0.40)',
+                  boxShadow: '0 6px 28px rgba(237,27,46,0.35)',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 36px rgba(237,27,46,0.60)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
-                onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 6px 28px rgba(237,27,46,0.40)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 36px rgba(237,27,46,0.55)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 6px 28px rgba(237,27,46,0.35)'; e.currentTarget.style.transform = 'translateY(0)' }}
               >
                 Run Your 3-Minute Assessment →
               </button>
 
-              {/* SECONDARY CTA */}
+              {/* SECONDARY CTA — glass light */}
               <button
                 onClick={openCalendly}
-                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm text-white/80 transition-all duration-200"
+                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl font-bold text-sm transition-all duration-200"
                 style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.15)',
+                  background: 'rgba(255,255,255,0.70)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(0,0,0,0.10)',
+                  color: '#374151',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.10)'
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.30)'
-                  e.currentTarget.style.color = '#fff'
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.90)'
+                  e.currentTarget.style.borderColor = 'rgba(0,0,0,0.18)'
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.10)'
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'
-                  e.currentTarget.style.color = 'rgba(255,255,255,0.8)'
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.70)'
+                  e.currentTarget.style.borderColor = 'rgba(0,0,0,0.10)'
+                  e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)'
                 }}
               >
                 Book a Consultation
@@ -109,7 +132,7 @@ export default function HeroSection() {
 
             <HeroStatsPills className="mt-5" />
 
-            <p className="text-xs text-gray-500 mt-4">
+            <p className="text-xs text-gray-400 mt-4">
               Free &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; Confidential
             </p>
           </div>
