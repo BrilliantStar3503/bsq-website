@@ -831,10 +831,10 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           {result.gaps.map((gap, i) => {
             /* ── Per-severity design tokens ── */
             const sev = gap.severity === 'high'
-              ? { accent: '#b91c1c', accentMuted: 'rgba(185,28,28,0.7)', badgeBg: 'rgba(185,28,28,0.10)', badgeColor: 'rgba(185,28,28,0.9)', label: 'High Risk'     }
+              ? { accent: '#b91c1c', badgeBg: 'rgba(185,28,28,0.12)', badgeColor: 'rgba(220,60,60,0.85)',  label: 'High Risk'     }
               : gap.severity === 'medium'
-              ? { accent: '#c0392b', accentMuted: 'rgba(192,57,43,0.7)',  badgeBg: 'rgba(192,57,43,0.08)',  badgeColor: 'rgba(192,57,43,0.85)', label: 'Moderate Risk' }
-              : { accent: 'rgba(255,255,255,0.30)', accentMuted: 'rgba(255,255,255,0.20)', badgeBg: 'rgba(255,255,255,0.05)', badgeColor: 'rgba(255,255,255,0.45)', label: 'Low Risk' }
+              ? { accent: '#c0392b', badgeBg: 'rgba(192,57,43,0.10)', badgeColor: 'rgba(210,80,70,0.80)',  label: 'Moderate Risk' }
+              : { accent: '#6b7280', badgeBg: 'rgba(107,114,128,0.10)', badgeColor: 'rgba(160,165,175,0.75)', label: 'Low Risk'   }
 
             return (
               <motion.div
@@ -844,12 +844,12 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 transition={{ delay: 0.18 + i * 0.10, duration: 0.42, ease: 'easeOut' as const }}
                 className="group flex flex-col gap-4 rounded-2xl"
                 style={{
-                  background:   'linear-gradient(145deg, #202028 0%, #1a1a22 100%)',
-                  border:       '1px solid rgba(255,255,255,0.08)',
-                  borderLeft:   `3px solid ${sev.accent}`,
+                  background:   '#1c1c1e',
+                  border:       '1px solid rgba(255,255,255,0.07)',
+                  borderLeft:   `2.5px solid ${sev.accent}`,
                   borderRadius: 16,
                   padding:      24,
-                  boxShadow:    '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04)',
+                  boxShadow:    '0 1px 3px rgba(0,0,0,0.14), 0 4px 14px rgba(0,0,0,0.10)',
                   transition:   'transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
                   cursor:       'default',
                 }}
@@ -859,25 +859,25 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = 'rgba(255,255,255,0.14)'
+                  el.style.borderColor     = 'rgba(255,255,255,0.12)'
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = '0 6px 20px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)'
+                  el.style.boxShadow       = '0 2px 8px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.14)'
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor     = 'rgba(255,255,255,0.08)'
+                  el.style.borderColor     = 'rgba(255,255,255,0.07)'
                   el.style.borderLeftColor = sev.accent
-                  el.style.boxShadow       = '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04)'
+                  el.style.boxShadow       = '0 1px 3px rgba(0,0,0,0.14), 0 4px 14px rgba(0,0,0,0.10)'
                 }}
               >
                 {/* ── Top row: icon · title · badge ── */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
-                      style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.35)' }}>
+                      style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.42)' }}>
                       {gapIcon[gap.id] ?? <AlertTriangle size={14} />}
                     </div>
-                    <h4 style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.88)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
+                    <h4 style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.92)', lineHeight: 1.3, letterSpacing: '-0.01em' }}>
                       {gap.title}
                     </h4>
                   </div>
@@ -891,18 +891,18 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                 </div>
 
                 {/* ── Description ── */}
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.50)', lineHeight: 1.65, margin: 0 }}>
                   {gap.description}
                 </p>
 
                 {/* ── Key impact callout ── */}
                 <div style={{
-                  background:   'rgba(255,255,255,0.03)',
+                  background:   'rgba(255,255,255,0.04)',
                   borderLeft:   `2px solid ${sev.accent}`,
                   borderRadius: '0 6px 6px 0',
                   padding:      '9px 12px',
                 }}>
-                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.42)', lineHeight: 1.6, margin: 0, letterSpacing: '0.01em' }}>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.40)', lineHeight: 1.6, margin: 0, letterSpacing: '0.01em' }}>
                     {gap.consequence}
                   </p>
                 </div>
@@ -935,7 +935,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                     style={{
                       fontSize:       11,
                       fontWeight:     500,
-                      color:          'rgba(255,255,255,0.35)',
+                      color:          'rgba(255,255,255,0.30)',
                       textDecoration: 'none',
                       letterSpacing:  '0.02em',
                       display:        'inline-flex',
@@ -943,8 +943,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                       gap:            4,
                       transition:     'color 0.15s ease',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.70)' }}
-                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)' }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)' }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.30)' }}
                   >
                     Learn more <ArrowRight size={10} />
                   </a>
