@@ -1562,26 +1562,26 @@ export default function AssessmentFlow() {
               <button
                 onClick={() => router.push('/')}
                 style={{
-                  fontSize: 12, fontWeight: 500,
+                  fontSize: 14, fontWeight: 500,
                   color: 'rgba(255,255,255,0.70)',
                   background: 'none', border: 'none', cursor: 'pointer',
                   padding: '5px 9px', borderRadius: 6,
-                  display: 'flex', alignItems: 'center', gap: 5,
+                  display: 'flex', alignItems: 'center', gap: 6,
                   transition: 'color 0.15s ease, background 0.15s ease',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)' }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.70)'; e.currentTarget.style.background = 'transparent' }}
               >
-                <Home size={12} strokeWidth={2} />
+                <Home size={14} strokeWidth={2} />
                 <span className="hidden sm:inline">Home</span>
               </button>
 
               {/* Center — Brand */}
               <div style={{ textAlign: 'center', lineHeight: 1.4 }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: '#ffffff', letterSpacing: '-0.01em' }}>
+                <div style={{ fontSize: 15, fontWeight: 600, color: '#ffffff', letterSpacing: '-0.01em' }}>
                   BSQ Financial Assessment
                 </div>
-                <div style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.10em', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.10em', textTransform: 'uppercase' }}>
                   PRU Life UK
                 </div>
               </div>
@@ -1589,28 +1589,28 @@ export default function AssessmentFlow() {
               {/* Right — Complete + Retake */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span className="hidden sm:inline-flex" style={{
-                  fontSize: 11, fontWeight: 600, color: '#ffffff',
-                  display: 'inline-flex', alignItems: 'center', gap: 4,
-                  padding: '3px 9px', borderRadius: 99,
+                  fontSize: 13, fontWeight: 600, color: '#ffffff',
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  padding: '4px 11px', borderRadius: 99,
                   background: 'rgba(255,255,255,0.18)',
                   border: '1px solid rgba(255,255,255,0.22)',
                 }}>
-                  <CheckCircle size={10} strokeWidth={2.5} /> Complete
+                  <CheckCircle size={12} strokeWidth={2.5} /> Complete
                 </span>
                 <button
                   onClick={handleRetake}
                   style={{
-                    fontSize: 12, fontWeight: 500,
+                    fontSize: 14, fontWeight: 500,
                     color: 'rgba(255,255,255,0.70)',
                     background: 'none', border: 'none', cursor: 'pointer',
                     padding: '5px 9px', borderRadius: 6,
-                    display: 'flex', alignItems: 'center', gap: 5,
+                    display: 'flex', alignItems: 'center', gap: 6,
                     transition: 'color 0.15s ease, background 0.15s ease',
                   }}
                   onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)' }}
                   onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.70)'; e.currentTarget.style.background = 'transparent' }}
                 >
-                  <RotateCcw size={11} strokeWidth={2} />
+                  <RotateCcw size={13} strokeWidth={2} />
                   <span className="hidden sm:inline">Retake</span>
                 </button>
               </div>
