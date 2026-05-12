@@ -4,9 +4,8 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import HeaderWrapper from "@/components/ui/HeaderWrapper";
-import BsqFooter from "@/components/ui/bsq-footer";
+import FooterWrapper from "@/components/ui/FooterWrapper";
 import UtmCapture from "@/components/ui/utm-capture";
-import { MessengerChat } from "@/components/ui/messenger-chat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,9 +39,8 @@ export default function RootLayout({
         <UtmCapture />
         <HeaderWrapper />
         {children}
-        <BsqFooter />
+        <FooterWrapper />
         <Analytics />
-        <MessengerChat />
         {/* Calendly popup widget script — loads after page is interactive */}
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"

@@ -1634,168 +1634,194 @@ export default function AssessmentFlow() {
     )
   }
 
-  // phase === 'question' (default)
+  // ─── phase === 'question' — focused KYC-style onboarding layout ─────
+  const visibleQs  = getVisibleQuestions(answers as Record<string, string>)
+  const safeStep   = Math.min(step, visibleQs.length - 1)
+  const currentQ   = visibleQs[safeStep]
+  const totalSteps = visibleQs.length
+  const pct        = Math.round(((safeStep + 1) / totalSteps) * 100)
+
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden" style={{
-      background: 'linear-gradient(160deg, #ffffff 0%, #f5f7ff 55%, #eef1ff 100%)',
-    }}>
+    <div
+      className="flex flex-col overflow-hidden"
+      style={{
+        minHeight: '100dvh',
+        background: 'linear-gradient(160deg, #ffffff 0%, #f5f7ff 55%, #eef1ff 100%)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
+      }}
+    >
       <style>{`
-        @keyframes af-fade-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-        .af-fade { animation: af-fade-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
-        @keyframes af-glow-pulse { 0%,100% { opacity:0.5; } 50% { opacity:1; } }
+        @keyframes af-fade-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        .af-fade { animation: af-fade-in 0.45s cubic-bezier(0.16,1,0.3,1) both; }
+        @keyframes af-glow-pulse { 0%,100% { opacity:0.45; } 50% { opacity:1; } }
+        @keyframes af-bar-grow { from { width: 0%; } to { width: ${pct}%; } }
       `}</style>
 
-      {/* Subtle radial glow — top-right, matching homepage */}
-      <div className="pointer-events-none absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full" style={{
-        background: 'radial-gradient(circle, rgba(237,27,46,0.06) 0%, transparent 70%)',
-      }} />
-      {/* Subtle radial glow — bottom-left */}
-      <div className="pointer-events-none absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full" style={{
-        background: 'radial-gradient(circle, rgba(100,116,255,0.05) 0%, transparent 70%)',
-      }} />
+      {/* ── Subtle ambient glows ── */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <div style={{ position:'absolute', top:'-10%', right:'-5%', width:480, height:480, borderRadius:'50%', background:'radial-gradient(circle, rgba(237,27,46,0.055) 0%, transparent 70%)' }} />
+        <div style={{ position:'absolute', bottom:'-8%', left:'-5%', width:420, height:420, borderRadius:'50%', background:'radial-gradient(circle, rgba(100,116,255,0.045) 0%, transparent 70%)' }} />
+      </div>
 
-      {/* ══ Glass-white two-layer fixed header ══════════════════ */}
-      <div style={{
-        position: 'fixed', top: BSQ_H, left: 0, right: 0, zIndex: 999,
-        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
-        transition: 'top 0.2s linear',
+      {/* ══════════════════════════════════════════════════════════
+          FOCUSED HEADER — logo · progress bar · step counter
+          Single 52 px bar — no nav, no clutter
+      ══════════════════════════════════════════════════════════ */}
+      <header style={{
+        position:             'fixed',
+        top: 0, left: 0, right: 0,
+        height:               52,
+        zIndex:               999,
+        display:              'flex',
+        alignItems:           'center',
+        gap:                  16,
+        padding:              '0 20px',
+        background:           pageScrolled ? 'rgba(255,255,255,0.97)' : 'rgba(255,255,255,0.90)',
+        backdropFilter:       'saturate(200%) blur(20px)',
+        WebkitBackdropFilter: 'saturate(200%) blur(20px)',
+        borderBottom:         '1px solid rgba(0,0,0,0.07)',
+        transition:           'background 0.3s ease',
       }}>
 
-        {/* Layer 1 — Announcement bar (trust strip) */}
-        <div style={{
-          background:           pageScrolled ? 'rgba(255,255,255,0.97)' : 'rgba(255,255,255,0.88)',
-          backdropFilter:       'saturate(180%) blur(20px)',
-          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-          borderBottom:         '1px solid rgba(0,0,0,0.06)',
-          padding:              '6px 24px',
-          transition:           'background 0.3s ease',
-        }}>
-          <div style={{ maxWidth: 960, margin: '0 auto' }}>
-            <AssessmentTrustStrip theme="light" />
+        {/* Left — compact BSQ logo */}
+        <a href="/" aria-label="BSQ Home" style={{ display:'flex', alignItems:'center', gap:7, flexShrink:0, textDecoration:'none' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/bsq-logo.png" alt="BSQ" width={28} height={28} style={{ objectFit:'contain', display:'block' }} />
+          <span style={{ fontSize:13, fontWeight:700, color:'#111', letterSpacing:'0.01em', lineHeight:1 }}>BSQ</span>
+        </a>
+
+        {/* Center — animated progress bar */}
+        <div style={{ flex:1, position:'relative' }}>
+          {/* Track */}
+          <div style={{ height:3, background:'rgba(0,0,0,0.07)', borderRadius:9999, overflow:'hidden' }}>
+            {/* Fill */}
+            <div style={{
+              height:     '100%',
+              width:      `${pct}%`,
+              background: 'linear-gradient(90deg, #D92D20 0%, #b91c1c 100%)',
+              borderRadius: 9999,
+              transition: 'width 0.55s cubic-bezier(0.16,1,0.3,1)',
+            }} />
           </div>
         </div>
 
-        {/* Layer 2 — Main nav */}
-        <div style={{
-          background:           pageScrolled ? 'rgba(255,255,255,0.98)' : 'rgba(255,255,255,0.92)',
-          backdropFilter:       'saturate(180%) blur(20px)',
-          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-          borderBottom:         '1px solid rgba(0,0,0,0.08)',
-          transition:           'background 0.3s ease',
-        }}>
-          <div style={{
-            maxWidth: 960, margin: '0 auto', padding: '0 24px',
-            height: BSQ_NAV_H, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        {/* Right — step counter */}
+        <div style={{ display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
+          <span style={{
+            fontSize:12, fontWeight:400,
+            color:'rgba(17,17,17,0.38)',
+            fontVariantNumeric:'tabular-nums',
+            letterSpacing:'0.02em',
           }}>
-            {/* Brand */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{
-                width: 5, height: 5, borderRadius: '50%', flexShrink: 0,
-                background: '#D92D20', boxShadow: '0 0 6px rgba(217,45,32,0.5)',
-                display: 'inline-block',
-                animation: 'af-glow-pulse 2s ease-in-out infinite',
-              }} />
-              <span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(17,17,17,0.70)', letterSpacing: '0.01em' }}>
-                BSQ Financial Assessment
-              </span>
-            </div>
-
-            {/* Step counter */}
-            <span style={{
-              fontSize: 12, fontWeight: 400,
-              color: 'rgba(17,17,17,0.35)',
-              fontVariantNumeric: 'tabular-nums',
-            }}>
-              {step + 1} / {getVisibleQuestions(answers as Record<string, string>).length}
-            </span>
-          </div>
+            {safeStep + 1}&thinsp;<span style={{ opacity:0.5 }}>of</span>&thinsp;{totalSteps}
+          </span>
+          {/* Subtle live dot */}
+          <span style={{
+            width:5, height:5, borderRadius:'50%', flexShrink:0, display:'inline-block',
+            background:'#D92D20', boxShadow:'0 0 5px rgba(217,45,32,0.55)',
+            animation:'af-glow-pulse 2s ease-in-out infinite',
+          }} />
         </div>
-      </div>
-      {/* Spacer — compensates for fixed header height */}
-      <div style={{ height: TRUST_H + BSQ_NAV_H, flexShrink: 0 }} />
+      </header>
 
-      {/* Main content — glass card */}
-      <div className="relative flex-1 flex flex-col justify-center px-6 md:px-12 py-16" style={{ zIndex: 2 }}>
-        <div className="max-w-2xl mx-auto w-full">
+      {/* Header spacer */}
+      <div style={{ height:52, flexShrink:0 }} />
+
+      {/* ══════════════════════════════════════════════════════════
+          QUESTION AREA — full-bleed, vertically centred
+          No card box — question breathes on the page directly
+      ══════════════════════════════════════════════════════════ */}
+      <main
+        className="relative flex-1 flex flex-col justify-center"
+        style={{ padding:'32px 24px 100px', zIndex:2 }}
+      >
+        {/* Question card — generous max-width, subtle elevation */}
+        <div style={{ maxWidth:640, margin:'0 auto', width:'100%' }}>
           <div style={{
-            background:           'rgba(255,255,255,0.92)',
-            backdropFilter:       'saturate(180%) blur(20px)',
-            WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-            border:               '1px solid rgba(0,0,0,0.10)',
-            borderRadius:         20,
-            padding:              '40px 40px 44px',
-            boxShadow:            '0 8px 40px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04)',
+            background:           'rgba(255,255,255,0.88)',
+            backdropFilter:       'saturate(180%) blur(24px)',
+            WebkitBackdropFilter: 'saturate(180%) blur(24px)',
+            border:               '1px solid rgba(0,0,0,0.08)',
+            borderRadius:         24,
+            padding:              '44px 44px 48px',
+            boxShadow:            '0 4px 32px rgba(0,0,0,0.06), 0 1px 8px rgba(0,0,0,0.04)',
           }}>
-            {(() => {
-              const visible  = getVisibleQuestions(answers as Record<string, string>)
-              const safeStep = Math.min(step, visible.length - 1)
-              const currentQ = visible[safeStep]
-              if (!currentQ) return null
-              return (
-                <>
-                  <ProgressBar step={safeStep} total={visible.length} />
-                  <QuestionScreen key={safeStep} question={currentQ} onAnswer={handleAnswer} />
-                </>
-              )
-            })()}
+            {currentQ && (
+              <QuestionScreen
+                key={safeStep}
+                question={currentQ}
+                onAnswer={handleAnswer}
+              />
+            )}
           </div>
         </div>
-      </div>
+      </main>
 
-      {/* ── PRU ribbon — bottom edge ── */}
+      {/* ══════════════════════════════════════════════════════════
+          PRU RIBBON — bottom decorative accent
+      ══════════════════════════════════════════════════════════ */}
       <svg
-        className="absolute left-0 w-full pointer-events-none"
-        style={{ bottom: 0, height: 160, zIndex: 0, opacity: 0.75 }}
-        viewBox="0 0 1440 160"
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 w-full"
+        style={{ bottom:0, height:140, zIndex:0, opacity:0.70 }}
+        viewBox="0 0 1440 140"
         preserveAspectRatio="none"
         xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
       >
         <defs>
           <linearGradient id="afRMain" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%"   stopColor="#C40022" stopOpacity="0"/>
             <stop offset="5%"   stopColor="#C40022" stopOpacity="1"/>
-            <stop offset="40%"  stopColor="#E60028" stopOpacity="1"/>
-            <stop offset="60%"  stopColor="#E60028" stopOpacity="1"/>
+            <stop offset="50%"  stopColor="#E60028" stopOpacity="1"/>
             <stop offset="95%"  stopColor="#C40022" stopOpacity="1"/>
             <stop offset="100%" stopColor="#C40022" stopOpacity="0"/>
           </linearGradient>
           <linearGradient id="afRHL" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%"   stopColor="#FF5070" stopOpacity="0"/>
-            <stop offset="5%"   stopColor="#FF5070" stopOpacity="0.65"/>
-            <stop offset="50%"  stopColor="#FF2244" stopOpacity="0.55"/>
-            <stop offset="95%"  stopColor="#FF5070" stopOpacity="0.55"/>
+            <stop offset="5%"   stopColor="#FF5070" stopOpacity="0.60"/>
+            <stop offset="50%"  stopColor="#FF2244" stopOpacity="0.50"/>
+            <stop offset="95%"  stopColor="#FF5070" stopOpacity="0.50"/>
             <stop offset="100%" stopColor="#FF5070" stopOpacity="0"/>
           </linearGradient>
           <linearGradient id="afRShadow" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%"   stopColor="#880018" stopOpacity="0"/>
-            <stop offset="5%"   stopColor="#880018" stopOpacity="0.40"/>
-            <stop offset="50%"  stopColor="#9C001C" stopOpacity="0.35"/>
-            <stop offset="95%"  stopColor="#880018" stopOpacity="0.30"/>
+            <stop offset="5%"   stopColor="#880018" stopOpacity="0.35"/>
+            <stop offset="50%"  stopColor="#9C001C" stopOpacity="0.30"/>
+            <stop offset="95%"  stopColor="#880018" stopOpacity="0.25"/>
             <stop offset="100%" stopColor="#880018" stopOpacity="0"/>
           </linearGradient>
           <linearGradient id="afGMain" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%"   stopColor="#C8C8C8" stopOpacity="0"/>
-            <stop offset="5%"   stopColor="#C8C8C8" stopOpacity="0.45"/>
-            <stop offset="50%"  stopColor="#E0E0E0" stopOpacity="0.40"/>
-            <stop offset="95%"  stopColor="#C8C8C8" stopOpacity="0.35"/>
+            <stop offset="5%"   stopColor="#C8C8C8" stopOpacity="0.40"/>
+            <stop offset="50%"  stopColor="#E0E0E0" stopOpacity="0.35"/>
+            <stop offset="95%"  stopColor="#C8C8C8" stopOpacity="0.30"/>
             <stop offset="100%" stopColor="#C8C8C8" stopOpacity="0"/>
           </linearGradient>
         </defs>
-        <path d="M0,90  C360,90  560,148 720,142 S1080,100 1440,100"
-              fill="none" stroke="url(#afGMain)"   strokeWidth="18" strokeLinecap="round"/>
-        <path d="M0,84  C360,84  560,142 720,136 S1080,94  1440,94"
-              fill="none" stroke="url(#afRShadow)" strokeWidth="22" strokeLinecap="round"/>
-        <path d="M0,78  C360,78  560,136 720,130 S1080,88  1440,88"
-              fill="none" stroke="url(#afRMain)"   strokeWidth="18" strokeLinecap="round"/>
-        <path d="M0,72  C360,72  560,130 720,124 S1080,82  1440,82"
-              fill="none" stroke="url(#afRHL)"     strokeWidth="5"  strokeLinecap="round"/>
+        <path d="M0,80  C360,80  560,128 720,122 S1080,88  1440,88"  fill="none" stroke="url(#afGMain)"   strokeWidth="16" strokeLinecap="round"/>
+        <path d="M0,74  C360,74  560,122 720,116 S1080,82  1440,82"  fill="none" stroke="url(#afRShadow)" strokeWidth="20" strokeLinecap="round"/>
+        <path d="M0,68  C360,68  560,116 720,110 S1080,76  1440,76"  fill="none" stroke="url(#afRMain)"   strokeWidth="16" strokeLinecap="round"/>
+        <path d="M0,62  C360,62  560,110 720,104 S1080,70  1440,70"  fill="none" stroke="url(#afRHL)"     strokeWidth="4"  strokeLinecap="round"/>
       </svg>
 
-      {/* Footer */}
-      <div className="relative px-6 py-4 text-center" style={{ borderTop: '1px solid rgba(0,0,0,0.06)', zIndex: 2 }}>
-        <p style={{ fontSize: 10, color: '#86868b', letterSpacing: '0.05em' }}>Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Manila</p>
-      </div>
+      {/* ══════════════════════════════════════════════════════════
+          TRUST FOOTER — fixed, minimal, above the ribbon
+      ══════════════════════════════════════════════════════════ */}
+      <footer style={{
+        position:             'fixed',
+        bottom:               0, left:0, right:0,
+        zIndex:               5,
+        padding:              '9px 24px 10px',
+        textAlign:            'center',
+        background:           'rgba(255,255,255,0.82)',
+        backdropFilter:       'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderTop:            '1px solid rgba(0,0,0,0.05)',
+      }}>
+        <p style={{ fontSize:10, color:'rgba(17,17,17,0.32)', letterSpacing:'0.06em', margin:0 }}>
+          🔒&nbsp; Confidential &nbsp;·&nbsp; Free &nbsp;·&nbsp; No obligation &nbsp;·&nbsp; PRU Life UK Licensed Advisor
+        </p>
+      </footer>
     </div>
   )
 }

@@ -24,10 +24,13 @@ import { PruLifeHeader }  from '@/components/ui/pru-life-header'
 export const BSQ_HEADER_H = 56
 
 export default function HeaderWrapper() {
-  const pathname      = usePathname()
-  const isProductPage = pathname.startsWith('/products')
+  const pathname        = usePathname()
+  const isProductPage   = pathname.startsWith('/products')
+  // Assessment uses its own focused header — suppress the global nav entirely
+  const isAssessment    = pathname.startsWith('/assessment')
 
-  if (isProductPage) return <PruLifeHeader />
+  if (isAssessment)   return null
+  if (isProductPage)  return <PruLifeHeader />
 
   return (
     <>
