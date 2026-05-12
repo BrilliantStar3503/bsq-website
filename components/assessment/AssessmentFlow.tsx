@@ -1546,63 +1546,14 @@ export default function AssessmentFlow() {
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
         }}>
           <div style={{
-            position:             'relative',
-            overflow:             'hidden',
-            background:           pageScrolled
-              ? 'rgba(176,12,28,0.97)'
-              : 'linear-gradient(100deg, #B91C1C 0%, #ED1B2E 48%, #C0111F 100%)',
-            backdropFilter:       'saturate(200%) blur(20px)',
-            WebkitBackdropFilter: 'saturate(200%) blur(20px)',
-            borderBottom:         '1px solid rgba(0,0,0,0.14)',
-            boxShadow:            pageScrolled
-              ? '0 2px 20px rgba(176,12,28,0.35), 0 1px 4px rgba(0,0,0,0.18)'
-              : '0 2px 16px rgba(185,28,28,0.28), 0 1px 3px rgba(0,0,0,0.12)',
-            transition:           'background 0.3s ease, box-shadow 0.3s ease',
+            background:   'linear-gradient(180deg, #D91A2A 0%, #B91020 100%)',
+            borderBottom: '1px solid rgba(0,0,0,0.18)',
+            boxShadow:    '0 1px 3px rgba(0,0,0,0.12), 0 4px 16px rgba(150,0,16,0.20)',
+            transition:   'box-shadow 0.25s ease',
           }}>
 
-            {/* Ribbon — flows behind nav content */}
-            <svg
-              aria-hidden="true"
-              style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
-              viewBox="0 0 1440 48"
-              preserveAspectRatio="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <linearGradient id="nbRMain" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%"   stopColor="#ffffff" stopOpacity="0"/>
-                  <stop offset="12%"  stopColor="#ffffff" stopOpacity="0.14"/>
-                  <stop offset="52%"  stopColor="#ffffff" stopOpacity="0.09"/>
-                  <stop offset="88%"  stopColor="#ffffff" stopOpacity="0.12"/>
-                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
-                </linearGradient>
-                <linearGradient id="nbRHL" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%"   stopColor="#ffffff" stopOpacity="0"/>
-                  <stop offset="18%"  stopColor="#ffffff" stopOpacity="0.26"/>
-                  <stop offset="58%"  stopColor="#ffffff" stopOpacity="0.16"/>
-                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
-                </linearGradient>
-                <linearGradient id="nbRDark" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%"   stopColor="#000000" stopOpacity="0"/>
-                  <stop offset="10%"  stopColor="#000000" stopOpacity="0.12"/>
-                  <stop offset="60%"  stopColor="#000000" stopOpacity="0.08"/>
-                  <stop offset="100%" stopColor="#000000" stopOpacity="0"/>
-                </linearGradient>
-              </defs>
-              {/* Depth shadow */}
-              <path d="M -20,38  C 220,34  460,44  720,40  C 980,36  1220,30  1460,34"
-                    fill="none" stroke="url(#nbRDark)" strokeWidth="18" strokeLinecap="round"/>
-              {/* Main ribbon */}
-              <path d="M -20,30  C 220,26  460,36  720,32  C 980,28  1220,22  1460,26"
-                    fill="none" stroke="url(#nbRMain)" strokeWidth="13" strokeLinecap="round"/>
-              {/* Top highlight */}
-              <path d="M -20,21  C 220,17  460,27  720,23  C 980,19  1220,13  1460,17"
-                    fill="none" stroke="url(#nbRHL)"  strokeWidth="3.5" strokeLinecap="round"/>
-            </svg>
-
-            {/* Nav content — above ribbon */}
+            {/* Nav content */}
             <div style={{
-              position: 'relative', zIndex: 1,
               maxWidth: 960, margin: '0 auto', padding: '0 24px',
               height: 48, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
