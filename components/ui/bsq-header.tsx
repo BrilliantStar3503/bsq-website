@@ -144,8 +144,8 @@ function BsqLogo({ scrolled }: { scrolled: boolean }) {
             <span className="text-red-400 font-black text-xs">BSQ</span>
           </div>
         ) : (
-          /* Black-bg logo — displayed in a clipped rounded container */
-          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-black">
+          /* Logo — no background, transparent */
+          <div className="w-10 h-10 flex items-center justify-center">
             <Image
               src="/images/bsq-logo.png"
               alt="BSQ"
