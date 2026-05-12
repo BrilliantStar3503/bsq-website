@@ -99,8 +99,11 @@ function Pill({
    VARIANT B — Assessment trust strip (dark, inline)
    Used below the assessment header bar while answering questions
 ───────────────────────────────────────────────────────────────────── */
-export function AssessmentTrustStrip({ className }: { className?: string }) {
+export function AssessmentTrustStrip({ className, theme = 'dark' }: { className?: string; theme?: 'dark' | 'light' }) {
   const count = useCountUp(SITE_STATS.assessments, 1600, 300)
+  const muted  = theme === 'light' ? 'rgba(17,17,17,0.35)' : 'rgba(255,255,255,0.30)'
+  const strong = theme === 'light' ? 'rgba(17,17,17,0.70)' : 'rgba(255,255,255,0.50)'
+  const sep    = theme === 'light' ? 'rgba(17,17,17,0.12)' : 'rgba(255,255,255,0.10)'
 
   return (
     <div className={cn('flex items-center justify-center gap-3', className)}>
@@ -110,20 +113,20 @@ export function AssessmentTrustStrip({ className }: { className?: string }) {
           className="inline-block rounded-full"
           style={{ width: 5, height: 5, background: '#D92D20', boxShadow: '0 0 6px rgba(217,45,32,0.6)', animation: 'pulse 2s ease-in-out infinite' }}
         />
-        <span className="text-[10px] text-white/30 tracking-widest uppercase font-medium">Live</span>
+        <span className="text-[10px] tracking-widest uppercase font-medium" style={{ color: muted }}>Live</span>
       </span>
 
-      <span className="text-white/10">·</span>
+      <span style={{ color: sep }}>·</span>
 
-      <span className="text-[10px] text-white/30">
-        <span className="text-white/50 font-semibold tabular-nums">{fmt(count)}</span>
+      <span className="text-[10px]" style={{ color: muted }}>
+        <span className="font-semibold tabular-nums" style={{ color: strong }}>{fmt(count)}</span>
         {' '}people have taken this assessment
       </span>
 
-      <span className="text-white/10">·</span>
+      <span style={{ color: sep }}>·</span>
 
-      <span className="text-[10px] text-white/30">
-        <span className="text-white/50 font-semibold">{SITE_STATS.satisfactionRate}%</span>
+      <span className="text-[10px]" style={{ color: muted }}>
+        <span className="font-semibold" style={{ color: strong }}>{SITE_STATS.satisfactionRate}%</span>
         {' '}found their coverage gaps
       </span>
     </div>
