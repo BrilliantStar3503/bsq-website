@@ -74,11 +74,11 @@ export default function HeroSection() {
           style={{ background: 'radial-gradient(circle, rgba(100,116,255,0.06) 0%, transparent 70%)' }}
         />
 
-        {/* ── PRU ribbon — flows full-width at the bottom of the hero ── */}
+        {/* ── PRU ribbon — bottom edge, behind all content ── */}
         <svg
           className="absolute left-0 w-full pointer-events-none"
-          style={{ bottom: 0, height: 200, zIndex: 1, opacity: 0.80 }}
-          viewBox="0 0 1440 200"
+          style={{ bottom: 0, height: 160, zIndex: 0, opacity: 0.80 }}
+          viewBox="0 0 1440 160"
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
@@ -114,21 +114,18 @@ export default function HeroSection() {
               <stop offset="100%" stopColor="#C8C8C8" stopOpacity="0"/>
             </linearGradient>
           </defs>
-          {/* Gray companion — slightly below main */}
-          <path d="M0,58  C320,58  520,168 720,162 S1120,78  1440,78"
+          {/* Paths shifted down so ribbon sits in the bottom quarter only */}
+          <path d="M0,90  C360,90  560,148 720,142 S1080,100 1440,100"
                 fill="none" stroke="url(#heroGMain)"   strokeWidth="18" strokeLinecap="round"/>
-          {/* Red shadow — underside depth */}
-          <path d="M0,52  C320,52  520,162 720,156 S1120,72  1440,72"
+          <path d="M0,84  C360,84  560,142 720,136 S1080,94  1440,94"
                 fill="none" stroke="url(#heroRShadow)" strokeWidth="22" strokeLinecap="round"/>
-          {/* Red main ribbon */}
-          <path d="M0,45  C320,45  520,155 720,150 S1120,65  1440,65"
+          <path d="M0,78  C360,78  560,136 720,130 S1080,88  1440,88"
                 fill="none" stroke="url(#heroRMain)"   strokeWidth="18" strokeLinecap="round"/>
-          {/* Top highlight */}
-          <path d="M0,38  C320,38  520,148 720,143 S1120,58  1440,58"
+          <path d="M0,72  C360,72  560,130 720,124 S1080,82  1440,82"
                 fill="none" stroke="url(#heroRHL)"     strokeWidth="5"  strokeLinecap="round"/>
         </svg>
 
-        <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-10 relative">
+        <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-10 relative" style={{ zIndex: 2 }}>
 
           {/* ── LEFT — Text content ──────────────────────────────────── */}
           <div className="w-full md:w-1/2 min-w-0">
