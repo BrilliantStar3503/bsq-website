@@ -31,6 +31,11 @@ import {
   Star,
   BookOpen,
   ArrowRight,
+  Shield,
+  Heart,
+  BarChart2,
+  Banknote,
+  Package,
 } from 'lucide-react'
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -111,6 +116,40 @@ const aboutLinks2: LinkItem[] = [
   { title: 'Our Advisors',    href: '/about',    icon: Users    },
   { title: 'Certifications',  href: '/about',    icon: BookOpen },
   { title: 'Talk to Us',      href: 'https://m.me/Bstarquartzarea', icon: MessageCircle },
+]
+
+/* ─── Products sub-links ────────────────────────────────────────────── */
+const productLinks: LinkItem[] = [
+  {
+    title: 'PRUMillion Protect',
+    href:  '/products/pru-million-protect',
+    icon:  Shield,
+    description: 'Life cover from ₱1M · critical illness & death benefit',
+  },
+  {
+    title: 'PRUlink Elite Protector Series',
+    href:  '/products/elite-series',
+    icon:  BarChart2,
+    description: 'Investment-linked protection that grows with the market',
+  },
+  {
+    title: 'PRULifetime Income',
+    href:  '/prulifetime',
+    icon:  Sunset,
+    description: 'Guaranteed income for life — zero market risk',
+  },
+  {
+    title: 'PRULink Assurance Account Plus',
+    href:  '/products/prulink-assurance-account-plus',
+    icon:  Banknote,
+    description: 'VUL savings + flexible life protection in one plan',
+  },
+  {
+    title: 'PRULove for Life',
+    href:  '/products/prulove-for-life',
+    icon:  Heart,
+    description: 'Love-linked life plan designed for families & couples',
+  },
 ]
 
 /* ─── Scroll hook ───────────────────────────────────────────────────── */
@@ -351,6 +390,48 @@ export function BsqHeader() {
               </NavigationMenuContent>
             </NavigationMenuItem>
 
+            {/* Products dropdown */}
+            <NavigationMenuItem>
+              <NavigationMenuTrigger
+                className="text-sm transition-colors duration-300"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
+              >
+                Products
+              </NavigationMenuTrigger>
+              <NavigationMenuContent style={{ background: '#0d1117' }}>
+                <div className="p-3 w-[560px]">
+                  <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 px-2 mb-2">
+                    PRU Life UK Products
+                  </p>
+                  <ul className="grid grid-cols-2 gap-1">
+                    {productLinks.map((item) => (
+                      <li key={item.title}>
+                        <ListItem {...item} />
+                      </li>
+                    ))}
+                  </ul>
+                  <div
+                    className="mt-3 mx-2 rounded-lg px-4 py-3 flex items-center justify-between"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(220,38,38,0.12) 0%, rgba(185,28,28,0.08) 100%)',
+                      border: '1px solid rgba(220,38,38,0.2)',
+                    }}
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-white">Not sure which plan fits you?</p>
+                      <p className="text-[11px] text-white/40">Run the 3-minute assessment — free & confidential</p>
+                    </div>
+                    <a
+                      href="/assessment"
+                      className="flex items-center gap-1.5 text-xs font-bold text-red-400 hover:text-red-300 transition-colors whitespace-nowrap"
+                    >
+                      Find my plan <ArrowRight size={12} />
+                    </a>
+                  </div>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
             {/* About dropdown */}
             <NavigationMenuItem>
               <NavigationMenuTrigger
@@ -468,6 +549,36 @@ export function BsqHeader() {
             </p>
             <div className="space-y-1">
               {assessmentLinks.map((link) => (
+                <a
+                  key={link.title}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors"
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: 'rgba(220,38,38,0.12)', border: '1px solid rgba(220,38,38,0.18)' }}
+                  >
+                    <link.icon size={14} className="text-red-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold leading-none mb-0.5">{link.title}</p>
+                    {link.description && (
+                      <p className="text-[11px] text-white/35">{link.description}</p>
+                    )}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Products section */}
+          <div>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
+              Products
+            </p>
+            <div className="space-y-1">
+              {productLinks.map((link) => (
                 <a
                   key={link.title}
                   href={link.href}
