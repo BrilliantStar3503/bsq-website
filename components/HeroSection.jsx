@@ -58,7 +58,9 @@ export default function HeroSection() {
       <section
         className="relative overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #ffffff 0%, #f5f7ff 55%, #eef1ff 100%)',
+          background: 'linear-gradient(160deg, #ffffff 0%, #f8f8fa 50%, #f2f2f5 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
         }}
       >
         {/* Subtle decorative radial glow — top-right */}
