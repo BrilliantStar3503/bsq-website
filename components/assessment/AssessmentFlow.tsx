@@ -1357,38 +1357,65 @@ export default function AssessmentFlow() {
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* ── RIGHT UPPER — enters top-right, fans down-left across margin ── */}
-            <path d="M 1462,138 C 1348,172 1224,220 1038,312" fill="none" stroke="#C8102E" strokeOpacity="0.72" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M 1462,174 C 1348,208 1224,256 1053,346" fill="none" stroke="#C8102E" strokeOpacity="0.55" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M 1462,208 C 1348,242 1224,290 1067,378" fill="none" stroke="#ED1B2E" strokeOpacity="0.40" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M 1462,239 C 1348,273 1224,321 1080,407" fill="none" stroke="#ED1B2E" strokeOpacity="0.27" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M 1462,267 C 1348,301 1224,349 1092,434" fill="none" stroke="#ED1B2E" strokeOpacity="0.18" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M 1462,292 C 1348,326 1224,374 1103,458" fill="none" stroke="#F06070" strokeOpacity="0.13" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M 1462,314 C 1348,348 1224,396 1113,480" fill="none" stroke="#F08898" strokeOpacity="0.09" strokeWidth="0.7" strokeLinecap="round"/>
-            <path d="M 1462,333 C 1348,367 1224,415 1122,500" fill="none" stroke="#FFB8C8" strokeOpacity="0.07" strokeWidth="0.7" strokeLinecap="round"/>
+            {/* ══════════════════════════════════════════════════════════════
+                RIGHT UPPER — 12 flowing arcs entering from top-right.
+                Each path is a TWO-SEGMENT cubic bezier (S-arc) so the
+                curve sweeps dramatically rather than reading as a diagonal.
+                Stroke widths taper 2.5 → 0.8 px; opacity 0.62 → 0.03.
+            ══════════════════════════════════════════════════════════════ */}
+            <path d="M 1462,10  C 1400,75  1330,155 1238,233 C 1148,312 1062,352 982,337" fill="none" stroke="#C8102E" strokeOpacity="0.62" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M 1462,40  C 1400,105 1330,185 1238,263 C 1148,342 1062,382 982,367" fill="none" stroke="#C8102E" strokeOpacity="0.52" strokeWidth="2.2" strokeLinecap="round"/>
+            <path d="M 1462,68  C 1400,133 1330,213 1238,291 C 1148,370 1062,410 982,395" fill="none" stroke="#C8102E" strokeOpacity="0.42" strokeWidth="2.0" strokeLinecap="round"/>
+            <path d="M 1462,94  C 1400,159 1330,239 1238,317 C 1148,396 1062,436 982,421" fill="none" stroke="#D42030" strokeOpacity="0.33" strokeWidth="1.8" strokeLinecap="round"/>
+            <path d="M 1462,118 C 1400,183 1330,263 1238,341 C 1148,420 1062,460 982,445" fill="none" stroke="#ED1B2E" strokeOpacity="0.25" strokeWidth="1.6" strokeLinecap="round"/>
+            <path d="M 1462,140 C 1400,205 1330,285 1238,363 C 1148,442 1062,482 982,467" fill="none" stroke="#ED1B2E" strokeOpacity="0.18" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M 1462,160 C 1400,225 1330,305 1238,383 C 1148,462 1062,502 982,487" fill="none" stroke="#ED1B2E" strokeOpacity="0.13" strokeWidth="1.3" strokeLinecap="round"/>
+            <path d="M 1462,178 C 1400,243 1330,323 1238,401 C 1148,480 1062,520 982,505" fill="none" stroke="#F04055" strokeOpacity="0.09" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M 1462,195 C 1400,260 1330,340 1238,418 C 1148,497 1062,537 982,522" fill="none" stroke="#F05068" strokeOpacity="0.07" strokeWidth="1.1" strokeLinecap="round"/>
+            <path d="M 1462,210 C 1400,275 1330,355 1238,433 C 1148,512 1062,552 982,537" fill="none" stroke="#F87080" strokeOpacity="0.05" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 1462,223 C 1400,288 1330,368 1238,446 C 1148,525 1062,565 982,550" fill="none" stroke="#FFA0B5" strokeOpacity="0.035" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M 1462,235 C 1400,300 1330,380 1238,458 C 1148,537 1062,577 982,562" fill="none" stroke="#FFBAC8" strokeOpacity="0.025" strokeWidth="0.8" strokeLinecap="round"/>
 
-            {/* ── LEFT MIDDLE — enters mid-left, fans up-right across margin ── */}
-            <path d="M -22,370 C 104,340 256,314 464,318" fill="none" stroke="#C8102E" strokeOpacity="0.63" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M -22,405 C 104,375 256,349 479,352" fill="none" stroke="#C8102E" strokeOpacity="0.47" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M -22,438 C 104,408 256,382 493,385" fill="none" stroke="#ED1B2E" strokeOpacity="0.33" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M -22,468 C 104,438 256,412 506,415" fill="none" stroke="#ED1B2E" strokeOpacity="0.22" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M -22,495 C 104,465 256,439 518,442" fill="none" stroke="#ED1B2E" strokeOpacity="0.14" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M -22,519 C 104,489 256,463 529,466" fill="none" stroke="#F06070" strokeOpacity="0.10" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M -22,540 C 104,510 256,484 539,487" fill="none" stroke="#F08898" strokeOpacity="0.07" strokeWidth="0.7" strokeLinecap="round"/>
-            <path d="M -22,558 C 104,528 256,502 548,505" fill="none" stroke="#FFB8C8" strokeOpacity="0.05" strokeWidth="0.7" strokeLinecap="round"/>
+            {/* ══════════════════════════════════════════════════════════════
+                LEFT MIDDLE — 12 flowing arcs entering from mid-left.
+                S-arc sweeps upward-right: from (−22, y) to (~510, y−220).
+                Creates the "ribbon lifting off the left edge" look.
+            ══════════════════════════════════════════════════════════════ */}
+            <path d="M -22,360 C 82,278 178,213 272,173 C 366,133 448,128 510,138" fill="none" stroke="#C8102E" strokeOpacity="0.60" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M -22,390 C 82,308 178,243 272,203 C 366,163 448,158 510,168" fill="none" stroke="#C8102E" strokeOpacity="0.50" strokeWidth="2.2" strokeLinecap="round"/>
+            <path d="M -22,418 C 82,336 178,271 272,231 C 366,191 448,186 510,196" fill="none" stroke="#C8102E" strokeOpacity="0.40" strokeWidth="2.0" strokeLinecap="round"/>
+            <path d="M -22,444 C 82,362 178,297 272,257 C 366,217 448,212 510,222" fill="none" stroke="#D42030" strokeOpacity="0.31" strokeWidth="1.8" strokeLinecap="round"/>
+            <path d="M -22,468 C 82,386 178,321 272,281 C 366,241 448,236 510,246" fill="none" stroke="#ED1B2E" strokeOpacity="0.23" strokeWidth="1.6" strokeLinecap="round"/>
+            <path d="M -22,490 C 82,408 178,343 272,303 C 366,263 448,258 510,268" fill="none" stroke="#ED1B2E" strokeOpacity="0.16" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M -22,510 C 82,428 178,363 272,323 C 366,283 448,278 510,288" fill="none" stroke="#ED1B2E" strokeOpacity="0.12" strokeWidth="1.3" strokeLinecap="round"/>
+            <path d="M -22,528 C 82,446 178,381 272,341 C 366,301 448,296 510,306" fill="none" stroke="#F04055" strokeOpacity="0.08" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M -22,544 C 82,462 178,397 272,357 C 366,317 448,312 510,322" fill="none" stroke="#F05068" strokeOpacity="0.06" strokeWidth="1.1" strokeLinecap="round"/>
+            <path d="M -22,558 C 82,476 178,411 272,371 C 366,331 448,326 510,336" fill="none" stroke="#F87080" strokeOpacity="0.045" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M -22,570 C 82,488 178,423 272,383 C 366,343 448,338 510,348" fill="none" stroke="#FFA0B5" strokeOpacity="0.032" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M -22,581 C 82,499 178,434 272,394 C 366,354 448,349 510,359" fill="none" stroke="#FFBAC8" strokeOpacity="0.022" strokeWidth="0.8" strokeLinecap="round"/>
 
-            {/* ── RIGHT LOWER — emergency fund / financial gap area ── */}
-            <path d="M 1462,742 C 1354,762 1232,780 1052,772" fill="none" stroke="#C8102E" strokeOpacity="0.33" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M 1462,772 C 1354,791 1232,808 1067,800" fill="none" stroke="#ED1B2E" strokeOpacity="0.22" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M 1462,798 C 1354,816 1232,833 1080,825" fill="none" stroke="#ED1B2E" strokeOpacity="0.14" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M 1462,820 C 1354,837 1232,853 1092,845" fill="none" stroke="#F06070" strokeOpacity="0.09" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M 1462,838 C 1354,854 1232,869 1102,861" fill="none" stroke="#FFB8C8" strokeOpacity="0.07" strokeWidth="0.7" strokeLinecap="round"/>
+            {/* ══════════════════════════════════════════════════════════════
+                RIGHT LOWER — 7 gentle arcs for the emergency fund area.
+                Near-horizontal flow with slight downward bow.
+            ══════════════════════════════════════════════════════════════ */}
+            <path d="M 1462,720 C 1378,745 1274,766 1152,780 C 1048,792 968,788 938,776" fill="none" stroke="#C8102E" strokeOpacity="0.36" strokeWidth="2.0" strokeLinecap="round"/>
+            <path d="M 1462,748 C 1378,772 1274,793 1154,807 C 1050,818 970,814 940,802" fill="none" stroke="#C8102E" strokeOpacity="0.26" strokeWidth="1.7" strokeLinecap="round"/>
+            <path d="M 1462,773 C 1378,796 1274,817 1156,830 C 1052,841 972,837 942,825" fill="none" stroke="#ED1B2E" strokeOpacity="0.18" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M 1462,795 C 1378,817 1274,837 1157,850 C 1053,861 973,857 943,845" fill="none" stroke="#ED1B2E" strokeOpacity="0.12" strokeWidth="1.3" strokeLinecap="round"/>
+            <path d="M 1462,814 C 1378,835 1274,855 1158,867 C 1054,877 974,873 944,861" fill="none" stroke="#F04055" strokeOpacity="0.08" strokeWidth="1.1" strokeLinecap="round"/>
+            <path d="M 1462,830 C 1378,851 1274,870 1159,882 C 1055,891 975,887 945,875" fill="none" stroke="#F87080" strokeOpacity="0.056" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 1462,843 C 1378,864 1274,882 1160,894 C 1056,903 976,899 946,887" fill="none" stroke="#FFBAC8" strokeOpacity="0.038" strokeWidth="0.9" strokeLinecap="round"/>
 
-            {/* ── LEFT LOWER — recommended plans / CTA depth layer ── */}
-            <path d="M -22,1062 C 124,1036 290,1018 516,1024" fill="none" stroke="#C8102E" strokeOpacity="0.23" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M -22,1093 C 124,1067 290,1049 530,1055" fill="none" stroke="#ED1B2E" strokeOpacity="0.15" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M -22,1120 C 124,1094 290,1076 543,1082" fill="none" stroke="#ED1B2E" strokeOpacity="0.09" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M -22,1143 C 124,1117 290,1099 555,1105" fill="none" stroke="#FFB8C8" strokeOpacity="0.06" strokeWidth="0.7" strokeLinecap="round"/>
+            {/* ══════════════════════════════════════════════════════════════
+                LEFT LOWER — 6 arcs for the recommended plans depth layer.
+                Near-horizontal, slight upward lean toward the right.
+            ══════════════════════════════════════════════════════════════ */}
+            <path d="M -22,1040 C 92,1014 208,995 330,987 C 428,980 504,984 548,996" fill="none" stroke="#C8102E" strokeOpacity="0.26" strokeWidth="1.8" strokeLinecap="round"/>
+            <path d="M -22,1066 C 92,1040 208,1021 330,1013 C 428,1006 504,1010 548,1022" fill="none" stroke="#C8102E" strokeOpacity="0.18" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M -22,1089 C 92,1063 208,1044 330,1036 C 428,1029 504,1033 548,1045" fill="none" stroke="#ED1B2E" strokeOpacity="0.12" strokeWidth="1.3" strokeLinecap="round"/>
+            <path d="M -22,1109 C 92,1083 208,1064 330,1056 C 428,1049 504,1053 548,1065" fill="none" stroke="#ED1B2E" strokeOpacity="0.08" strokeWidth="1.1" strokeLinecap="round"/>
+            <path d="M -22,1126 C 92,1100 208,1081 330,1073 C 428,1066 504,1070 548,1082" fill="none" stroke="#F04055" strokeOpacity="0.055" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M -22,1140 C 92,1114 208,1095 330,1087 C 428,1080 504,1084 548,1096" fill="none" stroke="#FFBAC8" strokeOpacity="0.036" strokeWidth="0.9" strokeLinecap="round"/>
           </svg>
         </div>
 
