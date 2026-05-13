@@ -231,46 +231,96 @@ function ScanningScreen() {
   }, [])
 
   return (
-    <div className="af-fade flex flex-col items-center justify-center py-20 px-4 w-full max-w-sm mx-auto">
-      {/* ── Card with animated box-grid background ── */}
+    <div className="af-fade w-full max-w-md mx-auto px-4">
+      {/* ── Premium AI scanner card ── */}
       <div className="relative w-full rounded-2xl overflow-hidden" style={{
-        background: '#0d1117',
-        border: '1px solid rgba(220,0,0,0.22)',
-        boxShadow: '0 0 32px rgba(220,0,0,0.08)',
+        background: 'rgba(8,11,16,0.96)',
+        border: '1px solid rgba(217,45,32,0.28)',
+        boxShadow: '0 0 0 1px rgba(217,45,32,0.06), 0 8px 48px rgba(0,0,0,0.55), 0 0 90px rgba(180,35,24,0.13)',
       }}>
 
-        {/* Animated isometric grid — fills the card, clipped by overflow-hidden */}
+        {/* Animated isometric box grid — background layer */}
         <Boxes />
 
-        {/* Radial vignette — fades the grid toward the centre so text stays legible */}
-        <div
-          className="absolute inset-0 z-10 pointer-events-none"
-          style={{
-            background: '#0d1117',
-            maskImage: 'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 30%, #0d1117 80%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 30%, #0d1117 80%)',
-          }}
-        />
+        {/* Radial vignette — softer fade so grid breathes at the edges */}
+        <div className="absolute inset-0 z-10 pointer-events-none" style={{
+          background: 'rgba(8,11,16,0.80)',
+          maskImage: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 22%, rgba(8,11,16,0.55) 52%, #080b10 88%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 22%, rgba(8,11,16,0.55) 52%, #080b10 88%)',
+        }} />
 
-        {/* Terminal content — z-20, above grid + vignette */}
+        {/* Scan sweep — translucent red band drifting top→bottom */}
+        <div className="scan-sweep-line" style={{
+          zIndex: 15, height: 90,
+          background: 'linear-gradient(180deg, transparent 0%, rgba(217,45,32,0.055) 50%, transparent 100%)',
+        }} />
+
+        {/* Top accent bar */}
+        <div style={{
+          position: 'relative', zIndex: 20, height: 2,
+          background: 'linear-gradient(90deg, transparent 0%, #7f0000 20%, #D92D20 50%, #7f0000 80%, transparent 100%)',
+        }} />
+
+        {/* ── All content above the grid ── */}
         <div className="relative z-20">
-          {/* Header */}
-          <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+
+          {/* macOS traffic-light header */}
+          <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <div className="flex gap-1.5">
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#B42318', display: 'inline-block' }} />
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#7f0000', display: 'inline-block' }} />
             </div>
-            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginLeft: 4 }}>
+            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.18)', fontFamily: 'monospace', marginLeft: 4, letterSpacing: '0.03em' }}>
               bsq-ai-scanner — running
             </span>
-            <span className="scan-pulse ml-auto" style={{
-              width: 6, height: 6, borderRadius: '50%', background: '#D92D20', display: 'inline-block',
-            }} />
+            <span className="scan-pulse ml-auto" style={{ width: 6, height: 6, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
           </div>
 
-          {/* Steps */}
-          <div className="px-5 py-5 space-y-3">
+          {/* ── HEADLINE SECTION ── */}
+          <div className="px-6 pt-6 pb-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+            {/* Shield icon + badges */}
+            <div className="flex items-center gap-3 mb-4">
+              <div style={{
+                width: 40, height: 40, borderRadius: 11, flexShrink: 0,
+                background: 'linear-gradient(135deg, rgba(217,45,32,0.18), rgba(127,0,0,0.28))',
+                border: '1px solid rgba(217,45,32,0.30)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 0 20px rgba(217,45,32,0.12)',
+              }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#D92D20" strokeWidth="1.8"/>
+                  <polyline points="9 12 11 14 15 10" stroke="#ff7070" strokeWidth="2.2"/>
+                </svg>
+              </div>
+              <div className="flex gap-1.5 flex-wrap">
+                <span style={{
+                  fontSize: 9, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase',
+                  color: 'rgba(217,45,32,0.90)', background: 'rgba(217,45,32,0.10)',
+                  border: '1px solid rgba(217,45,32,0.22)', padding: '2px 8px', borderRadius: 999,
+                }}>AI-Powered</span>
+                <span style={{
+                  fontSize: 9, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.28)', background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.07)', padding: '2px 8px', borderRadius: 999,
+                }}>Encrypted</span>
+              </div>
+            </div>
+
+            {/* Headline */}
+            <h2 style={{
+              fontSize: 20, fontWeight: 700, color: '#ffffff', lineHeight: 1.25,
+              letterSpacing: '-0.025em', marginBottom: 8,
+            }}>
+              Analyzing Your<br />Financial Profile
+            </h2>
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.30)', lineHeight: 1.65 }}>
+              Our AI is reviewing your answers to identify protection gaps and build your personalized recommendations.
+            </p>
+          </div>
+
+          {/* ── SCAN STEPS ── */}
+          <div className="px-6 py-5 space-y-3.5">
             {SCAN_STEPS.map((label, i) => {
               const isDone    = i < activeStep
               const isCurrent = i === activeStep
@@ -278,36 +328,43 @@ function ScanningScreen() {
                 <div
                   key={i}
                   className="flex items-center gap-3"
-                  style={{ opacity: isDone || isCurrent ? 1 : 0.25, transition: 'opacity 0.4s ease' }}
+                  style={{ opacity: isDone || isCurrent ? 1 : 0.22, transition: 'opacity 0.5s ease' }}
                 >
                   <span style={{
-                    width: 18, height: 18, borderRadius: '50%', display: 'flex',
-                    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    background: isDone ? 'rgba(220,0,0,0.15)' : isCurrent ? 'rgba(220,0,0,0.10)' : 'rgba(255,255,255,0.04)',
-                    border: isDone ? '1px solid rgba(255,59,59,0.5)' : isCurrent ? '1px solid rgba(220,0,0,0.4)' : '1px solid rgba(255,255,255,0.08)',
-                    transition: 'all 0.3s ease',
+                    width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: isDone ? 'rgba(217,45,32,0.18)' : isCurrent ? 'rgba(217,45,32,0.10)' : 'rgba(255,255,255,0.03)',
+                    border: isDone ? '1px solid rgba(217,45,32,0.55)' : isCurrent ? '1px solid rgba(217,45,32,0.42)' : '1px solid rgba(255,255,255,0.07)',
+                    boxShadow: isDone ? '0 0 10px rgba(217,45,32,0.18)' : 'none',
+                    transition: 'all 0.45s ease',
                   }}>
                     {isDone ? (
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ff7070" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     ) : isCurrent ? (
-                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
+                      <span style={{
+                        width: 6, height: 6, borderRadius: '50%', background: '#D92D20',
+                        display: 'inline-block', boxShadow: '0 0 10px rgba(217,45,32,0.9)',
+                      }} />
                     ) : (
-                      <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-block' }} />
+                      <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.12)', display: 'inline-block' }} />
                     )}
                   </span>
                   <p style={{
-                    fontFamily: 'ui-monospace, monospace', fontSize: 12, letterSpacing: '0.01em',
-                    color: isDone ? '#ffffff' : isCurrent ? '#fca5a5' : 'rgba(255,255,255,0.25)',
-                    transition: 'color 0.3s ease',
+                    fontFamily: 'ui-monospace, "Cascadia Code", "SF Mono", monospace',
+                    fontSize: 12.5, letterSpacing: '0.008em', margin: 0,
+                    color: isDone ? 'rgba(255,255,255,0.62)' : isCurrent ? '#fca5a5' : 'rgba(255,255,255,0.18)',
+                    transition: 'color 0.45s ease',
+                    textShadow: isCurrent ? '0 0 28px rgba(252,165,165,0.22)' : 'none',
                   }}>
                     {isDone ? `✓ ${label}` : label}
                     {isCurrent && (
                       <span style={{
-                        display: 'inline-block', width: 6, height: 12,
+                        display: 'inline-block', width: 6, height: 13,
                         background: '#D92D20', marginLeft: 3, verticalAlign: 'text-bottom',
                         opacity: cursorVisible ? 1 : 0, transition: 'opacity 0.1s',
+                        boxShadow: cursorVisible ? '0 0 8px rgba(217,45,32,0.95)' : 'none',
                       }} />
                     )}
                   </p>
@@ -316,23 +373,41 @@ function ScanningScreen() {
             })}
           </div>
 
-          {/* Progress bar */}
-          <div className="px-5 pb-5">
-            <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', borderRadius: 9999, overflow: 'hidden' }}>
+          {/* ── PROGRESS BAR ── */}
+          <div className="px-6 pb-5">
+            <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 9999, overflow: 'hidden' }}>
               <div style={{
                 height: '100%', borderRadius: 9999,
-                background: 'linear-gradient(to right, #7f0000, #D92D20)',
+                background: 'linear-gradient(90deg, #7f0000 0%, #B42318 40%, #D92D20 100%)',
+                boxShadow: '0 0 14px rgba(217,45,32,0.55), 0 0 5px rgba(217,45,32,0.85)',
                 width: `${Math.min((activeStep / SCAN_STEPS.length) * 100, 100)}%`,
-                transition: 'width 0.45s cubic-bezier(0.34,1.2,0.64,1)',
+                transition: 'width 0.5s cubic-bezier(0.34,1.2,0.64,1)',
               }} />
             </div>
-            <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginTop: 8, textAlign: 'right' }}>
-              {Math.min(Math.round((activeStep / SCAN_STEPS.length) * 100), 100)}% complete
-            </p>
+            <div className="flex items-center justify-between mt-2.5">
+              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.18)', fontFamily: 'monospace', letterSpacing: '0.03em' }}>
+                Processing responses…
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.42)', fontFamily: 'monospace', letterSpacing: '0.06em' }}>
+                {Math.min(Math.round((activeStep / SCAN_STEPS.length) * 100), 100)}%
+              </span>
+            </div>
           </div>
+
+          {/* ── CARD FOOTER ── */}
+          <div className="px-6 py-3 flex items-center justify-center gap-3" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 9.5, color: 'rgba(255,255,255,0.17)', letterSpacing: '0.03em' }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(217,45,32,0.6)', display: 'inline-block', boxShadow: '0 0 5px rgba(217,45,32,0.45)' }} />
+              BSQ Financial AI
+            </span>
+            <span style={{ color: 'rgba(255,255,255,0.08)', fontSize: 10 }}>·</span>
+            <span style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.17)', letterSpacing: '0.03em' }}>256-bit Encrypted</span>
+            <span style={{ color: 'rgba(255,255,255,0.08)', fontSize: 10 }}>·</span>
+            <span style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.17)', letterSpacing: '0.03em' }}>PRU Life UK</span>
+          </div>
+
         </div>
       </div>
-      <p className="text-xs text-gray-400 mt-6 text-center">AI analysis complete in a moment…</p>
     </div>
   )
 }
@@ -1318,37 +1393,70 @@ export default function AssessmentFlow() {
   // ── Render — single source of truth ──────────────────────────────
   if (phase === 'analyzing') {
     return (
-      <div className="min-h-screen flex flex-col" style={{ background: 'transparent' }}>
+      <div className="min-h-screen flex flex-col" style={{ background: 'transparent', position: 'relative', overflow: 'hidden' }}>
         <style>{`
-          html, body { background: #0d1117; }
-          @keyframes af-fade-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-          @keyframes scan-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.35; transform:scale(0.75); } }
-          .af-fade { animation: af-fade-in 0.45s ease both; }
-          .scan-pulse { animation: scan-pulse 1.2s ease-in-out infinite; }
+          html, body { background: #080b10; }
+          @keyframes af-fade-in  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+          @keyframes scan-pulse  { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.3; transform:scale(0.7); } }
+          @keyframes scan-sweep  { 0% { top:-80px; opacity:0; } 6% { opacity:1; } 90% { opacity:1; } 100% { top:110%; opacity:0; } }
+          .af-fade        { animation: af-fade-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+          .scan-pulse     { animation: scan-pulse 1.3s ease-in-out infinite; }
+          .scan-sweep-line{ animation: scan-sweep 3.6s ease-in-out infinite; position:absolute; left:0; right:0; pointer-events:none; }
         `}</style>
+
+        {/* ── Page-level radial glow centred behind the card ── */}
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 65% 55% at 50% 46%, rgba(180,35,24,0.11) 0%, transparent 65%)',
+        }} />
+
+        {/* ── Concentric arc decoration — dark-page variant ──
+            TOP-RIGHT  : quarter-arcs from corner (1650, -80)
+            BOTTOM-LEFT: quarter-arcs from corner (-200, 1000)  */}
+        <div aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            {/* Top-right */}
+            <path d="M 1440,73  A  260  260 0 0 1 1403,0" fill="none" stroke="#C8102E" strokeOpacity="0.30" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M 1440,187 A  340  340 0 0 1 1320,0" fill="none" stroke="#C8102E" strokeOpacity="0.23" strokeWidth="1.3" strokeLinecap="round"/>
+            <path d="M 1440,284 A  420  420 0 0 1 1238,0" fill="none" stroke="#C8102E" strokeOpacity="0.17" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M 1440,374 A  500  500 0 0 1 1156,0" fill="none" stroke="#D42030" strokeOpacity="0.12" strokeWidth="1.1" strokeLinecap="round"/>
+            <path d="M 1440,461 A  580  580 0 0 1 1076,0" fill="none" stroke="#D42030" strokeOpacity="0.08" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 1440,546 A  660  660 0 0 1  995,0" fill="none" stroke="#ED1B2E" strokeOpacity="0.05" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M 1440,630 A  740  740 0 0 1  914,0" fill="none" stroke="#ED1B2E" strokeOpacity="0.03" strokeWidth="0.8" strokeLinecap="round"/>
+            {/* Bottom-left  (center −200, 1000) */}
+            <path d="M 0,712.8 A 350 350 0 0 1 135.4,900" fill="none" stroke="#C8102E" strokeOpacity="0.25" strokeWidth="1.3" strokeLinecap="round"/>
+            <path d="M 0,597.1 A 450 450 0 0 1 238.7,900" fill="none" stroke="#C8102E" strokeOpacity="0.18" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M 0,487.9 A 550 550 0 0 1 340.8,900" fill="none" stroke="#D42030" strokeOpacity="0.12" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 0,381.8 A 650 650 0 0 1 442.3,900" fill="none" stroke="#D42030" strokeOpacity="0.07" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M 0,278.8 A 750 750 0 0 1 543.2,900" fill="none" stroke="#ED1B2E" strokeOpacity="0.04" strokeWidth="0.7" strokeLinecap="round"/>
+          </svg>
+        </div>
+
         {/* Fixed scanning header */}
         <div style={{
           position: 'fixed', top: BSQ_H, left: 0, right: 0, zIndex: 999,
-          background: pageScrolled ? 'rgba(18,18,20,0.97)' : 'rgba(18,18,20,0.88)',
+          background: pageScrolled ? 'rgba(8,11,16,0.98)' : 'rgba(8,11,16,0.88)',
           backdropFilter: 'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
           transition: 'top 0.2s linear, background 0.3s ease',
           fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif',
         }}>
           <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 20px', height: BSQ_NAV_H, display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#dc2626', boxShadow: '0 0 6px #dc2626', flexShrink: 0 }} />
-            <span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.01em' }}>
+            <span style={{ fontSize: 12, fontWeight: 500, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.01em' }}>
               BSQ Financial Assessment
             </span>
           </div>
         </div>
-        <div style={{ height: BSQ_NAV_H, flexShrink: 0 }} />{/* spacer */}
-        <div className="flex-1 flex flex-col items-center justify-start py-10">
+
+        <div style={{ height: BSQ_NAV_H, flexShrink: 0 }} />
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center py-10">
           <ScanningScreen />
         </div>
-        <div className="py-5 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <p className="text-[11px] text-white/20">Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Manila</p>
+        <div className="relative z-10 py-4 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+          <p className="text-[10px] text-white/15 tracking-wide">Brilliant Star Quartz · Licensed PRU Life UK Advisor · Ortigas, Manila</p>
         </div>
       </div>
     )
