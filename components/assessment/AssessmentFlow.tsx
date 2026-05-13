@@ -686,8 +686,22 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           background: '#ffffff',
           border: '1px solid rgba(0,0,0,0.07)',
           boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.04)',
+          position: 'relative',
         }}>
-        <div style={{ height: 3, background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 45%, rgba(185,28,28,0.25) 80%, transparent 100%)' }} />
+        {/* Section ribbon — absolute, clipped by overflow:hidden, scroll with card */}
+        <svg aria-hidden="true" style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
+          viewBox="0 0 800 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Shadow */}
+          <path d="M -10,260 C 160,250 320,268 500,258 C 620,251 710,244 810,241"
+            fill="none" stroke="rgba(140,12,24,0.055)" strokeWidth="22" strokeLinecap="round"/>
+          {/* Main ribbon */}
+          <path d="M -10,246 C 160,236 320,254 500,244 C 620,237 710,230 810,227"
+            fill="none" stroke="rgba(210,26,40,0.085)" strokeWidth="11" strokeLinecap="round"/>
+          {/* Top highlight */}
+          <path d="M -10,232 C 160,222 320,240 500,230 C 620,223 710,216 810,213"
+            fill="none" stroke="rgba(255,80,90,0.055)" strokeWidth="3.5" strokeLinecap="round"/>
+        </svg>
+        <div style={{ height: 3, background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 45%, rgba(185,28,28,0.25) 80%, transparent 100%)', position: 'relative' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
 
           {/* Score ring */}
@@ -768,8 +782,19 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             background: 'rgba(255,255,255,0.95)',
             border: '1px solid rgba(0,0,0,0.06)',
             boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
+            position: 'relative',
           }}>
-          <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
+          {/* Section ribbon */}
+          <svg aria-hidden="true" style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
+            viewBox="0 0 800 210" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M -10,172 C 160,164 320,178 500,169 C 620,163 710,157 810,154"
+              fill="none" stroke="rgba(140,12,24,0.05)" strokeWidth="22" strokeLinecap="round"/>
+            <path d="M -10,159 C 160,151 320,165 500,156 C 620,150 710,144 810,141"
+              fill="none" stroke="rgba(210,26,40,0.075)" strokeWidth="11" strokeLinecap="round"/>
+            <path d="M -10,145 C 160,137 320,151 500,142 C 620,136 710,130 810,127"
+              fill="none" stroke="rgba(255,80,90,0.048)" strokeWidth="3.5" strokeLinecap="round"/>
+          </svg>
+          <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)', position: 'relative' }} />
           <div className="p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#dc2626' }}>Emergency Fund Target</p>
@@ -989,7 +1014,17 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
 
         {/* Timeline vertical list */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' }}>
+        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)', position: 'relative' }}>
+          {/* Section ribbon */}
+          <svg aria-hidden="true" style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
+            viewBox="0 0 800 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M -10,300 C 160,291 320,307 500,297 C 620,290 710,283 810,280"
+              fill="none" stroke="rgba(140,12,24,0.045)" strokeWidth="24" strokeLinecap="round"/>
+            <path d="M -10,286 C 160,277 320,293 500,283 C 620,276 710,269 810,266"
+              fill="none" stroke="rgba(210,26,40,0.070)" strokeWidth="12" strokeLinecap="round"/>
+            <path d="M -10,271 C 160,262 320,278 500,268 C 620,261 710,254 810,251"
+              fill="none" stroke="rgba(255,80,90,0.045)" strokeWidth="4" strokeLinecap="round"/>
+          </svg>
           {result.recommendations.map((rec, i) => {
             const hex         = rec.color ?? PRU_RED
             const engineMatch = engineResult.recommended_products.find(e => e.slug === rec.slug)
@@ -1341,106 +1376,6 @@ export default function AssessmentFlow() {
         {/* Full-viewport background */}
         <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#f5f5f7' }} />
 
-        {/* ── Prudential ribbon background — z:0, behind all cards (z:10+) ── */}
-        <svg
-          aria-hidden="true"
-          style={{ position:'fixed', inset:0, width:'100%', height:'100%', zIndex:0, pointerEvents:'none' }}
-          viewBox="0 0 1440 900"
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            {/* Ribbon A — upper sweep */}
-            <linearGradient id="arAMain" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#C0111F" stopOpacity="0"/>
-              <stop offset="8%"   stopColor="#D91A2A" stopOpacity="0.55"/>
-              <stop offset="38%"  stopColor="#ED1B2E" stopOpacity="0.72"/>
-              <stop offset="62%"  stopColor="#D91A2A" stopOpacity="0.68"/>
-              <stop offset="92%"  stopColor="#C0111F" stopOpacity="0.48"/>
-              <stop offset="100%" stopColor="#C0111F" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="arAHL" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#FF8090" stopOpacity="0"/>
-              <stop offset="10%"  stopColor="#FF6070" stopOpacity="0.35"/>
-              <stop offset="55%"  stopColor="#FF5060" stopOpacity="0.28"/>
-              <stop offset="90%"  stopColor="#FF6070" stopOpacity="0.22"/>
-              <stop offset="100%" stopColor="#FF8090" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="arAShadow" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#6E0010" stopOpacity="0"/>
-              <stop offset="8%"   stopColor="#7A0014" stopOpacity="0.20"/>
-              <stop offset="50%"  stopColor="#880018" stopOpacity="0.16"/>
-              <stop offset="92%"  stopColor="#7A0014" stopOpacity="0.12"/>
-              <stop offset="100%" stopColor="#6E0010" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="arAGray" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#B8B8BC" stopOpacity="0"/>
-              <stop offset="10%"  stopColor="#C4C4C8" stopOpacity="0.28"/>
-              <stop offset="55%"  stopColor="#D0D0D4" stopOpacity="0.22"/>
-              <stop offset="90%"  stopColor="#C4C4C8" stopOpacity="0.18"/>
-              <stop offset="100%" stopColor="#B8B8BC" stopOpacity="0"/>
-            </linearGradient>
-
-            {/* Ribbon B — lower sweep */}
-            <linearGradient id="arBMain" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#C0111F" stopOpacity="0"/>
-              <stop offset="6%"   stopColor="#C8151E" stopOpacity="0.48"/>
-              <stop offset="42%"  stopColor="#E01828" stopOpacity="0.62"/>
-              <stop offset="68%"  stopColor="#D01520" stopOpacity="0.58"/>
-              <stop offset="94%"  stopColor="#C0111F" stopOpacity="0.38"/>
-              <stop offset="100%" stopColor="#C0111F" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="arBHL" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#FF7080" stopOpacity="0"/>
-              <stop offset="12%"  stopColor="#FF5870" stopOpacity="0.28"/>
-              <stop offset="58%"  stopColor="#FF4860" stopOpacity="0.22"/>
-              <stop offset="94%"  stopColor="#FF5870" stopOpacity="0.16"/>
-              <stop offset="100%" stopColor="#FF7080" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="arBShadow" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#6E0010" stopOpacity="0"/>
-              <stop offset="6%"   stopColor="#780012" stopOpacity="0.16"/>
-              <stop offset="55%"  stopColor="#840016" stopOpacity="0.12"/>
-              <stop offset="94%"  stopColor="#780012" stopOpacity="0.09"/>
-              <stop offset="100%" stopColor="#6E0010" stopOpacity="0"/>
-            </linearGradient>
-            <linearGradient id="arBGray" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stopColor="#B4B4B8" stopOpacity="0"/>
-              <stop offset="8%"   stopColor="#C0C0C4" stopOpacity="0.22"/>
-              <stop offset="52%"  stopColor="#CCCCCE" stopOpacity="0.17"/>
-              <stop offset="92%"  stopColor="#C0C0C4" stopOpacity="0.13"/>
-              <stop offset="100%" stopColor="#B4B4B8" stopOpacity="0"/>
-            </linearGradient>
-          </defs>
-
-          {/* ── Ribbon A — upper sweep (y≈290–360 on 900 canvas ≈ 32–40% vh) ── */}
-          {/* Gray companion — below main */}
-          <path d="M -30,342  C 170,330  390,352  600,372  C 760,388  920,382  1100,368  C 1260,356  1390,346  1470,344"
-                fill="none" stroke="url(#arAGray)"   strokeWidth="11" strokeLinecap="round"/>
-          {/* Shadow underside */}
-          <path d="M -30,330  C 170,318  390,340  600,360  C 760,376  920,370  1100,356  C 1260,344  1390,334  1470,332"
-                fill="none" stroke="url(#arAShadow)" strokeWidth="22" strokeLinecap="round"/>
-          {/* Main red */}
-          <path d="M -30,320  C 170,308  390,330  600,350  C 760,366  920,360  1100,346  C 1260,334  1390,324  1470,322"
-                fill="none" stroke="url(#arAMain)"   strokeWidth="11" strokeLinecap="round"/>
-          {/* Top highlight */}
-          <path d="M -30,308  C 170,296  390,318  600,338  C 760,354  920,348  1100,334  C 1260,322  1390,312  1470,310"
-                fill="none" stroke="url(#arAHL)"     strokeWidth="3"  strokeLinecap="round"/>
-
-          {/* ── Ribbon B — lower sweep (y≈620–690 on 900 canvas ≈ 69–77% vh) ── */}
-          {/* Gray companion */}
-          <path d="M -30,678  C 200,664  460,682  680,674  C 880,666  1080,654  1290,662  C 1390,666  1440,668  1470,667"
-                fill="none" stroke="url(#arBGray)"   strokeWidth="10" strokeLinecap="round"/>
-          {/* Shadow underside */}
-          <path d="M -30,668  C 200,654  460,672  680,664  C 880,656  1080,644  1290,652  C 1390,656  1440,658  1470,657"
-                fill="none" stroke="url(#arBShadow)" strokeWidth="20" strokeLinecap="round"/>
-          {/* Main red */}
-          <path d="M -30,658  C 200,644  460,662  680,654  C 880,646  1080,634  1290,642  C 1390,646  1440,648  1470,647"
-                fill="none" stroke="url(#arBMain)"   strokeWidth="10" strokeLinecap="round"/>
-          {/* Top highlight */}
-          <path d="M -30,647  C 200,633  460,651  680,643  C 880,635  1080,623  1290,631  C 1390,635  1440,637  1470,636"
-                fill="none" stroke="url(#arBHL)"     strokeWidth="2.5" strokeLinecap="round"/>
-        </svg>
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
         <style>{`
           html, body { background: #f5f5f7; }
