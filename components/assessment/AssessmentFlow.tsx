@@ -9,6 +9,7 @@ import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-s
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
 import { ShineBorder } from '@/components/ui/shine-border'
+import { Boxes } from '@/components/ui/background-boxes'
 import { AssessmentTrustStrip, ResultsStatsBanner } from '@/components/ui/assessment-stats'
 import { useAgentContact } from '@/hooks/useAgentContact'
 import TestimonialForm from '@/components/ui/testimonial-form'
@@ -231,86 +232,104 @@ function ScanningScreen() {
 
   return (
     <div className="af-fade flex flex-col items-center justify-center py-20 px-4 w-full max-w-sm mx-auto">
-      <div className="w-full rounded-2xl overflow-hidden" style={{
+      {/* ── Card with animated box-grid background ── */}
+      <div className="relative w-full rounded-2xl overflow-hidden" style={{
         background: '#0d1117',
         border: '1px solid rgba(220,0,0,0.22)',
         boxShadow: '0 0 32px rgba(220,0,0,0.08)',
       }}>
-        {/* Header */}
-        <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <div className="flex gap-1.5">
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#B42318', display: 'inline-block' }} />
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#7f0000', display: 'inline-block' }} />
-          </div>
-          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginLeft: 4 }}>
-            bsq-ai-scanner — running
-          </span>
-          <span className="scan-pulse ml-auto" style={{
-            width: 6, height: 6, borderRadius: '50%', background: '#D92D20', display: 'inline-block',
-          }} />
-        </div>
 
-        {/* Steps */}
-        <div className="px-5 py-5 space-y-3">
-          {SCAN_STEPS.map((label, i) => {
-            const isDone    = i < activeStep
-            const isCurrent = i === activeStep
-            return (
-              <div
-                key={i}
-                className="flex items-center gap-3"
-                style={{ opacity: isDone || isCurrent ? 1 : 0.25, transition: 'opacity 0.4s ease' }}
-              >
-                <span style={{
-                  width: 18, height: 18, borderRadius: '50%', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  background: isDone ? 'rgba(220,0,0,0.15)' : isCurrent ? 'rgba(220,0,0,0.10)' : 'rgba(255,255,255,0.04)',
-                  border: isDone ? '1px solid rgba(255,59,59,0.5)' : isCurrent ? '1px solid rgba(220,0,0,0.4)' : '1px solid rgba(255,255,255,0.08)',
-                  transition: 'all 0.3s ease',
-                }}>
-                  {isDone ? (
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  ) : isCurrent ? (
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
-                  ) : (
-                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-block' }} />
-                  )}
-                </span>
-                <p style={{
-                  fontFamily: 'ui-monospace, monospace', fontSize: 12, letterSpacing: '0.01em',
-                  color: isDone ? '#ffffff' : isCurrent ? '#fca5a5' : 'rgba(255,255,255,0.25)',
-                  transition: 'color 0.3s ease',
-                }}>
-                  {isDone ? `✓ ${label}` : label}
-                  {isCurrent && (
-                    <span style={{
-                      display: 'inline-block', width: 6, height: 12,
-                      background: '#D92D20', marginLeft: 3, verticalAlign: 'text-bottom',
-                      opacity: cursorVisible ? 1 : 0, transition: 'opacity 0.1s',
-                    }} />
-                  )}
-                </p>
-              </div>
-            )
-          })}
-        </div>
+        {/* Animated isometric grid — fills the card, clipped by overflow-hidden */}
+        <Boxes />
 
-        {/* Progress bar */}
-        <div className="px-5 pb-5">
-          <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', borderRadius: 9999, overflow: 'hidden' }}>
-            <div style={{
-              height: '100%', borderRadius: 9999,
-              background: 'linear-gradient(to right, #7f0000, #D92D20)',
-              width: `${Math.min((activeStep / SCAN_STEPS.length) * 100, 100)}%`,
-              transition: 'width 0.45s cubic-bezier(0.34,1.2,0.64,1)',
+        {/* Radial vignette — fades the grid toward the centre so text stays legible */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background: '#0d1117',
+            maskImage: 'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 30%, #0d1117 80%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 30%, #0d1117 80%)',
+          }}
+        />
+
+        {/* Terminal content — z-20, above grid + vignette */}
+        <div className="relative z-20">
+          {/* Header */}
+          <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="flex gap-1.5">
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#B42318', display: 'inline-block' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#7f0000', display: 'inline-block' }} />
+            </div>
+            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginLeft: 4 }}>
+              bsq-ai-scanner — running
+            </span>
+            <span className="scan-pulse ml-auto" style={{
+              width: 6, height: 6, borderRadius: '50%', background: '#D92D20', display: 'inline-block',
             }} />
           </div>
-          <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginTop: 8, textAlign: 'right' }}>
-            {Math.min(Math.round((activeStep / SCAN_STEPS.length) * 100), 100)}% complete
-          </p>
+
+          {/* Steps */}
+          <div className="px-5 py-5 space-y-3">
+            {SCAN_STEPS.map((label, i) => {
+              const isDone    = i < activeStep
+              const isCurrent = i === activeStep
+              return (
+                <div
+                  key={i}
+                  className="flex items-center gap-3"
+                  style={{ opacity: isDone || isCurrent ? 1 : 0.25, transition: 'opacity 0.4s ease' }}
+                >
+                  <span style={{
+                    width: 18, height: 18, borderRadius: '50%', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    background: isDone ? 'rgba(220,0,0,0.15)' : isCurrent ? 'rgba(220,0,0,0.10)' : 'rgba(255,255,255,0.04)',
+                    border: isDone ? '1px solid rgba(255,59,59,0.5)' : isCurrent ? '1px solid rgba(220,0,0,0.4)' : '1px solid rgba(255,255,255,0.08)',
+                    transition: 'all 0.3s ease',
+                  }}>
+                    {isDone ? (
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    ) : isCurrent ? (
+                      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
+                    ) : (
+                      <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-block' }} />
+                    )}
+                  </span>
+                  <p style={{
+                    fontFamily: 'ui-monospace, monospace', fontSize: 12, letterSpacing: '0.01em',
+                    color: isDone ? '#ffffff' : isCurrent ? '#fca5a5' : 'rgba(255,255,255,0.25)',
+                    transition: 'color 0.3s ease',
+                  }}>
+                    {isDone ? `✓ ${label}` : label}
+                    {isCurrent && (
+                      <span style={{
+                        display: 'inline-block', width: 6, height: 12,
+                        background: '#D92D20', marginLeft: 3, verticalAlign: 'text-bottom',
+                        opacity: cursorVisible ? 1 : 0, transition: 'opacity 0.1s',
+                      }} />
+                    )}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Progress bar */}
+          <div className="px-5 pb-5">
+            <div style={{ height: 2, background: 'rgba(255,255,255,0.06)', borderRadius: 9999, overflow: 'hidden' }}>
+              <div style={{
+                height: '100%', borderRadius: 9999,
+                background: 'linear-gradient(to right, #7f0000, #D92D20)',
+                width: `${Math.min((activeStep / SCAN_STEPS.length) * 100, 100)}%`,
+                transition: 'width 0.45s cubic-bezier(0.34,1.2,0.64,1)',
+              }} />
+            </div>
+            <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginTop: 8, textAlign: 'right' }}>
+              {Math.min(Math.round((activeStep / SCAN_STEPS.length) * 100), 100)}% complete
+            </p>
+          </div>
         </div>
       </div>
       <p className="text-xs text-gray-400 mt-6 text-center">AI analysis complete in a moment…</p>
