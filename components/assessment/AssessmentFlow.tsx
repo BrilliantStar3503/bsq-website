@@ -226,7 +226,7 @@ function ScanningScreen() {
       idx++
       setActiveStep(idx)
       if (idx >= SCAN_STEPS.length) clearInterval(interval)
-    }, 500)
+    }, 900)
     return () => clearInterval(interval)
   }, [])
 
@@ -1300,7 +1300,7 @@ export default function AssessmentFlow() {
       setResult(computed)
       setEngineResult(engine)
       setPhase('analyzing')
-      setTimeout(() => setPhase('results'), 2500)
+      setTimeout(() => setPhase('results'), 5000)
 
       // Track completion silently — fire and forget, never blocks UX
       fetch('/api/track-assessment', {
