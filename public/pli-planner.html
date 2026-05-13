@@ -111,13 +111,16 @@
 </nav>
 
 <!-- ─── HERO ──────────────────────────────────────────────── -->
-<section class="bg-white pt-28 pb-20 px-6 relative overflow-hidden">
+<section class="bg-white pt-28 pb-40 px-6 relative overflow-hidden">
 
-  <!-- ─── Decorative ribbon — flows from below 3-gen legacy → curves down → up to CTA ─── -->
+  <!-- ─── PRU ribbon — bottom edge only, never overlaps content ─── -->
+  <!--     SVG is 110px tall, ribbon highest point y=40 → sits 70px  -->
+  <!--     from section bottom. Section pb-40 (160px) clears it by   -->
+  <!--     ~90px, so no text can reach the ribbon zone.              -->
   <svg
     class="absolute left-0 w-full pointer-events-none"
-    style="bottom:0; height:200px; z-index:1; opacity:0.85;"
-    viewBox="0 0 1440 200"
+    style="bottom:0; height:110px; z-index:1; opacity:0.85;"
+    viewBox="0 0 1440 110"
     preserveAspectRatio="none"
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -154,27 +157,20 @@
       </linearGradient>
     </defs>
 
-    <!--
-      Path anatomy:
-        Left (x=0)   y=45  — starts just below "3-Gen Legacy / 10,000 families"
-        Middle dip   y=155 — curves down between the two columns
-        Right (x=1440) y=65 — comes back up below "Get My Personalized Plan"
-    -->
-
-    <!-- ① Gray companion — slightly below main -->
-    <path d="M0,58  C320,58  520,168 720,162 S1120,78  1440,78"
+    <!-- ① Gray companion -->
+    <path d="M0,58  C320,58  520,100 720,96  S1120,68  1440,68"
           fill="none" stroke="url(#gMain)"   stroke-width="18" stroke-linecap="round"/>
 
     <!-- ② Red shadow — underside depth -->
-    <path d="M0,52  C320,52  520,162 720,156 S1120,72  1440,72"
+    <path d="M0,52  C320,52  520,95  720,91  S1120,62  1440,62"
           fill="none" stroke="url(#rShadow)" stroke-width="22" stroke-linecap="round"/>
 
     <!-- ③ Red main ribbon -->
-    <path d="M0,45  C320,45  520,155 720,150 S1120,65  1440,65"
+    <path d="M0,46  C320,46  520,90  720,86  S1120,56  1440,56"
           fill="none" stroke="url(#rMain)"   stroke-width="18" stroke-linecap="round"/>
 
     <!-- ④ Top highlight -->
-    <path d="M0,38  C320,38  520,148 720,143 S1120,58  1440,58"
+    <path d="M0,40  C320,40  520,84  720,80  S1120,50  1440,50"
           fill="none" stroke="url(#rHL)"     stroke-width="5"  stroke-linecap="round"/>
 
   </svg>
