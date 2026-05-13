@@ -1342,13 +1342,17 @@ export default function AssessmentFlow() {
         <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#f5f5f7' }} />
 
         {/* ══════════════════════════════════════════════════════════════════
-            PREMIUM PRUDENTIAL RIBBON BACKGROUND
-            — Page-level SVG, absolute inside the results container
-            — Scrolls naturally with content (NOT fixed)
-            — Visible only in page margins / gaps between cards
-            — White card backgrounds naturally mask the central ribbon area
-            — 4 ribbon bundles: right-upper · left-mid · right-lower · left-lower
-            — 8 layered lines per bundle: opacity fades from deep red → light pink
+            PREMIUM CIRCULAR ARC BACKGROUND DECORATION
+            — Inspired by luxury life-insurance / fintech design aesthetic
+            — Two clusters of concentric circular arcs:
+                • TOP-RIGHT  — 12 rings centered off top-right corner (1650, -80)
+                  Each arc enters from the right edge and exits at the top edge,
+                  creating elegant quarter-ring decorations in the corner.
+                • LEFT-CENTRE — 6 rings centered off the left edge (-160, 1300)
+                  Each arc enters and exits at the left edge, bowing rightward
+                  into the page like a parenthesis "(" decoration.
+            — Deep red (#C8102E) → soft pink (#FFBAC8) opacity gradient per cluster
+            — Scrolls naturally with page content (position: absolute, not fixed)
             ══════════════════════════════════════════════════════════════════ */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', overflow: 'hidden' }}>
           <svg
@@ -1357,73 +1361,37 @@ export default function AssessmentFlow() {
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* ═══════════════════════════════════════════════════════════════
-                RIBBON DESIGN SYSTEM
-                ─ All lines are SINGLE smooth cubic bezier curves (no S-arcs).
-                ─ 18-line bundles at 18 px step → fabric density, not wireframe.
-                ─ Formula: each line is a parallel offset of the base arc.
-                ─ RIGHT bundles: sweep gently down-left into right margin.
-                ─ LEFT bundles:  sweep gently up-right into left margin.
-                ─ Stroke widths taper 1.8 → 0.7; opacity 0.62 → 0.010.
-                ─ Deep red (#C8102E) → mid red (#ED1B2E) → soft pink (#FFBAC8).
-            ═══════════════════════════════════════════════════════════════ */}
+            {/* ── TOP-RIGHT CLUSTER · 12 concentric arcs · center (1650, −80) ──
+                Arc formula: M 1440,y_right A R R 0 0 1 x_top,0
+                  y_right = −80 + √(R²−210²)   [right-edge intersection, x=1440]
+                  x_top   = 1650 − √(R²−80²)   [top-edge intersection,  y=0  ]
+                Sweep CW (flag 1) → short arc through top-right corner.
+            ── */}
+            <path d="M 1440,73   A  260  260 0 0 1 1403,0" fill="none" stroke="#C8102E" strokeOpacity="0.55" strokeWidth="1.8" strokeLinecap="round"/>
+            <path d="M 1440,187  A  340  340 0 0 1 1320,0" fill="none" stroke="#C8102E" strokeOpacity="0.48" strokeWidth="1.7" strokeLinecap="round"/>
+            <path d="M 1440,284  A  420  420 0 0 1 1238,0" fill="none" stroke="#C8102E" strokeOpacity="0.41" strokeWidth="1.6" strokeLinecap="round"/>
+            <path d="M 1440,374  A  500  500 0 0 1 1156,0" fill="none" stroke="#D42030" strokeOpacity="0.34" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M 1440,461  A  580  580 0 0 1 1076,0" fill="none" stroke="#D42030" strokeOpacity="0.27" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M 1440,546  A  660  660 0 0 1  995,0" fill="none" stroke="#ED1B2E" strokeOpacity="0.21" strokeWidth="1.3" strokeLinecap="round"/>
+            <path d="M 1440,630  A  740  740 0 0 1  914,0" fill="none" stroke="#ED1B2E" strokeOpacity="0.16" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M 1440,713  A  820  820 0 0 1  834,0" fill="none" stroke="#ED1B2E" strokeOpacity="0.12" strokeWidth="1.1" strokeLinecap="round"/>
+            <path d="M 1440,795  A  900  900 0 0 1  753,0" fill="none" stroke="#F04055" strokeOpacity="0.085" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 1440,877  A  980  980 0 0 1  673,0" fill="none" stroke="#F04055" strokeOpacity="0.057" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M 1440,959  A 1060 1060 0 0 1  593,0" fill="none" stroke="#F87888" strokeOpacity="0.036" strokeWidth="0.8" strokeLinecap="round"/>
+            <path d="M 1440,1041 A 1140 1140 0 0 1  513,0" fill="none" stroke="#FFBAC8" strokeOpacity="0.022" strokeWidth="0.7" strokeLinecap="round"/>
 
-            {/* ── RIGHT UPPER · 18 lines · y 85–391 · arc drop +162 ── */}
-            <path d="M 1462,85  C 1422,113 1328,180 1140,247" fill="none" stroke="#C8102E" strokeOpacity="0.62" strokeWidth="1.8" strokeLinecap="round"/>
-            <path d="M 1462,103 C 1422,131 1328,198 1140,265" fill="none" stroke="#C8102E" strokeOpacity="0.55" strokeWidth="1.7" strokeLinecap="round"/>
-            <path d="M 1462,121 C 1422,149 1328,216 1140,283" fill="none" stroke="#C8102E" strokeOpacity="0.48" strokeWidth="1.6" strokeLinecap="round"/>
-            <path d="M 1462,139 C 1422,167 1328,234 1140,301" fill="none" stroke="#C8102E" strokeOpacity="0.42" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M 1462,157 C 1422,185 1328,252 1140,319" fill="none" stroke="#D42030" strokeOpacity="0.36" strokeWidth="1.4" strokeLinecap="round"/>
-            <path d="M 1462,175 C 1422,203 1328,270 1140,337" fill="none" stroke="#D42030" strokeOpacity="0.30" strokeWidth="1.4" strokeLinecap="round"/>
-            <path d="M 1462,193 C 1422,221 1328,288 1140,355" fill="none" stroke="#ED1B2E" strokeOpacity="0.25" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M 1462,211 C 1422,239 1328,306 1140,373" fill="none" stroke="#ED1B2E" strokeOpacity="0.20" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M 1462,229 C 1422,257 1328,324 1140,391" fill="none" stroke="#ED1B2E" strokeOpacity="0.16" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M 1462,247 C 1422,275 1328,342 1140,409" fill="none" stroke="#ED1B2E" strokeOpacity="0.12" strokeWidth="1.1" strokeLinecap="round"/>
-            <path d="M 1462,265 C 1422,293 1328,360 1140,427" fill="none" stroke="#F04055" strokeOpacity="0.090" strokeWidth="1.1" strokeLinecap="round"/>
-            <path d="M 1462,283 C 1422,311 1328,378 1140,445" fill="none" stroke="#F04055" strokeOpacity="0.068" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M 1462,301 C 1422,329 1328,396 1140,463" fill="none" stroke="#F05068" strokeOpacity="0.052" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M 1462,319 C 1422,347 1328,414 1140,481" fill="none" stroke="#F06878" strokeOpacity="0.038" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M 1462,337 C 1422,365 1328,432 1140,499" fill="none" stroke="#F87888" strokeOpacity="0.028" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M 1462,355 C 1422,383 1328,450 1140,517" fill="none" stroke="#F890A0" strokeOpacity="0.020" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M 1462,373 C 1422,401 1328,468 1140,535" fill="none" stroke="#FFAABB" strokeOpacity="0.014" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M 1462,391 C 1422,419 1328,486 1140,553" fill="none" stroke="#FFBAC8" strokeOpacity="0.009" strokeWidth="0.7" strokeLinecap="round"/>
-
-            {/* ── LEFT MIDDLE · 18 lines · y 330–636 · arc rise −162 ── */}
-            <path d="M -22,330 C 22,302 116,235 304,168" fill="none" stroke="#C8102E" strokeOpacity="0.60" strokeWidth="1.8" strokeLinecap="round"/>
-            <path d="M -22,348 C 22,320 116,253 304,186" fill="none" stroke="#C8102E" strokeOpacity="0.53" strokeWidth="1.7" strokeLinecap="round"/>
-            <path d="M -22,366 C 22,338 116,271 304,204" fill="none" stroke="#C8102E" strokeOpacity="0.46" strokeWidth="1.6" strokeLinecap="round"/>
-            <path d="M -22,384 C 22,356 116,289 304,222" fill="none" stroke="#C8102E" strokeOpacity="0.40" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M -22,402 C 22,374 116,307 304,240" fill="none" stroke="#D42030" strokeOpacity="0.34" strokeWidth="1.4" strokeLinecap="round"/>
-            <path d="M -22,420 C 22,392 116,325 304,258" fill="none" stroke="#D42030" strokeOpacity="0.28" strokeWidth="1.4" strokeLinecap="round"/>
-            <path d="M -22,438 C 22,410 116,343 304,276" fill="none" stroke="#ED1B2E" strokeOpacity="0.23" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M -22,456 C 22,428 116,361 304,294" fill="none" stroke="#ED1B2E" strokeOpacity="0.18" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M -22,474 C 22,446 116,379 304,312" fill="none" stroke="#ED1B2E" strokeOpacity="0.14" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M -22,492 C 22,464 116,397 304,330" fill="none" stroke="#ED1B2E" strokeOpacity="0.11" strokeWidth="1.1" strokeLinecap="round"/>
-            <path d="M -22,510 C 22,482 116,415 304,348" fill="none" stroke="#F04055" strokeOpacity="0.082" strokeWidth="1.1" strokeLinecap="round"/>
-            <path d="M -22,528 C 22,500 116,433 304,366" fill="none" stroke="#F04055" strokeOpacity="0.060" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M -22,546 C 22,518 116,451 304,384" fill="none" stroke="#F05068" strokeOpacity="0.044" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M -22,564 C 22,536 116,469 304,402" fill="none" stroke="#F06878" strokeOpacity="0.032" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M -22,582 C 22,554 116,487 304,420" fill="none" stroke="#F87888" strokeOpacity="0.023" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M -22,600 C 22,572 116,505 304,438" fill="none" stroke="#F890A0" strokeOpacity="0.016" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M -22,618 C 22,590 116,523 304,456" fill="none" stroke="#FFAABB" strokeOpacity="0.011" strokeWidth="0.8" strokeLinecap="round"/>
-            <path d="M -22,636 C 22,608 116,541 304,474" fill="none" stroke="#FFBAC8" strokeOpacity="0.007" strokeWidth="0.7" strokeLinecap="round"/>
-
-            {/* ── RIGHT LOWER · 7 lines · y 720–822 · near-horizontal ── */}
-            <path d="M 1462,720 C 1422,732 1328,752 1140,772" fill="none" stroke="#C8102E" strokeOpacity="0.34" strokeWidth="1.7" strokeLinecap="round"/>
-            <path d="M 1462,737 C 1422,749 1328,769 1140,789" fill="none" stroke="#C8102E" strokeOpacity="0.25" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M 1462,754 C 1422,766 1328,786 1140,806" fill="none" stroke="#ED1B2E" strokeOpacity="0.18" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M 1462,771 C 1422,783 1328,803 1140,823" fill="none" stroke="#ED1B2E" strokeOpacity="0.12" strokeWidth="1.1" strokeLinecap="round"/>
-            <path d="M 1462,788 C 1422,800 1328,820 1140,840" fill="none" stroke="#F04055" strokeOpacity="0.078" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M 1462,805 C 1422,817 1328,837 1140,857" fill="none" stroke="#F87080" strokeOpacity="0.050" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M 1462,822 C 1422,834 1328,854 1140,874" fill="none" stroke="#FFBAC8" strokeOpacity="0.030" strokeWidth="0.8" strokeLinecap="round"/>
-
-            {/* ── LEFT LOWER · 6 lines · y 1040–1115 · near-horizontal ── */}
-            <path d="M -22,1040 C 22,1032 116,1018 304,1004" fill="none" stroke="#C8102E" strokeOpacity="0.24" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M -22,1055 C 22,1047 116,1033 304,1019" fill="none" stroke="#C8102E" strokeOpacity="0.17" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M -22,1070 C 22,1062 116,1048 304,1034" fill="none" stroke="#ED1B2E" strokeOpacity="0.11" strokeWidth="1.1" strokeLinecap="round"/>
-            <path d="M -22,1085 C 22,1077 116,1063 304,1049" fill="none" stroke="#ED1B2E" strokeOpacity="0.072" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M -22,1100 C 22,1092 116,1078 304,1064" fill="none" stroke="#F04055" strokeOpacity="0.046" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M -22,1115 C 22,1107 116,1093 304,1079" fill="none" stroke="#FFBAC8" strokeOpacity="0.028" strokeWidth="0.8" strokeLinecap="round"/>
+            {/* ── LEFT-CENTRE CLUSTER · 6 concentric arcs · center (−160, 1300) ──
+                Arc formula: M 0,y_upper A R R 0 0 1 0,y_lower
+                  y_upper = 1300 − √(R²−160²)
+                  y_lower = 1300 + √(R²−160²)
+                Sweep CW (flag 1) → minor arc bowing rightward into page ("(" shape).
+            ── */}
+            <path d="M 0,1035 A  310  310 0 0 1 0,1565" fill="none" stroke="#C8102E" strokeOpacity="0.40" strokeWidth="1.6" strokeLinecap="round"/>
+            <path d="M 0, 978 A  360  360 0 0 1 0,1623" fill="none" stroke="#C8102E" strokeOpacity="0.33" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M 0, 923 A  410  410 0 0 1 0,1678" fill="none" stroke="#D42030" strokeOpacity="0.26" strokeWidth="1.4" strokeLinecap="round"/>
+            <path d="M 0, 869 A  460  460 0 0 1 0,1731" fill="none" stroke="#D42030" strokeOpacity="0.18" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M 0, 816 A  510  510 0 0 1 0,1784" fill="none" stroke="#ED1B2E" strokeOpacity="0.11" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 0, 743 A  580  580 0 0 1 0,1858" fill="none" stroke="#F04055" strokeOpacity="0.060" strokeWidth="0.8" strokeLinecap="round"/>
           </svg>
         </div>
 
