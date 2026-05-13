@@ -10,6 +10,7 @@ import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/
 import { GlowingEffect } from '@/components/ui/glowing-effect'
 import { ShineBorder } from '@/components/ui/shine-border'
 import { Boxes } from '@/components/ui/background-boxes'
+import ShaderAnimation from '@/components/ui/shader-animation'
 import { AssessmentTrustStrip, ResultsStatsBanner } from '@/components/ui/assessment-stats'
 import { useAgentContact } from '@/hooks/useAgentContact'
 import TestimonialForm from '@/components/ui/testimonial-form'
@@ -226,7 +227,7 @@ function ScanningScreen() {
       idx++
       setActiveStep(idx)
       if (idx >= SCAN_STEPS.length) clearInterval(interval)
-    }, 900)
+    }, 1000)
     return () => clearInterval(interval)
   }, [])
 
@@ -1376,7 +1377,7 @@ export default function AssessmentFlow() {
       setResult(computed)
       setEngineResult(engine)
       setPhase('analyzing')
-      setTimeout(() => setPhase('results'), 5000)
+      setTimeout(() => setPhase('results'), 6000)
 
       // Track completion silently — fire and forget, never blocks UX
       fetch('/api/track-assessment', {
@@ -1405,34 +1406,14 @@ export default function AssessmentFlow() {
           .scan-sweep-line{ animation: scan-sweep 3.6s ease-in-out infinite; position:absolute; left:0; right:0; pointer-events:none; }
         `}</style>
 
-        {/* ── Page-level radial glow centred behind the card ── */}
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 65% 55% at 50% 46%, rgba(180,35,24,0.11) 0%, transparent 65%)',
-        }} />
+        {/* ── WebGL shader — full-viewport animated crimson background ── */}
+        <ShaderAnimation className="fixed inset-0 z-0 w-full h-full" />
 
-        {/* ── Concentric arc decoration — dark-page variant ──
-            TOP-RIGHT  : quarter-arcs from corner (1650, -80)
-            BOTTOM-LEFT: quarter-arcs from corner (-200, 1000)  */}
-        <div aria-hidden="true" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-          <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-            viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-            {/* Top-right */}
-            <path d="M 1440,73  A  260  260 0 0 1 1403,0" fill="none" stroke="#C8102E" strokeOpacity="0.30" strokeWidth="1.4" strokeLinecap="round"/>
-            <path d="M 1440,187 A  340  340 0 0 1 1320,0" fill="none" stroke="#C8102E" strokeOpacity="0.23" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M 1440,284 A  420  420 0 0 1 1238,0" fill="none" stroke="#C8102E" strokeOpacity="0.17" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M 1440,374 A  500  500 0 0 1 1156,0" fill="none" stroke="#D42030" strokeOpacity="0.12" strokeWidth="1.1" strokeLinecap="round"/>
-            <path d="M 1440,461 A  580  580 0 0 1 1076,0" fill="none" stroke="#D42030" strokeOpacity="0.08" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M 1440,546 A  660  660 0 0 1  995,0" fill="none" stroke="#ED1B2E" strokeOpacity="0.05" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M 1440,630 A  740  740 0 0 1  914,0" fill="none" stroke="#ED1B2E" strokeOpacity="0.03" strokeWidth="0.8" strokeLinecap="round"/>
-            {/* Bottom-left  (center −200, 1000) */}
-            <path d="M 0,712.8 A 350 350 0 0 1 135.4,900" fill="none" stroke="#C8102E" strokeOpacity="0.25" strokeWidth="1.3" strokeLinecap="round"/>
-            <path d="M 0,597.1 A 450 450 0 0 1 238.7,900" fill="none" stroke="#C8102E" strokeOpacity="0.18" strokeWidth="1.2" strokeLinecap="round"/>
-            <path d="M 0,487.9 A 550 550 0 0 1 340.8,900" fill="none" stroke="#D42030" strokeOpacity="0.12" strokeWidth="1.0" strokeLinecap="round"/>
-            <path d="M 0,381.8 A 650 650 0 0 1 442.3,900" fill="none" stroke="#D42030" strokeOpacity="0.07" strokeWidth="0.9" strokeLinecap="round"/>
-            <path d="M 0,278.8 A 750 750 0 0 1 543.2,900" fill="none" stroke="#ED1B2E" strokeOpacity="0.04" strokeWidth="0.7" strokeLinecap="round"/>
-          </svg>
-        </div>
+        {/* ── Dark veil — tones the shader down to near-black so card pops ── */}
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none',
+          background: 'rgba(8,11,16,0.82)',
+        }} />
 
         {/* Fixed scanning header */}
         <div style={{
