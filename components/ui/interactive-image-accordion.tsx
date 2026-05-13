@@ -1052,8 +1052,54 @@ export function FinancialAccordion() {
 
   return (
     <>
-      <section className="bg-white py-20 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="bg-white py-20 px-4 relative overflow-hidden">
+
+        {/* ── Concentric arc ribbons — top-right corner ──────────── */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 right-0"
+          width="820"
+          height="820"
+          viewBox="0 0 820 820"
+          fill="none"
+          style={{ zIndex: 0 }}
+        >
+          {/* Arc 1 — tightest, most vivid */}
+          <path d="M 820,155  A 260 260 0 0 0 665,0"   stroke="#C8102E" strokeOpacity="0.50" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+          {/* Arc 2 */}
+          <path d="M 820,235  A 340 340 0 0 0 585,0"   stroke="#C8102E" strokeOpacity="0.38" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+          {/* Arc 3 */}
+          <path d="M 820,315  A 420 420 0 0 0 505,0"   stroke="#C8102E" strokeOpacity="0.28" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+          {/* Arc 4 */}
+          <path d="M 820,395  A 500 500 0 0 0 425,0"   stroke="#C8102E" strokeOpacity="0.20" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+          {/* Arc 5 */}
+          <path d="M 820,475  A 580 580 0 0 0 345,0"   stroke="#C8102E" strokeOpacity="0.14" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
+          {/* Arc 6 */}
+          <path d="M 820,555  A 660 660 0 0 0 265,0"   stroke="#C8102E" strokeOpacity="0.10" strokeWidth="1.0" strokeLinecap="round" fill="none"/>
+          {/* Arc 7 */}
+          <path d="M 820,635  A 740 740 0 0 0 185,0"   stroke="#C8102E" strokeOpacity="0.07" strokeWidth="0.9" strokeLinecap="round" fill="none"/>
+          {/* Arc 8 */}
+          <path d="M 820,715  A 820 820 0 0 0 105,0"   stroke="#C8102E" strokeOpacity="0.04" strokeWidth="0.8" strokeLinecap="round" fill="none"/>
+        </svg>
+
+        {/* ── Concentric arc ribbons — bottom-left corner ─────────── */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-0 left-0"
+          width="520"
+          height="520"
+          viewBox="0 0 520 520"
+          fill="none"
+          style={{ zIndex: 0 }}
+        >
+          <path d="M 0,260  A 260 260 0 0 1 260,520" stroke="#C8102E" strokeOpacity="0.35" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+          <path d="M 0,180  A 340 340 0 0 1 340,520" stroke="#C8102E" strokeOpacity="0.25" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+          <path d="M 0,100  A 420 420 0 0 1 420,520" stroke="#C8102E" strokeOpacity="0.16" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+          <path d="M 0,20   A 500 500 0 0 1 500,520" stroke="#C8102E" strokeOpacity="0.09" strokeWidth="1.0" strokeLinecap="round" fill="none"/>
+          <path d="M 20,0   A 520 520 0 0 1 520,500" stroke="#C8102E" strokeOpacity="0.05" strokeWidth="0.8" strokeLinecap="round" fill="none"/>
+        </svg>
+
+        <div className="max-w-6xl mx-auto relative" style={{ zIndex: 1 }}>
 
           {/* ── Header ──────────────────────────────────────────── */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
