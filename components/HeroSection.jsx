@@ -74,6 +74,42 @@ export default function HeroSection() {
           style={{ background: 'radial-gradient(circle, rgba(100,116,255,0.06) 0%, transparent 70%)' }}
         />
 
+        {/* ── Concentric arc ribbon — top-right corner ── */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 right-0"
+          width="780"
+          height="780"
+          viewBox="0 0 780 780"
+          fill="none"
+          style={{ zIndex: 1 }}
+        >
+          <path d="M 780,148  A 260 260 0 0 0 632,0"   stroke="#C8102E" strokeOpacity="0.45" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+          <path d="M 780,228  A 340 340 0 0 0 552,0"   stroke="#C8102E" strokeOpacity="0.34" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+          <path d="M 780,308  A 420 420 0 0 0 472,0"   stroke="#C8102E" strokeOpacity="0.24" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+          <path d="M 780,388  A 500 500 0 0 0 392,0"   stroke="#C8102E" strokeOpacity="0.17" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+          <path d="M 780,468  A 580 580 0 0 0 312,0"   stroke="#C8102E" strokeOpacity="0.11" strokeWidth="1.1" strokeLinecap="round" fill="none"/>
+          <path d="M 780,548  A 660 660 0 0 0 232,0"   stroke="#C8102E" strokeOpacity="0.07" strokeWidth="1.0" strokeLinecap="round" fill="none"/>
+          <path d="M 780,628  A 740 740 0 0 0 152,0"   stroke="#C8102E" strokeOpacity="0.04" strokeWidth="0.9" strokeLinecap="round" fill="none"/>
+          <path d="M 780,708  A 820 820 0 0 0 72,0"    stroke="#C8102E" strokeOpacity="0.02" strokeWidth="0.8" strokeLinecap="round" fill="none"/>
+        </svg>
+
+        {/* ── Concentric arc ribbon — bottom-left corner ── */}
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-0 left-0"
+          width="480"
+          height="480"
+          viewBox="0 0 480 480"
+          fill="none"
+          style={{ zIndex: 1 }}
+        >
+          <path d="M 0,240  A 240 240 0 0 1 240,480" stroke="#C8102E" strokeOpacity="0.30" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+          <path d="M 0,160  A 320 320 0 0 1 320,480" stroke="#C8102E" strokeOpacity="0.20" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+          <path d="M 0,80   A 400 400 0 0 1 400,480" stroke="#C8102E" strokeOpacity="0.12" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+          <path d="M 20,0   A 480 480 0 0 1 480,460" stroke="#C8102E" strokeOpacity="0.06" strokeWidth="1.0" strokeLinecap="round" fill="none"/>
+        </svg>
+
         {/* ── PRU ribbon — bottom edge, behind all content ── */}
         <svg
           className="absolute left-0 w-full pointer-events-none"
