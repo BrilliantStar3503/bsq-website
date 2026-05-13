@@ -233,11 +233,18 @@ function ScanningScreen() {
 
   return (
     <div className="af-fade w-full max-w-md mx-auto px-4">
+      {/* ── ShineBorder wraps the card — animated crimson sweep on the border ── */}
+      <ShineBorder
+        borderRadius={16}
+        borderWidth={1}
+        duration={6}
+        color={['#3f0000', '#7f0000', '#B42318', '#D92D20', '#ff5555', '#D92D20', '#B42318', '#7f0000', '#3f0000']}
+        className="w-full min-w-0 p-0 bg-transparent"
+      >
       {/* ── Premium AI scanner card ── */}
       <div className="relative w-full rounded-2xl overflow-hidden" style={{
         background: 'rgba(8,11,16,0.96)',
-        border: '1px solid rgba(217,45,32,0.28)',
-        boxShadow: '0 0 0 1px rgba(217,45,32,0.06), 0 8px 48px rgba(0,0,0,0.55), 0 0 90px rgba(180,35,24,0.13)',
+        boxShadow: '0 8px 48px rgba(0,0,0,0.55), 0 0 90px rgba(180,35,24,0.13)',
       }}>
 
         {/* Animated isometric box grid — background layer */}
@@ -409,6 +416,7 @@ function ScanningScreen() {
 
         </div>
       </div>
+      </ShineBorder>
     </div>
   )
 }
@@ -775,13 +783,20 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
       </motion.div>
 
       {/* ══ SECTION 1 — Score Overview ═══════════════════════════════ */}
-      <motion.div variants={fadeUp}
-        className="rounded-2xl overflow-hidden"
-        style={{
-          background: '#ffffff',
-          border: '1px solid rgba(0,0,0,0.07)',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.04)',
-        }}>
+      <motion.div variants={fadeUp}>
+      <ShineBorder
+        borderRadius={16}
+        borderWidth={1}
+        duration={12}
+        color={['#C8102E', '#D42030', '#ED1B2E', '#ffffff', '#ED1B2E', '#D42030', '#C8102E']}
+        className="w-full min-w-0 p-0 bg-transparent"
+      >
+        <div
+          className="rounded-2xl overflow-hidden w-full"
+          style={{
+            background: '#ffffff',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.04)',
+          }}>
         <div style={{ height: 3, background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 45%, rgba(185,28,28,0.25) 80%, transparent 100%)' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
 
@@ -852,18 +867,26 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             </div>
           </div>
         </div>
-
+        </div>
+      </ShineBorder>
       </motion.div>
 
       {/* ══ SECTION 2 — Emergency Fund (conditional) ════════════════════ */}
       {result.emergencyFundTarget > 0 && (
-        <motion.div variants={fadeUp}
-          className="rounded-2xl overflow-hidden"
-          style={{
-            background: 'rgba(255,255,255,0.95)',
-            border: '1px solid rgba(0,0,0,0.06)',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
-          }}>
+        <motion.div variants={fadeUp}>
+        <ShineBorder
+          borderRadius={16}
+          borderWidth={1}
+          duration={14}
+          color={['#C8102E', '#D42030', '#ED1B2E', '#ffffff', '#ED1B2E', '#D42030', '#C8102E']}
+          className="w-full min-w-0 p-0 bg-transparent"
+        >
+          <div
+            className="rounded-2xl overflow-hidden w-full"
+            style={{
+              background: 'rgba(255,255,255,0.95)',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
+            }}>
           <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
           <div className="p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
@@ -898,6 +921,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
               </p>
             </div>
           </div>
+          </div>
+        </ShineBorder>
         </motion.div>
       )}
 
@@ -1084,7 +1109,14 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
 
         {/* Timeline vertical list */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' }}>
+        <ShineBorder
+          borderRadius={16}
+          borderWidth={1}
+          duration={10}
+          color={['#C8102E', '#D42030', '#ED1B2E', '#ffffff', '#ED1B2E', '#D42030', '#C8102E']}
+          className="w-full min-w-0 p-0 bg-transparent"
+        >
+        <div className="rounded-2xl overflow-hidden w-full" style={{ background: 'rgba(255,255,255,0.95)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' }}>
           {result.recommendations.map((rec, i) => {
             const hex         = rec.color ?? PRU_RED
             const engineMatch = engineResult.recommended_products.find(e => e.slug === rec.slug)
@@ -1205,6 +1237,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             )
           })}
         </div>
+        </ShineBorder>
       </motion.div>
 
       {/* ══ SECTION 6 — CTA ═════════════════════════════════════════════ */}

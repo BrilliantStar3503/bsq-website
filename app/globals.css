@@ -4,6 +4,17 @@
 
 /* ===== Animation Keyframes ===== */
 
+/* ShineBorder — Aceternity mask-composite sweep */
+@utility animate-shine {
+  animation: shine var(--duration, 14s) infinite linear;
+}
+
+@keyframes shine {
+  0%   { background-position: 0%   0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0%   0%; }
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
