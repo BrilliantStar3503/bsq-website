@@ -1090,15 +1090,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             const isTopPick   = engineMatch?.priority === 1
             const isLast      = i === result.recommendations.length - 1
 
-            const categoryImageMap: Record<string, string> = {
-              protection:  'https://images.unsplash.com/photo-1511895426328-dc8714191011?w=240&h=160&fit=crop&crop=center',
-              health:      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=240&h=160&fit=crop&crop=center',
-              investment:  'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=240&h=160&fit=crop&crop=center',
-              retirement:  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=240&h=160&fit=crop&crop=center',
-              education:   'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=240&h=160&fit=crop&crop=center',
+            // Slug-first lookup → local product photos in /public/images/products/
+            const slugImageMap: Record<string, string> = {
+              'pru-million-protect':           '/images/products/pru-million-protect-hero.jpg',
+              'prulink-assurance-account-plus': '/images/products/prulink-assurance-account-plus-hero.jpg',
+              'prulifetime-income':             '/images/products/prulifetime-income-2.jpg',
+              'elite-series':                  '/images/products/pru-million-protect-3-hero.jpg',
+              'prulove-for-life':              '/images/products/pru-million-protect-4-hero.jpg',
             }
-            const cardImage = categoryImageMap[(rec.category ?? '').toLowerCase()]
-              ?? 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=240&h=160&fit=crop&crop=center'
+            const cardImage = slugImageMap[rec.slug]
+              ?? '/images/products/pru-million-protect-hero.jpg'
 
             return (
               <motion.div key={rec.id}
