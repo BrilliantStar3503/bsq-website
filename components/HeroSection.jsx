@@ -82,7 +82,7 @@ export default function HeroSection() {
           height="780"
           viewBox="0 0 780 780"
           fill="none"
-          style={{ zIndex: 1 }}
+          style={{ zIndex: 0 }}
         >
           <path d="M 780,148  A 260 260 0 0 0 632,0"   stroke="#C8102E" strokeOpacity="0.45" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
           <path d="M 780,228  A 340 340 0 0 0 552,0"   stroke="#C8102E" strokeOpacity="0.34" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
@@ -102,7 +102,7 @@ export default function HeroSection() {
           height="480"
           viewBox="0 0 480 480"
           fill="none"
-          style={{ zIndex: 1 }}
+          style={{ zIndex: 0 }}
         >
           <path d="M 0,240  A 240 240 0 0 1 240,480" stroke="#C8102E" strokeOpacity="0.30" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
           <path d="M 0,160  A 320 320 0 0 1 320,480" stroke="#C8102E" strokeOpacity="0.20" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
