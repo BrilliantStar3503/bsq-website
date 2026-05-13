@@ -199,13 +199,13 @@ function BsqLogo({ scrolled }: { scrolled: boolean }) {
       <div className="flex flex-col leading-none">
         <span
           className="font-black text-sm tracking-wide transition-colors duration-300"
-          style={{ color: scrolled ? '#111111' : '#C8102E' }}
+          style={{ color: scrolled ? '#111111' : '#1d1d1f' }}
         >
           Brilliant Star Quartz
         </span>
         <span className="text-[9px] tracking-[0.15em] uppercase font-bold flex items-center gap-1">
-          <span style={{ color: scrolled ? 'rgba(17,17,17,0.5)' : 'rgba(200,16,46,0.55)', transition: 'color 0.3s' }}>Tied Branch &amp; Area</span>
-          <span style={{ color: scrolled ? 'rgba(17,17,17,0.25)' : 'rgba(200,16,46,0.30)', transition: 'color 0.3s' }}>·</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.5)' : 'rgba(17,17,17,0.45)', transition: 'color 0.3s' }}>Tied Branch &amp; Area</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.25)' : 'rgba(17,17,17,0.25)', transition: 'color 0.3s' }}>·</span>
           <span style={{ color: '#D92D20', fontWeight: 800, letterSpacing: '0.12em' }}>PRU&nbsp;LIFE&nbsp;UK</span>
         </span>
       </div>
@@ -333,11 +333,11 @@ export function BsqHeader() {
       <style>{`
         [data-scrolled="false"] .nav-menu button,
         [data-scrolled="false"] .nav-link {
-          color: #C8102E !important;
+          color: rgba(17,17,17,0.55) !important;
         }
         [data-scrolled="false"] .nav-menu button:hover,
         [data-scrolled="false"] .nav-link:hover {
-          color: #9B0D24 !important;
+          color: #111111 !important;
         }
         [data-scrolled="true"] .nav-menu button,
         [data-scrolled="true"] .nav-link {
@@ -361,7 +361,7 @@ export function BsqHeader() {
             <NavigationMenuItem>
               <NavigationMenuTrigger
                 className="text-sm transition-colors duration-300"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : '#C8102E' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
               >
                 Assessment
               </NavigationMenuTrigger>
@@ -403,7 +403,7 @@ export function BsqHeader() {
             <NavigationMenuItem>
               <NavigationMenuTrigger
                 className="text-sm transition-colors duration-300"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : '#C8102E' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
               >
                 Products
               </NavigationMenuTrigger>
@@ -445,7 +445,7 @@ export function BsqHeader() {
             <NavigationMenuItem>
               <NavigationMenuTrigger
                 className="text-sm transition-colors duration-300"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : '#C8102E' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
               >
                 About
               </NavigationMenuTrigger>
@@ -488,7 +488,7 @@ export function BsqHeader() {
               <NavigationMenuLink
                 href="/recruitment"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : '#C8102E' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.50)' }}
               >
                 Join Us
               </NavigationMenuLink>
@@ -502,7 +502,7 @@ export function BsqHeader() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : '#C8102E' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.50)' }}
               >
                 Contact
               </NavigationMenuLink>
