@@ -148,11 +148,9 @@ export function ResultsStatsBanner({ className }: { className?: string }) {
         className,
       )}
       style={{
-        background:  'rgba(255,255,255,0.04)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        border:      '1px solid rgba(255,255,255,0.08)',
-        boxShadow:   '0 2px 24px rgba(0,0,0,0.35)',
+        background:  '#ffffff',
+        border:      '1px solid rgba(0,0,0,0.06)',
+        boxShadow:   '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05)',
       }}
     >
       <StatItem
@@ -191,13 +189,13 @@ function StatItem({
         {icon}
       </div>
       <div>
-        <p className="text-sm font-semibold tabular-nums leading-none" style={{ color: 'rgba(255,255,255,0.85)' }}>{count}</p>
-        <p className="text-[10px] mt-0.5 leading-none tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>{label}</p>
+        <p className="text-sm font-semibold tabular-nums leading-none" style={{ color: '#1d1d1f' }}>{count}</p>
+        <p className="text-[10px] mt-0.5 leading-none tracking-wide" style={{ color: 'rgba(17,17,17,0.45)' }}>{label}</p>
       </div>
     </div>
   )
 }
 
 function Divider() {
-  return <div className="hidden sm:block w-px h-6 bg-white/10" />
+  return <div className="hidden sm:block w-px h-6 bg-black/10" />
 }

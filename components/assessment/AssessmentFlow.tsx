@@ -686,22 +686,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           background: '#ffffff',
           border: '1px solid rgba(0,0,0,0.07)',
           boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.04)',
-          position: 'relative',
         }}>
-        {/* Section ribbon — absolute, clipped by overflow:hidden, scroll with card */}
-        <svg aria-hidden="true" style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
-          viewBox="0 0 800 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          {/* Shadow */}
-          <path d="M -10,260 C 160,250 320,268 500,258 C 620,251 710,244 810,241"
-            fill="none" stroke="rgba(140,12,24,0.055)" strokeWidth="22" strokeLinecap="round"/>
-          {/* Main ribbon */}
-          <path d="M -10,246 C 160,236 320,254 500,244 C 620,237 710,230 810,227"
-            fill="none" stroke="rgba(210,26,40,0.085)" strokeWidth="11" strokeLinecap="round"/>
-          {/* Top highlight */}
-          <path d="M -10,232 C 160,222 320,240 500,230 C 620,223 710,216 810,213"
-            fill="none" stroke="rgba(255,80,90,0.055)" strokeWidth="3.5" strokeLinecap="round"/>
-        </svg>
-        <div style={{ height: 3, background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 45%, rgba(185,28,28,0.25) 80%, transparent 100%)', position: 'relative' }} />
+        <div style={{ height: 3, background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 45%, rgba(185,28,28,0.25) 80%, transparent 100%)' }} />
         <div className="grid grid-cols-1 md:grid-cols-2">
 
           {/* Score ring */}
@@ -782,19 +768,8 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             background: 'rgba(255,255,255,0.95)',
             border: '1px solid rgba(0,0,0,0.06)',
             boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
-            position: 'relative',
           }}>
-          {/* Section ribbon */}
-          <svg aria-hidden="true" style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
-            viewBox="0 0 800 210" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M -10,172 C 160,164 320,178 500,169 C 620,163 710,157 810,154"
-              fill="none" stroke="rgba(140,12,24,0.05)" strokeWidth="22" strokeLinecap="round"/>
-            <path d="M -10,159 C 160,151 320,165 500,156 C 620,150 710,144 810,141"
-              fill="none" stroke="rgba(210,26,40,0.075)" strokeWidth="11" strokeLinecap="round"/>
-            <path d="M -10,145 C 160,137 320,151 500,142 C 620,136 710,130 810,127"
-              fill="none" stroke="rgba(255,80,90,0.048)" strokeWidth="3.5" strokeLinecap="round"/>
-          </svg>
-          <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)', position: 'relative' }} />
+          <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
           <div className="p-6 md:p-8">
             <div className="flex items-center gap-2 mb-6">
               <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 600, color: '#dc2626' }}>Emergency Fund Target</p>
@@ -1014,17 +989,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
 
         {/* Timeline vertical list */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)', position: 'relative' }}>
-          {/* Section ribbon */}
-          <svg aria-hidden="true" style={{ position:'absolute', inset:0, width:'100%', height:'100%', pointerEvents:'none' }}
-            viewBox="0 0 800 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M -10,300 C 160,291 320,307 500,297 C 620,290 710,283 810,280"
-              fill="none" stroke="rgba(140,12,24,0.045)" strokeWidth="24" strokeLinecap="round"/>
-            <path d="M -10,286 C 160,277 320,293 500,283 C 620,276 710,269 810,266"
-              fill="none" stroke="rgba(210,26,40,0.070)" strokeWidth="12" strokeLinecap="round"/>
-            <path d="M -10,271 C 160,262 320,278 500,268 C 620,261 710,254 810,251"
-              fill="none" stroke="rgba(255,80,90,0.045)" strokeWidth="4" strokeLinecap="round"/>
-          </svg>
+        <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' }}>
           {result.recommendations.map((rec, i) => {
             const hex         = rec.color ?? PRU_RED
             const engineMatch = engineResult.recommended_products.find(e => e.slug === rec.slug)
@@ -1375,6 +1340,57 @@ export default function AssessmentFlow() {
       <div id="assessment-results" className="assessment-results min-h-screen flex flex-col" style={{ background: '#f5f5f7', position: 'relative', zIndex: 0 }}>
         {/* Full-viewport background */}
         <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: '#f5f5f7' }} />
+
+        {/* ══════════════════════════════════════════════════════════════════
+            PREMIUM PRUDENTIAL RIBBON BACKGROUND
+            — Page-level SVG, absolute inside the results container
+            — Scrolls naturally with content (NOT fixed)
+            — Visible only in page margins / gaps between cards
+            — White card backgrounds naturally mask the central ribbon area
+            — 4 ribbon bundles: right-upper · left-mid · right-lower · left-lower
+            — 8 layered lines per bundle: opacity fades from deep red → light pink
+            ══════════════════════════════════════════════════════════════════ */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none', overflow: 'hidden' }}>
+          <svg
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            viewBox="0 0 1440 2600"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* ── RIGHT UPPER — enters top-right, fans down-left across margin ── */}
+            <path d="M 1462,138 C 1348,172 1224,220 1038,312" fill="none" stroke="#C8102E" strokeOpacity="0.72" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M 1462,174 C 1348,208 1224,256 1053,346" fill="none" stroke="#C8102E" strokeOpacity="0.55" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M 1462,208 C 1348,242 1224,290 1067,378" fill="none" stroke="#ED1B2E" strokeOpacity="0.40" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 1462,239 C 1348,273 1224,321 1080,407" fill="none" stroke="#ED1B2E" strokeOpacity="0.27" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M 1462,267 C 1348,301 1224,349 1092,434" fill="none" stroke="#ED1B2E" strokeOpacity="0.18" strokeWidth="0.8" strokeLinecap="round"/>
+            <path d="M 1462,292 C 1348,326 1224,374 1103,458" fill="none" stroke="#F06070" strokeOpacity="0.13" strokeWidth="0.8" strokeLinecap="round"/>
+            <path d="M 1462,314 C 1348,348 1224,396 1113,480" fill="none" stroke="#F08898" strokeOpacity="0.09" strokeWidth="0.7" strokeLinecap="round"/>
+            <path d="M 1462,333 C 1348,367 1224,415 1122,500" fill="none" stroke="#FFB8C8" strokeOpacity="0.07" strokeWidth="0.7" strokeLinecap="round"/>
+
+            {/* ── LEFT MIDDLE — enters mid-left, fans up-right across margin ── */}
+            <path d="M -22,370 C 104,340 256,314 464,318" fill="none" stroke="#C8102E" strokeOpacity="0.63" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M -22,405 C 104,375 256,349 479,352" fill="none" stroke="#C8102E" strokeOpacity="0.47" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M -22,438 C 104,408 256,382 493,385" fill="none" stroke="#ED1B2E" strokeOpacity="0.33" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M -22,468 C 104,438 256,412 506,415" fill="none" stroke="#ED1B2E" strokeOpacity="0.22" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M -22,495 C 104,465 256,439 518,442" fill="none" stroke="#ED1B2E" strokeOpacity="0.14" strokeWidth="0.8" strokeLinecap="round"/>
+            <path d="M -22,519 C 104,489 256,463 529,466" fill="none" stroke="#F06070" strokeOpacity="0.10" strokeWidth="0.8" strokeLinecap="round"/>
+            <path d="M -22,540 C 104,510 256,484 539,487" fill="none" stroke="#F08898" strokeOpacity="0.07" strokeWidth="0.7" strokeLinecap="round"/>
+            <path d="M -22,558 C 104,528 256,502 548,505" fill="none" stroke="#FFB8C8" strokeOpacity="0.05" strokeWidth="0.7" strokeLinecap="round"/>
+
+            {/* ── RIGHT LOWER — emergency fund / financial gap area ── */}
+            <path d="M 1462,742 C 1354,762 1232,780 1052,772" fill="none" stroke="#C8102E" strokeOpacity="0.33" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M 1462,772 C 1354,791 1232,808 1067,800" fill="none" stroke="#ED1B2E" strokeOpacity="0.22" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M 1462,798 C 1354,816 1232,833 1080,825" fill="none" stroke="#ED1B2E" strokeOpacity="0.14" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M 1462,820 C 1354,837 1232,853 1092,845" fill="none" stroke="#F06070" strokeOpacity="0.09" strokeWidth="0.8" strokeLinecap="round"/>
+            <path d="M 1462,838 C 1354,854 1232,869 1102,861" fill="none" stroke="#FFB8C8" strokeOpacity="0.07" strokeWidth="0.7" strokeLinecap="round"/>
+
+            {/* ── LEFT LOWER — recommended plans / CTA depth layer ── */}
+            <path d="M -22,1062 C 124,1036 290,1018 516,1024" fill="none" stroke="#C8102E" strokeOpacity="0.23" strokeWidth="1.0" strokeLinecap="round"/>
+            <path d="M -22,1093 C 124,1067 290,1049 530,1055" fill="none" stroke="#ED1B2E" strokeOpacity="0.15" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M -22,1120 C 124,1094 290,1076 543,1082" fill="none" stroke="#ED1B2E" strokeOpacity="0.09" strokeWidth="0.8" strokeLinecap="round"/>
+            <path d="M -22,1143 C 124,1117 290,1099 555,1105" fill="none" stroke="#FFB8C8" strokeOpacity="0.06" strokeWidth="0.7" strokeLinecap="round"/>
+          </svg>
+        </div>
 
         {/* ── Scoped button design system — ONLY affects .assessment-results ── */}
         <style>{`
