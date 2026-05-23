@@ -90,7 +90,7 @@ function Hero({
 
           {/* ── Right — event image ── */}
           <div
-            className="rounded-2xl overflow-hidden aspect-square relative"
+            className="rounded-2xl overflow-hidden aspect-[4/5] relative"
             style={{
               background: eventImage ? undefined : '#f3f4f6',
               border: eventImage ? 'none' : '1.5px dashed rgba(0,0,0,0.12)',
