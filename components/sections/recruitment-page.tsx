@@ -678,7 +678,7 @@ export default function RecruitmentPage() {
       */}
       <BYBHero
         eventLabel="Now Recruiting · Build Your Business"
-        // eventImage="/images/events/byb-invite-apr-2026.jpg"
+        eventImage="/images/events/pruventure-apprentice.jpg"
       />
 
       {/* ── 2. BENEFITS GRID ────────────────────────────────────────────── */}
