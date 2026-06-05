@@ -13,8 +13,9 @@ const NAV_LINKS = [
   { label: 'Start Assessment', href: '/assessment'      },
   { label: 'How It Works',     href: '/#how'            },
   { label: 'Solutions',        href: '/#solutions'      },
+  { label: 'Join Us',          href: '/recruitment'     },
+  { label: 'Contact Us',       href: '/contact'         },
   { label: 'Privacy Policy',   href: '/privacy-policy'  },
-  { label: 'Contact Advisor',  href: 'https://m.me/Bstarquartzarea' },
 ]
 
 const SOCIAL_LINKS = [

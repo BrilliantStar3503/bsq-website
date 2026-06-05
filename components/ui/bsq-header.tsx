@@ -494,13 +494,10 @@ export function BsqHeader() {
               </NavigationMenuLink>
             </NavigationMenuItem>
 
-            {/* Simple link */}
+            {/* Contact link */}
             <NavigationMenuItem>
               <NavigationMenuLink
-                href="#"
-                onClick={(e) => { e.preventDefault(); openContact('nav_contact') }}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/contact"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
                 style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.50)' }}
               >
@@ -611,10 +608,10 @@ export function BsqHeader() {
             </div>
           </div>
 
-          {/* Recruitment section */}
+          {/* Recruitment + Contact section */}
           <div>
             <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
-              Join Us
+              More
             </p>
             <a
               href="/recruitment"
@@ -623,6 +620,14 @@ export function BsqHeader() {
             >
               <Users size={14} className="text-white/35 shrink-0" />
               <span className="text-sm">Join Us</span>
+            </a>
+            <a
+              href="/contact"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-2 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/08 transition-colors"
+            >
+              <MessageCircle size={14} className="text-white/35 shrink-0" />
+              <span className="text-sm">Contact Us</span>
             </a>
           </div>
 
