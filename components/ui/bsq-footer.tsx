@@ -39,7 +39,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: 'Email',
-    href: 'mailto:bstarquartz@gmail.com',
+    href: 'mailto:contact.us@prubsq.com',
     icon: <Mail size={15} />,
   },
 ]
@@ -164,7 +164,7 @@ export default function BsqFooter() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={10} className="text-white/40 shrink-0" />
-                <p className="text-[11px] text-white/80">bstarquartz@gmail.com</p>
+                <p className="text-[11px] text-white/80">contact.us@prubsq.com</p>
               </div>
             </div>
           </div>
