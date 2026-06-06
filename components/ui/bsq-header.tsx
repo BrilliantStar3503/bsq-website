@@ -485,24 +485,24 @@ export function BsqHeader() {
 
             {/* Join Us link */}
             <NavigationMenuItem>
-              <NavigationMenuLink
+              <a
                 href="/recruitment"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
                 style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.50)' }}
               >
                 Join Us
-              </NavigationMenuLink>
+              </a>
             </NavigationMenuItem>
 
             {/* Contact link */}
             <NavigationMenuItem>
-              <NavigationMenuLink
+              <a
                 href="/contact"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
                 style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.50)' }}
               >
                 Contact
-              </NavigationMenuLink>
+              </a>
             </NavigationMenuItem>
 
           </NavigationMenuList>
