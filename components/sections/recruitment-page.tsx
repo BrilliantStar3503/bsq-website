@@ -681,6 +681,170 @@ export default function RecruitmentPage() {
         eventImage="/images/events/pruventure-apprentice.jpg"
       />
 
+      {/* ── 1b. WE ARE HIRING ───────────────────────────────────────────── */}
+      <section className="bg-white py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+
+          {/* Header */}
+          <FadeUp>
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: RED }} />
+                <span
+                  className="text-xs font-bold tracking-[0.28em] uppercase px-3 py-1 rounded-full"
+                  style={{ color: RED, background: 'rgba(237,27,46,0.08)', border: '1px solid rgba(237,27,46,0.18)' }}
+                >
+                  Now Open
+                </span>
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: RED }} />
+              </div>
+              <h2 className="font-black text-gray-900 tracking-tight" style={{ fontSize: 'clamp(2rem, 5vw, 3rem)' }}>
+                WE ARE <span style={{ color: RED }}>HIRING!</span>
+              </h2>
+              <p className="text-gray-400 mt-3 font-light text-[1rem] max-w-md mx-auto leading-relaxed">
+                Two roles. One team. Choose the path that fits your ambition.
+              </p>
+            </div>
+          </FadeUp>
+
+          {/* Role cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {/* Card 1 — PRU Venture Apprentice */}
+            <FadeUp delay={0.1}>
+              <div
+                className="group relative rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300"
+                style={{
+                  background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0505 100%)',
+                  border: `1px solid rgba(237,27,46,0.25)`,
+                  boxShadow: `0 4px 32px rgba(237,27,46,0.10)`,
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 48px rgba(237,27,46,0.20)` }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 32px rgba(237,27,46,0.10)` }}
+              >
+                {/* Glow */}
+                <div className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(237,27,46,0.12) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+
+                <div className="relative p-7 flex flex-col gap-5 h-full">
+                  {/* Badge */}
+                  <span
+                    className="self-start text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
+                    style={{ background: 'rgba(237,27,46,0.18)', color: RED, border: '1px solid rgba(237,27,46,0.3)' }}
+                  >
+                    Featured Role
+                  </span>
+
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(237,27,46,0.15)', border: '1px solid rgba(237,27,46,0.25)' }}>
+                    <TrendingUp size={22} style={{ color: RED }} />
+                  </div>
+
+                  {/* Title */}
+                  <div>
+                    <p className="text-white font-black text-xl leading-tight">PRU Venture</p>
+                    <p className="font-black text-xl leading-tight" style={{ color: RED }}>Apprentice</p>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-white/50 text-[13px] leading-relaxed font-light">
+                    The entry point into the BSQ system. Learn the financial advisory business from the ground up — with full training, licensing support, AI tools, and a mentor by your side from day one.
+                  </p>
+
+                  {/* Perks */}
+                  <div className="flex flex-col gap-2.5 flex-1">
+                    {[
+                      'Full PRU Life UK licensing support',
+                      'Access to the BSQ AI assessment platform',
+                      'Mentored by a senior advisor',
+                      'Uncapped commission from day one',
+                    ].map(perk => (
+                      <div key={perk} className="flex items-start gap-2.5">
+                        <CheckCircle2 size={13} className="flex-shrink-0 mt-0.5" style={{ color: RED }} />
+                        <span className="text-white/60 text-[12.5px] font-light">{perk}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <a
+                    href="#book"
+                    className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 hover:gap-3"
+                    style={{ background: RED, boxShadow: `0 4px 20px rgba(237,27,46,0.40)` }}
+                  >
+                    Apply as Apprentice <ArrowRight size={14} strokeWidth={2.5} />
+                  </a>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Card 2 — iLeader */}
+            <FadeUp delay={0.2}>
+              <div
+                className="group relative rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 48px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLDivElement).style.borderColor = `rgba(237,27,46,0.25)` }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(0,0,0,0.08)' }}
+              >
+                <div className="relative p-7 flex flex-col gap-5 h-full">
+                  {/* Badge */}
+                  <span
+                    className="self-start text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
+                    style={{ background: '#f3f4f6', color: '#6b7280', border: '1px solid rgba(0,0,0,0.08)' }}
+                  >
+                    Leadership Role
+                  </span>
+
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(237,27,46,0.08)', border: '1px solid rgba(237,27,46,0.15)' }}>
+                    <Users size={22} style={{ color: RED }} />
+                  </div>
+
+                  {/* Title */}
+                  <div>
+                    <p className="text-gray-900 font-black text-xl leading-tight">iLeader</p>
+                    <p className="text-sm font-medium mt-1" style={{ color: '#9ca3af' }}>Build & Lead Your Own Team</p>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-500 text-[13px] leading-relaxed font-light">
+                    Ready to lead? Step into the iLeader track and build your own unit under the BSQ system. Recruit, train, and grow a team while earning from your own production and your team&apos;s performance.
+                  </p>
+
+                  {/* Perks */}
+                  <div className="flex flex-col gap-2.5 flex-1">
+                    {[
+                      'Override income from your team\'s production',
+                      'Leadership development & management training',
+                      'Your own branded BSQ sub-team funnel',
+                      'MDRT & COT qualification path',
+                    ].map(perk => (
+                      <div key={perk} className="flex items-start gap-2.5">
+                        <CheckCircle2 size={13} className="flex-shrink-0 mt-0.5" style={{ color: RED }} />
+                        <span className="text-gray-500 text-[12.5px] font-light">{perk}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <a
+                    href="#book"
+                    className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:gap-3"
+                    style={{ background: 'rgba(237,27,46,0.07)', color: RED, border: `1.5px solid rgba(237,27,46,0.25)` }}
+                  >
+                    Apply as iLeader <ArrowRight size={14} strokeWidth={2.5} />
+                  </a>
+                </div>
+              </div>
+            </FadeUp>
+
+          </div>
+        </div>
+      </section>
+
       {/* ── 2. BENEFITS GRID ────────────────────────────────────────────── */}
       <section className="bg-white py-24 px-6">
         <div className="max-w-5xl mx-auto">
