@@ -702,13 +702,13 @@ export default function RecruitmentPage() {
                 WE ARE <span style={{ color: RED }}>HIRING!</span>
               </h2>
               <p className="text-gray-400 mt-3 font-light text-[1rem] max-w-md mx-auto leading-relaxed">
-                Two roles. One team. Choose the path that fits your ambition.
+                Three roles. One team. Choose the path that fits your ambition.
               </p>
             </div>
           </FadeUp>
 
           {/* Role cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {/* Card 1 — PRU Venture Apprentice */}
             <FadeUp delay={0.1}>
@@ -836,6 +836,71 @@ export default function RecruitmentPage() {
                     style={{ background: 'rgba(237,27,46,0.07)', color: RED, border: `1.5px solid rgba(237,27,46,0.25)` }}
                   >
                     Apply as iLeader <ArrowRight size={14} strokeWidth={2.5} />
+                  </a>
+                </div>
+              </div>
+            </FadeUp>
+
+            {/* Card 3 — Financial Advisor */}
+            <FadeUp delay={0.3}>
+              <div
+                className="group relative rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 48px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(237,27,46,0.25)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(0,0,0,0.08)' }}
+              >
+                <div className="relative p-7 flex flex-col gap-5 h-full">
+                  {/* Badge */}
+                  <span
+                    className="self-start text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
+                    style={{ background: '#f3f4f6', color: '#6b7280', border: '1px solid rgba(0,0,0,0.08)' }}
+                  >
+                    Part-time / Full-time
+                  </span>
+
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(237,27,46,0.08)', border: '1px solid rgba(237,27,46,0.15)' }}>
+                    <ShieldCheck size={22} style={{ color: RED }} />
+                  </div>
+
+                  {/* Title */}
+                  <div>
+                    <p className="text-gray-900 font-black text-xl leading-tight">Financial</p>
+                    <p className="font-black text-xl leading-tight" style={{ color: RED }}>Advisor</p>
+                    <p className="text-sm font-medium mt-1" style={{ color: '#9ca3af' }}>Part-time or Full-time</p>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-500 text-[13px] leading-relaxed font-light">
+                    Whether you&apos;re exploring a side income or committing full-time, the Financial Advisor role fits your schedule. Serve real clients, earn real income, and grow at your own pace.
+                  </p>
+
+                  {/* Perks */}
+                  <div className="flex flex-col gap-2.5 flex-1">
+                    {[
+                      'Flexible hours — work around your schedule',
+                      'Same AI tools & digital system as full-timers',
+                      'PRU Life UK licensed & regulated',
+                      "Transition to full-time anytime you're ready",
+                    ].map(perk => (
+                      <div key={perk} className="flex items-start gap-2.5">
+                        <CheckCircle2 size={13} className="flex-shrink-0 mt-0.5" style={{ color: RED }} />
+                        <span className="text-gray-500 text-[12.5px] font-light">{perk}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <a
+                    href="#book"
+                    className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:gap-3"
+                    style={{ background: 'rgba(237,27,46,0.07)', color: RED, border: '1.5px solid rgba(237,27,46,0.25)' }}
+                  >
+                    Apply as Advisor <ArrowRight size={14} strokeWidth={2.5} />
                   </a>
                 </div>
               </div>
