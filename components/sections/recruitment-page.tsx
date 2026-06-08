@@ -682,7 +682,7 @@ export default function RecruitmentPage() {
       />
 
       {/* ── 1b. WE ARE HIRING ───────────────────────────────────────────── */}
-      <section className="bg-white py-20 px-6">
+      <section id="hiring" className="bg-white py-20 px-6">
         <div className="max-w-4xl mx-auto">
 
           {/* Header */}
