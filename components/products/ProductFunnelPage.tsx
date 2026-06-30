@@ -11,6 +11,9 @@ import {
   Clock, Users, Star, Phone, X, Send, Check, ChevronLeft, ChevronRight
 } from 'lucide-react'
 import type { PruProduct } from '@/lib/products'
+import ProductStickyNav from './ProductStickyNav'
+import ProductAppointmentSection from './ProductAppointmentSection'
+import RelatedProducts from './RelatedProducts'
 
 /* ─── Brand constants ─────────────────────────────────────────────── */
 const PRU_RED   = '#D92D20'   // primary red
@@ -494,11 +497,14 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
         </div>
       </section>
 
+      {/* ── Sticky in-page section nav ── */}
+      <ProductStickyNav />
+
       {/* ══════════════════════════════════════════════════
           PROBLEM HOOK — gray bg, centered
           pt-10 mobile / pt-20 desktop (floating CTA room)
       ══════════════════════════════════════════════════ */}
-      <section style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
+      <section id="overview" style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
         <div className="max-w-3xl mx-auto px-6 md:px-10 pt-12 pb-12 lg:pt-16 lg:pb-16 text-center">
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.45 }}>
@@ -522,7 +528,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
       {/* ══════════════════════════════════════════════════
           KEY BENEFITS — white bg
       ══════════════════════════════════════════════════ */}
-      <section style={{ background: '#fff', borderBottom: `1px solid ${GRAY_LINE}` }}>
+      <section id="benefits" style={{ background: '#fff', borderBottom: `1px solid ${GRAY_LINE}` }}>
         <div className="max-w-6xl mx-auto px-6 md:px-10 py-14 md:py-20">
           <motion.div className="mb-10"
             initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
@@ -589,7 +595,7 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
       {/* ══════════════════════════════════════════════════
           IS IT RIGHT FOR YOU — gray bg, 2 col
       ══════════════════════════════════════════════════ */}
-      <section style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
+      <section id="coverage" style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
         <div className="max-w-6xl mx-auto px-6 md:px-10 py-14 md:py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
@@ -694,6 +700,11 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
       )}
 
       {/* ══════════════════════════════════════════════════
+          APPOINTMENT — primary conversion section
+      ══════════════════════════════════════════════════ */}
+      <ProductAppointmentSection product={product} />
+
+      {/* ══════════════════════════════════════════════════
           BOTTOM CTA — dark section, PRU Life UK style
       ══════════════════════════════════════════════════ */}
       <section style={{ background: '#1a1a1a' }}>
@@ -745,6 +756,11 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════
+          RELATED PRODUCTS
+      ══════════════════════════════════════════════════ */}
+      <RelatedProducts product={product} />
 
       {/* ══════════════════════════════════════════════════
           COMPLIANCE FOOTER NOTE
