@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sanitize, sanitizeSource } from '@/lib/api-guard'
+import { sanitize, sanitizeEventSource } from '@/lib/api-guard'
 
 /**
  * POST /api/track-click
@@ -7,7 +7,10 @@ import { sanitize, sanitizeSource } from '@/lib/api-guard'
  * Logs all lead-generating button clicks to n8n → per-agent CRM tab + master sheet.
  * Fires and forgets — never blocks the user action.
  *
- * Sources: advisor_btn_* | chat_launcher | call_btn | etc.
+ * Sources: advisor_btn_<context> | chat_launcher | call_btn | etc. — see
+ * sanitizeEventSource() / EVENT_SOURCE_PREFIXES in lib/api-guard.ts for the
+ * full registry. Uses sanitizeEventSource (not sanitizeSource) — this field
+ * is interaction telemetry, not the closed UTM-source vocabulary.
  * Payload: { source, agent, name?, message?, platform?, utmSource, utmMedium }
  */
 export async function POST(req: NextRequest) {
@@ -15,7 +18,7 @@ export async function POST(req: NextRequest) {
     const raw = await req.json()
 
     // Sanitize every field — strip HTML, enforce max lengths
-    const source    = sanitizeSource(raw.source)
+    const source    = sanitizeEventSource(raw.source)
     const agent     = sanitize(raw.agent,     64)
     const name      = sanitize(raw.name,      120)
     const message   = sanitize(raw.message,   500)

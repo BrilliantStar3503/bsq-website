@@ -38,7 +38,10 @@ export function isValidRating(rating: unknown): boolean {
   return typeof rating === 'number' && Number.isInteger(rating) && rating >= 1 && rating <= 5
 }
 
-/** Allowlist for known source identifiers */
+/** Allowlist for known UTM/lead source identifiers (small, closed marketing
+ *  vocabulary — facebook, google, direct, etc.). Used for `utmSource` in
+ *  /api/capture-lead and /api/appointments. Do not widen this for event
+ *  telemetry — see sanitizeEventSource below for that. */
 const ALLOWED_SOURCES = new Set([
   'advisor_btn', 'chat_launcher', 'call_btn', 'nav_consult', 'nav_contact',
   'mobile_consult', 'hero_cta', 'footer_cta', 'assessment_complete',
@@ -49,4 +52,46 @@ const ALLOWED_SOURCES = new Set([
 export function sanitizeSource(source: unknown): string {
   const s = sanitize(source, 64)
   return ALLOWED_SOURCES.has(s) ? s : 'unknown'
+}
+
+/**
+ * Canonical registry of event-source prefixes for interaction telemetry
+ * (/api/track-click's `source` field). Each prefix names a UI surface;
+ * the suffix after `<prefix>_` carries contextual detail — a product
+ * slug, a goal id, a numeric score — sourced from lib/products.ts or
+ * numeric values, never raw user text. The security boundary is
+ * sanitize()'s charset stripping plus EVENT_SOURCE_SUFFIX below, not
+ * this list — this list exists to keep the taxonomy meaningful and
+ * closed to known UI surfaces, not to block injection by itself.
+ *
+ * Adding a new experience (Business Solutions, Health & Protection,
+ * ...) needs no change here as long as it reuses an existing prefix
+ * (e.g. 'advisor_btn' via openContact()) — only add a prefix here if a
+ * genuinely new *kind* of UI surface is introduced.
+ */
+export const EVENT_SOURCE_PREFIXES = [
+  'advisor_btn', 'chat_launcher', 'call_btn', 'nav_consult', 'nav_contact',
+  'mobile_consult', 'hero_cta', 'footer_cta', 'assessment_cta', 'direct',
+] as const
+
+/** Suffix charset for event sources — product slugs and goal ids are
+ *  kebab-case, scores are numeric; this covers both, nothing else. */
+const EVENT_SOURCE_SUFFIX = /^[a-z0-9_-]{1,48}$/i
+
+/**
+ * Validates /api/track-click's `source` field: exact prefix match, or
+ * `<prefix>_<safe suffix>`. Distinct from sanitizeSource()/ALLOWED_SOURCES
+ * on purpose — utmSource is a closed marketing vocabulary that should
+ * stay closed; event sources are an open, structured taxonomy that
+ * needs to carry contextual detail to be useful in the CRM.
+ */
+export function sanitizeEventSource(source: unknown): string {
+  const s = sanitize(source, 64)
+  for (const prefix of EVENT_SOURCE_PREFIXES) {
+    if (s === prefix) return s
+    if (s.startsWith(`${prefix}_`) && EVENT_SOURCE_SUFFIX.test(s.slice(prefix.length + 1))) {
+      return s
+    }
+  }
+  return 'unknown'
 }
