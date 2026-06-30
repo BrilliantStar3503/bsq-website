@@ -5,7 +5,7 @@ import ProductCard from '@/components/products/ProductCard'
 const PRU_RED = '#D92D20'
 
 export const metadata: Metadata = {
-  title: 'Our Products | BSQ · PRU Life UK',
+  title: 'Insurance Solutions | BSQ · PRU Life UK',
   description: 'Explore PRU Life UK insurance and investment-linked plans — protection, income, and savings solutions for every life stage.',
 }
 
@@ -21,7 +21,7 @@ export default function ProductsIndexPage() {
             </span>
             <div style={{ height: 2, width: 24, background: PRU_RED }} />
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Our Products</h1>
+          <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Insurance Solutions</h1>
           <p className="text-base text-gray-600 leading-relaxed">
             Protection, investment, and guaranteed income plans — built around your life stage and goals.
             Open any plan below to compare benefits and book a free consultation.

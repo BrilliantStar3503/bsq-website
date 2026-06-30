@@ -27,7 +27,7 @@ const FULL_HEADER_H    = BRAND_ROW_H + NAV_H_TOP  // 140px flow spacer
 /* ── Nav data ─────────────────────────────────────────────────────── */
 const NAV_LINKS = [
   { label: 'Home',            href: '/'           },
-  { label: 'Products',        href: '/products',  hasDropdown: true },
+  { label: 'Insurance Solutions', href: '/products',  hasDropdown: true },
   { label: 'Take Assessment', href: '/assessment' },
   { label: 'About BSQ',       href: '/#about'     },
   { label: 'Contact Us',      href: '/#contact'   },

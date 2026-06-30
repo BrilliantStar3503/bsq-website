@@ -26,7 +26,7 @@ export default function ProductSwitcherNav() {
       <div ref={sentinelRef} style={{ height: 1 }} aria-hidden="true" />
       {stuck && <div style={{ height: NAV_HEIGHT }} aria-hidden="true" />}
       <nav
-        aria-label="Browse products"
+        aria-label="Browse insurance solutions"
         style={{
           background: '#fff',
           borderBottom: '1px solid #e5e7eb',

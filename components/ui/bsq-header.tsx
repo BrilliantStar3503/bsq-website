@@ -405,12 +405,12 @@ export function BsqHeader() {
                 className="text-sm transition-colors duration-300"
                 style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
               >
-                Products
+                Insurance Solutions
               </NavigationMenuTrigger>
               <NavigationMenuContent style={{ background: '#0d1117' }}>
                 <div className="p-3 w-[560px]">
                   <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 px-2 mb-2">
-                    PRU Life UK Products
+                    PRU Life UK Insurance Solutions
                   </p>
                   <ul className="grid grid-cols-2 gap-1">
                     {productLinks.map((item) => (
@@ -581,7 +581,7 @@ export function BsqHeader() {
           {/* Products section */}
           <div>
             <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
-              Products
+              Insurance Solutions
             </p>
             <div className="space-y-1">
               {productLinks.map((link) => (
