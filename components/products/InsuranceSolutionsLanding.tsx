@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowRight, MessageCircle, ClipboardList, Check, ShieldCheck, UserCheck, Globe2, HeartHandshake, Heart } from 'lucide-react'
+import { ArrowRight, MessageCircle, ClipboardList, Check, ShieldCheck, UserCheck, Globe2, HeartHandshake } from 'lucide-react'
 import { financialGoals, getProductsForGoal } from '@/lib/products'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { OrganicBackground } from '@/components/ui/organic-background'
@@ -74,7 +74,7 @@ export default function InsuranceSolutionsLanding() {
           HERO — split layout, organic curve wrap, editorial serif
       ══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#fff' }}>
-        <div className={`${CONTAINER} grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-10 items-center pt-20 pb-24 md:pt-28 md:pb-36`}>
+        <div className={`${CONTAINER} grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-20 pb-24 md:pt-28 md:pb-36`}>
 
           {/* Left — copy */}
           <motion.div initial="hidden" animate="visible" variants={stagger} className="relative z-10">
@@ -115,52 +115,58 @@ export default function InsuranceSolutionsLanding() {
             </motion.div>
           </motion.div>
 
-          {/* Right — organic curve wrap + layered photo placeholder */}
+          {/* Right — photo placeholder. Full organic curve treatment at
+              lg+ only: the ribbon's path is tuned for a wide aspect
+              ratio and visibly distorts when stretched into the
+              narrower mobile/tablet container — a clean standalone
+              card reads better there than a warped curve. */}
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: EASE_PREMIUM, delay: 0.15 }}
             className="relative aspect-[4/3] lg:aspect-[5/4]"
           >
-            <OrganicBackground variant="hero-wrap" color="#E8392A" colorDark="#A8210F" />
+            <div className="hidden lg:block absolute inset-0">
+              <OrganicBackground variant="hero-wrap" color="#E8392A" colorDark="#A8210F" />
+              {/* Undertone card — a second surface offset behind the
+                  photo, visible at its lower-right edge. */}
+              <div
+                className="absolute z-[5]"
+                style={{ inset: '11% 3% 3% 25%', borderRadius: 24, background: 'rgba(255,255,255,0.5)' }}
+              />
+              <div
+                className="absolute z-10 overflow-hidden"
+                style={{
+                  inset: '8% 6% 6% 22%',
+                  borderRadius: 24,
+                  background: 'linear-gradient(150deg, #fde8e8 0%, #f4b8b4 45%, #c94f47 100%)',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 30px 50px -12px rgba(0,0,0,0.22)',
+                }}
+              >
+                {/* PLACEHOLDER — swap for real photography (family, golden
+                    hour) once an asset is provided. Caption is visual-only,
+                    removed the moment a real <Image> replaces this div. */}
+                <div className="w-full h-full flex items-end justify-center pb-6">
+                  <span className="text-[11px] font-semibold text-white/80 bg-black/15 px-3 py-1 rounded-full backdrop-blur-sm">
+                    Photo placeholder — family imagery
+                  </span>
+                </div>
+              </div>
+            </div>
 
-            {/* Undertone card — a second surface offset behind the photo,
-                visible at its lower-right edge, reinforcing depth. */}
             <div
-              className="absolute z-[5]"
-              style={{ inset: '11% 3% 3% 25%', borderRadius: 24, background: 'rgba(255,255,255,0.5)' }}
-            />
-
-            <div
-              className="absolute z-10 overflow-hidden"
+              className="lg:hidden absolute inset-0 overflow-hidden"
               style={{
-                inset: '8% 6% 6% 22%',
                 borderRadius: 24,
                 background: 'linear-gradient(150deg, #fde8e8 0%, #f4b8b4 45%, #c94f47 100%)',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 30px 50px -12px rgba(0,0,0,0.22)',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 24px 40px -12px rgba(0,0,0,0.20)',
               }}
             >
-              {/* PLACEHOLDER — swap for real photography (family, golden hour)
-                  once an asset is provided. Caption is visual-only, removed
-                  the moment a real <Image> replaces this div. */}
               <div className="w-full h-full flex items-end justify-center pb-6">
                 <span className="text-[11px] font-semibold text-white/80 bg-black/15 px-3 py-1 rounded-full backdrop-blur-sm">
                   Photo placeholder — family imagery
                 </span>
               </div>
             </div>
-
-            {/* Floating accent badge — purely decorative, no new copy */}
-            <motion.div
-              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: EASE_PREMIUM, delay: 0.6 }}
-              className="absolute z-20 flex items-center justify-center"
-              style={{
-                left: '8%', bottom: '10%', width: 56, height: 56, borderRadius: '50%',
-                background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 16px 32px -8px rgba(0,0,0,0.18)',
-              }}
-            >
-              <Heart size={20} style={{ color: PRU_RED }} fill={PRU_RED} fillOpacity={0.12} strokeWidth={1.75} />
-            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -193,7 +199,12 @@ export default function InsuranceSolutionsLanding() {
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-white leading-[1.12] tracking-[-0.01em] mb-6">
                 A plan today, peace of mind for a lifetime.
               </h2>
-              <p className="text-base text-white/80 leading-relaxed max-w-md mb-9">
+              {/* white/80 measured 3.54:1 against this background — fails
+                  WCAG AA (needs 4.5:1) at this text size; white/95 measures
+                  ~4.48, still short. Full white clears it with margin —
+                  hierarchy against the heading above comes from weight
+                  (semibold vs. medium), not opacity. */}
+              <p className="text-base text-white leading-relaxed max-w-md mb-9 font-medium">
                 Insurance is not about expecting the unexpected. It&apos;s about being ready for it.
               </p>
               <ul className="space-y-4">
@@ -271,7 +282,7 @@ export default function InsuranceSolutionsLanding() {
                         goal group) and needs to be heading-navigable for
                         screen readers, same level as each ProductCard's
                         own h3 below it. */}
-                    <h3 className="text-[11px] font-bold uppercase tracking-[0.14em] mb-2" style={{ color: PRU_RED }}>
+                    <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: PRU_RED }}>
                       Recommended for: {goal.label}
                     </h3>
                     <p className="text-sm text-gray-500 max-w-xl">{goal.description}</p>
@@ -302,12 +313,12 @@ export default function InsuranceSolutionsLanding() {
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM }}
-            className="rounded-[28px] px-7 py-7 md:px-12 md:py-9 flex flex-col md:flex-row items-center justify-between gap-7"
+            className="rounded-3xl px-7 py-7 md:px-12 md:py-9 flex flex-col md:flex-row items-center justify-between gap-7"
             style={{ background: '#ffffff', boxShadow: '0 1px 2px rgba(16,24,40,0.04), 0 24px 48px -16px rgba(16,24,40,0.10)' }}
           >
             <div className="flex items-center gap-4 text-center md:text-left">
               <div className="hidden md:flex w-12 h-12 rounded-full items-center justify-center shrink-0" style={{ background: '#fef2f2' }}>
-                <MessageCircle size={19} style={{ color: PRU_RED }} strokeWidth={1.75} />
+                <MessageCircle size={20} style={{ color: PRU_RED }} strokeWidth={1.75} />
               </div>
               <div>
                 <p className="text-[17px] font-bold text-gray-900 mb-1">Not sure where to start?</p>
@@ -321,7 +332,7 @@ export default function InsuranceSolutionsLanding() {
                 duration={5}
                 className="px-8 py-3.5 text-sm rounded-full"
               >
-                <ClipboardList size={15} />Take the Financial Assessment
+                <ClipboardList size={14} />Take the Financial Assessment
               </AnimatedGradientButton>
               <a
                 href="#appointment"

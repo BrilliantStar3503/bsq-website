@@ -13,7 +13,11 @@ export function SectionEyebrow({
   tone?: 'red' | 'white'
   align?: 'left' | 'center'
 }) {
-  const color = tone === 'white' ? 'rgba(255,255,255,0.85)' : '#D92D20'
+  // Solid white, not a translucent tint, for the white variant: at this
+  // size (11px) WCAG AA needs 4.5:1 regardless of font-weight, and
+  // white/85 on #D92D20 measures 3.85:1 — fails. The rule beside it is
+  // decorative, not text, so it can stay translucent.
+  const color = tone === 'white' ? '#ffffff' : '#D92D20'
   const ruleColor = tone === 'white' ? 'rgba(255,255,255,0.6)' : '#D92D20'
   return (
     <div className={`flex items-center gap-2.5 mb-5 ${align === 'center' ? 'justify-center' : ''}`}>
