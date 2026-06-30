@@ -47,6 +47,12 @@ export interface PruProduct {
   addressesGaps: string[]  // matches Gap.id in assessment-scoring.ts
   // Funnel page slug
   slug: string
+  // Internal-only grouping for navigation/maintenance — NOT the visitor-facing
+  // taxonomy. The public experience is goal-first (see financialGoals below);
+  // this exists purely so nav/admin tooling can group solutions without
+  // re-deriving meaning from `category`, which describes plan mechanics
+  // (VUL vs. traditional) rather than what the plan is for.
+  internalCategory: 'protection' | 'investment' | 'retirement'
 }
 
 export const products: PruProduct[] = [
@@ -139,6 +145,7 @@ export const products: PruProduct[] = [
     ],
     addressesGaps: ['income', 'savings', 'awareness'],
     slug: 'pru-million-protect',
+    internalCategory: 'protection',
   },
 
   /* ══════════════════════════════════════════════════════════════
@@ -243,6 +250,7 @@ export const products: PruProduct[] = [
     ],
     addressesGaps: ['income', 'savings', 'retirement'],
     slug: 'elite-series',
+    internalCategory: 'investment',
   },
 
   /* ══════════════════════════════════════════════════════════════
@@ -338,6 +346,7 @@ export const products: PruProduct[] = [
     ],
     addressesGaps: ['retirement', 'income', 'savings'],
     slug: 'prulifetime-income',
+    internalCategory: 'retirement',
   },
 
   /* ══════════════════════════════════════════════════════════════
@@ -445,6 +454,7 @@ export const products: PruProduct[] = [
     ],
     addressesGaps: ['income', 'savings', 'medical', 'awareness'],
     slug: 'prulink-assurance-account-plus',
+    internalCategory: 'investment',
   },
 
   /* ══════════════════════════════════════════════════════════════
@@ -547,6 +557,7 @@ export const products: PruProduct[] = [
     ],
     addressesGaps: ['income', 'savings', 'retirement', 'awareness'],
     slug: 'prulove-for-life',
+    internalCategory: 'protection',
   },
 ]
 
@@ -582,4 +593,110 @@ export const PRODUCT_NAME_TO_ID: Record<string, string> = {
   'PRULove for Life':               'prulove-for-life',
   'PRULove for Life Product Primer':'prulove-for-life',
   'PRULink Assurance':              'prulink-assurance-account-plus',
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FINANCIAL GOALS — the visitor-facing entry point
+   ══════════════════════════════════════════════════════════════
+   This is the public taxonomy: visitors think in life goals, not
+   plan mechanics. `internalCategory` on PruProduct (protection /
+   investment / retirement) stays internal-only for nav/admin
+   grouping — it must never be presented to visitors as the primary
+   navigation model. Goal → product order is curated (primary match
+   first), not derived, since "what we lead with" is a marketing
+   decision, not something to infer from addressesGaps alone.
+
+   Reserved, not yet built (no backing product): business-protection,
+   education-planning. Add a goal entry once a product can back it —
+   navigation/landing page will pick it up automatically.
+   ══════════════════════════════════════════════════════════════ */
+export interface FinancialGoal {
+  id: string
+  label: string             // visitor-facing, e.g. "Protect My Family"
+  description: string       // 1-sentence framing for goal cards
+  icon: string              // lucide-react icon name, resolved by the UI layer
+  productIds: string[]      // ordered — primary recommendation first
+}
+
+export const financialGoals: FinancialGoal[] = [
+  {
+    id: 'protect-family',
+    label: 'Protect My Family',
+    description: 'Make sure the people who depend on you are financially secure, no matter what happens.',
+    icon: 'Shield',
+    productIds: ['pru-million-protect', 'prulove-for-life'],
+  },
+  {
+    id: 'protect-income',
+    label: 'Protect My Income',
+    description: 'Replace your income for your family if you suddenly couldn\'t earn anymore.',
+    icon: 'Briefcase',
+    productIds: ['pru-million-protect', 'prulink-assurance-account-plus'],
+  },
+  {
+    id: 'prepare-retirement',
+    label: 'Prepare for Retirement',
+    description: 'Build a guaranteed income stream so you don\'t run out of money after you stop working.',
+    icon: 'Sunset',
+    productIds: ['pru-lifetime-income', 'pru-elite-series'],
+  },
+  {
+    id: 'grow-wealth',
+    label: 'Grow My Wealth / Investments',
+    description: 'Put your money to work in market-linked funds while staying protected.',
+    icon: 'TrendingUp',
+    productIds: ['prulink-assurance-account-plus', 'pru-elite-series'],
+  },
+  {
+    id: 'secure-child-future',
+    label: 'Secure My Child\'s Future',
+    description: 'Fund your child\'s education and leave behind a guaranteed inheritance.',
+    icon: 'GraduationCap',
+    productIds: ['pru-elite-series', 'prulove-for-life'],
+  },
+]
+
+/**
+ * Maps assessment-engine gap IDs (lib/assessment-scoring.ts → Gap.id) to
+ * visitor-facing financial goal IDs. Lets assessment results route into
+ * the goal-first Insurance Solutions Landing Page without coupling the
+ * scoring engine's internal vocabulary to marketing copy.
+ *
+ * Engine gap IDs without a confident goal mapping (optimization,
+ * freelancerProtection, estateTax, businessInsurance, keyMan,
+ * employeeRetirement) are intentionally omitted — they fall back to
+ * showing all goals rather than a wrong/forced match.
+ */
+export const gapToGoal: Record<string, string> = {
+  income:    'protect-income',
+  medical:   'protect-family',
+  savings:   'grow-wealth',
+  retirement:'prepare-retirement',
+  awareness: 'protect-family',
+  education: 'secure-child-future',
+}
+
+/** Get a financial goal by its id */
+export function getFinancialGoal(id: string): FinancialGoal | undefined {
+  return financialGoals.find(g => g.id === id)
+}
+
+/** Get the ordered list of products recommended for a financial goal */
+export function getProductsForGoal(goalId: string): PruProduct[] {
+  const goal = getFinancialGoal(goalId)
+  if (!goal) return []
+  return goal.productIds
+    .map(id => getProduct(id))
+    .filter((p): p is PruProduct => p !== undefined)
+}
+
+/** Get every financial goal a given product is recommended under */
+export function getGoalsForProduct(productId: string): FinancialGoal[] {
+  return financialGoals.filter(g => g.productIds.includes(productId))
+}
+
+/** Resolve an assessment gap ID to its matching financial goal, if any */
+export function getGoalForGap(gapId: string): FinancialGoal | undefined {
+  const goalId = gapToGoal[gapId]
+  return goalId ? getFinancialGoal(goalId) : undefined
 }
