@@ -36,22 +36,31 @@ const labelBase: React.CSSProperties = {
 
 /* ══════════════════════════════════════════════════════════════════
    PRIMARY CONVERSION SECTION — id="appointment"
-   Embedded booking form (pre-selected product) + Messenger / Call /
-   Financial Assessment as equal-weight alternative actions.
+   Embedded booking form (pre-selected product, when known) + Messenger
+   / Call / Financial Assessment as equal-weight alternative actions.
+
+   `product` is optional so this same section can be reused goal-
+   agnostically on the Insurance Solutions Landing Page ("Book a
+   Complimentary Consultation") — there it defaults the Interested
+   Product field to the first registry entry rather than pre-selecting
+   one. `goalId`, when provided, is forwarded as appointment context —
+   reserved for the Phase 5 assessment handoff (deep-linking a visitor's
+   matched goal into this form without restructuring the component).
 
    Submits to the shared /api/appointments endpoint with
    type: 'product_consultation' — the same intake other appointment
    flows (recruitment, financial review) will reuse.
 ══════════════════════════════════════════════════════════════════ */
-export default function ProductAppointmentSection({ product }: { product: PruProduct }) {
+export default function ProductAppointmentSection({ product, goalId }: { product?: PruProduct; goalId?: string }) {
   const router = useRouter()
   const { contact, agentId, openContact } = useAgentContact()
+  const refSlug = product?.slug ?? 'landing'
 
   const [form, setForm] = useState({
     name: '', mobile: '', email: '',
     preferredDate: '', preferredTime: '',
     questions: '',
-    productInterest: product.id,
+    productInterest: product?.id ?? products[0].id,
   })
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'error'>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -74,7 +83,7 @@ export default function ProductAppointmentSection({ product }: { product: PruPro
     setErrors({})
     setStatus('submitting')
 
-    const interested = products.find(p => p.id === form.productInterest) ?? product
+    const interested = products.find(p => p.id === form.productInterest) ?? product ?? products[0]
     const utmData = (() => { try { return JSON.parse(localStorage.getItem('bsq_utm') || '{}') } catch { return {} } })()
 
     try {
@@ -89,6 +98,7 @@ export default function ProductAppointmentSection({ product }: { product: PruPro
           context: {
             productInterest: interested.name,
             productSlug: interested.slug,
+            ...(goalId ? { goalId } : {}),
           },
           attribution: {
             agent:     utmData.utm_agent  || agentId || '',
@@ -122,7 +132,9 @@ export default function ProductAppointmentSection({ product }: { product: PruPro
             Book Your Free Consultation
           </h2>
           <p className="text-base text-gray-600 max-w-xl mx-auto">
-            Talk to a licensed BSQ · PRU Life UK advisor about {product.shortName}. No cost, no obligation.
+            {product
+              ? <>Talk to a licensed BSQ · PRU Life UK advisor about {product.shortName}. No cost, no obligation.</>
+              : <>Talk to a licensed BSQ · PRU Life UK advisor about your financial goals. No cost, no obligation.</>}
           </p>
         </motion.div>
 
@@ -239,7 +251,7 @@ export default function ProductAppointmentSection({ product }: { product: PruPro
               icon={MessageCircle}
               title="Chat on Messenger"
               sub="Get a quick answer now"
-              onClick={() => openContact(`product_${product.slug}`)}
+              onClick={() => openContact(`product_${refSlug}`)}
             />
             <ActionCard
               icon={Phone}
@@ -248,7 +260,7 @@ export default function ProductAppointmentSection({ product }: { product: PruPro
               onClick={() => {
                 const phoneUrl = getPhoneUrl(contact)
                 if (phoneUrl) window.location.href = phoneUrl
-                else openContact(`product_${product.slug}_call`)
+                else openContact(`product_${refSlug}_call`)
               }}
             />
             <ActionCard

@@ -31,6 +31,11 @@ export default function ProductSwitcherNav() {
   const pathname = usePathname()
   const { sentinelRef, stuck } = useStickyOnScroll(60)
 
+  // Hide on the landing page itself — it's the goal-first entry point,
+  // and a product-name switcher here would compete with that message.
+  // Detail pages (/products/[slug]) still get the full switcher.
+  if (pathname === '/products') return null
+
   return (
     <>
       <div ref={sentinelRef} style={{ height: 1 }} aria-hidden="true" />
