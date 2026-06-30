@@ -160,9 +160,13 @@ export default function InsuranceSolutionsLanding() {
                   <motion.div className="mb-6 pb-6" style={{ borderBottom: `1px solid ${GRAY_LINE}` }}
                     initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }} transition={{ duration: 0.4 }}>
-                    <p className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: PRU_RED }}>
+                    {/* h3, not p — this is a real section heading (one per
+                        goal group) and needs to be heading-navigable for
+                        screen readers, same level as each ProductCard's
+                        own h3 below it. */}
+                    <h3 className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: PRU_RED }}>
                       Recommended for: {goal.label}
-                    </p>
+                    </h3>
                     <p className="text-sm text-gray-600 max-w-xl">{goal.description}</p>
                   </motion.div>
                   <motion.div

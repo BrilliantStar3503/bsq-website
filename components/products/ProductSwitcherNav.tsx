@@ -69,10 +69,12 @@ export default function ProductSwitcherNav() {
             {/* Goal-context breadcrumb — folded in, not a separate bar */}
             {currentProduct && (
               <div className="flex items-center gap-1.5 pr-3 mr-2 flex-shrink-0" style={{ borderRight: `1px solid ${GRAY_LINE}` }}>
+                {/* #6b7280, not the lighter #9ca3af — 4.83:1 contrast on
+                    white meets WCAG AA for normal-size text (2.54:1 didn't). */}
                 <Link href="/products" className="text-xs font-semibold whitespace-nowrap transition-colors"
-                  style={{ color: '#9ca3af' }}
+                  style={{ color: '#6b7280' }}
                   onMouseEnter={e => (e.currentTarget.style.color = PRU_RED)}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}
                 >
                   Insurance Solutions
                 </Link>
