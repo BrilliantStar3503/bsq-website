@@ -2,12 +2,13 @@
 
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowRight, MessageCircle, ClipboardList, Check, ShieldCheck, UserCheck, Globe2, HeartHandshake } from 'lucide-react'
+import { ArrowRight, MessageCircle, ClipboardList, Check, ShieldCheck, UserCheck, Globe2, HeartHandshake, Heart } from 'lucide-react'
 import { financialGoals, getProductsForGoal } from '@/lib/products'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { OrganicBackground } from '@/components/ui/organic-background'
 import { FeaturedQuoteCard } from '@/components/ui/featured-quote-card'
 import { IconTrustStrip } from '@/components/ui/icon-trust-strip'
+import { SectionEyebrow } from '@/components/ui/section-eyebrow'
 import GoalCard from './GoalCard'
 import ProductCard from './ProductCard'
 import ProductAppointmentSection from './ProductAppointmentSection'
@@ -15,14 +16,20 @@ import ProductAppointmentSection from './ProductAppointmentSection'
 const PRU_RED   = '#D92D20'
 const GRAY_BG   = '#f5f5f5'
 const GRAY_LINE = '#e5e7eb'
+const CONTAINER = 'max-w-[1320px] mx-auto px-6 md:px-10'
+
+// One easing curve, used everywhere — the "signature feel" of this
+// design system. A gentle expo-out: quick to start, settles softly,
+// never bounces or overshoots.
+const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const
 
 const fadeUp = {
-  hidden:  { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' as const } },
+  hidden:  { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_PREMIUM } },
 }
 const stagger = {
   hidden:  {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.09 } },
 }
 
 const TRUST_ITEMS = [
@@ -43,9 +50,15 @@ const TRUST_ITEMS = [
    "I know I need security → why does planning matter → which goal →
    what solutions" conversation flow during the Phase 3/4 review, and
    is preserved here even though the visual-direction mockup happened
-   to show goal cards before the "Why It Matters" panel. This pass
-   only changes the VISUAL TREATMENT of each section, not their order
-   or the underlying registry-driven rendering.
+   to show goal cards before the "Why It Matters" panel.
+
+   This file is a visual-craftsmanship pass on top of the prior visual
+   redesign — same sections, same order, same data, same registry-
+   driven rendering. Refinements: one consistent container width across
+   every section (was 1320px in the hero/panel, 1152px in the goal
+   section, 1024px in the CTA bar — now 1320px throughout, so margins
+   line up site-wide), one shared easing curve, layered-surface shadows
+   in place of heavier blurs, and generally more room to breathe.
 
    Fully registry-driven: every goal, every recommended product, and
    every anchor id comes from lib/products.ts. Adding a 6th financial
@@ -61,60 +74,69 @@ export default function InsuranceSolutionsLanding() {
           HERO — split layout, organic curve wrap, editorial serif
       ══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#fff' }}>
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center pt-14 pb-20 md:pt-20 md:pb-28">
+        <div className={`${CONTAINER} grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-10 items-center pt-20 pb-24 md:pt-28 md:pb-36`}>
 
           {/* Left — copy */}
           <motion.div initial="hidden" animate="visible" variants={stagger} className="relative z-10">
-            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-5">
-              <div style={{ height: 2, width: 24, background: PRU_RED }} />
-              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>
-                Insurance Solutions
-              </span>
+            <motion.div variants={fadeUp}>
+              <SectionEyebrow>Insurance Solutions</SectionEyebrow>
             </motion.div>
             <motion.h1 variants={fadeUp}
-              className="font-display text-5xl md:text-6xl font-semibold text-gray-900 leading-[1.08] mb-5">
+              className="font-display text-5xl md:text-[64px] font-semibold text-gray-900 leading-[1.07] tracking-[-0.01em] mb-6">
               Solutions that protect<br />what matters{' '}
               <span className="italic" style={{ color: PRU_RED }}>most</span>
             </motion.h1>
-            <motion.p variants={fadeUp} className="text-base md:text-lg text-gray-600 leading-relaxed max-w-md mb-9">
+            <motion.p variants={fadeUp} className="text-base md:text-lg text-gray-500 leading-relaxed max-w-md mb-10">
               Life is full of uncertainties. The right protection today can secure your family&apos;s tomorrow.
             </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3">
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3.5">
               <a
                 href="#goals"
-                className="flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-white transition-all"
-                style={{ background: PRU_RED, borderRadius: 999, boxShadow: '0 8px 20px rgba(217,45,32,0.30)' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#B42318' }}
-                onMouseLeave={e => { e.currentTarget.style.background = PRU_RED }}
+                className="flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-white"
+                style={{
+                  background: PRU_RED, borderRadius: 999,
+                  boxShadow: '0 1px 2px rgba(217,45,32,0.15), 0 12px 24px -6px rgba(217,45,32,0.35)',
+                  transition: `all 0.35s ${EASE_PREMIUM.join(',')}`,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#B42318'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.transform = 'translateY(0)' }}
               >
                 Choose Your Financial Goal <ArrowRight size={14} />
               </a>
               <button
                 onClick={() => router.push('/assessment')}
-                className="flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold transition-all"
-                style={{ background: 'transparent', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 999 }}
-                onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = PRU_RED }}
+                className="flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold"
+                style={{ background: 'transparent', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 999, transition: `all 0.35s ${EASE_PREMIUM.join(',')}` }}
+                onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = PRU_RED; e.currentTarget.style.transform = 'translateY(0)' }}
               >
                 Take the Financial Assessment
               </button>
             </motion.div>
           </motion.div>
 
-          {/* Right — organic curve wrap + photo placeholder */}
+          {/* Right — organic curve wrap + layered photo placeholder */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: EASE_PREMIUM, delay: 0.15 }}
             className="relative aspect-[4/3] lg:aspect-[5/4]"
           >
-            <OrganicBackground variant="hero-wrap" color={PRU_RED} className="opacity-95" />
+            <OrganicBackground variant="hero-wrap" color="#E8392A" colorDark="#A8210F" />
+
+            {/* Undertone card — a second surface offset behind the photo,
+                visible at its lower-right edge, reinforcing depth. */}
+            <div
+              className="absolute z-[5]"
+              style={{ inset: '11% 3% 3% 25%', borderRadius: 24, background: 'rgba(255,255,255,0.5)' }}
+            />
+
             <div
               className="absolute z-10 overflow-hidden"
               style={{
                 inset: '8% 6% 6% 22%',
                 borderRadius: 24,
                 background: 'linear-gradient(150deg, #fde8e8 0%, #f4b8b4 45%, #c94f47 100%)',
-                boxShadow: '0 30px 60px rgba(0,0,0,0.18)',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 30px 50px -12px rgba(0,0,0,0.22)',
               }}
             >
               {/* PLACEHOLDER — swap for real photography (family, golden hour)
@@ -126,6 +148,19 @@ export default function InsuranceSolutionsLanding() {
                 </span>
               </div>
             </div>
+
+            {/* Floating accent badge — purely decorative, no new copy */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: EASE_PREMIUM, delay: 0.6 }}
+              className="absolute z-20 flex items-center justify-center"
+              style={{
+                left: '8%', bottom: '10%', width: 56, height: 56, borderRadius: '50%',
+                background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 16px 32px -8px rgba(0,0,0,0.18)',
+              }}
+            >
+              <Heart size={20} style={{ color: PRU_RED }} fill={PRU_RED} fillOpacity={0.12} strokeWidth={1.75} />
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -134,37 +169,49 @@ export default function InsuranceSolutionsLanding() {
           WHY FINANCIAL PLANNING MATTERS — red panel + featured quote
       ══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: PRU_RED }}>
-        <div className="absolute top-0 left-0 right-0" style={{ height: 60, transform: 'translateY(-1px)' }}>
+        <div className="absolute top-0 left-0 right-0" style={{ height: 64, transform: 'translateY(-1px)' }}>
           <OrganicBackground variant="wave-divider" color="#ffffff" />
         </div>
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-20 md:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-            <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <div className="flex items-center gap-2 mb-5">
-                <div style={{ height: 2, width: 24, background: '#fff' }} />
-                <span className="text-xs font-bold uppercase tracking-widest text-white/80">Why It Matters</span>
-              </div>
-              <h2 className="font-display text-4xl md:text-5xl font-semibold text-white leading-tight mb-5">
+
+        {/* Architectural depth layer — a soft, off-center glow rather than
+            a flat color fill, so the panel reads as lit from one side
+            instead of a solid poster-color block. */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 900px 700px at 15% 15%, rgba(255,255,255,0.10), transparent 60%)' }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 700px 600px at 90% 100%, rgba(0,0,0,0.14), transparent 55%)' }}
+        />
+
+        <div className={`${CONTAINER} relative py-24 md:py-32`}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE_PREMIUM }}>
+              <SectionEyebrow tone="white">Why It Matters</SectionEyebrow>
+              <h2 className="font-display text-4xl md:text-5xl font-semibold text-white leading-[1.12] tracking-[-0.01em] mb-6">
                 A plan today, peace of mind for a lifetime.
               </h2>
-              <p className="text-base text-white/85 leading-relaxed max-w-md mb-7">
+              <p className="text-base text-white/80 leading-relaxed max-w-md mb-9">
                 Insurance is not about expecting the unexpected. It&apos;s about being ready for it.
               </p>
-              <ul className="space-y-3">
-                {['Protect your loved ones', 'Secure your financial future', 'Live life with confidence'].map(item => (
-                  <li key={item} className="flex items-center gap-3 text-white">
-                    <span className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.18)' }}>
-                      <Check size={12} />
+              <ul className="space-y-4">
+                {['Protect your loved ones', 'Secure your financial future', 'Live life with confidence'].map((item, i) => (
+                  <motion.li key={item} className="flex items-center gap-3.5 text-white"
+                    initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }} transition={{ duration: 0.45, ease: EASE_PREMIUM, delay: 0.1 + i * 0.08 }}>
+                    <span className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.16)' }}>
+                      <Check size={13} strokeWidth={2.5} />
                     </span>
-                    <span className="text-sm font-medium">{item}</span>
-                  </li>
+                    <span className="text-[15px] font-medium">{item}</span>
+                  </motion.li>
                 ))}
               </ul>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE_PREMIUM, delay: 0.12 }}>
               {/* DRAFT quote — placeholder copy for your review in the
                   dedicated copywriting pass, not final brand messaging. */}
               <FeaturedQuoteCard
@@ -185,22 +232,19 @@ export default function InsuranceSolutionsLanding() {
           them — only the per-goal heading below changes.
       ══════════════════════════════════════════════════ */}
       <section id="goals" style={{ background: '#fff', scrollMarginTop: 80 }}>
-        <div className="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-24">
-          <motion.div className="text-center max-w-2xl mx-auto mb-12"
-            initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.45 }}>
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
-              <p className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>Start Here</p>
-            </div>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-gray-900 mb-3">
+        <div className={`${CONTAINER} py-24 md:py-32`}>
+          <motion.div className="text-center max-w-2xl mx-auto mb-16"
+            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM }}>
+            <SectionEyebrow align="center">Start Here</SectionEyebrow>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-[-0.01em]">
               What is your <span className="italic" style={{ color: PRU_RED }}>financial goal?</span>
             </h2>
-            <p className="text-base text-gray-600">Everyone&apos;s journey is different. Choose the goal closest to your situation.</p>
+            <p className="text-base text-gray-500">Everyone&apos;s journey is different. Choose the goal closest to your situation.</p>
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
             initial="hidden" whileInView="visible"
             viewport={{ once: true, margin: '-40px' }} variants={stagger}
           >
@@ -214,26 +258,26 @@ export default function InsuranceSolutionsLanding() {
           {/* Recommended solutions — same beat, no new chapter heading.
               Each block answers "what solutions might help me?" for the
               goal just chosen above. */}
-          <div className="mt-20 space-y-16">
+          <div className="mt-28 space-y-20">
             {financialGoals.map(goal => {
               const goalProducts = getProductsForGoal(goal.id)
               if (goalProducts.length === 0) return null
               return (
                 <div key={goal.id} id={goal.id} style={{ scrollMarginTop: 80 }}>
-                  <motion.div className="mb-6 pb-6" style={{ borderBottom: `1px solid ${GRAY_LINE}` }}
-                    initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.4 }}>
+                  <motion.div className="mb-8 pb-7" style={{ borderBottom: `1px solid ${GRAY_LINE}` }}
+                    initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }} transition={{ duration: 0.5, ease: EASE_PREMIUM }}>
                     {/* h3, not p — this is a real section heading (one per
                         goal group) and needs to be heading-navigable for
                         screen readers, same level as each ProductCard's
                         own h3 below it. */}
-                    <h3 className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: PRU_RED }}>
+                    <h3 className="text-[11px] font-bold uppercase tracking-[0.14em] mb-2" style={{ color: PRU_RED }}>
                       Recommended for: {goal.label}
                     </h3>
-                    <p className="text-sm text-gray-600 max-w-xl">{goal.description}</p>
+                    <p className="text-sm text-gray-500 max-w-xl">{goal.description}</p>
                   </motion.div>
                   <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                    className="grid grid-cols-1 md:grid-cols-2 gap-7"
                     initial="hidden" whileInView="visible"
                     viewport={{ once: true, margin: '-40px' }} variants={stagger}
                   >
@@ -254,19 +298,19 @@ export default function InsuranceSolutionsLanding() {
           NOT SURE WHICH SOLUTION FITS YOU? — floating pill CTA bar
       ══════════════════════════════════════════════════ */}
       <section style={{ background: GRAY_BG }}>
-        <div className="max-w-5xl mx-auto px-6 md:px-10 py-16 md:py-20">
+        <div className={`${CONTAINER} py-24 md:py-28`}>
           <motion.div
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.45 }}
-            className="rounded-3xl px-6 py-6 md:px-10 md:py-7 flex flex-col md:flex-row items-center justify-between gap-6"
-            style={{ background: '#ffffff', boxShadow: '0 16px 48px rgba(0,0,0,0.08)' }}
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM }}
+            className="rounded-[28px] px-7 py-7 md:px-12 md:py-9 flex flex-col md:flex-row items-center justify-between gap-7"
+            style={{ background: '#ffffff', boxShadow: '0 1px 2px rgba(16,24,40,0.04), 0 24px 48px -16px rgba(16,24,40,0.10)' }}
           >
             <div className="flex items-center gap-4 text-center md:text-left">
-              <div className="hidden md:flex w-11 h-11 rounded-full items-center justify-center shrink-0" style={{ background: '#fef2f2' }}>
-                <MessageCircle size={18} style={{ color: PRU_RED }} />
+              <div className="hidden md:flex w-12 h-12 rounded-full items-center justify-center shrink-0" style={{ background: '#fef2f2' }}>
+                <MessageCircle size={19} style={{ color: PRU_RED }} strokeWidth={1.75} />
               </div>
               <div>
-                <p className="text-base font-bold text-gray-900">Not sure where to start?</p>
+                <p className="text-[17px] font-bold text-gray-900 mb-1">Not sure where to start?</p>
                 <p className="text-sm text-gray-500">Let&apos;s talk about your goals. We&apos;ll guide you to the right solution.</p>
               </div>
             </div>
@@ -281,8 +325,8 @@ export default function InsuranceSolutionsLanding() {
               </AnimatedGradientButton>
               <a
                 href="#appointment"
-                className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold transition-all"
-                style={{ background: 'transparent', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 999 }}
+                className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold"
+                style={{ background: 'transparent', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 999, transition: `all 0.35s ${EASE_PREMIUM.join(',')}` }}
                 onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = PRU_RED }}
               >
@@ -293,9 +337,9 @@ export default function InsuranceSolutionsLanding() {
 
           {/* Trust strip — closing statement-based row, distinct from the
               logo-based TrustStrip used elsewhere on the site. */}
-          <motion.div className="mt-16"
-            initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.45, delay: 0.1 }}>
+          <motion.div className="mt-20"
+            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM, delay: 0.1 }}>
             <IconTrustStrip items={TRUST_ITEMS} />
           </motion.div>
         </div>
