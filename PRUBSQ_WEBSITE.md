@@ -11,6 +11,41 @@ A modern Next.js financial advisory website for a PRU Life UK agent (Brilliant S
 
 ---
 
+## 🧭 Reference Architecture: Insurance Solutions Experience (v1.0.0)
+
+**Tag:** `v1.0.0-insurance-solutions-experience` · **Full release record:** [`docs/insurance-solutions-v1-release.md`](docs/insurance-solutions-v1-release.md)
+
+The `/products` experience (now "Insurance Solutions") was rebuilt from an
+independent-product-page catalog into a single, goal-first, registry-driven
+journey: **Financial Goal → Recommended Solution → Insurance Product →
+Consultation**. This is now the **baseline architectural pattern for every
+future customer-facing experience** on this site (Business Solutions,
+Health & Protection, Learning Center, etc.) — new experiences should follow
+the same shape rather than starting from a product/service list. Key
+platform capabilities introduced and intended for reuse:
+
+- **Goal/Solution registry** (`lib/products.ts`) — `financialGoals`,
+  `getProductsForGoal`, `getGoalsForProduct`, `getGoalForGap`. Single
+  source of truth for navigation, the landing page, recommendations, and
+  the assessment bridge.
+- **Universal consultation component** (`components/products/ProductAppointmentSection.tsx`)
+  — optional `product`/`goalId` props, posts to `/api/appointments`
+  (type-discriminated, built to serve future appointment types beyond
+  product consultations).
+- **Goal icon resolver** (`lib/goal-icons.ts`) — single source for
+  resolving a goal's icon string to a component.
+- **Event-source telemetry registry** (`EVENT_SOURCE_PREFIXES` in
+  `lib/api-guard.ts`) — structured, pattern-validated taxonomy for
+  interaction tracking; reuse `openContact()` from any new experience and
+  it's covered automatically.
+
+See the release doc for the full phase-by-phase history, architectural
+decisions, and known follow-up work (notably: `/api/capture-lead`
+currently discards its `source` field — separate, pre-existing, not yet
+fixed).
+
+---
+
 ## 🧰 Tech Stack
 
 | Layer | Technology |
