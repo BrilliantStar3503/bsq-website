@@ -117,9 +117,13 @@ export default function InsuranceSolutionsLanding() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          CHOOSE YOUR FINANCIAL GOAL
+          CHOOSE YOUR FINANCIAL GOAL → RECOMMENDED SOLUTIONS
+          One continuous beat, not two separate chapters: picking a
+          goal and seeing what helps are the same moment in the
+          conversation, so there's no section/background break between
+          them — only the per-goal heading below changes.
       ══════════════════════════════════════════════════ */}
-      <section id="goals" style={{ background: '#fff', scrollMarginTop: 80 }}>
+      <section id="goals" style={{ background: '#fff', scrollMarginTop: 80, borderTop: `1px solid ${GRAY_LINE}` }}>
         <div className="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
           <motion.div className="text-center max-w-2xl mx-auto mb-10"
             initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
@@ -143,34 +147,22 @@ export default function InsuranceSolutionsLanding() {
               </motion.div>
             ))}
           </motion.div>
-        </div>
-      </section>
 
-      {/* ══════════════════════════════════════════════════
-          RECOMMENDED INSURANCE SOLUTIONS — grouped by goal
-      ══════════════════════════════════════════════════ */}
-      <section style={{ background: GRAY_BG, borderTop: `1px solid ${GRAY_LINE}`, borderBottom: `1px solid ${GRAY_LINE}` }}>
-        <div className="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
-          <motion.div className="text-center max-w-2xl mx-auto mb-12"
-            initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.45 }}>
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <div style={{ width: 3, height: 20, background: PRU_RED, borderRadius: 2 }} />
-              <p className="text-xs font-bold uppercase tracking-widest" style={{ color: PRU_RED }}>Recommended For You</p>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900">Recommended Insurance Solutions</h2>
-          </motion.div>
-
-          <div className="space-y-16">
+          {/* Recommended solutions — same beat, no new chapter heading.
+              Each block answers "what solutions might help me?" for the
+              goal just chosen above. */}
+          <div className="mt-20 space-y-16">
             {financialGoals.map(goal => {
               const goalProducts = getProductsForGoal(goal.id)
               if (goalProducts.length === 0) return null
               return (
                 <div key={goal.id} id={goal.id} style={{ scrollMarginTop: 80 }}>
-                  <motion.div className="mb-6"
+                  <motion.div className="mb-6 pb-6" style={{ borderBottom: `1px solid ${GRAY_LINE}` }}
                     initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }} transition={{ duration: 0.4 }}>
-                    <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-1.5">{goal.label}</h3>
+                    <p className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: PRU_RED }}>
+                      Recommended for: {goal.label}
+                    </p>
                     <p className="text-sm text-gray-600 max-w-xl">{goal.description}</p>
                   </motion.div>
                   <motion.div

@@ -11,6 +11,7 @@ import {
   Clock, Users, Star, Phone, X, Send, Check, ChevronLeft, ChevronRight
 } from 'lucide-react'
 import type { PruProduct } from '@/lib/products'
+import Breadcrumb from './Breadcrumb'
 import ProductStickyNav from './ProductStickyNav'
 import ProductAppointmentSection from './ProductAppointmentSection'
 import RelatedProducts from './RelatedProducts'
@@ -359,6 +360,8 @@ export default function ProductFunnelPage({ product }: { product: PruProduct }) 
 
   return (
     <main style={{ background: '#fff', color: '#111' }}>
+
+      <Breadcrumb product={product} />
 
       {/* ══════════════════════════════════════════════════
           HERO — full-width background carousel
