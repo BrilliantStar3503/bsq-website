@@ -41,6 +41,14 @@
   display: none;
 }
 
+/* Editorial display serif (Fraunces) — major headlines ONLY (hero, section
+   titles). Never use for body copy, card titles, or UI chrome — those stay
+   on the default Geist sans stack. Established as part of the Insurance
+   Solutions visual redesign (see docs/insurance-solutions-v1-release.md). */
+.font-display {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
 /* ===== Base Styles ===== */
 :root {
   --background: #f5f5f7;

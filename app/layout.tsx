@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
@@ -15,6 +15,16 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Editorial display serif — major headlines only (hero, section titles).
+// Body copy and card text stay on Geist sans. See PRUBSQ_WEBSITE.md for
+// the design-system note on where each font is used.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -34,7 +44,7 @@ export default function RootLayout({
         <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} antialiased`}
       >
         <UtmCapture />
         <HeaderWrapper />
