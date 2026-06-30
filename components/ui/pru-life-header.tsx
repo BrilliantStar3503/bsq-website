@@ -14,7 +14,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Menu, X, MessageCircle } from 'lucide-react'
+import { Menu, X, MessageCircle } from 'lucide-react'
 
 /* ── Constants ────────────────────────────────────────────────────── */
 const PRU_RED          = '#D92D20'
@@ -25,20 +25,18 @@ const NAV_H_SCROLLED   = 60    // nav height when scrolled (white state)
 const FULL_HEADER_H    = BRAND_ROW_H + NAV_H_TOP  // 140px flow spacer
 
 /* ── Nav data ─────────────────────────────────────────────────────── */
+/* "Insurance Solutions" is a direct link, not a dropdown, while inside
+   the experience (/products/*) — the persistent ProductSwitcherNav just
+   below this header already exposes every solution, so a second flyout
+   listing the same solutions would be redundant. The dropdown form is
+   reserved for the global header (bsq-header.tsx), where it guides
+   visitors into the experience goal-first instead of listing products. */
 const NAV_LINKS = [
-  { label: 'Home',            href: '/'           },
-  { label: 'Insurance Solutions', href: '/products',  hasDropdown: true },
-  { label: 'Take Assessment', href: '/assessment' },
-  { label: 'About BSQ',       href: '/#about'     },
-  { label: 'Contact Us',      href: '/#contact'   },
-]
-
-const PRODUCTS = [
-  { label: 'PRUMillion Protect',             href: '/products/pru-million-protect'             },
-  { label: 'Elite Series',                   href: '/products/elite-series'                   },
-  { label: 'PRULifetime Income',             href: '/products/prulifetime-income'             },
-  { label: 'PRULink Assurance Account Plus', href: '/products/prulink-assurance-account-plus' },
-  { label: 'PRULove for Life',               href: '/products/prulove-for-life'               },
+  { label: 'Home',                href: '/'           },
+  { label: 'Insurance Solutions', href: '/products'   },
+  { label: 'Take Assessment',     href: '/assessment' },
+  { label: 'About BSQ',           href: '/#about'     },
+  { label: 'Contact Us',          href: '/#contact'   },
 ]
 
 /* ══════════════════════════════════════════════════════════════════ */
@@ -46,7 +44,6 @@ export function PruLifeHeader() {
   const pathname = usePathname()
 
   const [scrolled,  setScrolled]  = useState(false)
-  const [dropOpen,  setDropOpen]  = useState(false)
   const [menuOpen,  setMenuOpen]  = useState(false)
   const [imgError,  setImgError]  = useState(false)
 
@@ -199,14 +196,10 @@ export function PruLifeHeader() {
             {/* ── Nav links ── */}
             <nav style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
               {NAV_LINKS.map(link => {
-                const isActive   = link.href !== '/' && pathname.startsWith(link.href)
-                const isProducts = !!link.hasDropdown
+                const isActive = link.href !== '/' && pathname.startsWith(link.href)
 
                 return (
-                  <div key={link.label} style={{ position: 'relative' }}
-                    onMouseEnter={() => isProducts && setDropOpen(true)}
-                    onMouseLeave={() => isProducts && setDropOpen(false)}
-                  >
+                  <div key={link.label} style={{ position: 'relative' }}>
                     <a href={link.href} style={{
                       display:        'flex',
                       alignItems:     'center',
@@ -245,53 +238,7 @@ export function PruLifeHeader() {
                       }}
                     >
                       {link.label}
-                      {isProducts && (
-                        <ChevronDown size={12} style={{
-                          opacity: 0.7,
-                          transform: dropOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                          transition: 'transform 0.2s ease',
-                        }} />
-                      )}
                     </a>
-
-                    {/* Products flyout dropdown */}
-                    {isProducts && dropOpen && (
-                      <div style={{
-                        position:     'absolute', top: '100%', left: 0,
-                        background:   '#fff',
-                        borderRadius: '0 0 10px 10px',
-                        boxShadow:    '0 12px 32px rgba(0,0,0,0.12)',
-                        minWidth:     290,
-                        zIndex:       200,
-                        overflow:     'hidden',
-                        border:       '1px solid rgba(0,0,0,0.06)',
-                        borderTop:    'none',
-                      }}>
-                        {PRODUCTS.map((p, i) => (
-                          <a key={p.href} href={p.href} style={{
-                            display:      'block',
-                            padding:      '12px 20px',
-                            fontSize:     13.5,
-                            color:        pathname === p.href ? PRU_RED : '#111827',
-                            fontWeight:   pathname === p.href ? 700 : 500,
-                            textDecoration: 'none',
-                            borderBottom: i < PRODUCTS.length - 1 ? '1px solid #f3f4f6' : 'none',
-                            transition:   'background 0.12s, color 0.12s',
-                          }}
-                            onMouseEnter={e => {
-                              e.currentTarget.style.background = '#fef2f2'
-                              e.currentTarget.style.color = PRU_RED
-                            }}
-                            onMouseLeave={e => {
-                              e.currentTarget.style.background = 'transparent'
-                              e.currentTarget.style.color = pathname === p.href ? PRU_RED : '#111827'
-                            }}
-                          >
-                            {p.label}
-                          </a>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 )
               })}
@@ -394,20 +341,6 @@ export function PruLifeHeader() {
                   textDecoration: 'none',
                 }}>
                 {link.label}
-              </a>
-            ))}
-            {PRODUCTS.map(p => (
-              <a key={p.href} href={p.href}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  display: 'block',
-                  padding: '11px 24px 11px 40px',
-                  fontSize: 13, fontWeight: 500,
-                  color: pathname === p.href ? PRU_RED : '#6b7280',
-                  borderBottom: '1px solid #f3f4f6',
-                  textDecoration: 'none',
-                }}>
-                {p.label}
               </a>
             ))}
             <div style={{ padding: '12px 24px 16px' }}>

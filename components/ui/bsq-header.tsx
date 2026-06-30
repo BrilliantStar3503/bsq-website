@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -17,6 +18,7 @@ import {
 import { LucideIcon } from 'lucide-react'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { useAgentContact } from '@/hooks/useAgentContact'
+import { financialGoals } from '@/lib/products'
 import {
   ClipboardList,
   ShieldCheck,
@@ -32,9 +34,7 @@ import {
   BookOpen,
   ArrowRight,
   Shield,
-  Heart,
-  BarChart2,
-  Banknote,
+  Briefcase,
   Package,
 } from 'lucide-react'
 
@@ -118,39 +118,23 @@ const aboutLinks2: LinkItem[] = [
   { title: 'Talk to Us',      href: 'https://m.me/Bstarquartzarea', icon: MessageCircle },
 ]
 
-/* ─── Products sub-links ────────────────────────────────────────────── */
-const productLinks: LinkItem[] = [
-  {
-    title: 'PRUMillion Protect',
-    href:  '/products/pru-million-protect',
-    icon:  Shield,
-    description: 'Life cover from ₱1M · critical illness & death benefit',
-  },
-  {
-    title: 'PRUlink Elite Protector Series',
-    href:  '/products/elite-series',
-    icon:  BarChart2,
-    description: 'Investment-linked protection that grows with the market',
-  },
-  {
-    title: 'PRULifetime Income',
-    href:  '/prulifetime',
-    icon:  Sunset,
-    description: 'Guaranteed income for life — zero market risk',
-  },
-  {
-    title: 'PRULink Assurance Account Plus',
-    href:  '/products/prulink-assurance-account-plus',
-    icon:  Banknote,
-    description: 'VUL savings + flexible life protection in one plan',
-  },
-  {
-    title: 'PRULove for Life',
-    href:  '/products/prulove-for-life',
-    icon:  Heart,
-    description: 'Love-linked life plan designed for families & couples',
-  },
-]
+/* ─── Insurance Solutions nav — derived from the financial-goals registry ──
+   Goal-first by design: the global nav guides visitors into the Insurance
+   Solutions experience via financial goals, not directly at product names.
+   Adding/editing a goal in lib/products.ts updates this nav automatically —
+   no hardcoded product list here (this also retires the dead /prulifetime
+   link that used to live in this array).
+──────────────────────────────────────────────────────────────────────── */
+const GOAL_ICONS: Record<string, LucideIcon> = {
+  Shield, Briefcase, Sunset, TrendingUp, GraduationCap,
+}
+
+const goalLinks: LinkItem[] = financialGoals.map(goal => ({
+  title: goal.label,
+  href: `/products#${goal.id}`,
+  icon: GOAL_ICONS[goal.icon] ?? Shield,
+  description: goal.description,
+}))
 
 /* ─── Scroll hook ───────────────────────────────────────────────────── */
 function useScroll(threshold: number) {
@@ -410,10 +394,10 @@ export function BsqHeader() {
               <NavigationMenuContent style={{ background: '#0d1117' }}>
                 <div className="p-3 w-[560px]">
                   <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 px-2 mb-2">
-                    PRU Life UK Insurance Solutions
+                    What Are You Trying to Achieve?
                   </p>
                   <ul className="grid grid-cols-2 gap-1">
-                    {productLinks.map((item) => (
+                    {goalLinks.map((item) => (
                       <li key={item.title}>
                         <ListItem {...item} />
                       </li>
@@ -427,15 +411,15 @@ export function BsqHeader() {
                     }}
                   >
                     <div>
-                      <p className="text-sm font-semibold text-white">Not sure which plan fits you?</p>
-                      <p className="text-[11px] text-white/40">Run the 3-minute assessment — free & confidential</p>
+                      <p className="text-sm font-semibold text-white">Want to see everything?</p>
+                      <p className="text-[11px] text-white/40">Browse all insurance solutions in one place</p>
                     </div>
-                    <a
-                      href="/assessment"
+                    <Link
+                      href="/products"
                       className="flex items-center gap-1.5 text-xs font-bold text-red-400 hover:text-red-300 transition-colors whitespace-nowrap"
                     >
-                      Find my plan <ArrowRight size={12} />
-                    </a>
+                      View All Insurance Solutions <ArrowRight size={12} />
+                    </Link>
                   </div>
                 </div>
               </NavigationMenuContent>
@@ -578,13 +562,13 @@ export function BsqHeader() {
             </div>
           </div>
 
-          {/* Products section */}
+          {/* Insurance Solutions section — goal-first, registry-driven */}
           <div>
             <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
-              Insurance Solutions
+              What Are You Trying to Achieve?
             </p>
             <div className="space-y-1">
-              {productLinks.map((link) => (
+              {goalLinks.map((link) => (
                 <a
                   key={link.title}
                   href={link.href}
@@ -605,6 +589,13 @@ export function BsqHeader() {
                   </div>
                 </a>
               ))}
+              <Link
+                href="/products"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-2 py-2.5 text-xs font-bold text-red-400 hover:text-red-300 transition-colors"
+              >
+                View All Insurance Solutions <ArrowRight size={12} />
+              </Link>
             </div>
           </div>
 

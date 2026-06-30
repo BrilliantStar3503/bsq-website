@@ -2,11 +2,21 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { products } from '@/lib/products'
+import { products, type PruProduct } from '@/lib/products'
 import { useStickyOnScroll } from '@/hooks/useStickyOnScroll'
 
 const PRU_RED = '#D92D20'
 const NAV_HEIGHT = 52
+
+/* internalCategory is a navigation-grouping aid only (see lib/products.ts) —
+   the labels below stay deliberately quiet/secondary so they never read as
+   the visitor's primary taxonomy. Order is fixed for a stable, predictable
+   row regardless of registry array order. */
+const CATEGORY_ORDER: { key: PruProduct['internalCategory']; label: string }[] = [
+  { key: 'protection', label: 'Protection' },
+  { key: 'investment',  label: 'Investment' },
+  { key: 'retirement',  label: 'Retirement' },
+]
 
 /* ── Horizontal switcher across all products ────────────────────────
    Rendered once in app/products/layout.tsx so it persists while
@@ -38,29 +48,53 @@ export default function ProductSwitcherNav() {
       >
         <div className="max-w-[1200px] mx-auto px-4 md:px-8">
           <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
-            {products.map(p => {
-              const href = `/products/${p.slug}`
-              const isActive = pathname === href
+            {CATEGORY_ORDER.map(({ key, label }, groupIndex) => {
+              const groupProducts = products.filter(p => p.internalCategory === key)
+              if (groupProducts.length === 0) return null
               return (
-                <Link
-                  key={p.slug}
-                  href={href}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    whiteSpace: 'nowrap',
-                    padding: '14px 16px',
-                    fontSize: 13.5,
-                    fontWeight: isActive ? 700 : 600,
-                    color: isActive ? PRU_RED : '#4b5563',
-                    borderBottom: isActive ? `2.5px solid ${PRU_RED}` : '2.5px solid transparent',
-                    transition: 'color 0.15s, border-color 0.15s',
-                  }}
-                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = PRU_RED }}
-                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#4b5563' }}
-                >
-                  {p.name}
-                </Link>
+                <div key={key} className="flex items-center gap-1">
+                  {groupIndex > 0 && (
+                    <div style={{ width: 1, height: 18, background: '#e5e7eb', margin: '0 4px' }} aria-hidden="true" />
+                  )}
+                  <span
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: '#c1c5cb',
+                      whiteSpace: 'nowrap',
+                      padding: '0 4px',
+                    }}
+                  >
+                    {label}
+                  </span>
+                  {groupProducts.map(p => {
+                    const href = `/products/${p.slug}`
+                    const isActive = pathname === href
+                    return (
+                      <Link
+                        key={p.slug}
+                        href={href}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          whiteSpace: 'nowrap',
+                          padding: '14px 16px',
+                          fontSize: 13.5,
+                          fontWeight: isActive ? 700 : 600,
+                          color: isActive ? PRU_RED : '#4b5563',
+                          borderBottom: isActive ? `2.5px solid ${PRU_RED}` : '2.5px solid transparent',
+                          transition: 'color 0.15s, border-color 0.15s',
+                        }}
+                        onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = PRU_RED }}
+                        onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = '#4b5563' }}
+                      >
+                        {p.name}
+                      </Link>
+                    )
+                  })}
+                </div>
               )
             })}
           </div>

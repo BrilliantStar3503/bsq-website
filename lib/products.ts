@@ -642,7 +642,7 @@ export const financialGoals: FinancialGoal[] = [
   },
   {
     id: 'grow-wealth',
-    label: 'Grow My Wealth / Investments',
+    label: 'Grow My Wealth',
     description: 'Put your money to work in market-linked funds while staying protected.',
     icon: 'TrendingUp',
     productIds: ['prulink-assurance-account-plus', 'pru-elite-series'],
