@@ -1,25 +1,20 @@
 'use client'
 
-import { Shield, Briefcase, Sunset, TrendingUp, GraduationCap, ArrowRight, type LucideIcon } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import type { FinancialGoal } from '@/lib/products'
+import { GOAL_ICONS } from '@/lib/goal-icons'
 
 const PRU_RED   = '#D92D20'
 const GRAY_LINE = '#e5e7eb'
-
-/* Resolves FinancialGoal.icon (a plain string in the registry, kept
-   UI-agnostic) to an actual icon component. Duplicated locally rather
-   than centralized, consistent with how bsq-header.tsx resolves the
-   same registry field — see GOAL_ICONS there. */
-const GOAL_ICONS: Record<string, LucideIcon> = {
-  Shield, Briefcase, Sunset, TrendingUp, GraduationCap,
-}
 
 /* ── Goal card — visual sibling of ProductCard, used on the Insurance
    Solutions Landing Page's "Choose Your Financial Goal" section.
    Links to #<goalId>, which the Recommended Solutions section below
    renders as a matching anchor — no router/JS scroll logic needed. ── */
 export default function GoalCard({ goal }: { goal: FinancialGoal }) {
-  const Icon = GOAL_ICONS[goal.icon] ?? Shield
+  // Direct object index (not the getGoalIcon() wrapper) — keeps this a
+  // statically analyzable expression for the static-components lint rule.
+  const Icon = GOAL_ICONS[goal.icon] ?? GOAL_ICONS.Shield
   return (
     <a
       href={`#${goal.id}`}

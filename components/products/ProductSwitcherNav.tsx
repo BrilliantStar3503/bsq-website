@@ -2,26 +2,34 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { products, type PruProduct } from '@/lib/products'
+import { ChevronRight } from 'lucide-react'
+import { products, getGoalsForProduct, type PruProduct } from '@/lib/products'
 import { useStickyOnScroll } from '@/hooks/useStickyOnScroll'
 
-const PRU_RED = '#D92D20'
+const PRU_RED   = '#D92D20'
+const GRAY_LINE = '#e5e7eb'
 const NAV_HEIGHT = 52
 
-/* internalCategory is a navigation-grouping aid only (see lib/products.ts) —
-   the labels below stay deliberately quiet/secondary so they never read as
-   the visitor's primary taxonomy. Order is fixed for a stable, predictable
-   row regardless of registry array order. */
-const CATEGORY_ORDER: { key: PruProduct['internalCategory']; label: string }[] = [
-  { key: 'protection', label: 'Protection' },
-  { key: 'investment',  label: 'Investment' },
-  { key: 'retirement',  label: 'Retirement' },
-]
+/* internalCategory groups the row visually (via dividers only, no text
+   label — see Phase 4.5 note below) so it stays a layout aid, never a
+   second taxonomy competing with the goal context shown to its left. */
+const CATEGORY_ORDER: PruProduct['internalCategory'][] = ['protection', 'investment', 'retirement']
 
 /* ── Horizontal switcher across all products ────────────────────────
    Rendered once in app/products/layout.tsx so it persists while
    visitors move between product pages — no full reload, no return
    trip to /products required.
+
+   Also carries the goal-context breadcrumb (Insurance Solutions /
+   <primary goal>) as a leading segment in this same bar, instead of a
+   separate full-width Breadcrumb bar — Phase 4.5: a first-time visitor
+   was hitting three stacked orientation bars (switcher, breadcrumb,
+   then hero) before any content. Folding them into one bar removes a
+   full strip of chrome without losing the "where am I" context, and
+   stops internalCategory's old text labels ("Protection" / "Investment"
+   / "Retirement") from visually competing with the goal-first language
+   right next to them — internalCategory now only groups the row via
+   thin dividers, never as visible category text.
 
    Docks beneath the global header's scrolled height (60px) once
    scrolled past its natural position. See useStickyOnScroll for why
@@ -36,15 +44,19 @@ export default function ProductSwitcherNav() {
   // Detail pages (/products/[slug]) still get the full switcher.
   if (pathname === '/products') return null
 
+  const currentSlug = pathname.replace('/products/', '')
+  const currentProduct = products.find(p => p.slug === currentSlug)
+  const primaryGoal = currentProduct ? getGoalsForProduct(currentProduct.id)[0] : undefined
+
   return (
     <>
       <div ref={sentinelRef} style={{ height: 1 }} aria-hidden="true" />
       {stuck && <div style={{ height: NAV_HEIGHT }} aria-hidden="true" />}
       <nav
-        aria-label="Browse insurance solutions"
+        aria-label="Insurance Solutions navigation"
         style={{
           background: '#fff',
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: `1px solid ${GRAY_LINE}`,
           ...(stuck
             ? { position: 'fixed', top: 60, left: 0, right: 0 }
             : { position: 'relative' }),
@@ -53,27 +65,38 @@ export default function ProductSwitcherNav() {
       >
         <div className="max-w-[1200px] mx-auto px-4 md:px-8">
           <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
-            {CATEGORY_ORDER.map(({ key, label }, groupIndex) => {
-              const groupProducts = products.filter(p => p.internalCategory === key)
+
+            {/* Goal-context breadcrumb — folded in, not a separate bar */}
+            {currentProduct && (
+              <div className="flex items-center gap-1.5 pr-3 mr-2 flex-shrink-0" style={{ borderRight: `1px solid ${GRAY_LINE}` }}>
+                <Link href="/products" className="text-xs font-semibold whitespace-nowrap transition-colors"
+                  style={{ color: '#9ca3af' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = PRU_RED)}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}
+                >
+                  Insurance Solutions
+                </Link>
+                {primaryGoal && (
+                  <>
+                    <ChevronRight size={11} className="text-gray-300 flex-shrink-0" />
+                    <Link href={`/products#${primaryGoal.id}`} className="text-xs font-bold whitespace-nowrap transition-colors"
+                      style={{ color: PRU_RED }}
+                    >
+                      {primaryGoal.label}
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
+
+            {CATEGORY_ORDER.map((category, groupIndex) => {
+              const groupProducts = products.filter(p => p.internalCategory === category)
               if (groupProducts.length === 0) return null
               return (
-                <div key={key} className="flex items-center gap-1">
+                <div key={category} className="flex items-center gap-1">
                   {groupIndex > 0 && (
-                    <div style={{ width: 1, height: 18, background: '#e5e7eb', margin: '0 4px' }} aria-hidden="true" />
+                    <div style={{ width: 1, height: 18, background: GRAY_LINE, margin: '0 4px' }} aria-hidden="true" />
                   )}
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 700,
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                      color: '#c1c5cb',
-                      whiteSpace: 'nowrap',
-                      padding: '0 4px',
-                    }}
-                  >
-                    {label}
-                  </span>
                   {groupProducts.map(p => {
                     const href = `/products/${p.slug}`
                     const isActive = pathname === href

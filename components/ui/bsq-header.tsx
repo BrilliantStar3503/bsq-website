@@ -19,6 +19,7 @@ import { LucideIcon } from 'lucide-react'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { useAgentContact } from '@/hooks/useAgentContact'
 import { financialGoals } from '@/lib/products'
+import { getGoalIcon } from '@/lib/goal-icons'
 import {
   ClipboardList,
   ShieldCheck,
@@ -33,8 +34,6 @@ import {
   Star,
   BookOpen,
   ArrowRight,
-  Shield,
-  Briefcase,
   Package,
 } from 'lucide-react'
 
@@ -125,14 +124,10 @@ const aboutLinks2: LinkItem[] = [
    no hardcoded product list here (this also retires the dead /prulifetime
    link that used to live in this array).
 ──────────────────────────────────────────────────────────────────────── */
-const GOAL_ICONS: Record<string, LucideIcon> = {
-  Shield, Briefcase, Sunset, TrendingUp, GraduationCap,
-}
-
 const goalLinks: LinkItem[] = financialGoals.map(goal => ({
   title: goal.label,
   href: `/products#${goal.id}`,
-  icon: GOAL_ICONS[goal.icon] ?? Shield,
+  icon: getGoalIcon(goal.icon),
   description: goal.description,
 }))
 
