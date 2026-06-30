@@ -114,8 +114,14 @@ export default function ProductAppointmentSection({ product, goalId }: { product
     }
   }
 
+  // scrollMarginTop: 112 = global header (60, scrolled) + ProductSwitcherNav
+  // (52, fixed) — matches ProductStickyNav's docking offset, since by the
+  // time a visitor scrolls/deep-links this far down a product page, both
+  // bars are in their fixed state. On the landing page (no switcher nav),
+  // this section sits near the bottom anyway, so the extra margin is
+  // harmless overscroll, not a misalignment.
   return (
-    <section id="appointment" style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}` }}>
+    <section id="appointment" style={{ background: GRAY_BG, borderBottom: `1px solid ${GRAY_LINE}`, scrollMarginTop: 112 }}>
       <div className="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
 
         <motion.div className="text-center mb-10"

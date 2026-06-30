@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, Shield, TrendingUp, Clock, ArrowRight, Info, Zap, CheckCircle, BarChart2, RotateCcw, Home, Mail, Phone, X, Send, MessageCircle, Check, Sparkles, User, GraduationCap, Briefcase, Key, Users } from 'lucide-react'
 import { questions, type Question } from '@/lib/assessment-questions'
-import { computeScore, type Answers, type ScoreResult } from '@/lib/assessment-scoring'
+import { computeScore, type Answers, type ScoreResult, type Gap } from '@/lib/assessment-scoring'
 import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/recommendation-engine'
+import { getGoalForGap } from '@/lib/products'
+import { GOAL_ICONS } from '@/lib/goal-icons'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
 import { ShineBorder } from '@/components/ui/shine-border'
 import { Boxes } from '@/components/ui/background-boxes'
@@ -723,6 +725,18 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
   const RED_SOFT  = `${PRU_RED}12`
   const RED_MED   = `${PRU_RED}30`
 
+  /* ── Recommended Financial Goal — bridges this assessment's existing
+     gap/recommendation engines into the Insurance Solutions goal-first
+     vocabulary (lib/products.ts), without touching either engine.
+     Picks the goal mapped to the visitor's highest-severity gap via
+     getGoalForGap (built in Phase 1); falls through lower-severity gaps
+     if the top one has no goal mapping (e.g. keyMan, businessInsurance —
+     intentionally unmapped, see lib/products.ts gapToGoal). ── */
+  const severityRank: Record<Gap['severity'], number> = { high: 3, medium: 2, low: 1 }
+  const sortedGaps = [...result.gaps].sort((a, b) => severityRank[b.severity] - severityRank[a.severity])
+  const topGoal = sortedGaps.map(gap => getGoalForGap(gap.id)).find(goal => goal !== undefined)
+  const TopGoalIcon = topGoal ? (GOAL_ICONS[topGoal.icon] ?? GOAL_ICONS.Shield) : undefined
+
   const gapIcon: Record<string, React.ReactNode> = {
     income:            <Shield size={15} />,
     medical:           <AlertTriangle size={15} />,
@@ -1101,6 +1115,36 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
       </motion.div>
 
+      {/* ══ SECTION 4.5 — Recommended Financial Goal ═══════════════════
+          Bridges into the Insurance Solutions goal-first experience:
+          "based on what you've shared, here's the goal that deserves
+          your attention" — before any specific plan is named below. ── */}
+      {topGoal && (
+        <motion.div variants={fadeUp}
+          className="rounded-2xl p-7 flex items-center gap-4"
+          style={{
+            background: 'rgba(255,255,255,0.95)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
+          }}>
+          <div className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
+            style={{ background: 'rgba(220,0,0,0.07)', border: '1px solid rgba(220,0,0,0.15)' }}>
+            {TopGoalIcon && <TopGoalIcon size={18} style={{ color: '#b91c1c' }} />}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs uppercase tracking-widest font-semibold mb-1" style={{ color: '#dc2626', letterSpacing: '0.15em' }}>
+              Based On What You&apos;ve Shared
+            </p>
+            <h3 className="text-base font-semibold mb-1" style={{ color: '#111111' }}>
+              Your Recommended Financial Goal: {topGoal.label}
+            </h3>
+            <p className="text-sm" style={{ color: 'rgba(17,17,17,0.65)' }}>
+              {topGoal.description}
+            </p>
+          </div>
+        </motion.div>
+      )}
+
       {/* ══ SECTION 5 — Recommended Plans ══════════════════════════════ */}
       <motion.div variants={fadeUp}>
         <div className="mb-6">
@@ -1205,13 +1249,17 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
                     >
                       <MessageCircle size={11} /> Talk to Advisor
                     </button>
-                    <a href={rec.slug === 'prulifetime-income' ? '/prulifetime' : `/products/${rec.slug}`}
+                    {/* Routes straight to that solution's own consultation
+                        section — already pre-selects this exact product
+                        (see ProductAppointmentSection), so the visitor never
+                        has to re-pick from an uncontextualized list. */}
+                    <a href={`/products/${rec.slug}#appointment`}
                       className="inline-flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium"
                       style={{ color: '#111111', border: '1px solid rgba(0,0,0,0.15)', background: 'transparent', transition: 'background 0.15s ease, border-color 0.15s ease' }}
                       onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'rgba(0,0,0,0.03)'; el.style.borderColor = 'rgba(0,0,0,0.22)' }}
                       onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = 'transparent'; el.style.borderColor = 'rgba(0,0,0,0.15)' }}
                     >
-                      Learn More <ArrowRight size={10} />
+                      Book Consultation <ArrowRight size={10} />
                     </a>
                   </div>
                 </div>
