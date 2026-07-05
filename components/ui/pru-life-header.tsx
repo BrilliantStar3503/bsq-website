@@ -161,7 +161,7 @@ export function PruLifeHeader() {
                 ← Back to Site
               </a>
 
-              <button className="md:hidden" onClick={() => setMenuOpen(v => !v)}
+              <button className="lg:hidden" onClick={() => setMenuOpen(v => !v)}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#374151', padding: 6 }}
                 aria-label="Toggle menu">
                 {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -177,7 +177,7 @@ export function PruLifeHeader() {
             SCROLLED → plain white, dark text, 60px tall, subtle shadow
             Transition: all 0.3s linear  (from prulifeuk.com.ph CSS)  */}
         <div
-          className="hidden md:flex"
+          className="hidden lg:flex"
           style={{
             height:     scrolled ? NAV_H_SCROLLED : NAV_H_TOP,
             background: scrolled ? '#ffffff' : PRU_RED,
@@ -280,7 +280,7 @@ export function PruLifeHeader() {
 
         {/* ── Mobile nav bar (always shows hamburger) ───────────────── */}
         <div
-          className="flex md:hidden"
+          className="flex lg:hidden"
           style={{
             height:     56,
             background: scrolled ? '#ffffff' : PRU_RED,

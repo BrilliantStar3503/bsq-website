@@ -28,6 +28,8 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['@vercel/analytics'],
+
   async headers() {
     return [
       {

@@ -76,6 +76,7 @@ export default function ProductStickyNav() {
               disabled={s.disabled}
               onClick={() => !s.disabled && scrollTo(s.id)}
               title={s.disabled ? 'Coming soon' : undefined}
+              className="border-0 bg-transparent"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -84,11 +85,12 @@ export default function ProductStickyNav() {
                 fontSize: 13,
                 fontWeight: active === s.id ? 700 : 600,
                 color: s.disabled ? '#c1c5cb' : active === s.id ? PRU_RED : '#6b7280',
-                borderBottom: active === s.id && !s.disabled ? `2px solid ${PRU_RED}` : '2px solid transparent',
-                background: 'none',
-                border: 'none',
+                // inset box-shadow mimics a bottom border with no shorthand/longhand conflict
+                boxShadow: active === s.id && !s.disabled
+                  ? `inset 0 -2px 0 0 ${PRU_RED}`
+                  : 'inset 0 -2px 0 0 transparent',
                 cursor: s.disabled ? 'default' : 'pointer',
-                transition: 'color 0.15s, border-color 0.15s',
+                transition: 'color 0.15s, box-shadow 0.15s',
               }}
               onMouseEnter={e => { if (!s.disabled && active !== s.id) e.currentTarget.style.color = PRU_RED }}
               onMouseLeave={e => { if (!s.disabled && active !== s.id) e.currentTarget.style.color = '#6b7280' }}

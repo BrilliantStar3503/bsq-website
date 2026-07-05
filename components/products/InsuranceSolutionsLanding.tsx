@@ -313,11 +313,11 @@ export default function InsuranceSolutionsLanding() {
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM }}
-            className="rounded-3xl px-7 py-7 md:px-12 md:py-9 flex flex-col md:flex-row items-center justify-between gap-7"
+            className="rounded-3xl px-7 py-7 lg:px-12 lg:py-9 flex flex-col lg:flex-row items-center justify-between gap-7"
             style={{ background: '#ffffff', boxShadow: '0 1px 2px rgba(16,24,40,0.04), 0 24px 48px -16px rgba(16,24,40,0.10)' }}
           >
-            <div className="flex items-center gap-4 text-center md:text-left">
-              <div className="hidden md:flex w-12 h-12 rounded-full items-center justify-center shrink-0" style={{ background: '#fef2f2' }}>
+            <div className="flex items-center gap-4 text-center lg:text-left">
+              <div className="hidden lg:flex w-12 h-12 rounded-full items-center justify-center shrink-0" style={{ background: '#fef2f2' }}>
                 <MessageCircle size={20} style={{ color: PRU_RED }} strokeWidth={1.75} />
               </div>
               <div>
@@ -325,7 +325,7 @@ export default function InsuranceSolutionsLanding() {
                 <p className="text-sm text-gray-500">Let&apos;s talk about your goals. We&apos;ll guide you to the right solution.</p>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
               <AnimatedGradientButton
                 onClick={() => router.push('/assessment')}
                 preset="pru"
