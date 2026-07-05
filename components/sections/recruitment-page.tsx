@@ -1,6 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -137,11 +138,11 @@ const BENEFITS = [
 
 const EVENTS = [
   {
-    title: 'BSQ Opportunity Night',
-    date: 'April 19, 2026',
-    day: '19',
+    title: 'Mega BYB — Build Your Business',
+    date: 'April 13, 2026 · 7:00PM–8:30PM',
+    day: '13',
     month: 'APR',
-    location: 'Makati, Metro Manila',
+    location: 'Dusit Thani Hotel, Makati City',
     format: 'In-person',
     slots: 12,
     tag: 'FEATURED',
@@ -413,11 +414,31 @@ function EventGallery() {
   )
 }
 
-/* ─── Book a Briefing form ───────────────────────────────────────────── */
+/* ─── Book a Briefing / Event Pre-Registration form ─────────────────── */
+const PRU_FORM_URL = 'https://forms.office.com/pages/responsepage.aspx?id=XjAHcGQma065pMTVzP0VJCY2UsqUAABFsBkyscTFhr5UODBLTldHVlVLVkFRVllMRkxYSlZUWk8xTC4u&origin=QRCode&route=shorturl'
+
 function BookBriefing() {
+  const searchParams = useSearchParams()
   const [form, setForm] = useState({ firstName: '', lastName: '', phone: '', location: '' })
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done'>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Hidden tracking fields — read silently from QR code URL params
+  const [tracking, setTracking] = useState({
+    branch:      'Brilliant Star Quartz',
+    recruiter:   'Christopher Garcia',
+    agentCode:   '70003503',
+    unitManager: 'Christopher Garcia',
+  })
+
+  useEffect(() => {
+    setTracking({
+      branch:      searchParams.get('branch')      ?? 'Brilliant Star Quartz',
+      recruiter:   searchParams.get('recruiter')   ?? 'Christopher Garcia',
+      agentCode:   searchParams.get('agent')       ?? '70003503',
+      unitManager: searchParams.get('unit_manager') ?? 'Christopher Garcia',
+    })
+  }, [searchParams])
 
   function validate() {
     const e: Record<string, string> = {}
@@ -428,29 +449,33 @@ function BookBriefing() {
     return e
   }
 
-  function openCalendly() {
-    if (typeof window !== 'undefined' && (window as any).Calendly) {
-      ;(window as any).Calendly.initPopupWidget({
-        url: 'https://calendly.com/prubsq/briefing',
-        prefill: {
-          name: `${form.firstName} ${form.lastName}`,
-          customAnswers: { a1: form.phone, a2: form.location },
-        },
-      })
-    }
-  }
-
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setErrors({})
     setStatus('submitting')
-    // Small delay so the button state is visible, then open Calendly
-    setTimeout(() => {
-      setStatus('done')
-      openCalendly()
-    }, 600)
+
+    try {
+      // 1. Save lead to BSQ CRM via n8n (with hidden tracking fields)
+      await fetch('/api/recruitment-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...form,
+          ...tracking,
+          eventName: 'Mega BYB 2026',
+          eventDate: 'April 13, 2026',
+        }),
+      })
+    } catch {
+      // Silent fail — don't block the user if n8n is down
+    }
+
+    // 2. Open PRU Life UK's official registration form in a new tab
+    window.open(PRU_FORM_URL, '_blank', 'noopener,noreferrer')
+
+    setStatus('done')
   }
 
   const inputBase: React.CSSProperties = {
@@ -478,7 +503,7 @@ function BookBriefing() {
         <div className="flex flex-col gap-6 lg:pt-2">
           <FadeUp delay={0.1}>
             <span className="text-xs font-semibold tracking-[0.22em] uppercase" style={{ color: RED }}>
-              One-on-One Briefing
+              Event Pre-Registration
             </span>
           </FadeUp>
 
@@ -487,25 +512,25 @@ function BookBriefing() {
               className="font-bold text-gray-900 tracking-tight leading-snug"
               style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}
             >
-              Not ready for an event? Start with a private call.
+              Reserve your spot at Mega BYB 2026.
             </h2>
           </FadeUp>
 
           <FadeUp delay={0.3}>
             <p className="text-gray-500 leading-relaxed font-light text-[1.02rem]">
-              Fill in your details and pick a time that works for you. We&apos;ll walk
-              you through the BSQ system, the income model, and what the first 90 days
-              look like — no pressure, no commitment.
+              Fill in your details below. Your slot will be logged with BSQ and you&apos;ll
+              be directed to PRU Life UK&apos;s official form — required to qualify for
+              the raffle and secure your entry at the door.
             </p>
           </FadeUp>
 
           <FadeUp delay={0.4}>
             <div className="flex flex-col gap-4 mt-2">
               {[
-                { icon: Clock, text: '30-minute session via Zoom or phone' },
-                { icon: Users, text: 'Direct conversation with a BSQ team leader' },
-                { icon: CalendarCheck, text: 'Pick your own date and time slot' },
-                { icon: ShieldCheck, text: 'No obligation — just information' },
+                { icon: CalendarCheck, text: 'Monday, April 13, 2026 · 7:00PM–8:30PM' },
+                { icon: MapPin, text: 'Mayuree I & II, Dusit Thani Hotel, Makati City' },
+                { icon: Users, text: 'Guest speaker: Chinkee Tan' },
+                { icon: ShieldCheck, text: 'Limited slots only — register now to secure entry' },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
                   <div
@@ -534,7 +559,7 @@ function BookBriefing() {
           >
             <div>
               <p className="text-gray-900 font-bold text-[18px] mb-1">Share your details</p>
-              <p className="text-gray-400 text-[13px] font-light">We&apos;ll confirm your slot via SMS or Messenger.</p>
+              <p className="text-gray-400 text-[13px] font-light">Takes 30 seconds. Official PRU form opens next.</p>
             </div>
 
             {/* First + Last name */}
@@ -648,14 +673,29 @@ function BookBriefing() {
                 boxShadow: status === 'done' ? '0 4px 20px rgba(34,197,94,0.35)' : `0 4px 20px ${RED}40`,
               }}
             >
-              {status === 'idle' && <><CalendarCheck size={15} strokeWidth={2} /> Book My Briefing Slot</>}
-              {status === 'submitting' && 'Opening calendar...'}
-              {status === 'done' && <><CheckCircle2 size={15} /> Slot picker opened</>}
+              {status === 'idle' && <><CalendarCheck size={15} strokeWidth={2} /> Pre-Register for the Event</>}
+              {status === 'submitting' && 'Saving your details...'}
+              {status === 'done' && <><CheckCircle2 size={15} /> Pre-registered! Complete official form →</>}
             </button>
 
-            <p className="text-center text-gray-400 text-[11px] font-light -mt-1">
-              A Calendly window will open so you can pick your preferred time.
-            </p>
+            {status === 'done' ? (
+              <div
+                className="rounded-xl p-4 text-center"
+                style={{ background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.2)' }}
+              >
+                <p className="text-[13px] font-semibold" style={{ color: '#16a34a' }}>
+                  ✅ You&apos;re pre-registered with BSQ!
+                </p>
+                <p className="text-[12px] text-gray-500 mt-1 font-light">
+                  A new tab just opened with the official PRU Life UK registration form.
+                  Please complete it to qualify for the raffle and secure your entry.
+                </p>
+              </div>
+            ) : (
+              <p className="text-center text-gray-400 text-[11px] font-light -mt-1">
+                Your details are saved with BSQ. You&apos;ll then be directed to PRU Life UK&apos;s official registration.
+              </p>
+            )}
           </form>
         </FadeUp>
       </div>
@@ -678,331 +718,9 @@ export default function RecruitmentPage() {
       */}
       <BYBHero
         eventLabel="Now Recruiting · Build Your Business"
-        eventImage="/images/events/pruventure-apprentice.jpg"
+        eventImage="/images/events/byb-apr-2026.jpg"
       />
 
-      {/* ── 1b. WE ARE HIRING ───────────────────────────────────────────── */}
-      <section id="hiring" className="bg-white py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-
-          {/* Header */}
-          <FadeUp>
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 mb-4">
-                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: RED }} />
-                <span
-                  className="text-xs font-bold tracking-[0.28em] uppercase px-3 py-1 rounded-full"
-                  style={{ color: RED, background: 'rgba(237,27,46,0.08)', border: '1px solid rgba(237,27,46,0.18)' }}
-                >
-                  Now Open
-                </span>
-                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: RED }} />
-              </div>
-              <h2 className="font-black text-gray-900 tracking-tight" style={{ fontSize: 'clamp(2rem, 5vw, 3rem)' }}>
-                WE ARE <span style={{ color: RED }}>HIRING!</span>
-              </h2>
-              <p className="text-gray-400 mt-3 font-light text-[1rem] max-w-md mx-auto leading-relaxed">
-                Three roles. One team. Choose the path that fits your ambition.
-              </p>
-            </div>
-          </FadeUp>
-
-          {/* Role cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {/* Card 1 — PRU Venture Apprentice */}
-            <FadeUp delay={0.1}>
-              <div
-                className="group relative rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300"
-                style={{
-                  background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0505 100%)',
-                  border: `1px solid rgba(237,27,46,0.25)`,
-                  boxShadow: `0 4px 32px rgba(237,27,46,0.10)`,
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 48px rgba(237,27,46,0.20)` }}
-                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 32px rgba(237,27,46,0.10)` }}
-              >
-                {/* Glow */}
-                <div className="absolute top-0 right-0 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(237,27,46,0.12) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
-
-                <div className="relative p-7 flex flex-col gap-5 h-full">
-                  {/* Badge */}
-                  <span
-                    className="self-start text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
-                    style={{ background: 'rgba(237,27,46,0.18)', color: RED, border: '1px solid rgba(237,27,46,0.3)' }}
-                  >
-                    Featured Role
-                  </span>
-
-                  {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(237,27,46,0.15)', border: '1px solid rgba(237,27,46,0.25)' }}>
-                    <TrendingUp size={22} style={{ color: RED }} />
-                  </div>
-
-                  {/* Title */}
-                  <div>
-                    <p className="text-white font-black text-xl leading-tight">PRU Venture</p>
-                    <p className="font-black text-xl leading-tight" style={{ color: RED }}>Apprentice</p>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-white/50 text-[13px] leading-relaxed font-light">
-                    The entry point into the BSQ system. Learn the financial advisory business from the ground up — with full training, licensing support, AI tools, and a mentor by your side from day one.
-                  </p>
-
-                  {/* Perks */}
-                  <div className="flex flex-col gap-2.5 flex-1">
-                    {[
-                      'Full PRU Life UK licensing support',
-                      'Access to the BSQ AI assessment platform',
-                      'Mentored by a senior advisor',
-                      'Uncapped commission from day one',
-                    ].map(perk => (
-                      <div key={perk} className="flex items-start gap-2.5">
-                        <CheckCircle2 size={13} className="flex-shrink-0 mt-0.5" style={{ color: RED }} />
-                        <span className="text-white/60 text-[12.5px] font-light">{perk}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
-                  <a
-                    href="#book"
-                    className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 hover:gap-3"
-                    style={{ background: RED, boxShadow: `0 4px 20px rgba(237,27,46,0.40)` }}
-                  >
-                    Apply as Apprentice <ArrowRight size={14} strokeWidth={2.5} />
-                  </a>
-                </div>
-              </div>
-            </FadeUp>
-
-            {/* Card 2 — iLeader */}
-            <FadeUp delay={0.2}>
-              <div
-                className="group relative rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300"
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid rgba(0,0,0,0.08)',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 48px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLDivElement).style.borderColor = `rgba(237,27,46,0.25)` }}
-                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(0,0,0,0.08)' }}
-              >
-                <div className="relative p-7 flex flex-col gap-5 h-full">
-                  {/* Badge */}
-                  <span
-                    className="self-start text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
-                    style={{ background: '#f3f4f6', color: '#6b7280', border: '1px solid rgba(0,0,0,0.08)' }}
-                  >
-                    Leadership Role
-                  </span>
-
-                  {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(237,27,46,0.08)', border: '1px solid rgba(237,27,46,0.15)' }}>
-                    <Users size={22} style={{ color: RED }} />
-                  </div>
-
-                  {/* Title */}
-                  <div>
-                    <p className="text-gray-900 font-black text-xl leading-tight">iLeader</p>
-                    <p className="text-sm font-medium mt-1" style={{ color: '#9ca3af' }}>Build & Lead Your Own Team</p>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-gray-500 text-[13px] leading-relaxed font-light">
-                    Ready to lead? Step into the iLeader track and build your own unit under the BSQ system. Recruit, train, and grow a team while earning from your own production and your team&apos;s performance.
-                  </p>
-
-                  {/* Perks */}
-                  <div className="flex flex-col gap-2.5 flex-1">
-                    {[
-                      'Override income from your team\'s production',
-                      'Leadership development & management training',
-                      'Your own branded BSQ sub-team funnel',
-                      'MDRT & COT qualification path',
-                    ].map(perk => (
-                      <div key={perk} className="flex items-start gap-2.5">
-                        <CheckCircle2 size={13} className="flex-shrink-0 mt-0.5" style={{ color: RED }} />
-                        <span className="text-gray-500 text-[12.5px] font-light">{perk}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
-                  <a
-                    href="#book"
-                    className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:gap-3"
-                    style={{ background: 'rgba(237,27,46,0.07)', color: RED, border: `1.5px solid rgba(237,27,46,0.25)` }}
-                  >
-                    Apply as iLeader <ArrowRight size={14} strokeWidth={2.5} />
-                  </a>
-                </div>
-              </div>
-            </FadeUp>
-
-            {/* Card 3 — Financial Advisor */}
-            <FadeUp delay={0.3}>
-              <div
-                className="group relative rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300"
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid rgba(0,0,0,0.08)',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-                }}
-                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 48px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(237,27,46,0.25)' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)'; (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(0,0,0,0.08)' }}
-              >
-                <div className="relative p-7 flex flex-col gap-5 h-full">
-                  {/* Badge */}
-                  <span
-                    className="self-start text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
-                    style={{ background: '#f3f4f6', color: '#6b7280', border: '1px solid rgba(0,0,0,0.08)' }}
-                  >
-                    Part-time / Full-time
-                  </span>
-
-                  {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(237,27,46,0.08)', border: '1px solid rgba(237,27,46,0.15)' }}>
-                    <ShieldCheck size={22} style={{ color: RED }} />
-                  </div>
-
-                  {/* Title */}
-                  <div>
-                    <p className="text-gray-900 font-black text-xl leading-tight">Financial</p>
-                    <p className="font-black text-xl leading-tight" style={{ color: RED }}>Advisor</p>
-                    <p className="text-sm font-medium mt-1" style={{ color: '#9ca3af' }}>Part-time or Full-time</p>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-gray-500 text-[13px] leading-relaxed font-light">
-                    Whether you&apos;re exploring a side income or committing full-time, the Financial Advisor role fits your schedule. Serve real clients, earn real income, and grow at your own pace.
-                  </p>
-
-                  {/* Perks */}
-                  <div className="flex flex-col gap-2.5 flex-1">
-                    {[
-                      'Flexible hours — work around your schedule',
-                      'Same AI tools & digital system as full-timers',
-                      'PRU Life UK licensed & regulated',
-                      "Transition to full-time anytime you're ready",
-                    ].map(perk => (
-                      <div key={perk} className="flex items-start gap-2.5">
-                        <CheckCircle2 size={13} className="flex-shrink-0 mt-0.5" style={{ color: RED }} />
-                        <span className="text-gray-500 text-[12.5px] font-light">{perk}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
-                  <a
-                    href="#book"
-                    className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:gap-3"
-                    style={{ background: 'rgba(237,27,46,0.07)', color: RED, border: '1.5px solid rgba(237,27,46,0.25)' }}
-                  >
-                    Apply as Advisor <ArrowRight size={14} strokeWidth={2.5} />
-                  </a>
-                </div>
-              </div>
-            </FadeUp>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2. BENEFITS GRID ────────────────────────────────────────────── */}
-      <section className="bg-white py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <FadeUp>
-            <div className="mb-14 text-center">
-              <p className="text-xs font-semibold tracking-[0.22em] uppercase mb-3" style={{ color: RED }}>Why BSQ</p>
-              <h2 className="font-bold text-gray-900 tracking-tight" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)' }}>
-                Everything you need to grow — already built.
-              </h2>
-              <p className="text-gray-400 mt-4 font-light text-[1rem] max-w-lg mx-auto leading-relaxed">
-                We hand you a system, not just a license. You focus on relationships. The platform handles the rest.
-              </p>
-            </div>
-          </FadeUp>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {BENEFITS.map((b, i) => <BenefitCard key={b.title} {...b} delay={i * 0.08} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. TRAVEL INCENTIVES ────────────────────────────────────────── */}
-      <section
-        className="py-24 px-6 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #18080a 60%, #0f0f0f 100%)' }}
-      >
-        {/* Glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: `radial-gradient(ellipse 60% 40% at 50% 50%, #ed1b2e14 0%, transparent 70%)` }}
-        />
-
-        <div className="relative max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-          {/* Left — globe */}
-          <FadeUp delay={0.1} className="flex justify-center">
-            <GlobePolaroids className="w-full max-w-md" speed={0.004} />
-          </FadeUp>
-
-          {/* Right — text */}
-          <div className="flex flex-col gap-6">
-            <FadeUp delay={0.15}>
-              <span className="text-xs font-semibold tracking-[0.22em] uppercase" style={{ color: RED }}>
-                PRU Life UK Travel Incentives
-              </span>
-            </FadeUp>
-
-            <FadeUp delay={0.25}>
-              <h2
-                className="font-bold text-white tracking-tight leading-snug"
-                style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}
-              >
-                Travel the World.<br />
-                <span style={{ color: RED }}>A to Z.</span>
-              </h2>
-            </FadeUp>
-
-            <FadeUp delay={0.35}>
-              <p className="text-white/50 leading-relaxed font-light text-[1.02rem]">
-                PRU Life UK rewards top-performing advisors with all-expense-paid trips to world-class
-                destinations. Tokyo, Singapore, Paris, New York — your production unlocks the world.
-              </p>
-            </FadeUp>
-
-            <FadeUp delay={0.45}>
-              <div className="grid grid-cols-2 gap-3 mt-2">
-                {[
-                  { city: 'Tokyo', flag: '🇯🇵' },
-                  { city: 'Singapore', flag: '🇸🇬' },
-                  { city: 'Paris', flag: '🇫🇷' },
-                  { city: 'New York', flag: '🇺🇸' },
-                  { city: 'Dubai', flag: '🇦🇪' },
-                  { city: 'London', flag: '🇬🇧' },
-                ].map(({ city, flag }) => (
-                  <div
-                    key={city}
-                    className="flex items-center gap-2.5 rounded-xl px-3.5 py-2.5"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}
-                  >
-                    <span style={{ fontSize: 16 }}>{flag}</span>
-                    <span className="text-white/70 text-[13px] font-medium">{city}</span>
-                  </div>
-                ))}
-              </div>
-            </FadeUp>
-
-            <FadeUp delay={0.55}>
-              <p className="text-white/30 text-[12px] font-light mt-2">
-                Destinations vary per incentive cycle. Past trips include Southeast Asia, Europe, Middle East, and the Americas.
-              </p>
-            </FadeUp>
-          </div>
-        </div>
-      </section>
 
       {/* ── 4. FEATURED EVENTS ──────────────────────────────────────────── */}
       <section id="events" className="py-24 px-6" style={{ background: '#fafafa' }}>
@@ -1172,7 +890,9 @@ export default function RecruitmentPage() {
       </section>
 
       {/* ── 7. BOOK A BRIEFING (form) ───────────────────────────────────── */}
-      <BookBriefing />
+      <Suspense fallback={null}>
+        <BookBriefing />
+      </Suspense>
 
       {/* ── 8. TESTIMONIALS ─────────────────────────────────────────────── */}
       <section className="bg-white py-24 px-6">

@@ -6,11 +6,8 @@ import { GOAL_ICONS } from '@/lib/goal-icons'
 
 const PRU_RED = '#D92D20'
 
-// Two-tier elevation — a tight "contact" shadow plus a soft, diffused
-// ambient shadow — rather than one heavy blur. This reads as a surface
-// resting just above the page, not a card wearing a drop-shadow.
-const REST_SHADOW  = '0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.05)'
-const HOVER_SHADOW = '0 4px 8px -2px rgba(16,24,40,0.06), 0 16px 32px -8px rgba(217,45,32,0.15)'
+const REST_SHADOW  = '0 6px 28px rgba(0,0,0,0.09)'
+const HOVER_SHADOW = '0 12px 40px rgba(0,0,0,0.15)'
 const EASE_PREMIUM = 'cubic-bezier(0.16, 1, 0.3, 1)'
 
 /* ── Goal card — visual sibling of ProductCard, used on the Insurance
@@ -26,8 +23,9 @@ export default function GoalCard({ goal, compact = false }: { goal: FinancialGoa
       href={`#${goal.id}`}
       className={`group relative flex flex-col h-full overflow-hidden ${compact ? 'p-5' : 'p-7'}`}
       style={{
-        borderRadius: 20,
+        borderRadius: 10,
         background: '#fff',
+        border: '1px solid #e5e7eb',
         boxShadow: REST_SHADOW,
         transition: `box-shadow 0.35s ${EASE_PREMIUM}, transform 0.35s ${EASE_PREMIUM}`,
       }}

@@ -2,6 +2,7 @@ import { MoveRight, PhoneCall } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
+import { QRCodeSVG } from "qrcode.react"
 
 /* ─────────────────────────────────────────────────────────────────────
    BYB HERO
@@ -38,48 +39,6 @@ function Hero({
               >
                 {eventLabel}
               </Badge>
-            </div>
-
-            {/* We Are Hiring block */}
-            <div
-              className="rounded-2xl px-5 py-4 flex flex-col gap-3"
-              style={{ background: 'rgba(237,27,46,0.04)', border: '1px solid rgba(237,27,46,0.15)' }}
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#ed1b2e' }} />
-                <p className="font-black text-lg tracking-tight" style={{ color: '#ed1b2e' }}>
-                  We Are Hiring!
-                </p>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                {[
-                  { label: 'PRU Venture Apprentice', href: '#hiring' },
-                  { label: 'iLeader',                 href: '#hiring' },
-                  { label: 'Financial Advisor',        href: '#hiring', sub: 'Part-time or Full-time' },
-                ].map(role => (
-                  <a
-                    key={role.label}
-                    href={role.href}
-                    className="flex items-center gap-2.5 group"
-                  >
-                    <span
-                      className="w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors duration-200"
-                      style={{ background: '#ed1b2e' }}
-                    />
-                    <span
-                      className="text-sm font-semibold transition-colors duration-200 group-hover:underline"
-                      style={{ color: '#1a1a2e' }}
-                    >
-                      {role.label}
-                    </span>
-                    {role.sub && (
-                      <span className="text-xs font-normal" style={{ color: '#9ca3af' }}>
-                        ({role.sub})
-                      </span>
-                    )}
-                  </a>
-                ))}
-              </div>
             </div>
 
             <div className="flex gap-4 flex-col">
@@ -132,7 +91,7 @@ function Hero({
 
           {/* ── Right — event image ── */}
           <div
-            className="rounded-2xl overflow-hidden aspect-[4/5] relative"
+            className="rounded-2xl overflow-hidden aspect-square relative"
             style={{
               background: eventImage ? undefined : '#f3f4f6',
               border: eventImage ? 'none' : '1.5px dashed rgba(0,0,0,0.12)',
@@ -140,13 +99,58 @@ function Hero({
             }}
           >
             {eventImage ? (
-              <Image
-                src={eventImage}
-                alt="Build Your Business Event"
-                fill
-                className="object-cover object-center"
-                priority
-              />
+              <>
+                <Image
+                  src={eventImage}
+                  alt="Build Your Business Event"
+                  fill
+                  className="object-cover object-center"
+                  priority
+                />
+                {/* ── BSQ QR overlay — covers the original PRU QR on the photo ── */}
+                <a
+                  href="#book"
+                  className="absolute flex flex-col items-center gap-1"
+                  style={{
+                    bottom: '6%',
+                    left: '70%',
+                    transform: 'translateX(-50%)',
+                    background: 'white',
+                    borderRadius: 10,
+                    padding: '8px 8px 6px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.35)',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                  }}
+                >
+                  <QRCodeSVG
+                    value="https://www.prubsq.com/recruitment?branch=Brilliant+Star+Quartz&recruiter=Christopher+Garcia&agent=70003503&unit_manager=Christopher+Garcia"
+                    size={110}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                    level="M"
+                    imageSettings={{
+                      src: '/logos/bsq-logo.png',
+                      x: undefined,
+                      y: undefined,
+                      height: 18,
+                      width: 18,
+                      excavate: true,
+                    }}
+                  />
+                  <span style={{
+                    fontSize: 9,
+                    fontWeight: 700,
+                    color: '#ed1b2e',
+                    letterSpacing: '0.05em',
+                    textTransform: 'uppercase',
+                    textAlign: 'center',
+                    lineHeight: 1.3,
+                  }}>
+                    Scan to Pre-Register
+                  </span>
+                </a>
+              </>
             ) : (
               /* Placeholder — shows until you pass an eventImage prop */
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">

@@ -25,18 +25,12 @@ const NAV_H_SCROLLED   = 60    // nav height when scrolled (white state)
 const FULL_HEADER_H    = BRAND_ROW_H + NAV_H_TOP  // 140px flow spacer
 
 /* ── Nav data ─────────────────────────────────────────────────────── */
-/* "Insurance Solutions" is a direct link, not a dropdown, while inside
-   the experience (/products/*) — the persistent ProductSwitcherNav just
-   below this header already exposes every solution, so a second flyout
-   listing the same solutions would be redundant. The dropdown form is
-   reserved for the global header (bsq-header.tsx), where it guides
-   visitors into the experience goal-first instead of listing products. */
 const NAV_LINKS = [
-  { label: 'Home',                href: '/'           },
-  { label: 'Insurance Solutions', href: '/products'   },
-  { label: 'Take Assessment',     href: '/assessment' },
-  { label: 'About BSQ',           href: '/#about'     },
-  { label: 'Contact Us',          href: '/#contact'   },
+  { label: 'Home',                  href: '/'           },
+  { label: 'Insurance Solutions',   href: '/insurance-solutions'   },
+  { label: 'Take Assessment',       href: '/assessment' },
+  { label: 'About BSQ',             href: '/#about'     },
+  { label: 'Contact Us',            href: '/#contact'   },
 ]
 
 /* ══════════════════════════════════════════════════════════════════ */
@@ -46,7 +40,6 @@ export function PruLifeHeader() {
   const [scrolled,  setScrolled]  = useState(false)
   const [menuOpen,  setMenuOpen]  = useState(false)
   const [imgError,  setImgError]  = useState(false)
-
   const rafId = useRef<number | null>(null)
 
   /* ── rAF-optimised scroll handler ─────────────────────────────── */
@@ -177,7 +170,7 @@ export function PruLifeHeader() {
             SCROLLED → plain white, dark text, 60px tall, subtle shadow
             Transition: all 0.3s linear  (from prulifeuk.com.ph CSS)  */}
         <div
-          className="hidden lg:flex"
+          className="hidden md:flex"
           style={{
             height:     scrolled ? NAV_H_SCROLLED : NAV_H_TOP,
             background: scrolled ? '#ffffff' : PRU_RED,
@@ -197,49 +190,41 @@ export function PruLifeHeader() {
             <nav style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
               {NAV_LINKS.map(link => {
                 const isActive = link.href !== '/' && pathname.startsWith(link.href)
-
                 return (
-                  <div key={link.label} style={{ position: 'relative' }}>
-                    <a href={link.href} style={{
-                      display:        'flex',
-                      alignItems:     'center',
-                      gap:            4,
-                      color:          scrolled
-                                        ? (isActive ? PRU_RED : '#374151')
-                                        : (isActive ? '#fff'  : 'rgba(255,255,255,0.92)'),
-                      fontWeight:     isActive ? 700 : 600,
-                      fontSize:       14,
-                      padding:        scrolled ? '0 16px' : '0 18px',
-                      height:         scrolled ? `${NAV_H_SCROLLED}px` : `${NAV_H_TOP}px`,
-                      textDecoration: 'none',
-                      letterSpacing:  '0.01em',
-                      borderBottom:   isActive
-                                        ? scrolled
-                                          ? `3px solid ${PRU_RED}`
-                                          : '3px solid rgba(255,255,255,0.85)'
-                                        : '3px solid transparent',
-                      background:     'transparent',
-                      transition:     T,
-                      whiteSpace:     'nowrap',
+                  <a key={link.label} href={link.href} style={{
+                    display:        'flex',
+                    alignItems:     'center',
+                    color:          scrolled
+                                      ? (isActive ? PRU_RED : '#374151')
+                                      : (isActive ? '#fff'  : 'rgba(255,255,255,0.92)'),
+                    fontWeight:     isActive ? 700 : 600,
+                    fontSize:       14,
+                    padding:        scrolled ? '0 16px' : '0 18px',
+                    height:         scrolled ? `${NAV_H_SCROLLED}px` : `${NAV_H_TOP}px`,
+                    textDecoration: 'none',
+                    letterSpacing:  '0.01em',
+                    borderBottom:   isActive
+                                      ? scrolled
+                                        ? `3px solid ${PRU_RED}`
+                                        : '3px solid rgba(255,255,255,0.85)'
+                                      : '3px solid transparent',
+                    background:     'transparent',
+                    transition:     T,
+                    whiteSpace:     'nowrap',
+                  }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = scrolled ? 'rgba(217,45,32,0.06)' : 'rgba(0,0,0,0.10)'
+                      if (!isActive) e.currentTarget.style.color = scrolled ? PRU_RED : '#fff'
                     }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.background = scrolled
-                          ? 'rgba(217,45,32,0.06)'
-                          : 'rgba(0,0,0,0.10)'
-                        if (!isActive) {
-                          e.currentTarget.style.color = scrolled ? PRU_RED : '#fff'
-                        }
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.background = 'transparent'
-                        e.currentTarget.style.color = scrolled
-                          ? (isActive ? PRU_RED : '#374151')
-                          : (isActive ? '#fff'  : 'rgba(255,255,255,0.92)')
-                      }}
-                    >
-                      {link.label}
-                    </a>
-                  </div>
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.color = scrolled
+                        ? (isActive ? PRU_RED : '#374151')
+                        : (isActive ? '#fff'  : 'rgba(255,255,255,0.92)')
+                    }}
+                  >
+                    {link.label}
+                  </a>
                 )
               })}
             </nav>
@@ -280,7 +265,7 @@ export function PruLifeHeader() {
 
         {/* ── Mobile nav bar (always shows hamburger) ───────────────── */}
         <div
-          className="flex lg:hidden"
+          className="flex md:hidden"
           style={{
             height:     56,
             background: scrolled ? '#ffffff' : PRU_RED,

@@ -42,7 +42,7 @@ export default function ProductSwitcherNav() {
   // Hide on the landing page itself — it's the goal-first entry point,
   // and a product-name switcher here would compete with that message.
   // Detail pages (/products/[slug]) still get the full switcher.
-  if (pathname === '/products') return null
+  if (pathname === '/products' || pathname === '/insurance-solutions') return null
 
   const currentSlug = pathname.replace('/products/', '')
   const currentProduct = products.find(p => p.slug === currentSlug)
@@ -71,7 +71,7 @@ export default function ProductSwitcherNav() {
               <div className="flex items-center gap-1.5 pr-3 mr-2 flex-shrink-0" style={{ borderRight: `1px solid ${GRAY_LINE}` }}>
                 {/* #6b7280, not the lighter #9ca3af — 4.83:1 contrast on
                     white meets WCAG AA for normal-size text (2.54:1 didn't). */}
-                <Link href="/products" className="text-xs font-semibold whitespace-nowrap transition-colors"
+                <Link href="/insurance-solutions" className="text-xs font-semibold whitespace-nowrap transition-colors"
                   style={{ color: '#6b7280' }}
                   onMouseEnter={e => (e.currentTarget.style.color = PRU_RED)}
                   onMouseLeave={e => (e.currentTarget.style.color = '#6b7280')}

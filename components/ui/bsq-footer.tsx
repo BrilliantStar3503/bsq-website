@@ -13,8 +13,7 @@ const NAV_LINKS = [
   { label: 'Start Assessment', href: '/assessment'      },
   { label: 'How It Works',     href: '/#how'            },
   { label: 'Solutions',        href: '/#solutions'      },
-  { label: 'Join Us',          href: '/recruitment'     },
-  { label: 'Contact Us',       href: '/contact'         },
+  { label: 'Contact Advisor',  href: 'https://m.me/Bstarquartzarea' },
   { label: 'Privacy Policy',   href: '/privacy-policy'  },
 ]
 
@@ -39,7 +38,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: 'Email',
-    href: 'mailto:contact.us@prubsq.com',
+    href: 'mailto:bstarquartz@gmail.com',
     icon: <Mail size={15} />,
   },
 ]
@@ -164,7 +163,7 @@ export default function BsqFooter() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={10} className="text-white/40 shrink-0" />
-                <p className="text-[11px] text-white/80">contact.us@prubsq.com</p>
+                <p className="text-[11px] text-white/80">bstarquartz@gmail.com</p>
               </div>
             </div>
           </div>

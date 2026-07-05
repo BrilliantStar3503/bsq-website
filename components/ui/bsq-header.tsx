@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -18,8 +17,6 @@ import {
 import { LucideIcon } from 'lucide-react'
 import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { useAgentContact } from '@/hooks/useAgentContact'
-import { financialGoals } from '@/lib/products'
-import { getGoalIcon } from '@/lib/goal-icons'
 import {
   ClipboardList,
   ShieldCheck,
@@ -34,7 +31,7 @@ import {
   Star,
   BookOpen,
   ArrowRight,
-  Package,
+  Sparkles,
 } from 'lucide-react'
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -112,24 +109,11 @@ const aboutLinks: LinkItem[] = [
 ]
 
 const aboutLinks2: LinkItem[] = [
-  { title: 'Our Advisors',    href: '/about',    icon: Users    },
+  { title: 'Our Advisors',    href: '/advisors', icon: Users    },
   { title: 'Certifications',  href: '/about',    icon: BookOpen },
   { title: 'Talk to Us',      href: 'https://m.me/Bstarquartzarea', icon: MessageCircle },
 ]
 
-/* ─── Insurance Solutions nav — derived from the financial-goals registry ──
-   Goal-first by design: the global nav guides visitors into the Insurance
-   Solutions experience via financial goals, not directly at product names.
-   Adding/editing a goal in lib/products.ts updates this nav automatically —
-   no hardcoded product list here (this also retires the dead /prulifetime
-   link that used to live in this array).
-──────────────────────────────────────────────────────────────────────── */
-const goalLinks: LinkItem[] = financialGoals.map(goal => ({
-  title: goal.label,
-  href: `/products#${goal.id}`,
-  icon: getGoalIcon(goal.icon),
-  description: goal.description,
-}))
 
 /* ─── Scroll hook ───────────────────────────────────────────────────── */
 function useScroll(threshold: number) {
@@ -162,8 +146,8 @@ function BsqLogo({ scrolled }: { scrolled: boolean }) {
             <span className="text-red-400 font-black text-xs">BSQ</span>
           </div>
         ) : (
-          /* Logo — no background, transparent */
-          <div className="w-10 h-10 flex items-center justify-center">
+          /* Black-bg logo — displayed in a clipped rounded container */
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-black">
             <Image
               src="/images/bsq-logo.png"
               alt="BSQ"
@@ -178,13 +162,13 @@ function BsqLogo({ scrolled }: { scrolled: boolean }) {
       <div className="flex flex-col leading-none">
         <span
           className="font-black text-sm tracking-wide transition-colors duration-300"
-          style={{ color: scrolled ? '#111111' : '#1d1d1f' }}
+          style={{ color: scrolled ? '#111111' : '#ffffff' }}
         >
           Brilliant Star Quartz
         </span>
         <span className="text-[9px] tracking-[0.15em] uppercase font-bold flex items-center gap-1">
-          <span style={{ color: scrolled ? 'rgba(17,17,17,0.5)' : 'rgba(17,17,17,0.45)', transition: 'color 0.3s' }}>Tied Branch &amp; Area</span>
-          <span style={{ color: scrolled ? 'rgba(17,17,17,0.25)' : 'rgba(17,17,17,0.25)', transition: 'color 0.3s' }}>·</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.5)' : 'rgba(255,255,255,0.4)', transition: 'color 0.3s' }}>Tied Branch &amp; Area</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.25)' : 'rgba(255,255,255,0.25)', transition: 'color 0.3s' }}>·</span>
           <span style={{ color: '#D92D20', fontWeight: 800, letterSpacing: '0.12em' }}>PRU&nbsp;LIFE&nbsp;UK</span>
         </span>
       </div>
@@ -301,23 +285,14 @@ export function BsqHeader() {
               willChange:    'background, box-shadow',
             }
           : {
-              background:    'rgba(255,255,255,0.72)',
-              backdropFilter: 'saturate(180%) blur(12px)',
-              WebkitBackdropFilter: 'saturate(180%) blur(12px)',
-              borderColor:   'rgba(0,0,0,0.05)',
+              background:    'rgba(5,6,10,0)',
+              backdropFilter: 'saturate(180%) blur(0px)',
+              WebkitBackdropFilter: 'saturate(180%) blur(0px)',
               willChange:    'background, box-shadow',
             }
       }
     >
       <style>{`
-        [data-scrolled="false"] .nav-menu button,
-        [data-scrolled="false"] .nav-link {
-          color: rgba(17,17,17,0.55) !important;
-        }
-        [data-scrolled="false"] .nav-menu button:hover,
-        [data-scrolled="false"] .nav-link:hover {
-          color: #111111 !important;
-        }
         [data-scrolled="true"] .nav-menu button,
         [data-scrolled="true"] .nav-link {
           color: rgba(17,17,17,0.75) !important;
@@ -336,95 +311,33 @@ export function BsqHeader() {
         <NavigationMenu className="hidden md:flex nav-menu">
           <NavigationMenuList>
 
-            {/* Assessment dropdown */}
+            {/* Insurance Solutions — direct link, no dropdown */}
             <NavigationMenuItem>
-              <NavigationMenuTrigger
-                className="text-sm transition-colors duration-300"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
-              >
-                Assessment
-              </NavigationMenuTrigger>
-              <NavigationMenuContent style={{ background: '#0d1117' }}>
-                <div className="p-3 w-[540px]">
-                  <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 px-2 mb-2">
-                    Financial Gap Analysis
-                  </p>
-                  <ul className="grid grid-cols-2 gap-1">
-                    {assessmentLinks.map((item) => (
-                      <li key={item.title}>
-                        <ListItem {...item} />
-                      </li>
-                    ))}
-                  </ul>
-                  <div
-                    className="mt-3 mx-2 rounded-lg px-4 py-3 flex items-center justify-between"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(220,38,38,0.12) 0%, rgba(185,28,28,0.08) 100%)',
-                      border: '1px solid rgba(220,38,38,0.2)',
-                    }}
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-white">Ready to find your gaps?</p>
-                      <p className="text-[11px] text-white/40">Free · 3 minutes · No obligation</p>
-                    </div>
-                    <a
-                      href="/assessment"
-                      className="flex items-center gap-1.5 text-xs font-bold text-red-400 hover:text-red-300 transition-colors"
-                    >
-                      Start now <ArrowRight size={12} />
-                    </a>
-                  </div>
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            {/* Products dropdown */}
-            <NavigationMenuItem>
-              <NavigationMenuTrigger
-                className="text-sm transition-colors duration-300"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
+              <NavigationMenuLink
+                href="/insurance-solutions"
+                className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
               >
                 Insurance Solutions
-              </NavigationMenuTrigger>
-              <NavigationMenuContent style={{ background: '#0d1117' }}>
-                <div className="p-3 w-[560px]">
-                  <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 px-2 mb-2">
-                    What Are You Trying to Achieve?
-                  </p>
-                  <ul className="grid grid-cols-2 gap-1">
-                    {goalLinks.map((item) => (
-                      <li key={item.title}>
-                        <ListItem {...item} />
-                      </li>
-                    ))}
-                  </ul>
-                  <div
-                    className="mt-3 mx-2 rounded-lg px-4 py-3 flex items-center justify-between"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(220,38,38,0.12) 0%, rgba(185,28,28,0.08) 100%)',
-                      border: '1px solid rgba(220,38,38,0.2)',
-                    }}
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-white">Want to see everything?</p>
-                      <p className="text-[11px] text-white/40">Browse all insurance solutions in one place</p>
-                    </div>
-                    <Link
-                      href="/products"
-                      className="flex items-center gap-1.5 text-xs font-bold text-red-400 hover:text-red-300 transition-colors whitespace-nowrap"
-                    >
-                      View All Insurance Solutions <ArrowRight size={12} />
-                    </Link>
-                  </div>
-                </div>
-              </NavigationMenuContent>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            {/* Assessment — direct link, no dropdown */}
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                href="/assessment"
+                className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
+              >
+                Assessment
+              </NavigationMenuLink>
             </NavigationMenuItem>
 
             {/* About dropdown */}
             <NavigationMenuItem>
               <NavigationMenuTrigger
                 className="text-sm transition-colors duration-300"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
               >
                 About
               </NavigationMenuTrigger>
@@ -462,26 +375,28 @@ export function BsqHeader() {
               </NavigationMenuContent>
             </NavigationMenuItem>
 
-            {/* Join Us link */}
+            {/* Join Us */}
             <NavigationMenuItem>
-              <a
-                href="/recruitment"
-                className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.50)' }}
+              <NavigationMenuLink
+                href="/advisors"
+                className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center gap-1.5"
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
               >
+                <Sparkles size={13} style={{ color: '#ed1b2e' }} />
                 Join Us
-              </a>
+              </NavigationMenuLink>
             </NavigationMenuItem>
 
-            {/* Contact link */}
+            {/* Contact */}
             <NavigationMenuItem>
-              <a
-                href="/contact"
+              <NavigationMenuLink
+                href="#"
+                onClick={(e) => { e.preventDefault(); openContact('nav_contact') }}
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.50)' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
               >
                 Contact
-              </a>
+              </NavigationMenuLink>
             </NavigationMenuItem>
 
           </NavigationMenuList>
@@ -527,93 +442,44 @@ export function BsqHeader() {
       {/* ── Mobile menu ── */}
       <MobileMenu open={open} className="flex flex-col justify-between gap-4">
         <div className="space-y-5 overflow-y-auto">
-          {/* Assessment section */}
-          <div>
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
-              Assessment
-            </p>
-            <div className="space-y-1">
-              {assessmentLinks.map((link) => (
-                <a
-                  key={link.title}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors"
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ background: 'rgba(220,38,38,0.12)', border: '1px solid rgba(220,38,38,0.18)' }}
-                  >
-                    <link.icon size={14} className="text-red-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold leading-none mb-0.5">{link.title}</p>
-                    {link.description && (
-                      <p className="text-[11px] text-white/35">{link.description}</p>
-                    )}
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
+          {/* Insurance Solutions */}
+          <a
+            href="/insurance-solutions"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors text-sm font-semibold"
+          >
+            Insurance Solutions
+          </a>
 
-          {/* Insurance Solutions section — goal-first, registry-driven */}
+          {/* Assessment */}
+          <a
+            href="/assessment"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors text-sm font-semibold"
+          >
+            Assessment
+          </a>
+
+          {/* Join Us */}
           <div>
             <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
-              What Are You Trying to Achieve?
+              Careers
             </p>
-            <div className="space-y-1">
-              {goalLinks.map((link) => (
-                <a
-                  key={link.title}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors"
-                >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ background: 'rgba(220,38,38,0.12)', border: '1px solid rgba(220,38,38,0.18)' }}
-                  >
-                    <link.icon size={14} className="text-red-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold leading-none mb-0.5">{link.title}</p>
-                    {link.description && (
-                      <p className="text-[11px] text-white/35">{link.description}</p>
-                    )}
-                  </div>
-                </a>
-              ))}
-              <Link
-                href="/products"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 px-2 py-2.5 text-xs font-bold text-red-400 hover:text-red-300 transition-colors"
+            <a
+              href="/advisors"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors"
+            >
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: 'rgba(220,38,38,0.12)', border: '1px solid rgba(220,38,38,0.18)' }}
               >
-                View All Insurance Solutions <ArrowRight size={12} />
-              </Link>
-            </div>
-          </div>
-
-          {/* Recruitment + Contact section */}
-          <div>
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/30 mb-2 px-1">
-              More
-            </p>
-            <a
-              href="/recruitment"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-2 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/08 transition-colors"
-            >
-              <Users size={14} className="text-white/35 shrink-0" />
-              <span className="text-sm">Join Us</span>
-            </a>
-            <a
-              href="/contact"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-2 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/08 transition-colors"
-            >
-              <MessageCircle size={14} className="text-white/35 shrink-0" />
-              <span className="text-sm">Contact Us</span>
+                <Sparkles size={14} className="text-red-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold leading-none mb-0.5">Join Us</p>
+                <p className="text-[11px] text-white/35">Become a BSQ Financial Advisor</p>
+              </div>
             </a>
           </div>
 

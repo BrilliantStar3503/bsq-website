@@ -1,7 +1,5 @@
 'use client'
 
-import { useId } from 'react'
-
 /* ══════════════════════════════════════════════════════════════════
    OrganicBackground — layered, architectural curved backgrounds
    ──────────────────────────────────────────────────────────────────
@@ -34,8 +32,11 @@ type OrganicBackgroundProps = {
 const PATHS: Record<OrganicBackgroundProps['variant'], { viewBox: string; main: string; under: string }> = {
   'hero-wrap': {
     viewBox: '0 0 1440 800',
-    main:  'M1440,0 L1440,800 L800,800 C710,760 660,680 705,600 C770,485 645,430 600,345 C560,270 660,150 800,75 C900,25 1000,5 1440,0 Z',
-    under: 'M1440,40 L1440,800 L860,800 C775,755 735,675 775,605 C835,500 720,440 685,360 C655,290 745,180 870,105 C955,55 1040,30 1440,40 Z',
+    // Single quadratic-bezier arc: left edge starts at x=570 at top/bottom (39.6% of 1440),
+    // bows left to x=500 at midpoint (34.7%). No S-curves — matches the clean single arc in the design.
+    main:  'M1440,0 L1440,800 L570,800 Q430,400 570,0 Z',
+    // Undertone: offset ~70px right for depth, same single-arc profile
+    under: 'M1440,20 L1440,800 L640,800 Q510,400 640,20 Z',
   },
   'wave-divider': {
     viewBox: '0 0 1440 120',
@@ -46,7 +47,8 @@ const PATHS: Record<OrganicBackgroundProps['variant'], { viewBox: string; main: 
 
 export function OrganicBackground({ variant, color = '#D92D20', colorDark = color, flip = false, className = '' }: OrganicBackgroundProps) {
   const { viewBox, main, under } = PATHS[variant]
-  const gradientId = useId()
+  // Stable deterministic ID — avoids SSR/client useId() mismatch
+  const gradientId = `ob-${variant}-${color.replace('#', '')}`
 
   return (
     <svg

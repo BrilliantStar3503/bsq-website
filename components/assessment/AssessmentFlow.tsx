@@ -10,9 +10,6 @@ import { getRecommendationsFromAnswers, type RecommendationResult } from '@/lib/
 import { getGoalForGap } from '@/lib/products'
 import { GOAL_ICONS } from '@/lib/goal-icons'
 import { GlowingEffect } from '@/components/ui/glowing-effect'
-import { ShineBorder } from '@/components/ui/shine-border'
-import { Boxes } from '@/components/ui/background-boxes'
-import ShaderAnimation from '@/components/ui/shader-animation'
 import { AssessmentTrustStrip, ResultsStatsBanner } from '@/components/ui/assessment-stats'
 import { useAgentContact } from '@/hooks/useAgentContact'
 import TestimonialForm from '@/components/ui/testimonial-form'
@@ -91,8 +88,8 @@ function ScoreRing({ score }: { score: number }) {
 function ProgressBar({ step, total }: { step: number; total: number }) {
   const pct = Math.round((step / total) * 100)
   return (
-    <div className="w-full mb-4">
-      <div className="flex justify-between text-xs mb-2">
+    <div className="w-full mb-10">
+      <div className="flex justify-between text-xs mb-3">
         <span className="font-medium tracking-wide" style={{ color: 'rgba(0,0,0,0.55)' }}>Step {step + 1} of {total}</span>
         <span className="font-medium tabular-nums" style={{ color: 'rgba(0,0,0,0.55)' }}>{pct}%</span>
       </div>
@@ -128,36 +125,36 @@ function QuestionScreen({ question, onAnswer }: { question: Question; onAnswer: 
   return (
     <div className="af-fade w-full">
       {/* Question */}
-      <div className="mb-4 text-center">
-        <h1 style={{ fontSize: 'clamp(18px, 4vh, 26px)', fontWeight: 600, color: '#111111', lineHeight: 1.3, marginBottom: '0.5rem' }}>{q.question}</h1>
+      <div className="mb-10 text-center">
+        <h1 style={{ fontSize: 28, fontWeight: 600, color: '#111111', lineHeight: 1.3, marginBottom: '0.75rem' }}>{q.question}</h1>
         {q.subtitle && (
-          <p className="text-xs sm:text-sm leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(0,0,0,0.60)' }}>{q.subtitle}</p>
+          <p className="text-sm md:text-base leading-relaxed max-w-xl mx-auto" style={{ color: 'rgba(0,0,0,0.65)' }}>{q.subtitle}</p>
         )}
       </div>
 
       {/* Options */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         {q.options.map((opt) => {
           const isSelected = selected === opt
           return (
-            <div key={opt} className="relative rounded-xl">
+            <div key={opt} className="relative rounded-2xl">
               <GlowingEffect
-                proximity={80}
-                spread={isSelected ? 50 : 32}
+                proximity={90}
+                spread={isSelected ? 55 : 38}
                 inactiveZone={0}
                 borderWidth={1}
                 color={isSelected ? 'rgba(220,38,38,0.7)' : 'rgba(0,0,0,0.12)'}
               />
               <button
                 onClick={() => choose(opt)}
-                className="relative w-full text-left px-5 py-3 rounded-xl active:scale-[0.99]"
+                className="relative w-full text-left px-6 py-5 rounded-2xl active:scale-[0.99]"
                 style={{
                   background:  isSelected ? 'rgba(220,0,0,0.07)' : 'rgba(0,0,0,0.025)',
                   border:      `1px solid ${isSelected ? 'rgba(220,0,0,0.6)' : 'rgba(0,0,0,0.12)'}`,
                   boxShadow:   isSelected
-                    ? '0 3px 16px rgba(220,0,0,0.12), 0 1px 4px rgba(220,0,0,0.07)'
+                    ? '0 4px 24px rgba(220,0,0,0.13), 0 1px 4px rgba(220,0,0,0.08)'
                     : 'none',
-                  transform:   isSelected ? 'translateY(-1px)' : 'translateY(0)',
+                  transform:   isSelected ? 'translateY(-2px)' : 'translateY(0)',
                   transition:  'background 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
                   cursor:      'pointer',
                 }}
@@ -166,8 +163,8 @@ function QuestionScreen({ question, onAnswer }: { question: Question; onAnswer: 
                     const el = e.currentTarget
                     el.style.background  = 'rgba(0,0,0,0.02)'
                     el.style.borderColor = 'rgba(0,0,0,0.22)'
-                    el.style.transform   = 'translateY(-1px)'
-                    el.style.boxShadow   = '0 3px 14px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05)'
+                    el.style.transform   = 'translateY(-2px)'
+                    el.style.boxShadow   = '0 4px 20px rgba(0,0,0,0.09), 0 1px 6px rgba(0,0,0,0.06)'
                   }
                 }}
                 onMouseLeave={e => {
@@ -229,66 +226,32 @@ function ScanningScreen() {
       idx++
       setActiveStep(idx)
       if (idx >= SCAN_STEPS.length) clearInterval(interval)
-    }, 1000)
+    }, 500)
     return () => clearInterval(interval)
   }, [])
 
   return (
-    <div className="af-fade w-full max-w-md mx-auto px-4">
-      {/* ── ShineBorder wraps the card — animated crimson sweep on the border ── */}
-      <ShineBorder
-        borderRadius={16}
-        borderWidth={1}
-        duration={6}
-        color={['#3f0000', '#7f0000', '#B42318', '#D92D20', '#ff5555', '#D92D20', '#B42318', '#7f0000', '#3f0000']}
-        className="w-full min-w-0 p-0 bg-transparent"
-      >
-      {/* ── Premium AI scanner card ── */}
-      <div className="relative w-full rounded-2xl overflow-hidden" style={{
-        background: 'rgba(8,11,16,0.96)',
-        boxShadow: '0 8px 48px rgba(0,0,0,0.55), 0 0 90px rgba(180,35,24,0.13)',
+    <div className="af-fade flex flex-col items-center justify-center py-20 px-4 w-full max-w-sm mx-auto">
+      <div className="w-full rounded-2xl overflow-hidden" style={{
+        background: '#0d1117',
+        border: '1px solid rgba(220,0,0,0.22)',
+        boxShadow: '0 0 32px rgba(220,0,0,0.08)',
       }}>
 
-        {/* Animated isometric box grid — background layer */}
-        <Boxes />
-
-        {/* Radial vignette — softer fade so grid breathes at the edges */}
-        <div className="absolute inset-0 z-10 pointer-events-none" style={{
-          background: 'rgba(8,11,16,0.80)',
-          maskImage: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 22%, rgba(8,11,16,0.55) 52%, #080b10 88%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 95% 90% at 50% 50%, transparent 22%, rgba(8,11,16,0.55) 52%, #080b10 88%)',
-        }} />
-
-        {/* Scan sweep — translucent red band drifting top→bottom */}
-        <div className="scan-sweep-line" style={{
-          zIndex: 15, height: 90,
-          background: 'linear-gradient(180deg, transparent 0%, rgba(217,45,32,0.055) 50%, transparent 100%)',
-        }} />
-
-        {/* Top accent bar */}
-        <div style={{
-          position: 'relative', zIndex: 20, height: 2,
-          background: 'linear-gradient(90deg, transparent 0%, #7f0000 20%, #D92D20 50%, #7f0000 80%, transparent 100%)',
-        }} />
-
-        {/* ── All content above the grid ── */}
-        <div className="relative z-20">
-
-          {/* macOS traffic-light header */}
-          <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            <div className="flex gap-1.5">
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#B42318', display: 'inline-block' }} />
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#7f0000', display: 'inline-block' }} />
-            </div>
-            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.18)', fontFamily: 'monospace', marginLeft: 4, letterSpacing: '0.03em' }}>
-              bsq-ai-scanner — running
-            </span>
-            <span className="scan-pulse ml-auto" style={{ width: 6, height: 6, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
+        {/* Header */}
+        <div className="flex items-center gap-2 px-5 py-3" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="flex gap-1.5">
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#B42318', display: 'inline-block' }} />
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#7f0000', display: 'inline-block' }} />
           </div>
-
-          {/* ── HEADLINE SECTION ── */}
-          <div className="px-6 pt-6 pb-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace', marginLeft: 4 }}>
+            bsq-ai-scanner — running
+          </span>
+          <span className="scan-pulse ml-auto" style={{ width: 6, height: 6, borderRadius: '50%', background: '#D92D20', display: 'inline-block' }} />
+        </div>
+        {/* ── HEADLINE SECTION ── */}
+        <div className="px-6 pt-6 pb-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             {/* Shield icon + badges */}
             <div className="flex items-center gap-3 mb-4">
               <div style={{
@@ -329,8 +292,8 @@ function ScanningScreen() {
             </p>
           </div>
 
-          {/* ── SCAN STEPS ── */}
-          <div className="px-6 py-5 space-y-3.5">
+        {/* ── SCAN STEPS ── */}
+        <div className="px-6 py-5 space-y-3.5">
             {SCAN_STEPS.map((label, i) => {
               const isDone    = i < activeStep
               const isCurrent = i === activeStep
@@ -383,7 +346,7 @@ function ScanningScreen() {
             })}
           </div>
 
-          {/* ── PROGRESS BAR ── */}
+        {/* ── PROGRESS BAR ── */}
           <div className="px-6 pb-5">
             <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 9999, overflow: 'hidden' }}>
               <div style={{
@@ -404,7 +367,7 @@ function ScanningScreen() {
             </div>
           </div>
 
-          {/* ── CARD FOOTER ── */}
+        {/* ── CARD FOOTER ── */}
           <div className="px-6 py-3 flex items-center justify-center gap-3" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 9.5, color: 'rgba(255,255,255,0.17)', letterSpacing: '0.03em' }}>
               <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(217,45,32,0.6)', display: 'inline-block', boxShadow: '0 0 5px rgba(217,45,32,0.45)' }} />
@@ -416,9 +379,7 @@ function ScanningScreen() {
             <span style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.17)', letterSpacing: '0.03em' }}>PRU Life UK</span>
           </div>
 
-        </div>
       </div>
-      </ShineBorder>
     </div>
   )
 }
@@ -798,17 +759,11 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
 
       {/* ══ SECTION 1 — Score Overview ═══════════════════════════════ */}
       <motion.div variants={fadeUp}>
-      <ShineBorder
-        borderRadius={16}
-        borderWidth={1}
-        duration={12}
-        color={['#C8102E', '#D42030', '#ED1B2E', '#ffffff', '#ED1B2E', '#D42030', '#C8102E']}
-        className="w-full min-w-0 p-0 bg-transparent"
-      >
         <div
           className="rounded-2xl overflow-hidden w-full"
           style={{
             background: '#ffffff',
+            border: '1px solid rgba(220,0,0,0.18)',
             boxShadow: '0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.04)',
           }}>
         <div style={{ height: 3, background: 'linear-gradient(90deg, #b91c1c 0%, #dc2626 45%, rgba(185,28,28,0.25) 80%, transparent 100%)' }} />
@@ -882,23 +837,16 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
           </div>
         </div>
         </div>
-      </ShineBorder>
       </motion.div>
 
       {/* ══ SECTION 2 — Emergency Fund (conditional) ════════════════════ */}
       {result.emergencyFundTarget > 0 && (
         <motion.div variants={fadeUp}>
-        <ShineBorder
-          borderRadius={16}
-          borderWidth={1}
-          duration={14}
-          color={['#C8102E', '#D42030', '#ED1B2E', '#ffffff', '#ED1B2E', '#D42030', '#C8102E']}
-          className="w-full min-w-0 p-0 bg-transparent"
-        >
           <div
             className="rounded-2xl overflow-hidden w-full"
             style={{
               background: 'rgba(255,255,255,0.95)',
+              border: '1px solid rgba(220,0,0,0.18)',
               boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
             }}>
           <div style={{ height: 2, background: 'linear-gradient(90deg, #b91c1c, rgba(153,27,27,0.4) 70%, transparent)' }} />
@@ -936,7 +884,6 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             </div>
           </div>
           </div>
-        </ShineBorder>
         </motion.div>
       )}
 
@@ -1153,14 +1100,7 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
         </div>
 
         {/* Timeline vertical list */}
-        <ShineBorder
-          borderRadius={16}
-          borderWidth={1}
-          duration={10}
-          color={['#C8102E', '#D42030', '#ED1B2E', '#ffffff', '#ED1B2E', '#D42030', '#C8102E']}
-          className="w-full min-w-0 p-0 bg-transparent"
-        >
-        <div className="rounded-2xl overflow-hidden w-full" style={{ background: 'rgba(255,255,255,0.95)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' }}>
+        <div className="rounded-2xl overflow-hidden w-full" style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(220,0,0,0.18)', boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' }}>
           {result.recommendations.map((rec, i) => {
             const hex         = rec.color ?? PRU_RED
             const engineMatch = engineResult.recommended_products.find(e => e.slug === rec.slug)
@@ -1285,7 +1225,6 @@ function ResultsScreen({ result, engineResult }: { result: ScoreResult; engineRe
             )
           })}
         </div>
-        </ShineBorder>
       </motion.div>
 
       {/* ══ SECTION 6 — CTA ═════════════════════════════════════════════ */}
@@ -1481,20 +1420,12 @@ export default function AssessmentFlow() {
           html, body { background: #080b10; }
           @keyframes af-fade-in  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
           @keyframes scan-pulse  { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.3; transform:scale(0.7); } }
-          @keyframes scan-sweep  { 0% { top:-80px; opacity:0; } 6% { opacity:1; } 90% { opacity:1; } 100% { top:110%; opacity:0; } }
           .af-fade        { animation: af-fade-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
           .scan-pulse     { animation: scan-pulse 1.3s ease-in-out infinite; }
-          .scan-sweep-line{ animation: scan-sweep 3.6s ease-in-out infinite; position:absolute; left:0; right:0; pointer-events:none; }
         `}</style>
 
-        {/* ── WebGL shader — full-viewport animated crimson background ── */}
-        <ShaderAnimation className="fixed inset-0 z-0 w-full h-full" />
-
-        {/* ── Dark veil — tones the shader down to near-black so card pops ── */}
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none',
-          background: 'rgba(8,11,16,0.82)',
-        }} />
+        {/* ── Static dark background ── */}
+        <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: '#080b10' }} />
 
         {/* Fixed scanning header */}
         <div style={{
