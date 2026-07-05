@@ -162,13 +162,13 @@ function BsqLogo({ scrolled }: { scrolled: boolean }) {
       <div className="flex flex-col leading-none">
         <span
           className="font-black text-sm tracking-wide transition-colors duration-300"
-          style={{ color: scrolled ? '#111111' : '#ffffff' }}
+          style={{ color: scrolled ? '#111111' : '#1d1d1f' }}
         >
           Brilliant Star Quartz
         </span>
         <span className="text-[9px] tracking-[0.15em] uppercase font-bold flex items-center gap-1">
-          <span style={{ color: scrolled ? 'rgba(17,17,17,0.5)' : 'rgba(255,255,255,0.4)', transition: 'color 0.3s' }}>Tied Branch &amp; Area</span>
-          <span style={{ color: scrolled ? 'rgba(17,17,17,0.25)' : 'rgba(255,255,255,0.25)', transition: 'color 0.3s' }}>·</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.5)' : 'rgba(17,17,17,0.45)', transition: 'color 0.3s' }}>Tied Branch &amp; Area</span>
+          <span style={{ color: scrolled ? 'rgba(17,17,17,0.25)' : 'rgba(17,17,17,0.25)', transition: 'color 0.3s' }}>·</span>
           <span style={{ color: '#D92D20', fontWeight: 800, letterSpacing: '0.12em' }}>PRU&nbsp;LIFE&nbsp;UK</span>
         </span>
       </div>
@@ -285,14 +285,23 @@ export function BsqHeader() {
               willChange:    'background, box-shadow',
             }
           : {
-              background:    'rgba(5,6,10,0)',
-              backdropFilter: 'saturate(180%) blur(0px)',
-              WebkitBackdropFilter: 'saturate(180%) blur(0px)',
+              background:    'rgba(255,255,255,0.72)',
+              backdropFilter: 'saturate(180%) blur(12px)',
+              WebkitBackdropFilter: 'saturate(180%) blur(12px)',
+              borderColor:   'rgba(0,0,0,0.05)',
               willChange:    'background, box-shadow',
             }
       }
     >
       <style>{`
+        [data-scrolled="false"] .nav-menu button,
+        [data-scrolled="false"] .nav-link {
+          color: rgba(17,17,17,0.55) !important;
+        }
+        [data-scrolled="false"] .nav-menu button:hover,
+        [data-scrolled="false"] .nav-link:hover {
+          color: #111111 !important;
+        }
         [data-scrolled="true"] .nav-menu button,
         [data-scrolled="true"] .nav-link {
           color: rgba(17,17,17,0.75) !important;
@@ -316,7 +325,7 @@ export function BsqHeader() {
               <NavigationMenuLink
                 href="/insurance-solutions"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
               >
                 Insurance Solutions
               </NavigationMenuLink>
@@ -327,7 +336,7 @@ export function BsqHeader() {
               <NavigationMenuLink
                 href="/assessment"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
               >
                 Assessment
               </NavigationMenuLink>
@@ -337,7 +346,7 @@ export function BsqHeader() {
             <NavigationMenuItem>
               <NavigationMenuTrigger
                 className="text-sm transition-colors duration-300"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(255,255,255,0.75)' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.75)' : 'rgba(17,17,17,0.55)' }}
               >
                 About
               </NavigationMenuTrigger>
@@ -380,7 +389,7 @@ export function BsqHeader() {
               <NavigationMenuLink
                 href="/advisors"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center gap-1.5"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.55)' }}
               >
                 <Sparkles size={13} style={{ color: '#ed1b2e' }} />
                 Join Us
@@ -393,7 +402,7 @@ export function BsqHeader() {
                 href="#"
                 onClick={(e) => { e.preventDefault(); openContact('nav_contact') }}
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center"
-                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(255,255,255,0.65)' }}
+                style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.55)' }}
               >
                 Contact
               </NavigationMenuLink>

@@ -20,7 +20,7 @@ const DELETE_SPEED = 22   // ms per character (deleting — faster feels snappy)
 const PAUSE_AFTER  = 1400 // ms to hold full sentence before deleting
 const PAUSE_BEFORE = 300  // ms pause between delete and next hook
 
-export default function RotatingHook() {
+export default function RotatingHook({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
   const [display, setDisplay]   = useState('')
   const [hookIdx, setHookIdx]   = useState(0)
   const [phase, setPhase]       = useState<'typing' | 'pausing' | 'deleting' | 'waiting'>('typing')
@@ -104,13 +104,15 @@ export default function RotatingHook() {
       aria-live="polite"
       style={{ display: 'block', minHeight: '3.75em' }}
     >
-      {/* Gradient text: crisp white → warm off-white → PRU red */}
+      {/* Gradient text — adapts to dark/light theme */}
       <span style={{
-        backgroundImage:  'linear-gradient(95deg, #ffffff 0%, #f0f0f0 55%, #ed1b2e 100%)',
+        backgroundImage: theme === 'light'
+          ? 'linear-gradient(95deg, #0f172a 0%, #374151 55%, #ed1b2e 100%)'
+          : 'linear-gradient(95deg, #ffffff 0%, #f0f0f0 55%, #ed1b2e 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         backgroundClip:  'text',
-        filter:          'drop-shadow(0 0 18px rgba(237,27,46,0.18))',
+        filter:          'drop-shadow(0 0 18px rgba(237,27,46,0.12))',
       }}>
         {display}
       </span>
