@@ -135,12 +135,12 @@ export default function ProductAppointmentSection({ product, goalId }: { product
             <div style={{ height: 2, width: 24, background: PRU_RED }} />
           </div>
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
-            Book Your Free Consultation
+            Book a Complimentary Consultation
           </h2>
           <p className="text-base text-gray-600 max-w-xl mx-auto">
             {product
-              ? <>Talk to a licensed BSQ · PRU Life UK advisor about {product.shortName}. No cost, no obligation.</>
-              : <>Talk to a licensed BSQ · PRU Life UK advisor about your financial goals. No cost, no obligation.</>}
+              ? <>Speak with a licensed BSQ · PRU Life UK advisor about {product.shortName}. No cost, no obligation — just honest, expert guidance.</>
+              : <>Speak with a licensed BSQ · PRU Life UK advisor about your financial goals. No cost, no obligation — just honest, expert guidance.</>}
           </p>
         </motion.div>
 

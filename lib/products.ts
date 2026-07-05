@@ -629,7 +629,7 @@ export const financialGoals: FinancialGoal[] = [
   {
     id: 'protect-income',
     label: 'Protect My Income',
-    description: 'Replace your income for your family if you suddenly couldn\'t earn anymore.',
+    description: 'Ensure your family maintains their standard of living if illness, injury, or disability prevents you from working.',
     icon: 'Briefcase',
     productIds: ['pru-million-protect', 'prulink-assurance-account-plus'],
   },
@@ -643,7 +643,7 @@ export const financialGoals: FinancialGoal[] = [
   {
     id: 'grow-wealth',
     label: 'Grow My Wealth',
-    description: 'Put your money to work in market-linked funds while staying protected.',
+    description: 'Grow your money through market-linked investments, with life insurance protection built in for complete peace of mind.',
     icon: 'TrendingUp',
     productIds: ['prulink-assurance-account-plus', 'pru-elite-series'],
   },

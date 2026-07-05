@@ -33,10 +33,10 @@ const stagger = {
 }
 
 const TRUST_ITEMS = [
-  { icon: ShieldCheck,   title: 'Trusted Protection',  description: 'Backed by PRU Life UK, part of the Prudential plc network.' },
-  { icon: UserCheck,     title: 'Tailored for You',     description: 'Solutions designed around your goals and life stage.' },
-  { icon: Globe2,        title: 'Global Strength',      description: 'Backed by a leader in financial services, built for the long term.' },
-  { icon: HeartHandshake,title: "We're Here for You",   description: "Your partner in life's journey, every step of the way." },
+  { icon: ShieldCheck,   title: 'Trusted Protection',        description: 'Backed by PRU Life UK, part of the Prudential plc network.' },
+  { icon: UserCheck,     title: 'Tailored for You',           description: 'Solutions designed around your goals, income, and life stage.' },
+  { icon: Globe2,        title: '175 Years of Financial Strength', description: "Prudential's proven legacy of protecting families across generations." },
+  { icon: HeartHandshake,title: 'Advisor-Led Guidance',       description: 'A dedicated BSQ advisor with you from first consultation to claims.' },
 ]
 
 /* ══════════════════════════════════════════════════════════════════
@@ -87,7 +87,7 @@ export default function InsuranceSolutionsLanding() {
               <span className="italic" style={{ color: PRU_RED }}>most</span>
             </motion.h1>
             <motion.p variants={fadeUp} className="text-base md:text-lg text-gray-500 leading-relaxed max-w-md mb-10">
-              Life is full of uncertainties. The right protection today can secure your family&apos;s tomorrow.
+              Your family&apos;s financial security is too important to leave to chance. The right plan today creates certainty for every tomorrow.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3.5">
               <a
@@ -205,10 +205,10 @@ export default function InsuranceSolutionsLanding() {
                   hierarchy against the heading above comes from weight
                   (semibold vs. medium), not opacity. */}
               <p className="text-base text-white leading-relaxed max-w-md mb-9 font-medium">
-                Insurance is not about expecting the unexpected. It&apos;s about being ready for it.
+                Insurance is not about expecting the unexpected — it is about being prepared for it. The families who plan ahead are the ones who never have to start over.
               </p>
               <ul className="space-y-4">
-                {['Protect your loved ones', 'Secure your financial future', 'Live life with confidence'].map((item, i) => (
+                {['Provide for those who depend on you', 'Build a financial foundation that lasts', 'Face every stage of life with confidence'].map((item, i) => (
                   <motion.li key={item} className="flex items-center gap-3.5 text-white"
                     initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }} transition={{ duration: 0.45, ease: EASE_PREMIUM, delay: 0.1 + i * 0.08 }}>
@@ -223,12 +223,10 @@ export default function InsuranceSolutionsLanding() {
 
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE_PREMIUM, delay: 0.12 }}>
-              {/* DRAFT quote — placeholder copy for your review in the
-                  dedicated copywriting pass, not final brand messaging. */}
               <FeaturedQuoteCard
-                quote="The best time to plan for tomorrow is today. Let's build a plan that protects what matters most to you."
+                quote="Protecting the people you love is one of the most important decisions you will ever make. My team and I are committed to guiding you through it — not just once, but for the life of your plan."
                 name="Christopher Garcia"
-                title="Area Manager, Pru Life UK"
+                title="Area Manager, PRU Life UK"
               />
             </motion.div>
           </div>
@@ -251,7 +249,7 @@ export default function InsuranceSolutionsLanding() {
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-[-0.01em]">
               What is your <span className="italic" style={{ color: PRU_RED }}>financial goal?</span>
             </h2>
-            <p className="text-base text-gray-500">Everyone&apos;s journey is different. Choose the goal closest to your situation.</p>
+            <p className="text-base text-gray-500">Every family&apos;s priorities are unique. Choose the goal that matters most to you — and discover the solutions designed around it.</p>
           </motion.div>
 
           <motion.div
@@ -321,8 +319,8 @@ export default function InsuranceSolutionsLanding() {
                 <MessageCircle size={20} style={{ color: PRU_RED }} strokeWidth={1.75} />
               </div>
               <div>
-                <p className="text-[17px] font-bold text-gray-900 mb-1">Not sure where to start?</p>
-                <p className="text-sm text-gray-500">Let&apos;s talk about your goals. We&apos;ll guide you to the right solution.</p>
+                <p className="text-[17px] font-bold text-gray-900 mb-1">Not sure which plan is right for you?</p>
+                <p className="text-sm text-gray-500">Our licensed advisors take the time to understand your situation before making any recommendation — no pressure, just honest guidance.</p>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
