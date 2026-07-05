@@ -17,14 +17,14 @@ const EASE_PREMIUM = 'cubic-bezier(0.16, 1, 0.3, 1)'
    Solutions Landing Page's "Choose Your Financial Goal" section.
    Links to #<goalId>, which the Recommended Solutions section below
    renders as a matching anchor — no router/JS scroll logic needed. ── */
-export default function GoalCard({ goal }: { goal: FinancialGoal }) {
+export default function GoalCard({ goal, compact = false }: { goal: FinancialGoal; compact?: boolean }) {
   // Direct object index (not the getGoalIcon() wrapper) — keeps this a
   // statically analyzable expression for the static-components lint rule.
   const Icon = GOAL_ICONS[goal.icon] ?? GOAL_ICONS.Shield
   return (
     <a
       href={`#${goal.id}`}
-      className="group relative flex flex-col h-full p-7 overflow-hidden"
+      className={`group relative flex flex-col h-full overflow-hidden ${compact ? 'p-5' : 'p-7'}`}
       style={{
         borderRadius: 20,
         background: '#fff',
@@ -42,15 +42,15 @@ export default function GoalCard({ goal }: { goal: FinancialGoal }) {
       />
 
       <div
-        className="w-12 h-12 flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-105"
-        style={{ background: 'linear-gradient(150deg, #fef2f2, #fde0df)', borderRadius: 14 }}
+        className={`flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${compact ? 'w-10 h-10 mb-4' : 'w-12 h-12 mb-5'}`}
+        style={{ background: 'linear-gradient(150deg, #fef2f2, #fde0df)', borderRadius: compact ? 11 : 14 }}
       >
-        <Icon size={20} style={{ color: PRU_RED }} strokeWidth={1.75} />
+        <Icon size={compact ? 18 : 20} style={{ color: PRU_RED }} strokeWidth={1.75} />
       </div>
-      <h3 className="text-[17px] font-bold text-gray-900 mb-2.5 leading-snug tracking-[-0.01em]">{goal.label}</h3>
-      <p className="text-[14px] text-gray-500 leading-relaxed mb-6 flex-1">{goal.description}</p>
+      <h3 className={`font-bold text-gray-900 leading-snug tracking-[-0.01em] ${compact ? 'text-[15px] mb-2' : 'text-[17px] mb-2.5'}`}>{goal.label}</h3>
+      <p className={`text-gray-500 leading-relaxed flex-1 ${compact ? 'text-[13px] mb-4' : 'text-[14px] mb-6'}`}>{goal.description}</p>
       <div className="flex items-center gap-1.5 text-[13px] font-bold" style={{ color: PRU_RED }}>
-        See Recommended Solutions
+        See Solutions
         <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
       </div>
     </a>

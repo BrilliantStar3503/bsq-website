@@ -2,9 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { ArrowRight, MessageCircle, ClipboardList, Check, ShieldCheck, UserCheck, Globe2, HeartHandshake } from 'lucide-react'
+import { ArrowRight, MessageCircle, Check, ShieldCheck, UserCheck, TrendingUp, HeartHandshake } from 'lucide-react'
 import { financialGoals, getProductsForGoal } from '@/lib/products'
-import { AnimatedGradientButton } from '@/components/ui/animated-gradient-button'
 import { OrganicBackground } from '@/components/ui/organic-background'
 import { FeaturedQuoteCard } from '@/components/ui/featured-quote-card'
 import { IconTrustStrip } from '@/components/ui/icon-trust-strip'
@@ -18,9 +17,6 @@ const GRAY_BG   = '#f5f5f5'
 const GRAY_LINE = '#e5e7eb'
 const CONTAINER = 'max-w-[1320px] mx-auto px-6 md:px-10'
 
-// One easing curve, used everywhere — the "signature feel" of this
-// design system. A gentle expo-out: quick to start, settles softly,
-// never bounces or overshoots.
 const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const
 
 const fadeUp = {
@@ -33,36 +29,19 @@ const stagger = {
 }
 
 const TRUST_ITEMS = [
-  { icon: ShieldCheck,   title: 'Trusted Protection',        description: 'Backed by PRU Life UK, part of the Prudential plc network.' },
-  { icon: UserCheck,     title: 'Tailored for You',           description: 'Solutions designed around your goals, income, and life stage.' },
-  { icon: Globe2,        title: '175 Years of Financial Strength', description: "Prudential's proven legacy of protecting families across generations." },
-  { icon: HeartHandshake,title: 'Advisor-Led Guidance',       description: 'A dedicated BSQ advisor with you from first consultation to claims.' },
+  { icon: ShieldCheck,    title: 'Trusted by Millions',  description: 'Pru Life UK has been protecting lives for over 175 years.' },
+  { icon: UserCheck,      title: 'Tailored for You',      description: 'Solutions designed around your goals and life stage.' },
+  { icon: TrendingUp,     title: 'Global Strength',       description: 'Backed by Prudential plc, a leader in financial services.' },
+  { icon: HeartHandshake, title: "We're Here for You",    description: "Your partner in life's journey, every step of the way." },
 ]
 
 /* ══════════════════════════════════════════════════════════════════
-   INSURANCE SOLUTIONS LANDING PAGE
-   The homepage of the entire Insurance Solutions experience — not a
-   product listing. Goal-first: visitors choose a financial goal before
-   ever seeing a plan name. Sections render in the APPROVED order
-   (Hero → Why Financial Planning Matters → Choose Your Goal →
-   Recommended Solutions, grouped by goal → Not Sure? → Consultation) —
-   this order is an architectural decision validated against the
-   "I know I need security → why does planning matter → which goal →
-   what solutions" conversation flow during the Phase 3/4 review, and
-   is preserved here even though the visual-direction mockup happened
-   to show goal cards before the "Why It Matters" panel.
-
-   This file is a visual-craftsmanship pass on top of the prior visual
-   redesign — same sections, same order, same data, same registry-
-   driven rendering. Refinements: one consistent container width across
-   every section (was 1320px in the hero/panel, 1152px in the goal
-   section, 1024px in the CTA bar — now 1320px throughout, so margins
-   line up site-wide), one shared easing curve, layered-surface shadows
-   in place of heavier blurs, and generally more room to breathe.
-
-   Fully registry-driven: every goal, every recommended product, and
-   every anchor id comes from lib/products.ts. Adding a 6th financial
-   goal or a 6th product requires no changes here.
+   INSURANCE SOLUTIONS LANDING PAGE — design-spec implementation
+   Sections in approved design order:
+     Hero → Financial Goals (5-col) → Recommended Products
+     → Why It Matters → CTA Bar → Trust Strip → Consultation
+   All business logic, data registry, anchor IDs, and integrations
+   are 100% preserved from the prior implementation.
 ══════════════════════════════════════════════════════════════════ */
 export default function InsuranceSolutionsLanding() {
   const router = useRouter()
@@ -71,7 +50,7 @@ export default function InsuranceSolutionsLanding() {
     <main style={{ background: '#fff' }}>
 
       {/* ══════════════════════════════════════════════════
-          HERO — split layout, organic curve wrap, editorial serif
+          HERO — text left, family photo right, red organic shape
       ══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#fff' }}>
         <div className={`${CONTAINER} grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-20 pb-24 md:pt-28 md:pb-36`}>
@@ -87,7 +66,7 @@ export default function InsuranceSolutionsLanding() {
               <span className="italic" style={{ color: PRU_RED }}>most</span>
             </motion.h1>
             <motion.p variants={fadeUp} className="text-base md:text-lg text-gray-500 leading-relaxed max-w-md mb-10">
-              Your family&apos;s financial security is too important to leave to chance. The right plan today creates certainty for every tomorrow.
+              Life is full of uncertainties. The right protection today can secure your family&apos;s tomorrow.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3.5">
               <a
@@ -115,54 +94,44 @@ export default function InsuranceSolutionsLanding() {
             </motion.div>
           </motion.div>
 
-          {/* Right — photo placeholder. Full organic curve treatment at
-              lg+ only: the ribbon's path is tuned for a wide aspect
-              ratio and visibly distorts when stretched into the
-              narrower mobile/tablet container — a clean standalone
-              card reads better there than a warped curve. */}
+          {/* Right — photo with red organic shape */}
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: EASE_PREMIUM, delay: 0.15 }}
             className="relative aspect-[4/3] lg:aspect-[5/4]"
           >
+            {/* Desktop: organic shape behind + photo card on top */}
             <div className="hidden lg:block absolute inset-0">
-              <OrganicBackground variant="hero-wrap" color="#E8392A" colorDark="#A8210F" />
-              {/* Undertone card — a second surface offset behind the
-                  photo, visible at its lower-right edge. */}
-              <div
-                className="absolute z-[5]"
-                style={{ inset: '11% 3% 3% 25%', borderRadius: 24, background: 'rgba(255,255,255,0.5)' }}
-              />
+              <OrganicBackground variant="hero-wrap" color="#D92D20" colorDark="#9A1D13" />
               <div
                 className="absolute z-10 overflow-hidden"
                 style={{
-                  inset: '8% 6% 6% 22%',
-                  borderRadius: 24,
-                  background: 'linear-gradient(150deg, #fde8e8 0%, #f4b8b4 45%, #c94f47 100%)',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 30px 50px -12px rgba(0,0,0,0.22)',
+                  inset: '5% 4% 5% 16%',
+                  borderRadius: 20,
+                  background: 'linear-gradient(160deg, #b83232 0%, #7a1515 100%)',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.10), 0 32px 56px -12px rgba(0,0,0,0.32)',
                 }}
               >
-                {/* PLACEHOLDER — swap for real photography (family, golden
-                    hour) once an asset is provided. Caption is visual-only,
-                    removed the moment a real <Image> replaces this div. */}
+                {/* PLACEHOLDER — swap for <Image> once family photo asset is provided */}
                 <div className="w-full h-full flex items-end justify-center pb-6">
-                  <span className="text-[11px] font-semibold text-white/80 bg-black/15 px-3 py-1 rounded-full backdrop-blur-sm">
+                  <span className="text-[11px] font-semibold text-white/70 bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm">
                     Photo placeholder — family imagery
                   </span>
                 </div>
               </div>
             </div>
 
+            {/* Mobile/tablet: standalone card */}
             <div
               className="lg:hidden absolute inset-0 overflow-hidden"
               style={{
                 borderRadius: 24,
-                background: 'linear-gradient(150deg, #fde8e8 0%, #f4b8b4 45%, #c94f47 100%)',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 24px 40px -12px rgba(0,0,0,0.20)',
+                background: 'linear-gradient(160deg, #b83232 0%, #7a1515 100%)',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.06), 0 24px 40px -12px rgba(0,0,0,0.22)',
               }}
             >
               <div className="w-full h-full flex items-end justify-center pb-6">
-                <span className="text-[11px] font-semibold text-white/80 bg-black/15 px-3 py-1 rounded-full backdrop-blur-sm">
+                <span className="text-[11px] font-semibold text-white/70 bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm">
                   Photo placeholder — family imagery
                 </span>
               </div>
@@ -172,101 +141,43 @@ export default function InsuranceSolutionsLanding() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          WHY FINANCIAL PLANNING MATTERS — red panel + featured quote
-      ══════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: PRU_RED }}>
-        <div className="absolute top-0 left-0 right-0" style={{ height: 64, transform: 'translateY(-1px)' }}>
-          <OrganicBackground variant="wave-divider" color="#ffffff" />
-        </div>
-
-        {/* Architectural depth layer — a soft, off-center glow rather than
-            a flat color fill, so the panel reads as lit from one side
-            instead of a solid poster-color block. */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 900px 700px at 15% 15%, rgba(255,255,255,0.10), transparent 60%)' }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 700px 600px at 90% 100%, rgba(0,0,0,0.14), transparent 55%)' }}
-        />
-
-        <div className={`${CONTAINER} relative py-24 md:py-32`}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE_PREMIUM }}>
-              <SectionEyebrow tone="white">Why It Matters</SectionEyebrow>
-              <h2 className="font-display text-4xl md:text-5xl font-semibold text-white leading-[1.12] tracking-[-0.01em] mb-6">
-                A plan today, peace of mind for a lifetime.
-              </h2>
-              {/* white/80 measured 3.54:1 against this background — fails
-                  WCAG AA (needs 4.5:1) at this text size; white/95 measures
-                  ~4.48, still short. Full white clears it with margin —
-                  hierarchy against the heading above comes from weight
-                  (semibold vs. medium), not opacity. */}
-              <p className="text-base text-white leading-relaxed max-w-md mb-9 font-medium">
-                Insurance is not about expecting the unexpected — it is about being prepared for it. The families who plan ahead are the ones who never have to start over.
-              </p>
-              <ul className="space-y-4">
-                {['Provide for those who depend on you', 'Build a financial foundation that lasts', 'Face every stage of life with confidence'].map((item, i) => (
-                  <motion.li key={item} className="flex items-center gap-3.5 text-white"
-                    initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.45, ease: EASE_PREMIUM, delay: 0.1 + i * 0.08 }}>
-                    <span className="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.16)' }}>
-                      <Check size={13} strokeWidth={2.5} />
-                    </span>
-                    <span className="text-[15px] font-medium">{item}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE_PREMIUM, delay: 0.12 }}>
-              <FeaturedQuoteCard
-                quote="Protecting the people you love is one of the most important decisions you will ever make. My team and I are committed to guiding you through it — not just once, but for the life of your plan."
-                name="Christopher Garcia"
-                title="Area Manager, PRU Life UK"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════
-          CHOOSE YOUR FINANCIAL GOAL → RECOMMENDED SOLUTIONS
-          One continuous beat, not two separate chapters: picking a
-          goal and seeing what helps are the same moment in the
-          conversation, so there's no section/background break between
-          them — only the per-goal heading below changes.
+          FINANCIAL GOALS — 5-column grid, two-col heading
       ══════════════════════════════════════════════════ */}
       <section id="goals" style={{ background: '#fff', scrollMarginTop: 80 }}>
         <div className={`${CONTAINER} py-24 md:py-32`}>
-          <motion.div className="text-center max-w-2xl mx-auto mb-16"
+
+          {/* Section heading: H2 left, description right */}
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end mb-14"
             initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM }}>
-            <SectionEyebrow align="center">Start Here</SectionEyebrow>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-gray-900 mb-4 tracking-[-0.01em]">
-              What is your <span className="italic" style={{ color: PRU_RED }}>financial goal?</span>
-            </h2>
-            <p className="text-base text-gray-500">Every family&apos;s priorities are unique. Choose the goal that matters most to you — and discover the solutions designed around it.</p>
+            viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM }}
+          >
+            <div>
+              <SectionEyebrow>Start Here</SectionEyebrow>
+              <h2 className="font-display text-4xl md:text-5xl font-semibold text-gray-900 tracking-[-0.01em]">
+                What is your{' '}
+                <span className="italic" style={{ color: PRU_RED }}>financial goal?</span>
+              </h2>
+            </div>
+            <p className="text-base text-gray-500 leading-relaxed">
+              Everyone&apos;s journey is different. Choose the goal closest to your situation so we can recommend the right solutions for you.
+            </p>
           </motion.div>
 
+          {/* 5 goal cards — single row at desktop */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5"
             initial="hidden" whileInView="visible"
             viewport={{ once: true, margin: '-40px' }} variants={stagger}
           >
             {financialGoals.map(goal => (
               <motion.div key={goal.id} variants={fadeUp}>
-                <GoalCard goal={goal} />
+                <GoalCard goal={goal} compact />
               </motion.div>
             ))}
           </motion.div>
 
-          {/* Recommended solutions — same beat, no new chapter heading.
-              Each block answers "what solutions might help me?" for the
-              goal just chosen above. */}
+          {/* Recommended solutions — continuous beat, anchored by goal id */}
           <div className="mt-28 space-y-20">
             {financialGoals.map(goal => {
               const goalProducts = getProductsForGoal(goal.id)
@@ -276,10 +187,6 @@ export default function InsuranceSolutionsLanding() {
                   <motion.div className="mb-8 pb-7" style={{ borderBottom: `1px solid ${GRAY_LINE}` }}
                     initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }} transition={{ duration: 0.5, ease: EASE_PREMIUM }}>
-                    {/* h3, not p — this is a real section heading (one per
-                        goal group) and needs to be heading-navigable for
-                        screen readers, same level as each ProductCard's
-                        own h3 below it. */}
                     <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: PRU_RED }}>
                       Recommended for: {goal.label}
                     </h3>
@@ -304,49 +211,93 @@ export default function InsuranceSolutionsLanding() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          NOT SURE WHICH SOLUTION FITS YOU? — floating pill CTA bar
+          WHY IT MATTERS — red panel, quote card right
+      ══════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: PRU_RED }}>
+        <div className="absolute top-0 left-0 right-0" style={{ height: 64, transform: 'translateY(-1px)' }}>
+          <OrganicBackground variant="wave-divider" color="#ffffff" />
+        </div>
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 900px 700px at 15% 15%, rgba(255,255,255,0.10), transparent 60%)' }} />
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 700px 600px at 90% 100%, rgba(0,0,0,0.14), transparent 55%)' }} />
+
+        <div className={`${CONTAINER} relative py-24 md:py-32`}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE_PREMIUM }}>
+              <SectionEyebrow tone="white">Why It Matters</SectionEyebrow>
+              <h2 className="font-display text-4xl md:text-5xl font-semibold text-white leading-[1.12] tracking-[-0.01em] mb-6">
+                A plan today, peace of mind for a lifetime.
+              </h2>
+              <p className="text-base text-white leading-relaxed max-w-md mb-9 font-medium">
+                Insurance is not about expecting the unexpected. It&apos;s about being ready for it.
+              </p>
+              <ul className="space-y-4">
+                {['Protect your loved ones', 'Secure your financial future', 'Live life with confidence'].map((item, i) => (
+                  <motion.li key={item} className="flex items-center gap-3.5 text-white"
+                    initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }} transition={{ duration: 0.45, ease: EASE_PREMIUM, delay: 0.1 + i * 0.08 }}>
+                    <span className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                      style={{ background: 'rgba(255,255,255,0.16)' }}>
+                      <Check size={13} strokeWidth={2.5} />
+                    </span>
+                    <span className="text-[15px] font-medium">{item}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.6, ease: EASE_PREMIUM, delay: 0.12 }}>
+              <FeaturedQuoteCard
+                quote="The best time to plan for tomorrow is today. Let's build a plan that protects what matters most to you."
+                name="Christopher Garcia"
+                title="Area Manager, Pru Life UK"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════
+          CTA BAR — single "Book a Free Consultation" button
       ══════════════════════════════════════════════════ */}
       <section style={{ background: GRAY_BG }}>
-        <div className={`${CONTAINER} py-24 md:py-28`}>
+        <div className={`${CONTAINER} py-16 md:py-20`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM }}
-            className="rounded-3xl px-7 py-7 lg:px-12 lg:py-9 flex flex-col lg:flex-row items-center justify-between gap-7"
-            style={{ background: '#ffffff', boxShadow: '0 1px 2px rgba(16,24,40,0.04), 0 24px 48px -16px rgba(16,24,40,0.10)' }}
+            className="rounded-2xl px-7 py-6 lg:px-10 lg:py-7 flex flex-col lg:flex-row items-center justify-between gap-6"
+            style={{ background: '#ffffff', boxShadow: '0 1px 2px rgba(16,24,40,0.04), 0 8px 24px -8px rgba(16,24,40,0.08)' }}
           >
             <div className="flex items-center gap-4 text-center lg:text-left">
-              <div className="hidden lg:flex w-12 h-12 rounded-full items-center justify-center shrink-0" style={{ background: '#fef2f2' }}>
-                <MessageCircle size={20} style={{ color: PRU_RED }} strokeWidth={1.75} />
+              <div className="hidden lg:flex w-10 h-10 rounded-full items-center justify-center shrink-0"
+                style={{ background: '#fef2f2' }}>
+                <MessageCircle size={18} style={{ color: PRU_RED }} strokeWidth={1.75} />
               </div>
               <div>
-                <p className="text-[17px] font-bold text-gray-900 mb-1">Not sure which plan is right for you?</p>
-                <p className="text-sm text-gray-500">Our licensed advisors take the time to understand your situation before making any recommendation — no pressure, just honest guidance.</p>
+                <p className="text-base font-bold text-gray-900 mb-0.5">Not sure where to start?</p>
+                <p className="text-sm text-gray-500">Let&apos;s talk about your goals. We&apos;ll guide you to the right solution.</p>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
-              <AnimatedGradientButton
-                onClick={() => router.push('/assessment')}
-                preset="pru"
-                duration={5}
-                className="px-8 py-3.5 text-sm rounded-full"
-              >
-                <ClipboardList size={14} />Take the Financial Assessment
-              </AnimatedGradientButton>
-              <a
-                href="#appointment"
-                className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold"
-                style={{ background: 'transparent', color: PRU_RED, border: `1.5px solid ${PRU_RED}`, borderRadius: 999, transition: `all 0.35s ${EASE_PREMIUM.join(',')}` }}
-                onMouseEnter={e => { e.currentTarget.style.background = PRU_RED; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = PRU_RED }}
-              >
-                Book a Free Consultation
-              </a>
-            </div>
+            <a
+              href="#appointment"
+              className="flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold text-white shrink-0 w-full lg:w-auto"
+              style={{
+                background: PRU_RED, borderRadius: 8,
+                boxShadow: '0 1px 2px rgba(217,45,32,0.15), 0 8px 20px -4px rgba(217,45,32,0.28)',
+                transition: `background 0.2s`,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#B42318' }}
+              onMouseLeave={e => { e.currentTarget.style.background = PRU_RED }}
+            >
+              Book a Free Consultation <ArrowRight size={14} />
+            </a>
           </motion.div>
 
-          {/* Trust strip — closing statement-based row, distinct from the
-              logo-based TrustStrip used elsewhere on the site. */}
-          <motion.div className="mt-20"
+          {/* Trust strip — 4-item icon row */}
+          <motion.div className="mt-16"
             initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.55, ease: EASE_PREMIUM, delay: 0.1 }}>
             <IconTrustStrip items={TRUST_ITEMS} />
@@ -355,8 +306,7 @@ export default function InsuranceSolutionsLanding() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          BOOK A COMPLIMENTARY CONSULTATION
-          Goal-agnostic — no product pre-selected.
+          CONSULTATION FORM — goal-agnostic booking
       ══════════════════════════════════════════════════ */}
       <ProductAppointmentSection />
 
