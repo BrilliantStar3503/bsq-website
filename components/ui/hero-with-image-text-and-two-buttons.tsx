@@ -41,6 +41,48 @@ function Hero({
               </Badge>
             </div>
 
+            {/* We Are Hiring block */}
+            <div
+              className="rounded-2xl px-5 py-4 flex flex-col gap-3"
+              style={{ background: 'rgba(237,27,46,0.04)', border: '1px solid rgba(237,27,46,0.15)' }}
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#ed1b2e' }} />
+                <p className="font-black text-lg tracking-tight" style={{ color: '#ed1b2e' }}>
+                  We Are Hiring!
+                </p>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                {[
+                  { label: 'PRU Venture Apprentice', href: '#hiring' },
+                  { label: 'iLeader',                 href: '#hiring' },
+                  { label: 'Financial Advisor',        href: '#hiring', sub: 'Part-time or Full-time' },
+                ].map(role => (
+                  <a
+                    key={role.label}
+                    href={role.href}
+                    className="flex items-center gap-2.5 group"
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors duration-200"
+                      style={{ background: '#ed1b2e' }}
+                    />
+                    <span
+                      className="text-sm font-semibold transition-colors duration-200 group-hover:underline"
+                      style={{ color: '#1a1a2e' }}
+                    >
+                      {role.label}
+                    </span>
+                    {role.sub && (
+                      <span className="text-xs font-normal" style={{ color: '#9ca3af' }}>
+                        ({role.sub})
+                      </span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </div>
+
             <div className="flex gap-4 flex-col">
               <h1 className="text-5xl md:text-6xl max-w-lg tracking-tighter text-left font-bold text-gray-900 leading-[1.08]">
                 Build Your Business{' '}

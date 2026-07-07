@@ -387,7 +387,7 @@ export function BsqHeader() {
             {/* Join Us */}
             <NavigationMenuItem>
               <NavigationMenuLink
-                href="/advisors"
+                href="/recruitment"
                 className="nav-link px-4 py-2 text-sm rounded-md transition-colors duration-150 inline-flex items-center gap-1.5"
                 style={{ color: scrolled ? 'rgba(17,17,17,0.65)' : 'rgba(17,17,17,0.55)' }}
               >
@@ -475,7 +475,7 @@ export function BsqHeader() {
               Careers
             </p>
             <a
-              href="/advisors"
+              href="/recruitment"
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 px-2 py-2.5 rounded-xl text-white/75 hover:text-white hover:bg-white/08 transition-colors"
             >
