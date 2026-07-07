@@ -1,12 +1,13 @@
 'use client'
 
-import { useRef, useState, useEffect, Suspense } from 'react'
+import { useRef, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { GlobePolaroids } from '@/components/ui/cobe-globe-polaroids'
 import { Hero as BYBHero } from '@/components/ui/hero-with-image-text-and-two-buttons'
+import { RECRUITMENT_EVENTS } from '@/lib/recruitment-events'
 import {
   ArrowRight,
   Brain,
@@ -136,38 +137,9 @@ const BENEFITS = [
   },
 ]
 
-const EVENTS = [
-  {
-    title: 'Mega BYB — Build Your Business',
-    date: 'April 13, 2026 · 7:00PM–8:30PM',
-    day: '13',
-    month: 'APR',
-    location: 'Dusit Thani Hotel, Makati City',
-    format: 'In-person',
-    slots: 12,
-    tag: 'FEATURED',
-  },
-  {
-    title: 'Online Discovery Call',
-    date: 'Rolling — Book anytime',
-    day: '—',
-    month: 'OPEN',
-    location: 'Zoom / Google Meet',
-    format: 'Virtual',
-    slots: 5,
-    tag: 'VIRTUAL',
-  },
-  {
-    title: 'Visayas Expansion Preview',
-    date: 'May 10, 2026',
-    day: '10',
-    month: 'MAY',
-    location: 'Cebu City',
-    format: 'In-person',
-    slots: 8,
-    tag: 'NEW CITY',
-  },
-]
+// Event data lives in lib/recruitment-events.ts — a new BYB event only
+// requires an entry there, never a change to this file's rendering logic.
+const EVENTS = RECRUITMENT_EVENTS
 
 const NOT_FOR_YOU = [
   "You want a guaranteed salary with zero accountability",
@@ -259,8 +231,8 @@ function BenefitCard({
 }
 
 function EventCard({
-  title, date, day, month, location, format, slots, tag, delay,
-}: (typeof EVENTS)[0] & { delay: number }) {
+  title, date, day, month, location, format, slots, tag, delay, onSelect,
+}: (typeof EVENTS)[0] & { delay: number; onSelect: () => void }) {
   const isFeatured = tag === 'FEATURED'
   return (
     <FadeUp delay={delay}>
@@ -322,6 +294,7 @@ function EventCard({
           </div>
           <a
             href="#book"
+            onClick={onSelect}
             className="inline-flex items-center gap-1.5 text-[12px] font-semibold transition-all duration-200 hover:gap-2.5"
             style={{ color: isFeatured ? RED : '#111' }}
           >
@@ -417,28 +390,33 @@ function EventGallery() {
 /* ─── Book a Briefing / Event Pre-Registration form ─────────────────── */
 const PRU_FORM_URL = 'https://forms.office.com/pages/responsepage.aspx?id=XjAHcGQma065pMTVzP0VJCY2UsqUAABFsBkyscTFhr5UODBLTldHVlVLVkFRVllMRkxYSlZUWk8xTC4u&origin=QRCode&route=shorturl'
 
-function BookBriefing() {
+function BookBriefing({
+  selectedEventId,
+  selectedRole,
+}: {
+  selectedEventId: string
+  selectedRole?: string
+}) {
   const searchParams = useSearchParams()
   const [form, setForm] = useState({ firstName: '', lastName: '', phone: '', location: '' })
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done'>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  // Hidden tracking fields — read silently from QR code URL params
-  const [tracking, setTracking] = useState({
-    branch:      'Brilliant Star Quartz',
-    recruiter:   'Christopher Garcia',
-    agentCode:   '70003503',
-    unitManager: 'Christopher Garcia',
-  })
+  // Hidden attribution — read silently from QR code / campaign URL params.
+  // Left undefined when absent; the API applies tenant defaults server-side
+  // so this component never needs to know BSQ-specific fallback values.
+  const branch = searchParams.get('branch') ?? undefined
+  const recruiter = searchParams.get('recruiter') ?? undefined
+  const agentCode = searchParams.get('agent') ?? undefined
+  const unitManager = searchParams.get('unit_manager') ?? undefined
+  const campaign = searchParams.get('campaign') ?? undefined
+  const utmSource = searchParams.get('utm_source') ?? undefined
+  const utmMedium = searchParams.get('utm_medium') ?? undefined
+  const utmCampaign = searchParams.get('utm_campaign') ?? undefined
+  const utmTerm = searchParams.get('utm_term') ?? undefined
+  const utmContent = searchParams.get('utm_content') ?? undefined
 
-  useEffect(() => {
-    setTracking({
-      branch:      searchParams.get('branch')      ?? 'Brilliant Star Quartz',
-      recruiter:   searchParams.get('recruiter')   ?? 'Christopher Garcia',
-      agentCode:   searchParams.get('agent')       ?? '70003503',
-      unitManager: searchParams.get('unit_manager') ?? 'Christopher Garcia',
-    })
-  }, [searchParams])
+  const selectedEvent = EVENTS.find(ev => ev.eventId === selectedEventId) ?? EVENTS[0]
 
   function validate() {
     const e: Record<string, string> = {}
@@ -457,19 +435,28 @@ function BookBriefing() {
     setStatus('submitting')
 
     try {
-      // 1. Save lead to BSQ CRM via n8n (with hidden tracking fields)
+      // Submit the Lead Intake request — the API stamps tenant identity
+      // and forwards it through the lead-intake connector (n8n today).
       await fetch('/api/recruitment-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
-          ...tracking,
-          eventName: 'Mega BYB 2026',
-          eventDate: 'April 13, 2026',
+          roleInterest: selectedRole,
+          branch, recruiter, agentCode, unitManager, campaign,
+          event: {
+            eventId: selectedEvent.eventId,
+            eventName: selectedEvent.title,
+            eventDate: selectedEvent.date,
+            venue: selectedEvent.venue,
+          },
+          landingPageUrl: window.location.href,
+          referrer: document.referrer || undefined,
+          utmSource, utmMedium, utmCampaign, utmTerm, utmContent,
         }),
       })
-    } catch {
-      // Silent fail — don't block the user if n8n is down
+    } catch (err) {
+      console.error('[recruitment-lead] Submission failed:', err)
     }
 
     // 2. Open PRU Life UK's official registration form in a new tab
@@ -512,25 +499,23 @@ function BookBriefing() {
               className="font-bold text-gray-900 tracking-tight leading-snug"
               style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}
             >
-              Reserve your spot at Mega BYB 2026.
+              Reserve your spot at {selectedEvent.title}.
             </h2>
           </FadeUp>
 
           <FadeUp delay={0.3}>
             <p className="text-gray-500 leading-relaxed font-light text-[1.02rem]">
-              Fill in your details below. Your slot will be logged with BSQ and you&apos;ll
-              be directed to PRU Life UK&apos;s official form — required to qualify for
-              the raffle and secure your entry at the door.
+              {selectedEvent.description}
             </p>
           </FadeUp>
 
           <FadeUp delay={0.4}>
             <div className="flex flex-col gap-4 mt-2">
               {[
-                { icon: CalendarCheck, text: 'Monday, April 13, 2026 · 7:00PM–8:30PM' },
-                { icon: MapPin, text: 'Mayuree I & II, Dusit Thani Hotel, Makati City' },
-                { icon: Users, text: 'Guest speaker: Chinkee Tan' },
-                { icon: ShieldCheck, text: 'Limited slots only — register now to secure entry' },
+                { icon: CalendarCheck, text: selectedEvent.date },
+                { icon: MapPin, text: selectedEvent.venue },
+                ...(selectedEvent.speaker ? [{ icon: Users, text: `Guest speaker: ${selectedEvent.speaker}` }] : []),
+                { icon: ShieldCheck, text: `${selectedEvent.slots} seat${selectedEvent.slots !== 1 ? 's' : ''} left — register now to secure entry` },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
                   <div
@@ -707,6 +692,13 @@ function BookBriefing() {
    MAIN PAGE
    ═══════════════════════════════════════════════════════════════════════ */
 export default function RecruitmentPage() {
+  // Marketing attribution only — which event/role the visitor engaged with
+  // before reaching the form. Never used for classification or CRM logic;
+  // just threaded into the Lead Intake Contract so the lead is attributed
+  // to the right event instead of always defaulting to the featured one.
+  const [selectedEventId, setSelectedEventId] = useState(EVENTS[0].eventId)
+  const [selectedRole, setSelectedRole] = useState<string | undefined>(undefined)
+
   return (
     <div style={{ fontFamily: "'Inter', 'SF Pro Display', -apple-system, sans-serif" }}>
 
@@ -808,6 +800,7 @@ export default function RecruitmentPage() {
                   {/* CTA */}
                   <a
                     href="#book"
+                    onClick={() => setSelectedRole('pru_venture_apprentice')}
                     className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 hover:gap-3"
                     style={{ background: RED, boxShadow: `0 4px 20px rgba(237,27,46,0.40)` }}
                   >
@@ -872,6 +865,7 @@ export default function RecruitmentPage() {
                   {/* CTA */}
                   <a
                     href="#book"
+                    onClick={() => setSelectedRole('ileader')}
                     className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:gap-3"
                     style={{ background: 'rgba(237,27,46,0.07)', color: RED, border: `1.5px solid rgba(237,27,46,0.25)` }}
                   >
@@ -937,6 +931,7 @@ export default function RecruitmentPage() {
                   {/* CTA */}
                   <a
                     href="#book"
+                    onClick={() => setSelectedRole('financial_advisor')}
                     className="mt-2 inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-200 hover:gap-3"
                     style={{ background: 'rgba(237,27,46,0.07)', color: RED, border: '1.5px solid rgba(237,27,46,0.25)' }}
                   >
@@ -1059,7 +1054,9 @@ export default function RecruitmentPage() {
             </div>
           </FadeUp>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {EVENTS.map((ev, i) => <EventCard key={ev.title} {...ev} delay={i * 0.1} />)}
+            {EVENTS.map((ev, i) => (
+              <EventCard key={ev.eventId} {...ev} delay={i * 0.1} onSelect={() => setSelectedEventId(ev.eventId)} />
+            ))}
           </div>
           <FadeIn delay={0.4}>
             <div className="text-center mt-10">
@@ -1213,7 +1210,7 @@ export default function RecruitmentPage() {
 
       {/* ── 7. BOOK A BRIEFING (form) ───────────────────────────────────── */}
       <Suspense fallback={null}>
-        <BookBriefing />
+        <BookBriefing selectedEventId={selectedEventId} selectedRole={selectedRole} />
       </Suspense>
 
       {/* ── 8. TESTIMONIALS ─────────────────────────────────────────────── */}
