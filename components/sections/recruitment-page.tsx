@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { GlobePolaroids } from '@/components/ui/cobe-globe-polaroids'
 import { Hero as BYBHero } from '@/components/ui/hero-with-image-text-and-two-buttons'
-import { RECRUITMENT_EVENTS } from '@/lib/recruitment-events'
+import type { RecruitmentEvent } from '@/lib/recruitment-events'
 import {
   ArrowRight,
   Brain,
@@ -137,10 +137,6 @@ const BENEFITS = [
   },
 ]
 
-// Event data lives in lib/recruitment-events.ts — a new BYB event only
-// requires an entry there, never a change to this file's rendering logic.
-const EVENTS = RECRUITMENT_EVENTS
-
 const NOT_FOR_YOU = [
   "You want a guaranteed salary with zero accountability",
   "You're looking for a passive side hustle with no real work",
@@ -232,8 +228,9 @@ function BenefitCard({
 
 function EventCard({
   title, date, day, month, location, format, slots, tag, delay, onSelect,
-}: (typeof EVENTS)[0] & { delay: number; onSelect: () => void }) {
+}: RecruitmentEvent & { delay: number; onSelect: () => void }) {
   const isFeatured = tag === 'FEATURED'
+  const isCancelled = tag === 'CANCELLED'
   return (
     <FadeUp delay={delay}>
       <div
@@ -286,20 +283,31 @@ function EventCard({
         </div>
 
         <div className="px-5 pb-5 mt-auto flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: slots <= 5 ? '#f59e0b' : '#22c55e' }} />
-            <span className="text-[11px] font-semibold" style={{ color: isFeatured ? 'rgba(255,255,255,0.45)' : '#666' }}>
-              {slots} seat{slots !== 1 ? 's' : ''} left
+          {typeof slots === 'number' ? (
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: slots <= 5 ? '#f59e0b' : '#22c55e' }} />
+              <span className="text-[11px] font-semibold" style={{ color: isFeatured ? 'rgba(255,255,255,0.45)' : '#666' }}>
+                {slots} seat{slots !== 1 ? 's' : ''} left
+              </span>
+            </div>
+          ) : <span />}
+          {isCancelled ? (
+            <span
+              className="text-[12px] font-semibold cursor-not-allowed"
+              style={{ color: isFeatured ? 'rgba(255,255,255,0.4)' : '#999' }}
+            >
+              Event Cancelled
             </span>
-          </div>
-          <a
-            href="#book"
-            onClick={onSelect}
-            className="inline-flex items-center gap-1.5 text-[12px] font-semibold transition-all duration-200 hover:gap-2.5"
-            style={{ color: isFeatured ? RED : '#111' }}
-          >
-            Reserve Seat <ChevronRight size={13} strokeWidth={2.5} />
-          </a>
+          ) : (
+            <a
+              href="#book"
+              onClick={onSelect}
+              className="inline-flex items-center gap-1.5 text-[12px] font-semibold transition-all duration-200 hover:gap-2.5"
+              style={{ color: isFeatured ? RED : '#111' }}
+            >
+              Reserve Seat <ChevronRight size={13} strokeWidth={2.5} />
+            </a>
+          )}
         </div>
       </div>
     </FadeUp>
@@ -391,9 +399,11 @@ function EventGallery() {
 const PRU_FORM_URL = 'https://forms.office.com/pages/responsepage.aspx?id=XjAHcGQma065pMTVzP0VJCY2UsqUAABFsBkyscTFhr5UODBLTldHVlVLVkFRVllMRkxYSlZUWk8xTC4u&origin=QRCode&route=shorturl'
 
 function BookBriefing({
+  events,
   selectedEventId,
   selectedRole,
 }: {
+  events: RecruitmentEvent[]
   selectedEventId: string
   selectedRole?: string
 }) {
@@ -416,7 +426,13 @@ function BookBriefing({
   const utmTerm = searchParams.get('utm_term') ?? undefined
   const utmContent = searchParams.get('utm_content') ?? undefined
 
-  const selectedEvent = EVENTS.find(ev => ev.eventId === selectedEventId) ?? EVENTS[0]
+  // No events available (BSQ AIMP unreachable, or nothing published yet) —
+  // there's nothing to book. Degrade gracefully instead of crashing on
+  // events[0] below.
+  if (events.length === 0) return null
+
+  const selectedEvent = events.find(ev => ev.eventId === selectedEventId) ?? events[0]
+  const isCancelled = selectedEvent.tag === 'CANCELLED'
 
   function validate() {
     const e: Record<string, string> = {}
@@ -429,6 +445,9 @@ function BookBriefing({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    // Defense in depth — the submit button is disabled for a cancelled
+    // event, but a stray Enter keypress in a field could still fire this.
+    if (isCancelled) return
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setErrors({})
@@ -515,7 +534,9 @@ function BookBriefing({
                 { icon: CalendarCheck, text: selectedEvent.date },
                 { icon: MapPin, text: selectedEvent.venue },
                 ...(selectedEvent.speaker ? [{ icon: Users, text: `Guest speaker: ${selectedEvent.speaker}` }] : []),
-                { icon: ShieldCheck, text: `${selectedEvent.slots} seat${selectedEvent.slots !== 1 ? 's' : ''} left — register now to secure entry` },
+                ...(typeof selectedEvent.slots === 'number'
+                  ? [{ icon: ShieldCheck, text: `${selectedEvent.slots} seat${selectedEvent.slots !== 1 ? 's' : ''} left — register now to secure entry` }]
+                  : []),
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
                   <div
@@ -651,19 +672,24 @@ function BookBriefing({
             {/* Submit */}
             <button
               type="submit"
-              disabled={status === 'submitting' || status === 'done'}
+              disabled={isCancelled || status === 'submitting' || status === 'done'}
               className="mt-1 w-full flex items-center justify-center gap-2 py-3.5 rounded-full font-semibold text-sm text-white transition-all duration-200 hover:scale-[1.01] disabled:opacity-70 disabled:cursor-not-allowed"
               style={{
-                background: status === 'done' ? '#22c55e' : RED,
-                boxShadow: status === 'done' ? '0 4px 20px rgba(34,197,94,0.35)' : `0 4px 20px ${RED}40`,
+                background: isCancelled ? '#9ca3af' : status === 'done' ? '#22c55e' : RED,
+                boxShadow: isCancelled ? 'none' : status === 'done' ? '0 4px 20px rgba(34,197,94,0.35)' : `0 4px 20px ${RED}40`,
               }}
             >
-              {status === 'idle' && <><CalendarCheck size={15} strokeWidth={2} /> Pre-Register for the Event</>}
-              {status === 'submitting' && 'Saving your details...'}
-              {status === 'done' && <><CheckCircle2 size={15} /> Pre-registered! Complete official form →</>}
+              {isCancelled && 'Registration Unavailable — Event Cancelled'}
+              {!isCancelled && status === 'idle' && <><CalendarCheck size={15} strokeWidth={2} /> Pre-Register for the Event</>}
+              {!isCancelled && status === 'submitting' && 'Saving your details...'}
+              {!isCancelled && status === 'done' && <><CheckCircle2 size={15} /> Pre-registered! Complete official form →</>}
             </button>
 
-            {status === 'done' ? (
+            {isCancelled ? (
+              <p className="text-center text-gray-400 text-[11px] font-light -mt-1">
+                This event has been cancelled and is no longer accepting registrations.
+              </p>
+            ) : status === 'done' ? (
               <div
                 className="rounded-xl p-4 text-center"
                 style={{ background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.2)' }}
@@ -691,12 +717,17 @@ function BookBriefing({
 /* ═══════════════════════════════════════════════════════════════════════
    MAIN PAGE
    ═══════════════════════════════════════════════════════════════════════ */
-export default function RecruitmentPage() {
+export default function RecruitmentPage({ events }: { events: RecruitmentEvent[] }) {
+  // Sourced from BSQ AIMP's public API (see app/recruitment/page.tsx) —
+  // this file never fetches, never imports a static list, and never needs
+  // to change when an event is added, edited, or removed in BSQ AIMP.
+  const EVENTS = events
+
   // Marketing attribution only — which event/role the visitor engaged with
   // before reaching the form. Never used for classification or CRM logic;
   // just threaded into the Lead Intake Contract so the lead is attributed
   // to the right event instead of always defaulting to the featured one.
-  const [selectedEventId, setSelectedEventId] = useState(EVENTS[0].eventId)
+  const [selectedEventId, setSelectedEventId] = useState(EVENTS[0]?.eventId ?? '')
   const [selectedRole, setSelectedRole] = useState<string | undefined>(undefined)
 
   return (
@@ -1053,11 +1084,24 @@ export default function RecruitmentPage() {
               </p>
             </div>
           </FadeUp>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {EVENTS.map((ev, i) => (
-              <EventCard key={ev.eventId} {...ev} delay={i * 0.1} onSelect={() => setSelectedEventId(ev.eventId)} />
-            ))}
-          </div>
+          {EVENTS.length === 0 ? (
+            /* No events currently published — mirrors the EventGallery
+               placeholder pattern rather than rendering an empty grid. */
+            <div
+              className="rounded-2xl py-16 text-center"
+              style={{ background: '#f9fafb', border: '1.5px dashed rgba(0,0,0,0.10)' }}
+            >
+              <p className="text-gray-400 text-sm font-light">
+                No events are currently scheduled. Check back soon, or book a private briefing below.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {EVENTS.map((ev, i) => (
+                <EventCard key={ev.eventId} {...ev} delay={i * 0.1} onSelect={() => setSelectedEventId(ev.eventId)} />
+              ))}
+            </div>
+          )}
           <FadeIn delay={0.4}>
             <div className="text-center mt-10">
               <a href="#book" className="inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200 hover:gap-3" style={{ color: RED }}>
@@ -1210,7 +1254,7 @@ export default function RecruitmentPage() {
 
       {/* ── 7. BOOK A BRIEFING (form) ───────────────────────────────────── */}
       <Suspense fallback={null}>
-        <BookBriefing selectedEventId={selectedEventId} selectedRole={selectedRole} />
+        <BookBriefing events={EVENTS} selectedEventId={selectedEventId} selectedRole={selectedRole} />
       </Suspense>
 
       {/* ── 8. TESTIMONIALS ─────────────────────────────────────────────── */}
